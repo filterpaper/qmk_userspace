@@ -126,23 +126,23 @@ void render_mod_status_ctrl_shift(uint8_t modifiers) {
 	if (modifiers & MOD_MASK_CTRL) oled_write_P(ctrl_on_1, false);
 	else oled_write_P(ctrl_off_1, false);
 
-	if ((modifiers & MOD_MASK_CTRL) && (modifiers & MOD_MASK_SHIFT)) oled_write_P(on_on_1, false);
+	if ((modifiers & MOD_MASK_CTRL) && ((modifiers & MOD_MASK_SHIFT)||(host_keyboard_led_state().caps_lock))) oled_write_P(on_on_1, false);
 	else if (modifiers & MOD_MASK_CTRL) oled_write_P(on_off_1, false);
-	else if (modifiers & MOD_MASK_SHIFT) oled_write_P(off_on_1, false);
+	else if ((modifiers & MOD_MASK_SHIFT)||(host_keyboard_led_state().caps_lock)) oled_write_P(off_on_1, false);
 	else oled_write_P(off_off_1, false);
 
-	if (modifiers & MOD_MASK_SHIFT) oled_write_P(shift_on_1, false);
+	if ((modifiers & MOD_MASK_SHIFT)||(host_keyboard_led_state().caps_lock)) oled_write_P(shift_on_1, false);
 	else oled_write_P(shift_off_1, false);
 
 	if (modifiers & MOD_MASK_CTRL) oled_write_P(ctrl_on_2, false);
 	else oled_write_P(ctrl_off_2, false);
 
-	if (modifiers & MOD_MASK_CTRL & MOD_MASK_SHIFT) oled_write_P(on_on_2, false);
+	if ((modifiers & MOD_MASK_CTRL) && ((modifiers & MOD_MASK_SHIFT)||(host_keyboard_led_state().caps_lock))) oled_write_P(on_on_2, false);
 	else if (modifiers & MOD_MASK_CTRL) oled_write_P(on_off_2, false);
-	else if (modifiers & MOD_MASK_SHIFT) oled_write_P(off_on_2, false);
+	else if ((modifiers & MOD_MASK_SHIFT)||(host_keyboard_led_state().caps_lock)) oled_write_P(off_on_2, false);
 	else oled_write_P(off_off_2, false);
 
-	if (modifiers & MOD_MASK_SHIFT) oled_write_P(shift_on_2, false);
+	if ((modifiers & MOD_MASK_SHIFT)||(host_keyboard_led_state().caps_lock)) oled_write_P(shift_on_2, false);
 	else oled_write_P(shift_off_2, false);
 }
 

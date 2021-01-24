@@ -32,7 +32,7 @@ RGB_MATRIX_EFFECT(kitt_effect)
 FRACTAL effect
 by u/_GEIST_/
 https://www.reddit.com/r/MechanicalKeyboards/comments/jyx2zm/i_created_a_custom_rgb_animation_two_more_in_the/
-Effect is optimised for ortholinea 4x12
+Effect is optimised for ortholinear 4x12
  */
 
 uint32_t f_timer = 0;
@@ -117,7 +117,7 @@ static bool FRACTAL(effect_params_t* params) {
 FRACTAL RGB
 by u/_GEIST_/
 https://www.reddit.com/r/MechanicalKeyboards/comments/jyx2zm/i_created_a_custom_rgb_animation_two_more_in_the/
-Effect is optimised for ortholinea 4x12
+Effect is optimised for ortholinear 4x12
  */ 
 
 uint32_t frgb_timer = 0;
