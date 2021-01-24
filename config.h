@@ -69,11 +69,12 @@
 #	define DISABLE_RGB_MATRIX_RAINDROPS
 #	define DISABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
 // Layer color and effect definitions
-#	define RGB_GRAY		91, 147, 153 // RGB_AZURE substitute
-#	define RGB_DEFAULT	RGB_GRAY
+#	define RGB_BSTEEL	70, 130, 180 // RGB_AZURE substitute
+#	define RGB_DEFAULT	RGB_BSTEEL
 #	define RGB_LOWER	RGB_BLUE
 #	define RGB_RAISE	RGB_YELLOW
 #	define RGB_ADJUST	RGB_TEAL
+#	define RGB_MODS		RGB_BSTEEL
 #	define HSV_DEFAULT	HSV_AZURE
 #	define HSV_LOWER	HSV_BLUE
 #	define HSV_RAISE	HSV_YELLOW

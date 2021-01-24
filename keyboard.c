@@ -85,9 +85,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 void rgb_matrix_indicators_user(void) {
 
-	// Layer key lighting
-	switch (get_highest_layer(layer_state)) {
 #ifdef KEYBOARD_bm40hsrgb
+	// Layer key lights
+	switch (get_highest_layer(layer_state)) {
 	// Index 40 and 42 are lower and raise
 	// keys on both sides of BM40 space bar
 	case _LOWER:
@@ -108,7 +108,31 @@ void rgb_matrix_indicators_user(void) {
 		if (host_keyboard_led_state().caps_lock) {
 			rgb_matrix_set_color_all(RGB_DEFAULT);
 		}
-#elif KEYBOARD_planck_rev6
+	}
+
+	// Mod key lights
+	if (get_mods() & MOD_MASK_SHIFT) {
+		rgb_matrix_set_color(24, RGB_MODS);
+		rgb_matrix_set_color(35, RGB_MODS);
+		rgb_matrix_set_color(41, RGB_MODS);
+	}
+	if (get_mods() & MOD_MASK_CTRL) {
+		rgb_matrix_set_color(15, RGB_MODS);
+		rgb_matrix_set_color(36, RGB_MODS);
+		rgb_matrix_set_color(20, RGB_MODS);
+	}
+	if (get_mods() & MOD_MASK_GUI) {
+		rgb_matrix_set_color(16, RGB_MODS);
+		rgb_matrix_set_color(19, RGB_MODS);
+		rgb_matrix_set_color(38, RGB_MODS);
+	}
+	if (get_mods() & MOD_MASK_ALT) {
+		rgb_matrix_set_color(37, RGB_MODS);
+	}
+#endif
+#ifdef KEYBOARD_planck_rev6
+	// Layer under glow
+	switch (get_highest_layer(layer_state)) {
 	// Planck rev6 LED index position:
 	//    6   5   4   3
 	//          0
@@ -131,8 +155,14 @@ void rgb_matrix_indicators_user(void) {
 		if (host_keyboard_led_state().caps_lock || get_highest_layer(default_layer_state) == _COLEMAK) {
 			rgb_matrix_set_color_all(RGB_DEFAULT);
 		}
-#endif
 	}
+
+	// Mod key under glow
+	if (get_mods() & (MOD_MASK_SHIFT || MOD_MASK_CTRL || MOD_MASK_GUI)) {
+		rgb_matrix_set_color(3, RGB_MODS);
+		rgb_matrix_set_color(6, RGB_MODS);
+	}
+#endif
 
 /*	// Light up non KC_TRANS or KC_NO on layers
 	// by u/richardgoulter/ (@rgoulter)
