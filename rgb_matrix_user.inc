@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Three custom matrix animation that were collected
-   from reddit users.
+/* Three custom matrix animation that were collected from reddit users.
+   define RGB_MATRIX_CUSTOM_USER in rules.mk to use them.
  */  
 
 

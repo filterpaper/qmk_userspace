@@ -30,9 +30,9 @@ enum layers {
 /////// RGB LIGHTING ///////
 #ifdef RGB_MATRIX_ENABLE
 
-/* Code snippet for 60% animation brightness to reduce 
-   USB power consumption. Applies only to matrix effects 
-   using rgb_matrix_hsv_to_rgb() for color selection.
+/* Code snippet for 60% animation brightness to reduce USB power 
+   consumption. Applies only to matrix effects using 
+   rgb_matrix_hsv_to_rgb() for color selection.
    Courtesy of @tzarc */
 /*
 RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
@@ -40,32 +40,11 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 	return hsv_to_rgb(hsv);
 }; */
 
-// Draft code for Mark65 LED matrix layout
-#ifdef KEYBOARD_boardsource_the_mark
-led_config_t g_led_config = { {
-	// Key Matrix to LED Index
-	{ NO_LED, 10    , 9     , NO_LED, 8     , 7     , NO_LED, 6     , 5     , NO_LED, 4     , 3     , NO_LED, 2     , 1     , NO_LED },
-	{ NO_LED, 11    , NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, 0     , NO_LED },
-	{ NO_LED, 12    , NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, 23    , NO_LED },
-	{ NO_LED, 13    , 14    , NO_LED, 15    , 16    , NO_LED, 17    , 18    , NO_LED, 19    , 20    , NO_LED, 21    , 22    , NO_LED },
-	{ NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED, NO_LED },
-}, {
-	// LED Index to Physical Position
-	{224, 42}, {224, 21}, {209, 21}, {179, 21}, {164, 21}, {134, 21}, {119, 21}, {89, 21}, {74, 21}, {45, 21}, {30, 21}, {30, 42},
-	{30, 64}, {30, 85}, {45, 85}, {74, 85}, {89, 85}, {119, 85}, {134, 85}, {164, 85}, {179, 85}, {209, 85}, {224, 85}, {224, 64}
-}, {
-	// LED Index to Flag
-	LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL,
-	LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL,
-	LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL, LED_FLAG_ALL
-} };
-#endif
-
-/*
+// Init with effect lights off
 void matrix_init_user(void) {
-	rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
-	rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
-} */
+	rgb_matrix_sethsv_noeeprom(HSV_OFF);
+	rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+}
 
 #ifndef KEYBOARD_planck_rev6
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -85,11 +64,17 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 void rgb_matrix_indicators_user(void) {
 
+	bool alt = get_mods() & MOD_MASK_ALT;
+	bool gui = get_mods() & MOD_MASK_GUI;
+	bool ctrl = get_mods() & MOD_MASK_CTRL;
+	bool shift = get_mods() & MOD_MASK_SHIFT;
+	bool caps = host_keyboard_led_state().caps_lock;
+
 #ifdef KEYBOARD_bm40hsrgb
 	// Layer key lights
 	switch (get_highest_layer(layer_state)) {
-	// Index 40 and 42 are lower and raise
-	// keys on both sides of BM40 space bar
+	/* Index 40 and 42 are lower and raise
+	   keys on both sides of BM40 space bar */
 	case _LOWER:
 		rgb_matrix_sethsv_noeeprom(HSV_LOWER);
 		rgb_matrix_set_color(40, RGB_LOWER);
@@ -105,38 +90,36 @@ void rgb_matrix_indicators_user(void) {
 		break;
 	default:
 		rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
-		if (host_keyboard_led_state().caps_lock) {
-			rgb_matrix_set_color_all(RGB_DEFAULT);
-		}
+		if (caps) { rgb_matrix_set_color_all(RGB_DEFAULT); }
 	}
 
-	// Mod key lights
-	if (get_mods() & MOD_MASK_SHIFT) {
-		rgb_matrix_set_color(24, RGB_MODS);
-		rgb_matrix_set_color(35, RGB_MODS);
-		rgb_matrix_set_color(41, RGB_MODS);
+	// Modifier key lights
+	if (alt) {
+		rgb_matrix_set_color(37, RGB_MODS);
 	}
-	if (get_mods() & MOD_MASK_CTRL) {
-		rgb_matrix_set_color(15, RGB_MODS);
-		rgb_matrix_set_color(36, RGB_MODS);
-		rgb_matrix_set_color(20, RGB_MODS);
-	}
-	if (get_mods() & MOD_MASK_GUI) {
+	if (gui) {
 		rgb_matrix_set_color(16, RGB_MODS);
 		rgb_matrix_set_color(19, RGB_MODS);
 		rgb_matrix_set_color(38, RGB_MODS);
 	}
-	if (get_mods() & MOD_MASK_ALT) {
-		rgb_matrix_set_color(37, RGB_MODS);
+	if (ctrl) {
+		rgb_matrix_set_color(15, RGB_MODS);
+		rgb_matrix_set_color(20, RGB_MODS);
+		rgb_matrix_set_color(36, RGB_MODS);
+	}
+	if (shift) {
+		rgb_matrix_set_color(24, RGB_MODS);
+		rgb_matrix_set_color(35, RGB_MODS);
+		rgb_matrix_set_color(41, RGB_MODS);
 	}
 #endif
 #ifdef KEYBOARD_planck_rev6
 	// Layer under glow
 	switch (get_highest_layer(layer_state)) {
-	// Planck rev6 LED index position:
-	//    6   5   4   3
-	//          0
-	//    7   8   1   2
+	/* Planck rev6 LED index position:
+	   6   5   4   3
+	         0
+	   7   8   1   2 */
 	case _LOWER:
 		rgb_matrix_set_color(5, RGB_LOWER);
 		rgb_matrix_set_color(8, RGB_LOWER);
@@ -152,13 +135,13 @@ void rgb_matrix_indicators_user(void) {
 		rgb_matrix_set_color(6, RGB_ADJUST);
 		break;
 	default:
-		if (host_keyboard_led_state().caps_lock || get_highest_layer(default_layer_state) == _COLEMAK) {
+		if (caps || get_highest_layer(default_layer_state) == _COLEMAK) {
 			rgb_matrix_set_color_all(RGB_DEFAULT);
 		}
 	}
 
-	// Mod key under glow
-	if (get_mods() & (MOD_MASK_SHIFT || MOD_MASK_CTRL || MOD_MASK_GUI)) {
+	// Modifier key under glow
+	if (alt || gui || ctrl || shift) {
 		rgb_matrix_set_color(3, RGB_MODS);
 		rgb_matrix_set_color(6, RGB_MODS);
 	}
@@ -227,22 +210,22 @@ void leader_end(void)	{ rgb_matrix_mode_noeeprom(MATRIX_NORMAL); }
 
 // Orientate OLED display
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-	if (is_keyboard_master())    return OLED_ROTATION_270;
-	else if (is_keyboard_left()) return OLED_ROTATION_0;
-	else                         return OLED_ROTATION_180;
+	if (is_keyboard_master())     { return OLED_ROTATION_270; }
+	else if (is_keyboard_right()) { return OLED_ROTATION_180; }
+	else                          { return OLED_ROTATION_0; }
 }
 
 // Render status modules on both OLED
 void oled_task_user(void) {
-	if (is_keyboard_master()) render_mod_status();
-	else                      animate_cat();
+	if (is_keyboard_master()) { render_mod_status(); }
+	else                      { animate_cat(); }
 }
 #endif // OLED_DRIVER_ENABLE
 
 
 
 /////// INIT AND SUSPENSION ///////
-// Handling keyboard suspension
+
 void suspend_power_down_user(void) {
 #ifdef RGB_MATRIX_ENABLE
 	rgb_matrix_set_suspend_state(true);

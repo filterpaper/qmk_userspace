@@ -103,8 +103,11 @@ static void render_cat_idle(void) {
 	};
 
 	current_idle_frame = (current_idle_frame + 1) % IDLE_FRAMES;
-	if (is_keyboard_left())	oled_write_raw_P(left_idle[abs((IDLE_FRAMES - 1) - current_idle_frame)], ANIM_SIZE);
-	else 					oled_write_raw_P(idle[abs((IDLE_FRAMES - 1) - current_idle_frame)], ANIM_SIZE);
+	if (is_keyboard_left())	{
+		oled_write_raw_P(left_idle[abs((IDLE_FRAMES - 1) - current_idle_frame)], ANIM_SIZE);
+	} else {
+		oled_write_raw_P(idle[abs((IDLE_FRAMES - 1) - current_idle_frame)], ANIM_SIZE);
+	}
 }
 
 static void render_cat_prep(void) {
@@ -127,8 +130,11 @@ static void render_cat_prep(void) {
 		}
 	};
 
-	if (is_keyboard_left())	oled_write_raw_P(left_prep[0], ANIM_SIZE);
-	else					oled_write_raw_P(prep[0], ANIM_SIZE);
+	if (is_keyboard_left())	{
+		oled_write_raw_P(left_prep[0], ANIM_SIZE);
+	} else {
+		oled_write_raw_P(prep[0], ANIM_SIZE);
+	}
 }
 
 static void render_cat_tap(void) {
@@ -163,11 +169,14 @@ static void render_cat_tap(void) {
 	};
 
 	current_tap_frame = (current_tap_frame + 1) % TAP_FRAMES;
-	if (is_keyboard_left())	oled_write_raw_P(left_tap[abs((TAP_FRAMES - 1) - current_tap_frame)], ANIM_SIZE);
-	else					oled_write_raw_P(tap[abs((TAP_FRAMES - 1) - current_tap_frame)], ANIM_SIZE);
+	if (is_keyboard_left())	{
+		oled_write_raw_P(left_tap[abs((TAP_FRAMES - 1) - current_tap_frame)], ANIM_SIZE);
+	} else {
+		oled_write_raw_P(tap[abs((TAP_FRAMES - 1) - current_tap_frame)], ANIM_SIZE);
+	}
 }
 
-// Render bongo cat on OLED
+// Primary bongo cat animation function
 static void animate_cat(void) {
 
 	void animation_phase(void) {
@@ -195,8 +204,9 @@ static void animate_cat(void) {
 		}
 		anim_sleep = timer_read32();
 	} else {
-		if (timer_elapsed32(anim_sleep) > oled_timeout) oled_off();
-		else {
+		if (timer_elapsed32(anim_sleep) > oled_timeout) {
+			oled_off();
+		} else {
 			if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
 				anim_timer = timer_read32();
 				animation_phase();

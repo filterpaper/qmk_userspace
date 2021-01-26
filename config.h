@@ -40,10 +40,6 @@
 #	define OLED_FONT_H "users/filterpaper/glcdfont.c"
 #endif
 
-#ifdef KEYBOARD_boardsource_the_mark
-#	define DRIVER_LED_TOTAL 24
-#endif
-
 #ifdef RGB_MATRIX_ENABLE
 #	define RGB_MATRIX_KEYPRESSES
 #	define RGB_DISABLE_WHEN_USB_SUSPENDED true
@@ -74,7 +70,7 @@
 #	define RGB_LOWER	RGB_BLUE
 #	define RGB_RAISE	RGB_YELLOW
 #	define RGB_ADJUST	RGB_TEAL
-#	define RGB_MODS		RGB_BSTEEL
+#	define RGB_MODS		RGB_GOLD
 #	define HSV_DEFAULT	HSV_AZURE
 #	define HSV_LOWER	HSV_BLUE
 #	define HSV_RAISE	HSV_YELLOW

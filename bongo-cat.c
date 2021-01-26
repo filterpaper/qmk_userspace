@@ -102,7 +102,7 @@ static void render_cat_tap(void) {
 	oled_write_raw_P(tap[abs((TAP_FRAMES-1)-current_tap_frame)], ANIM_SIZE);
 }
 
-// Render bongo cat on OLED
+// Primary bongo cat animation function
 static void animate_cat(void) {
 
 	void animation_phase(void) {
@@ -130,8 +130,9 @@ static void animate_cat(void) {
 		}
 		anim_sleep = timer_read32();
 	} else {
-		if (timer_elapsed32(anim_sleep) > oled_timeout) oled_off();
-		else {
+		if (timer_elapsed32(anim_sleep) > oled_timeout) {
+			oled_off();
+		} else {
 			if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
 				anim_timer = timer_read32();
 				animation_phase();
