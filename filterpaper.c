@@ -13,25 +13,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#include QMK_KEYBOARD_H
 
-// Layer number reference
-enum layers {
-	_QWERTY = 0,
-	_COLEMAK,
-	_LOWER,
-	_RAISE,
-	_ADJUST,
-};
-
+#include "filterpaper.h"
 
 
 /////// RGB LIGHTING ///////
 #ifdef RGB_MATRIX_ENABLE
 
-/* Code snippet for 60% animation brightness to reduce USB power 
-   consumption. Applies only to matrix effects using 
+/* Code snippet for 60% animation brightness to reduce USB power
+   consumption. Applies only to matrix effects using
    rgb_matrix_hsv_to_rgb() for color selection.
    Courtesy of @tzarc */
 /*
@@ -60,7 +50,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 	}
 	return state;
 }
-#endif
+#endif // KEYBOARD_planck_rev6
 
 void rgb_matrix_indicators_user(void) {
 
@@ -112,7 +102,7 @@ void rgb_matrix_indicators_user(void) {
 		rgb_matrix_set_color(35, RGB_MODS);
 		rgb_matrix_set_color(41, RGB_MODS);
 	}
-#endif
+#endif // KEYBOARD_bm40hsrgb
 #ifdef KEYBOARD_planck_rev6
 	// Layer under glow
 	switch (get_highest_layer(layer_state)) {
@@ -145,7 +135,7 @@ void rgb_matrix_indicators_user(void) {
 		rgb_matrix_set_color(3, RGB_MODS);
 		rgb_matrix_set_color(6, RGB_MODS);
 	}
-#endif
+#endif // KEYBOARD_planck_rev6
 
 /*	// Light up non KC_TRANS or KC_NO on layers
 	// by u/richardgoulter/ (@rgoulter)
@@ -206,13 +196,13 @@ void leader_end(void)	{ rgb_matrix_mode_noeeprom(MATRIX_NORMAL); }
 /////// OLED DISPLAY RENDERING ///////
 #ifdef OLED_DRIVER_ENABLE
 #include "mod-status.c" // For render_mod_status();
-#include "bongo-cat.c"  // For animate_cat();
+#include "bongo-cat-slim.c"  // For animate_cat();
 
 // Orientate OLED display
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-	if (is_keyboard_master())     { return OLED_ROTATION_270; }
-	else if (is_keyboard_right()) { return OLED_ROTATION_180; }
-	else                          { return OLED_ROTATION_0; }
+	if (is_keyboard_master())    { return OLED_ROTATION_270; }
+	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
+	else                         { return OLED_ROTATION_180; }
 }
 
 // Render status modules on both OLED
@@ -240,4 +230,3 @@ void suspend_wakeup_init_user(void) {
 	rgb_matrix_set_suspend_state(false);
 #endif
 }
-

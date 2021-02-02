@@ -16,7 +16,6 @@ SLEEP_LED_ENABLE = no
 TAP_DANCE_ENABLE = no
 SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
-
 RGBLIGHT_ENABLE = no
 RGB_MATRIX_ENABLE = no
 
@@ -30,15 +29,14 @@ ifneq ($(PLATFORM),CHIBIOS)
 endif
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_mark))
 	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = no
+	RGB_MATRIX_CUSTOM_USER = yes
 endif
 ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	BOOTLOADER = atmel-dfu
 	WPM_ENABLE = yes
-	SPLIT_KEYBOARD = yes
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 endif
 
-# Shared keyboard functions
-SRC += keyboard.c
+# Main shared source file
+SRC += filterpaper.c

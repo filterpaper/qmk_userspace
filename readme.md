@@ -1,58 +1,62 @@
-Copyright (C) 2021 @filterpaper
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 # Summary
 
-Personal user space for code sharing across a few custom keyboards. See [Sharing Code Between Keymaps](../../docs/feature_userspace.md) for details and [custom quantum funtions](../../docs/custom_quantum_functions.md) for customisation.
+My personal user space is a self-contained folder that avoids placing keymap files inside
+any keyboard directories. All customisation required to build QMK firmware is configured
+within this space in the following manner:
 
-# Supported Keyboard
+* Personalise keyboard layout using [QMK Configurator](https://config.qmk.fm/#/) and export
+the JSON file with keymap named after this space.
+* Create rules.mk, config.h and shared source codes in this folder, with `#ifdef` blocks
+for unique keyboard or feature specific functions.
+* Run QMK compile on the exported JSON file to build a custom firmware for each board.
+* See the [userspace guide](../../docs/feature_userspace.md) for more details.
 
-* [BM40 HS RGB](../../keyboards/bm40hsrgb)
-* [Planck rev6](../../keyboards/planck)
-* [Corne Keyboard (CRKBD)](../../keyboards/crkbd)
-* [The Mark: 65](../../keyboards/boardsource/the_mark)
+# Supported Keyboards
 
-# File list
+![corneplanck](corneplanck.png)
 
-* `config.h`	QMK configuration options, see [configuring QMK](../../docs/config_options.md)
-* `rules.mk`	Makefile rules for keyboard-specific features, includes keyboard.c
-* `keyboard.c`	Main file with shared codes, RGB matrix and OLED functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md)
-* `mod-status.c`	Graphical layer and modifier status rendering module for primary controller
-* `bongo-cat.c`		Graphical tapping bongo cat animation module, optimized for right OLED
-* `bongo-cat-left.c`		Graphical tapping bongo cat animation module, with cats aligned for both sides
-* `glcdfont.c`		Corne 8x6 font code with QMK Firmware Logo
-* `rgb_matrix_user.inc` Custom RGB matrix effect collected from Reddit, see [Custom RGB Matrix](../../docs/feature_rgb_matrix.md#custom-rgb-matrix-effects-idcustom-rgb-matrix-effects)
+* [BM40 HS RGB](../../keyboards/bm40hsrgb) — Features layer key press effects, per key RGB modifier lights.
+* [Planck rev6](../../keyboards/planck) — RGB underglow lights as layer and modifier indicators.
+* [Corne Keyboard (CRKBD)](../../keyboards/crkbd) — Bongocat typing animation and graphical indicators on OLEDs.
+* [The Mark: 65](../../keyboards/boardsource/the_mark) — RGB underglow effects as layer and modifier indicators.
 
-## Build commands
+# File Listing
+
+File | Description
+---- | -----------
+rules.mk | QMK compile rules and options
+config.h | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
+filterpaper.h | User specific variables and options
+filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
+bongo-cat-full.c | Bongocat aligned for both left and right 128x32px OLED (huge: 8774 bytes)
+bongo-cat-slim.c | Bongocat aligned for both left and right 128x32px OLED without prep paws (large: 7716 bytes)
+bongo-cat-right.c | Bongocat aligned only for right 128x32px OLED (small: 4614 bytes)
+mod-status.c | Graphical layer and modifier status module for primary OLED
+glcdfont.c | QMK logo, コルネ katakana name, fonts and icon images—required by mod-status.c
+rgb_matrix_user.inc | Custom RGB matrix effects collected from Reddit, see [Custom RGB Matrix](../../docs/feature_rgb_matrix.md#custom-rgb-matrix-effects-idcustom-rgb-matrix-effects)
+json | Folder of supported keyboard layouts
+
+# Build Commands
+QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
 ```
-qmk compile -kb bm40hsrgb -km filterpaper
-qmk compile -kb planck/rev6 -km filterpaper
-qmk compile -kb crkbd/rev1/common -km filterpaper
-qmk compile -kb boardsource/the_mark -km filterpaper
+qmk compile ~/qmk_firmware/users/filterpaper/json/bm40.json
+qmk compile ~/qmk_firmware/users/filterpaper/json/planck.json
+qmk compile ~/qmk_firmware/users/filterpaper/json/corne.json
+qmk compile ~/qmk_firmware/users/filterpaper/json/mark65.json
 ```
 
-## Corne Split Setup
-Corne is configured with EE_HANDS, the controllers will check EEPROM values to know which side it's on and USB-C can be used on either.
-These are the one-time flash commands to write left and right side setting into the Elite-C EEPROM:
+# Corne Split Setup
+Corne is configured with EE_HANDS for controllers to read left or right values off EEPROM,
+allowing USB-C cable to be used on either side. These are one-time flash commands to
+write left and right side values into both Elite-C MCUs:
 ```
-make crkbd/rev1/common:filterpaper:dfu-split-left
-make crkbd/rev1/common:filterpaper:dfu-split-right
+make crkbd/rev1/common:default:dfu-split-left
+make crkbd/rev1/common:default:dfu-split-right
 ```
-Following this, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
+Subsequently, the same firmware binary can be flashed normally to both sides.
+See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
-# Keymap layout
-
-Individual keymap.c for each keyboard is required in their respective keymaps directory. See 
-the [json folder](json/) for details and list of exported QMK Configurator layouts.
+# QMK logo file
+Images in `glcdfont.c` can be viewed and edited with:
+* [Helix Font Editor](https://helixfonteditor.netlify.app/)
+* [QMK Logo Editor](https://joric.github.io/qle/)
