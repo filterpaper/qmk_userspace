@@ -34,8 +34,11 @@
 #	define MOUSEKEY_WHEEL_TIME_TO_MAX 100
 #endif
 
-#ifdef KEYBOARD_crkbd
+#ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
+#endif
+
+#ifdef OLED_DRIVER_ENABLE
 #	define OLED_TIMEOUT 5000
 #	define OLED_FONT_H "users/filterpaper/glcdfont.c"
 #endif

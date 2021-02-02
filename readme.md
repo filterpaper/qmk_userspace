@@ -24,7 +24,7 @@ for unique keyboard or feature specific functions.
 
 File | Description
 ---- | -----------
-rules.mk | QMK compile rules and options
+rules.mk | QMK compile rules and hardware feature selection
 config.h | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
 filterpaper.h | User specific variables and options
 filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
@@ -50,8 +50,8 @@ Corne is configured with EE_HANDS for controllers to read left or right values o
 allowing USB-C cable to be used on either side. These are one-time flash commands to
 write left and right side values into both Elite-C MCUs:
 ```
-make crkbd/rev1/common:default:dfu-split-left
-make crkbd/rev1/common:default:dfu-split-right
+qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-left
+qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 ```
 Subsequently, the same firmware binary can be flashed normally to both sides.
 See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
