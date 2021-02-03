@@ -9,7 +9,7 @@ the JSON file with keymap named after this space.
 * Create rules.mk, config.h and shared source codes in this folder, with `#ifdef` blocks
 for unique keyboard or feature specific functions.
 * Run QMK compile on the exported JSON file to build a custom firmware for each board.
-* See the [userspace guide](../../docs/feature_userspace.md) for more details.
+* See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
 # Supported Keyboards
 
