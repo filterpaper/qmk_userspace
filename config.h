@@ -17,7 +17,7 @@
 #pragma once
 
 // Common QMK settings
-#define TAPPING_TERM 250
+#define TAPPING_TERM 300
 #define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
 #define LEADER_TIMEOUT 500
