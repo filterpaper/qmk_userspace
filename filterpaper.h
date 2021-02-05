@@ -27,18 +27,14 @@ enum layers {
 	_ADJUST,
 };
 
-// Layer color and effects
+// Layer colors and effects
 #ifdef RGB_MATRIX_ENABLE
-#	define RGB_BSTEEL	70, 130, 180 // RGB_AZURE substitute
+#	define RGB_BSTEEL	70, 130, 180
 #	define RGB_DEFAULT	RGB_BSTEEL
-#	define RGB_LOWER	RGB_BLUE
-#	define RGB_RAISE	RGB_YELLOW
-#	define RGB_ADJUST	RGB_TEAL
-#	define RGB_MODS		RGB_GOLD
+#	define RGB_MODS		RGB_BSTEEL
+#	define RGB_CAPS		RGB_PURPLE
+#	define RGB_LAYER	RGB_YELLOW
 #	define HSV_DEFAULT	HSV_AZURE
-#	define HSV_LOWER	HSV_BLUE
-#	define HSV_RAISE	HSV_YELLOW
-#	define HSV_ADJUST	HSV_TEAL
 #	define MATRIX_NORMAL	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #	define MATRIX_SPECIAL	RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
 #endif

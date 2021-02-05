@@ -19,6 +19,7 @@
 
 /////// RGB LIGHTING ///////
 #ifdef RGB_MATRIX_ENABLE
+#define NUM_LAYER_LEDS 2 // Layer indicator keys
 
 /* Code snippet for 60% animation brightness to reduce USB power
    consumption. Applies only to matrix effects using
@@ -40,6 +41,7 @@ void matrix_init_user(void) {
 layer_state_t layer_state_set_user(layer_state_t state) {
 
 	// Default layer keypress effects
+	rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
 	switch (get_highest_layer(default_layer_state)) {
 	case _COLEMAK:
 		rgb_matrix_mode_noeeprom(MATRIX_SPECIAL);
@@ -54,88 +56,55 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 void rgb_matrix_indicators_user(void) {
 
-	bool alt = get_mods() & MOD_MASK_ALT;
-	bool gui = get_mods() & MOD_MASK_GUI;
-	bool ctrl = get_mods() & MOD_MASK_CTRL;
-	bool shift = get_mods() & MOD_MASK_SHIFT;
-	bool caps = host_keyboard_led_state().caps_lock;
-
-#ifdef KEYBOARD_bm40hsrgb
-	// Layer key lights
-	switch (get_highest_layer(layer_state)) {
-	/* Index 40 and 42 are lower and raise
-	   keys on both sides of BM40 space bar */
-	case _LOWER:
-		rgb_matrix_sethsv_noeeprom(HSV_LOWER);
-		rgb_matrix_set_color(40, RGB_LOWER);
-		break;
-	case _RAISE:
-		rgb_matrix_sethsv_noeeprom(HSV_RAISE);
-		rgb_matrix_set_color(42, RGB_RAISE);
-		break;
-	case _ADJUST:
-		rgb_matrix_sethsv_noeeprom(HSV_ADJUST);
-		rgb_matrix_set_color(42, RGB_ADJUST);
-		rgb_matrix_set_color(40, RGB_ADJUST);
-		break;
-	default:
-		rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
-		if (caps) { rgb_matrix_set_color_all(RGB_DEFAULT); }
+	// Light up mod keys
+	if (get_mods() & (MOD_MASK_ALT|MOD_MASK_GUI|MOD_MASK_CTRL|MOD_MASK_SHIFT)) {
+		for (int i = 0; i <DRIVER_LED_TOTAL; i++) {
+			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_MODIFIER)) {
+				rgb_matrix_set_color(i, RGB_MODS);
+			}
+		}
 	}
-
-	// Modifier key lights
-	if (alt) {
-		rgb_matrix_set_color(37, RGB_MODS);
-	}
-	if (gui) {
-		rgb_matrix_set_color(16, RGB_MODS);
-		rgb_matrix_set_color(19, RGB_MODS);
-		rgb_matrix_set_color(38, RGB_MODS);
-	}
-	if (ctrl) {
-		rgb_matrix_set_color(15, RGB_MODS);
-		rgb_matrix_set_color(20, RGB_MODS);
-		rgb_matrix_set_color(36, RGB_MODS);
-	}
-	if (shift) {
-		rgb_matrix_set_color(24, RGB_MODS);
-		rgb_matrix_set_color(35, RGB_MODS);
-		rgb_matrix_set_color(41, RGB_MODS);
-	}
-#endif // KEYBOARD_bm40hsrgb
-#ifdef KEYBOARD_planck_rev6
-	// Layer under glow
-	switch (get_highest_layer(layer_state)) {
-	/* Planck rev6 LED index position:
-	   6   5   4   3
-	         0
-	   7   8   1   2 */
-	case _LOWER:
-		rgb_matrix_set_color(5, RGB_LOWER);
-		rgb_matrix_set_color(8, RGB_LOWER);
-		break;
-	case _RAISE:
-		rgb_matrix_set_color(1, RGB_RAISE);
-		rgb_matrix_set_color(4, RGB_RAISE);
-		break;
-	case _ADJUST:
-		rgb_matrix_set_color(3, RGB_ADJUST);
-		rgb_matrix_set_color(4, RGB_ADJUST);
-		rgb_matrix_set_color(5, RGB_ADJUST);
-		rgb_matrix_set_color(6, RGB_ADJUST);
-		break;
-	default:
-		if (caps || get_highest_layer(default_layer_state) == _COLEMAK) {
-			rgb_matrix_set_color_all(RGB_DEFAULT);
+	// Light up alpha keys
+	if (host_keyboard_led_state().caps_lock) {
+		for (int i = 0; i <DRIVER_LED_TOTAL; i++) {
+			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_KEYLIGHT)) {
+				rgb_matrix_set_color(i, RGB_CAPS);
+			}
 		}
 	}
 
-	// Modifier key under glow
-	if (alt || gui || ctrl || shift) {
-		rgb_matrix_set_color(3, RGB_MODS);
-		rgb_matrix_set_color(6, RGB_MODS);
+	// Light up layer indicator keys
+	uint8_t layer = get_highest_layer(layer_state);
+	if (layer >_COLEMAK) {
+
+		// Board specific layer indicator positions
+		#ifdef KEYBOARD_bm40hsrgb
+			int layer_led[][NUM_LAYER_LEDS] = {
+				{ 0,0 },	// _QWERTY
+				{ 0,0 },	// _COLEMAK
+				{ 40,40 },	// _LOWER
+				{ 42,42 },	// _RAISE
+				{ 40,42 },	// _ADJUST
+			};
+		#endif
+		#ifdef KEYBOARD_planck_rev6
+			// Planck rev6 LED index positions:
+			//   6   5   4   3
+			//         0
+			//   7   8   1   2
+			int layer_led[][NUM_LAYER_LEDS] = {
+				{ 0,0 },	// _QWERTY
+				{ 0,0 },	// _COLEMAK
+				{ 5,8 },	// _LOWER
+				{ 1,4 },	// _RAISE
+				{ 4,5 },	// _ADJUST
+			};
+		#endif
+
+		for (int i = 0; i < NUM_LAYER_LEDS; i++) {
+			rgb_matrix_set_color(layer_led[layer][i], RGB_LAYER);
+		}
 	}
-#endif // KEYBOARD_planck_rev6
 
 /*	// Light up non KC_TRANS or KC_NO on layers
 	// by u/richardgoulter/ (@rgoulter)
@@ -162,7 +131,6 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	} */
-
 }
 #endif // RGB_MATRIX_ENABLE
 
