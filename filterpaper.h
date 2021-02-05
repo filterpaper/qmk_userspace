@@ -27,8 +27,8 @@ enum layers {
 	_ADJUST,
 };
 
-// Layer colors and effects
 #ifdef RGB_MATRIX_ENABLE
+// Indicator colors and effects
 #	define RGB_BSTEEL	70, 130, 180
 #	define RGB_DEFAULT	RGB_BSTEEL
 #	define RGB_MODS		RGB_BSTEEL
@@ -36,5 +36,25 @@ enum layers {
 #	define RGB_LAYER	RGB_YELLOW
 #	define HSV_DEFAULT	HSV_AZURE
 #	define MATRIX_NORMAL	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
-#	define MATRIX_SPECIAL	RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
+#	define MATRIX_SHIFT		RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
+// LED layer indicator range
+#if defined(KEYBOARD_bm40hsrgb) || defined(KEYBOARD_boardsource_the_mark)
+#	define LED_MIN 4
+#	define LED_MAX 8
+#elif KEYBOARD_planck_rev6
+#	define LED_MIN 3
+#	define LED_MAX 7
+#else
+#	define LED_MIN 0
+#	define LED_MAX DRIVER_LED_TOTAL
+#endif
+
+#endif
+
+// Bongocat choice: pick one
+#ifdef OLED_DRIVER_ENABLE
+//#	define BONGOCAT "bongo-cat-full.c"
+#	define BONGOCAT "bongo-cat-slim.c"
+//#	define BONGOCAT "bongo-cat-left.c"
+//#	define BONGOCAT "bongo-cat-right.c"
 #endif

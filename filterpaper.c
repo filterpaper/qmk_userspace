@@ -19,7 +19,6 @@
 
 /////// RGB LIGHTING ///////
 #ifdef RGB_MATRIX_ENABLE
-#define NUM_LAYER_LEDS 2 // Layer indicator keys
 
 /* Code snippet for 60% animation brightness to reduce USB power
    consumption. Applies only to matrix effects using
@@ -31,32 +30,38 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 	return hsv_to_rgb(hsv);
 }; */
 
-// Init with effect lights off
 void matrix_init_user(void) {
+
+#ifdef KEYBOARD_planck_rev6
 	rgb_matrix_sethsv_noeeprom(HSV_OFF);
-	rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+#else
+	rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
+	rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
+#endif
+
 }
 
-#ifndef KEYBOARD_planck_rev6
+
 layer_state_t layer_state_set_user(layer_state_t state) {
 
+#ifndef KEYBOARD_planck_rev6
 	// Default layer keypress effects
-	rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
 	switch (get_highest_layer(default_layer_state)) {
 	case _COLEMAK:
-		rgb_matrix_mode_noeeprom(MATRIX_SPECIAL);
+		rgb_matrix_mode_noeeprom(MATRIX_SHIFT);
 		break;
-	case _QWERTY:
+	default:
 		rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
-		break;
 	}
+#endif // KEYBOARD_planck_rev6
+
 	return state;
 }
-#endif // KEYBOARD_planck_rev6
+
 
 void rgb_matrix_indicators_user(void) {
 
-	// Light up mod keys
+	// Modifier keys indicator
 	if (get_mods() & (MOD_MASK_ALT|MOD_MASK_GUI|MOD_MASK_CTRL|MOD_MASK_SHIFT)) {
 		for (int i = 0; i <DRIVER_LED_TOTAL; i++) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_MODIFIER)) {
@@ -64,7 +69,7 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
-	// Light up alpha keys
+	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
 		for (int i = 0; i <DRIVER_LED_TOTAL; i++) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_KEYLIGHT)) {
@@ -72,37 +77,12 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
-
-	// Light up layer indicator keys
-	uint8_t layer = get_highest_layer(layer_state);
-	if (layer >_COLEMAK) {
-
-		// Board specific layer indicator positions
-		#ifdef KEYBOARD_bm40hsrgb
-			int layer_led[][NUM_LAYER_LEDS] = {
-				{ 0,0 },	// _QWERTY
-				{ 0,0 },	// _COLEMAK
-				{ 40,40 },	// _LOWER
-				{ 42,42 },	// _RAISE
-				{ 40,42 },	// _ADJUST
-			};
-		#endif
-		#ifdef KEYBOARD_planck_rev6
-			// Planck rev6 LED index positions:
-			//   6   5   4   3
-			//         0
-			//   7   8   1   2
-			int layer_led[][NUM_LAYER_LEDS] = {
-				{ 0,0 },	// _QWERTY
-				{ 0,0 },	// _COLEMAK
-				{ 5,8 },	// _LOWER
-				{ 1,4 },	// _RAISE
-				{ 4,5 },	// _ADJUST
-			};
-		#endif
-
-		for (int i = 0; i < NUM_LAYER_LEDS; i++) {
-			rgb_matrix_set_color(layer_led[layer][i], RGB_LAYER);
+	// Layer keys indicator
+	if (get_highest_layer(layer_state) >_COLEMAK) {
+		for (int i = LED_MIN; i <LED_MAX; i++) {
+			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_KEYLIGHT)) {
+				rgb_matrix_set_color(i, RGB_LAYER);
+			}
 		}
 	}
 
@@ -153,7 +133,7 @@ void matrix_scan_user(void) {
 
 // Enable leader key effects
 #if defined(RGB_MATRIX_ENABLE) && !defined(KEYBOARD_planck_rev6)
-void leader_start(void)	{ rgb_matrix_mode_noeeprom(MATRIX_SPECIAL); }
+void leader_start(void)	{ rgb_matrix_mode_noeeprom(MATRIX_SHIFT); }
 void leader_end(void)	{ rgb_matrix_mode_noeeprom(MATRIX_NORMAL); }
 #endif
 
@@ -164,7 +144,7 @@ void leader_end(void)	{ rgb_matrix_mode_noeeprom(MATRIX_NORMAL); }
 /////// OLED DISPLAY RENDERING ///////
 #ifdef OLED_DRIVER_ENABLE
 #include "mod-status.c" // For render_mod_status();
-#include "bongo-cat-slim.c"  // For animate_cat();
+#include BONGOCAT // For animate_cat();
 
 // Orientate OLED display
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {

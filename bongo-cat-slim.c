@@ -535,7 +535,7 @@ static void render_cat_tap(void) {
 static void animate_cat(void) {
 
 	void animation_phase(void) {
-		// Animate idle when WPM drops from paused typing
+		// Animate idle when WPM drops
 		if (get_current_wpm() <TAP_SPEED || get_current_wpm() <prev_wpm) {
 			render_cat_idle();
 			prev_wpm = get_current_wpm()+1;
