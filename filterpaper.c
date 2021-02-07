@@ -31,19 +31,16 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 }; */
 
 void matrix_init_user(void) {
-
 #ifdef KEYBOARD_planck_rev6
 	rgb_matrix_sethsv_noeeprom(HSV_OFF);
 #else
 	rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
 	rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 #endif
-
 }
 
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-
 #ifndef KEYBOARD_planck_rev6
 	// Default layer keypress effects
 	switch (get_highest_layer(default_layer_state)) {
@@ -54,7 +51,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 		rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 	}
 #endif // KEYBOARD_planck_rev6
-
 	return state;
 }
 
@@ -85,7 +81,6 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
-
 /*	// Light up non KC_TRANS or KC_NO on layers
 	// by u/richardgoulter/ (@rgoulter)
 	uint8_t layer = get_highest_layer(layer_state);
