@@ -17,12 +17,14 @@
 #pragma once
 
 // Common QMK settings
-#define TAPPING_TERM 300
+#define TAPPING_TERM 280
 #define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
 #define LEADER_TIMEOUT 500
 #define LEADER_PER_KEY_TIMING
 #define TAP_CODE_DELAY 10
+// 8-layers limit to save ~462 bytes
+#define LAYER_STATE_8BIT
 
 #ifdef MOUSEKEY_ENABLE
 #	define MOUSEKEY_DELAY 0

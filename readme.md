@@ -31,7 +31,7 @@ rgb_matrix_user.inc | Custom RGB matrix effects collected from Reddit, see [Cust
 json | Folder of supported keyboard layouts
 
 # Build Commands
-QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware. Compile command requires the full path of that file:
+QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
 ```
 qmk compile ~/qmk_firmware/users/filterpaper/json/bm40.json
 qmk compile ~/qmk_firmware/users/filterpaper/json/planck.json

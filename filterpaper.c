@@ -20,10 +20,9 @@
 /////// RGB LIGHTING ///////
 #ifdef RGB_MATRIX_ENABLE
 
-/* Code snippet for 60% animation brightness to reduce USB power
-   consumption. Applies only to matrix effects using
-   rgb_matrix_hsv_to_rgb() for color selection.
-   Courtesy of @tzarc */
+// Reduces matrix effect brightness by 60% to lower USB
+// power consumption. Applies only to matrix effects using
+// rgb_matrix_hsv_to_rgb() for color selection (by @tzarc)
 /*
 RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 	hsv.v = (uint8_t)(hsv.v * 0.6);
@@ -73,8 +72,7 @@ void rgb_matrix_indicators_user(void) {
 		}
 	}
 	// Layer keys indicator
-	// Light up non KC_TRANS on layers
-	// by u/richardgoulter/ (@rgoulter)
+	// Modified from @rgoulter's post
 	uint8_t layer = get_highest_layer(layer_state);
 	if (layer >_COLEMAK) {
 		for (uint8_t row = 0; row <MATRIX_ROWS; row++) {
@@ -88,6 +86,19 @@ void rgb_matrix_indicators_user(void) {
 	}
 }
 #endif // RGB_MATRIX_ENABLE
+
+
+
+/////// TAP DANCE MACROS ///////
+#ifdef TAP_DANCE_ENABLE
+// TD actions must be referenced with TD(0)..TD(3) keycodes in keymap[]
+// because enum names are not shared between this and keymap.c
+qk_tap_dance_action_t tap_dance_actions[] = {
+	[0] = ACTION_TAP_DANCE_DOUBLE(KC_X, LGUI(KC_X)),
+	[1] = ACTION_TAP_DANCE_DOUBLE(KC_C, LGUI(KC_C)),
+	[2] = ACTION_TAP_DANCE_DOUBLE(KC_V, LGUI(KC_V)),
+};
+#endif
 
 
 
@@ -111,7 +122,6 @@ void matrix_scan_user(void) {
 void leader_start(void)	{ rgb_matrix_mode_noeeprom(MATRIX_SHIFT); }
 void leader_end(void)	{ rgb_matrix_mode_noeeprom(MATRIX_NORMAL); }
 #endif
-
 #endif // LEADER_ENABLE
 
 

@@ -12,7 +12,6 @@ TERMINAL_ENABLE = no
 KEY_LOCK_ENABLE = no
 BOOTMAGIC_ENABLE = no
 SLEEP_LED_ENABLE = no
-TAP_DANCE_ENABLE = no
 VELOCIKEY_ENABLE = no
 SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
@@ -22,12 +21,14 @@ RGB_MATRIX_ENABLE = no
 # Common features
 LEADER_ENABLE = yes
 EXTRAKEY_ENABLE = yes
+TAP_DANCE_ENABLE = yes
 
 # Platform and keyboard specific settings
 ifneq ($(PLATFORM),CHIBIOS)
 	LTO_ENABLE = yes
 endif
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_mark))
+	BOOTMAGIC_ENABLE = lite
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 endif
