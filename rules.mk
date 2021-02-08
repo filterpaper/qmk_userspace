@@ -27,12 +27,10 @@ EXTRAKEY_ENABLE = yes
 ifneq ($(PLATFORM),CHIBIOS)
 	LTO_ENABLE = yes
 endif
-
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_mark))
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 endif
-
 ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	BOOTLOADER = atmel-dfu
 	WPM_ENABLE = yes

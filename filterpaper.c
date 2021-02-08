@@ -56,7 +56,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 
 void rgb_matrix_indicators_user(void) {
-
 	// Modifier keys indicator
 	if (get_mods() & (MOD_MASK_ALT|MOD_MASK_GUI|MOD_MASK_CTRL|MOD_MASK_SHIFT)) {
 		for (int i = 0; i <DRIVER_LED_TOTAL; i++) {
@@ -74,38 +73,19 @@ void rgb_matrix_indicators_user(void) {
 		}
 	}
 	// Layer keys indicator
-	if (get_highest_layer(layer_state) >_COLEMAK) {
-		for (int i = LED_MIN; i <LED_MAX; i++) {
-			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_KEYLIGHT)) {
-				rgb_matrix_set_color(i, RGB_LAYER);
-			}
-		}
-	}
-/*	// Light up non KC_TRANS or KC_NO on layers
+	// Light up non KC_TRANS on layers
 	// by u/richardgoulter/ (@rgoulter)
 	uint8_t layer = get_highest_layer(layer_state);
-	if (layer >1) {
+	if (layer >_COLEMAK) {
 		for (uint8_t row = 0; row <MATRIX_ROWS; row++) {
 			for (uint8_t col = 0; col <MATRIX_COLS; col++) {
-				uint8_t led_index = g_led_config.matrix_co[row][col];
-				keypos_t pos = { col, row };
-				uint16_t keycode = keymap_key_to_keycode(layer, pos);
-				if (led_index !=NO_LED && keycode !=KC_TRNS && keycode !=KC_NO) {
-					switch (layer) {
-					case _ADJUST:
-						rgb_matrix_set_color(led_index, RGB_PURPLE);
-						break;
-					case _RAISE:
-						rgb_matrix_set_color(led_index, RGB_YELLOW);
-						break;
-					case _LOWER:
-						rgb_matrix_set_color(led_index, RGB_BLUE);
-						break;
-					}
+				if (g_led_config.matrix_co[row][col] !=NO_LED &&
+					keymap_key_to_keycode(layer, (keypos_t){col, row}) !=KC_TRNS) {
+					rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_LAYER);
 				}
 			}
 		}
-	} */
+	}
 }
 #endif // RGB_MATRIX_ENABLE
 
@@ -138,8 +118,8 @@ void leader_end(void)	{ rgb_matrix_mode_noeeprom(MATRIX_NORMAL); }
 
 /////// OLED DISPLAY RENDERING ///////
 #ifdef OLED_DRIVER_ENABLE
-#include "mod-status.c" // For render_mod_status();
 #include BONGOCAT // For animate_cat();
+#include "mod-status.c" // For render_mod_status();
 
 // Orientate OLED display
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -158,7 +138,6 @@ void oled_task_user(void) {
 
 
 /////// INIT AND SUSPENSION ///////
-
 void suspend_power_down_user(void) {
 #ifdef RGB_MATRIX_ENABLE
 	rgb_matrix_set_suspend_state(true);
