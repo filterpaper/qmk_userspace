@@ -535,13 +535,12 @@ static void render_cat_tap(void) {
 static void animate_cat(void) {
 
 	void animation_phase(void) {
-		// Animate idle when WPM drops
 		if (get_current_wpm() <TAP_SPEED || get_current_wpm() <prev_wpm) {
+			// Animate idle when WPM drops
 			render_cat_idle();
 			prev_wpm = get_current_wpm()+1;
-		}
-		// Animate tapping when WPM is sustained
-		if (get_current_wpm() >=TAP_SPEED && get_current_wpm() >=prev_wpm) {
+		} else { // (get_current_wpm() >=TAP_SPEED && get_current_wpm() >=prev_wpm)
+			// Animate tapping when WPM is sustained
 			render_cat_tap();
 			prev_wpm = get_current_wpm();
 		}
