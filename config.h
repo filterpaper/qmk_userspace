@@ -23,14 +23,14 @@
 #define LEADER_TIMEOUT 500
 #define LEADER_PER_KEY_TIMING
 #define TAP_CODE_DELAY 10
-// 8-layers limit to save ~462 bytes
+// 8-layer limit to save ~462 bytes
 #define LAYER_STATE_8BIT
 
 #ifdef MOUSEKEY_ENABLE
 #	define MOUSEKEY_DELAY 0
 #	define MOUSEKEY_INTERVAL 16
 #	define MOUSEKEY_MAX_SPEED 7
-#	define MOUSEKEY_TIME_TO_MAX 25
+#	define MOUSEKEY_TIME_TO_MAX 40
 #	define MOUSEKEY_WHEEL_DELAY 0
 #	define MOUSEKEY_WHEEL_INTERVAL 50
 #	define MOUSEKEY_WHEEL_TIME_TO_MAX 100
@@ -41,7 +41,7 @@
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
-#	define OLED_TIMEOUT 5000
+#	define OLED_TIMEOUT 8000
 #	define OLED_FONT_H "users/filterpaper/glcdfont.c"
 #endif
 
@@ -73,3 +73,10 @@
 #	define DISABLE_RGB_MATRIX_RAINDROPS
 #	define DISABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
 #endif
+
+// Layer tap macro references for keymap[]
+#define TH_Q LT(0, KC_Q)
+#define TH_W LT(0, KC_W)
+#define TH_X LT(0, KC_X)
+#define TH_C LT(0, KC_C)
+#define TH_V LT(0, KC_V)

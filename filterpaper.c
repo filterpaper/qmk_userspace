@@ -19,7 +19,6 @@
 
 /////// RGB LIGHTING ///////
 #ifdef RGB_MATRIX_ENABLE
-
 // Reduces matrix effect brightness by 60% to lower USB
 // power consumption. Applies only to matrix effects using
 // rgb_matrix_hsv_to_rgb() for color selection (by @tzarc)
@@ -38,7 +37,6 @@ void matrix_init_user(void) {
 #endif
 }
 
-
 layer_state_t layer_state_set_user(layer_state_t state) {
 #ifndef KEYBOARD_planck_rev6
 	// Default layer keypress effects
@@ -52,7 +50,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 #endif // KEYBOARD_planck_rev6
 	return state;
 }
-
 
 void rgb_matrix_indicators_user(void) {
 	// Modifier keys indicator
@@ -89,40 +86,54 @@ void rgb_matrix_indicators_user(void) {
 
 
 
-/////// TAP DANCE MACROS ///////
-#ifdef TAP_DANCE_ENABLE
-// TD actions must be referenced with TD(0)..TD(3) keycodes in keymap[]
-// because enum names are not shared between this and keymap.c
-qk_tap_dance_action_t tap_dance_actions[] = {
-	[0] = ACTION_TAP_DANCE_DOUBLE(KC_X, LGUI(KC_X)),
-	[1] = ACTION_TAP_DANCE_DOUBLE(KC_C, LGUI(KC_C)),
-	[2] = ACTION_TAP_DANCE_DOUBLE(KC_V, LGUI(KC_V)),
-};
-#endif
-
-
-
-/////// LEADER KEY MACROS ///////
-#ifdef LEADER_ENABLE
-LEADER_EXTERNS();
-void matrix_scan_user(void) {
-	LEADER_DICTIONARY() {
-		leading = false;
-		leader_end();
-		SEQ_ONE_KEY(KC_P) { SEND_STRING("()"); }
-		SEQ_ONE_KEY(KC_B) { SEND_STRING("{}"); }
-		SEQ_ONE_KEY(KC_Q) { SEND_STRING(":q!"); }
-		SEQ_ONE_KEY(KC_W) { SEND_STRING(":wq"); }
-		SEQ_ONE_KEY(KC_Z) { SEND_STRING("ZZ"); }
+/////// TAP HOLD SHORTCUTS ///////
+// Shortcut macros using layer tap LT() delay code
+// to register hold, by @sigprof
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+	switch(keycode){
+	case TH_X:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_X); }
+			else { unregister_code(KC_X); }
+		} else {
+			if (record->event.pressed) { tap_code16(G(KC_X)); }
+		}
+		return false;
+	case TH_C:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_C); }
+			else { unregister_code(KC_C); }
+		} else {
+			if (record->event.pressed) { tap_code16(G(KC_C)); }
+		}
+		return false;
+	case TH_V:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_V); }
+			else { unregister_code(KC_V); }
+		} else {
+			if (record->event.pressed) { tap_code16(G(KC_V)); }
+		}
+		return false;
+	case TH_Q:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_Q); }
+			else { unregister_code(KC_Q); }
+		} else {
+			if (record->event.pressed) { SEND_STRING(":q!"); }
+		}
+		return false;
+	case TH_W:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_W); }
+			else { unregister_code(KC_W); }
+		} else {
+			if (record->event.pressed) { SEND_STRING(":wq"); }
+		}
+		return false;
 	}
+	return true; // continue with unmatched keycodes
 }
-
-// Enable leader key effects
-#if defined(RGB_MATRIX_ENABLE) && !defined(KEYBOARD_planck_rev6)
-void leader_start(void)	{ rgb_matrix_mode_noeeprom(MATRIX_SHIFT); }
-void leader_end(void)	{ rgb_matrix_mode_noeeprom(MATRIX_NORMAL); }
-#endif
-#endif // LEADER_ENABLE
 
 
 
@@ -147,7 +158,7 @@ void oled_task_user(void) {
 
 
 
-/////// INIT AND SUSPENSION ///////
+/////// INIT AND SUSPEND ///////
 void suspend_power_down_user(void) {
 #ifdef RGB_MATRIX_ENABLE
 	rgb_matrix_set_suspend_state(true);

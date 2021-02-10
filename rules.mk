@@ -4,6 +4,7 @@ WPM_ENABLE = no
 NKRO_ENABLE = no
 AUDIO_ENABLE = no
 STENO_ENABLE = no
+LEADER_ENABLE = no
 UNICODE_ENABLE = no
 CONSOLE_ENABLE = no
 COMMAND_ENABLE = no
@@ -12,6 +13,7 @@ TERMINAL_ENABLE = no
 KEY_LOCK_ENABLE = no
 BOOTMAGIC_ENABLE = no
 SLEEP_LED_ENABLE = no
+TAP_DANCE_ENABLE = no
 VELOCIKEY_ENABLE = no
 SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
@@ -19,11 +21,9 @@ RGBLIGHT_ENABLE = no
 RGB_MATRIX_ENABLE = no
 
 # Common features
-LEADER_ENABLE = yes
 EXTRAKEY_ENABLE = yes
-TAP_DANCE_ENABLE = yes
 
-# Platform and keyboard specific settings
+# Platform and keyboard specific features
 ifneq ($(PLATFORM),CHIBIOS)
 	LTO_ENABLE = yes
 endif

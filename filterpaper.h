@@ -42,8 +42,8 @@ enum layers {
 
 // Bongocat choice: pick one
 #ifdef OLED_DRIVER_ENABLE
-//#	define BONGOCAT "bongo-cat-slim.c"
+#	define BONGOCAT "bongo-cat-slim.c"
 //#	define BONGOCAT "bongo-cat-full.c"
 //#	define BONGOCAT "bongo-cat-left.c"
-#	define BONGOCAT "bongo-cat-right.c"
+//	define BONGOCAT "bongo-cat-right.c"
 #endif
