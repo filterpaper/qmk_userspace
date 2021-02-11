@@ -19,13 +19,7 @@
 #include QMK_KEYBOARD_H
 
 // Layer number reference
-enum layers {
-	_QWERTY = 0,
-	_COLEMAK,
-	_LOWER,
-	_RAISE,
-	_ADJUST,
-};
+enum layers { DEF, CMK, LWR, RSE, ADJ };
 
 // Custom dimmer indicator colors and effects
 #ifdef RGB_MATRIX_ENABLE

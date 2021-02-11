@@ -18,11 +18,12 @@
 
 // Common QMK settings
 #define TAPPING_TERM 280
+#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
 #define LEADER_TIMEOUT 500
 #define LEADER_PER_KEY_TIMING
-#define TAP_CODE_DELAY 10
+#define TAP_CODE_DELAY 50
 // 8-layer limit to save ~462 bytes
 #define LAYER_STATE_8BIT
 
@@ -74,9 +75,11 @@
 #	define DISABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
 #endif
 
-// Layer tap macro references for keymap[]
-#define TH_Q LT(0, KC_Q)
-#define TH_W LT(0, KC_W)
-#define TH_X LT(0, KC_X)
-#define TH_C LT(0, KC_C)
-#define TH_V LT(0, KC_V)
+// Layer tap hold macro references for keymap[]
+#define TH_Q LT(0,KC_Q)
+#define TH_W LT(0,KC_W)
+#define TH_T LT(0,KC_T)
+#define TH_N LT(0,KC_N)
+#define TH_X LT(0,KC_X)
+#define TH_C LT(0,KC_C)
+#define TH_V LT(0,KC_V)

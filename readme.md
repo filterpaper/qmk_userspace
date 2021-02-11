@@ -3,7 +3,7 @@ My personal user space is a self-contained folder that avoids placing keymap fil
 
 * Configure keyboard layout using [QMK Configurator](https://config.qmk.fm/#/) and export the JSON file with keymap named after this space.
 * Create `rules.mk`, `config.h` and shared source codes in this folder, with `#ifdef` preprocessors for unique keyboard or feature specific functions.
-* Run QMK compile on the exported JSON file to build a custom firmware for each board.
+* Run QMK `flash` on the exported JSON file to build a custom firmware for each board.
 * See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
 # Supported Keyboards
@@ -30,19 +30,56 @@ glcdfont.c | Corne logo, コルネ katakana name, fonts and icon images—requir
 rgb_matrix_user.inc | Custom RGB matrix effects collected from Reddit, see [Custom RGB Matrix](../../docs/feature_rgb_matrix.md#custom-rgb-matrix-effects-idcustom-rgb-matrix-effects)
 json | Folder of supported keyboard layouts
 
+# Code Snippets
+## Light configured layers keys
+```
+uint8_t layer = get_highest_layer(layer_state);
+if (layer >_COLEMAK) {
+	for (uint8_t row = 0; row <MATRIX_ROWS; row++) {
+		for (uint8_t col = 0; col <MATRIX_COLS; col++) {
+			if (g_led_config.matrix_co[row][col] !=NO_LED &&
+				keymap_key_to_keycode(layer, (keypos_t){col, row}) !=KC_TRNS) {
+				rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_LAYER);
+			}
+		}
+	}
+}
+```
+Code loops through every row and column on a per-key RGB board, scanning for configured keys (not `KC_TRANS`) and lighting that index location. It is configured to activate on non-default layers. This can be further customised with specific layer colors in a `switch` condition inside the last `if` statement.
+
+## Tap hold macros
+```
+#define TH_W LT(0, KC_W)
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+	switch (keycode) {
+	case TH_W:
+		// Send W on single tap
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_W); }
+			else { unregister_code(KC_W); }
+		// Send macro string on hold
+		} else {
+			if (record->event.pressed) { SEND_STRING(":wq"); }
+		}
+		return false;
+	}
+	return true; // continue with unmatched keycodes
+}
+```
+These features can be found QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated using `process_record_user()` with layer tap (`LT()`) key and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Key definition `TH_W` is placed on the key map (`keymap[]`).
+
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
 ```
-qmk compile ~/qmk_firmware/users/filterpaper/json/bm40.json
-qmk compile ~/qmk_firmware/users/filterpaper/json/planck.json
-qmk compile ~/qmk_firmware/users/filterpaper/json/corne.json
-qmk compile ~/qmk_firmware/users/filterpaper/json/mark65.json
+qmk flash ~/qmk_firmware/users/filterpaper/json/bm40.json
+qmk flash ~/qmk_firmware/users/filterpaper/json/planck.json
+qmk flash ~/qmk_firmware/users/filterpaper/json/corne.json
+qmk flash ~/qmk_firmware/users/filterpaper/json/mark65.json
 ```
 
-# Compiling the cat
-Bongocat is a fun typing animation for a split keyboard's secondary OLED display. It is however space consuming because each frame is 512 bytes to fit the 128x32px OLED display. If keyboard configuration has minimal features and no RGB code, pick `bongo-cat-full.c` or `bongo-cat-slim.c` source to build a single firmware for both controllers. If compiled size exceeds limit, build with `bongo-cat-left.c` and `bongo-cat-right.c` separately to flash on each side. Bongocat source file selection is `#define BONGOCAT` in `filterpaper.h`.
-
-# Corne Split Setup
+# Building Corne Keyboard (CRKBD)
+## Corne Split Setup
 Corne is configured with EE_HANDS for controllers to read left or right values off EEPROM, allowing USB-C cable to be used on either side. These are one-time flash commands to write left and right side values into both Elite-C MCUs:
 ```
 qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-left
@@ -50,7 +87,10 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 ```
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
-# QMK logo file
+## Compiling the cat
+Bongocat is a fun typing animation for a split keyboard's secondary OLED display. It is however space consuming because each frame is 512 bytes to fit the 128x32px OLED display. If keyboard configuration has minimal features and no RGB code, pick `bongo-cat-full.c` or `bongo-cat-slim.c` source to build a single firmware for both controllers. If compiled size exceeds limit, build with `bongo-cat-left.c` and `bongo-cat-right.c` separately to flash on each side. Bongocat source file selection is `#define BONGOCAT` in `filterpaper.h`.
+
+## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
 * [QMK Logo Editor](https://joric.github.io/qle/)

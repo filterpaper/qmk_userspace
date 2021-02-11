@@ -40,8 +40,8 @@ void matrix_init_user(void) {
 layer_state_t layer_state_set_user(layer_state_t state) {
 #ifndef KEYBOARD_planck_rev6
 	// Default layer keypress effects
-	switch (get_highest_layer(default_layer_state)) {
-	case _COLEMAK:
+	switch (get_highest_layer(state)) {
+	case CMK:
 		rgb_matrix_mode_noeeprom(MATRIX_SHIFT);
 		break;
 	default:
@@ -71,7 +71,7 @@ void rgb_matrix_indicators_user(void) {
 	// Layer keys indicator
 	// Modified from @rgoulter's post
 	uint8_t layer = get_highest_layer(layer_state);
-	if (layer >_COLEMAK) {
+	if (layer >CMK) {
 		for (uint8_t row = 0; row <MATRIX_ROWS; row++) {
 			for (uint8_t col = 0; col <MATRIX_COLS; col++) {
 				if (g_led_config.matrix_co[row][col] !=NO_LED &&
@@ -87,52 +87,76 @@ void rgb_matrix_indicators_user(void) {
 
 
 /////// TAP HOLD SHORTCUTS ///////
-// Shortcut macros using layer tap LT() delay code
-// to register hold, by @sigprof
+// Shortcut macros using layer tap LT() tapping term delay
+// code to register hold, by @sigprof
+// Sends normal keycode on tap, macros on hold
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-	switch(keycode){
-	case TH_X:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_X); }
-			else { unregister_code(KC_X); }
-		} else {
-			if (record->event.pressed) { tap_code16(G(KC_X)); }
-		}
-		return false;
-	case TH_C:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_C); }
-			else { unregister_code(KC_C); }
-		} else {
-			if (record->event.pressed) { tap_code16(G(KC_C)); }
-		}
-		return false;
-	case TH_V:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_V); }
-			else { unregister_code(KC_V); }
-		} else {
-			if (record->event.pressed) { tap_code16(G(KC_V)); }
-		}
-		return false;
+	switch (keycode) {
 	case TH_Q:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_Q); }
 			else { unregister_code(KC_Q); }
-		} else {
-			if (record->event.pressed) { SEND_STRING(":q!"); }
-		}
+		} else { if (record->event.pressed) { SEND_STRING(":q!"); } }
 		return false;
 	case TH_W:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_W); }
 			else { unregister_code(KC_W); }
+		} else { if (record->event.pressed) { SEND_STRING(":wq"); } }
+		return false;
+	case TH_T:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_T); }
+			else { unregister_code(KC_T); }
+		} else { if (record->event.pressed) { tap_code16(G(KC_T)); } }
+		return false;
+	case TH_N:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_N); }
+			else { unregister_code(KC_N); }
+		} else { if (record->event.pressed) { tap_code16(G(KC_N)); } }
+		return false;
+	case TH_X:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_X); }
+			else { unregister_code(KC_X); }
+		} else { if (record->event.pressed) { tap_code16(G(KC_X)); } }
+		return false;
+	case TH_C:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_C); }
+			else { unregister_code(KC_C); }
+		} else { if (record->event.pressed) { tap_code16(G(KC_C)); } }
+		return false;
+	case TH_V:
+		if (record->tap.count) {
+			if (record->event.pressed) { register_code(KC_V); }
+			else { unregister_code(KC_V); }
+		} else { if (record->event.pressed) { tap_code16(G(KC_V)); } }
+		return false;
+	case KC_BSPC: // Shift Backspace Delete
+		if (record->event.pressed) {
+			if (get_mods() & MOD_MASK_SHIFT) { register_code(KC_DEL); }
+			else { register_code(KC_BSPC); }
 		} else {
-			if (record->event.pressed) { SEND_STRING(":wq"); }
+			unregister_code(KC_DEL);
+			unregister_code(KC_BSPC);
 		}
 		return false;
 	}
 	return true; // continue with unmatched keycodes
+}
+
+// Fine tune tapping term delays
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+	switch (keycode) {
+	case LSFT_T(KC_ENT):
+	case LSFT_T(KC_SPC):
+	case RSFT_T(KC_SPC):
+		return TAPPING_TERM - 80;
+	default:
+		return TAPPING_TERM;
+	}
 }
 
 
