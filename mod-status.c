@@ -57,10 +57,10 @@ void render_layer_state(void) {
 		0x20, 0xbd, 0xbe, 0xbf, 0x20,
 		0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
 
-	if (layer_state_is(DEF)) { oled_write_P(default_layer, false); }
-	else if (layer_state_is(LWR)) { oled_write_P(lower_layer, false); }
+	if (layer_state_is(ADJ)) { oled_write_P(adjust_layer, false); }
 	else if (layer_state_is(RSE)) { oled_write_P(raise_layer, false); }
-	else { oled_write_P(adjust_layer, false); }
+	else if (layer_state_is(LWR)) { oled_write_P(lower_layer, false); }
+	else { oled_write_P(default_layer, false); }
 }
 
 void render_mod_status_gui_alt(uint8_t modifiers) {
