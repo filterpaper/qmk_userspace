@@ -17,13 +17,9 @@
 /* Graphical active layer and modifier status display. Module must be
    rendered on primary OLED
 
-   @soundmonster is the original author of this code
-   (qmk_firmware/keyboards/crkbd/keymaps/soundmonster)
+   Modified from @soundmonster's graphical status code
+   (keyboards/crkbd/keymaps/soundmonster)
 */
-
-void render_space(void) {
-	oled_write_P(PSTR("\n\n"), false);
-}
 
 void render_logo(void) {
 	static const char PROGMEM corne_logo[] = {
@@ -156,9 +152,9 @@ void render_mod_status_ctrl_shift(uint8_t modifiers) {
 // Primary modifier status display function
 static void render_mod_status(void) {
 	render_logo();
-	render_space();
+	oled_set_cursor(0,6); // col 0,line 6 on 5x16 OLED
 	render_layer_state();
-	render_space();
+	oled_set_cursor(0,11);
 	render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
 	render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
 }

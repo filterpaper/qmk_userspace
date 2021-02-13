@@ -17,8 +17,8 @@
 /* Graphical bongocat animation display, requires WPM_ENABLE
    Animation is aligned only for right 128x32px OLED.
 
-   @j-inc is the original author the bongo cat code
-   (qmk_firmware/tree/master/keyboards/kyria/keymaps/j-inc)
+   Modified from @j-inc's bongocat animation code
+   (keyboards/kyria/keymaps/j-inc)
 */
 
 // Animation frame defaults

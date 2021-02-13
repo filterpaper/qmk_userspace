@@ -34,10 +34,10 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #	define MATRIX_SHIFT		RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
 #endif
 
-// Bongocat choice: pick one
+// Bongocat build settings
 #ifdef OLED_DRIVER_ENABLE
-#	define BONGOCAT "bongo-cat-slim.c"
-//#	define BONGOCAT "bongo-cat-full.c"
-//#	define BONGOCAT "bongo-cat-left.c"
-//	define BONGOCAT "bongo-cat-right.c"
+#	define SLIMCAT // Saves 1060 bytes
+// Uncomment to build separately for each sides
+//#	define LEFTCAT
+//#	define RIGHTCAT
 #endif

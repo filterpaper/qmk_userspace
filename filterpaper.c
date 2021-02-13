@@ -68,8 +68,7 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
-	// Layer keys indicator
-	// Modified from @rgoulter's post
+	// Layer keys indicator by @rgoulter
 	uint8_t layer = get_highest_layer(layer_state);
 	if (layer >CMK) {
 		for (uint8_t row = 0; row <MATRIX_ROWS; row++) {
@@ -163,7 +162,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 /////// OLED DISPLAY RENDERING ///////
 #ifdef OLED_DRIVER_ENABLE
-#include BONGOCAT // For animate_cat();
+#include "bongo-cat.c" // For animate_cat();
 #include "mod-status.c" // For render_mod_status();
 
 // Orientate OLED display
