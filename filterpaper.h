@@ -34,8 +34,8 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
-extern void render_mod_status(void);
-extern void animate_cat(void);
+void render_mod_status(void);
+void animate_cat(void);
 #	define SLIMCAT
 // #	define LEFTCAT
 // #	define RIGHTCAT
