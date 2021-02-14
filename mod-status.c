@@ -21,6 +21,8 @@
    (keyboards/crkbd/keymaps/soundmonster)
 */
 
+#include "filterpaper.h"
+
 void render_logo(void) {
 	static const char PROGMEM corne_logo[] = {
 		0x80, 0x81, 0x82, 0x83, 0x84,
@@ -150,7 +152,7 @@ void render_mod_status_ctrl_shift(uint8_t modifiers) {
 }
 
 // Primary modifier status display function
-static void render_mod_status(void) {
+void render_mod_status(void) {
 	render_logo();
 	oled_set_cursor(0,6); // col 0,line 6 on 5x16 OLED
 	render_layer_state();

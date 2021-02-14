@@ -21,8 +21,6 @@
 #define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
-#define LEADER_TIMEOUT 500
-#define LEADER_PER_KEY_TIMING
 #define TAP_CODE_DELAY 50
 #define LAYER_STATE_8BIT // 8-layer limit, saves ~462 bytes
 

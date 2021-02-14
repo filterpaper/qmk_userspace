@@ -15,10 +15,9 @@
  */
 
 #pragma once
-
 #include QMK_KEYBOARD_H
 
-// Layer number reference
+// Layer references
 enum layers { DEF, CMK, LWR, RSE, ADJ };
 
 // Custom dimmer indicator colors and effects
@@ -34,10 +33,10 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #	define MATRIX_SHIFT		RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
 #endif
 
-// Bongocat build settings
 #ifdef OLED_DRIVER_ENABLE
-#	define SLIMCAT // Saves 1060 bytes
-// Uncomment to build separately for each sides
-//#	define LEFTCAT
-//#	define RIGHTCAT
+extern void render_mod_status(void);
+extern void animate_cat(void);
+#	define SLIMCAT
+// #	define LEFTCAT
+// #	define RIGHTCAT
 #endif

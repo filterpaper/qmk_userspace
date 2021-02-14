@@ -37,6 +37,7 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	WPM_ENABLE = yes
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
+	SRC += mod-status.c bongo-cat.c
 endif
 
 # Main shared source file

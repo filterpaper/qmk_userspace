@@ -23,6 +23,8 @@
    (keyboards/kyria/keymaps/j-inc)
 */
 
+#include "filterpaper.h"
+
 // Animation frame defaults
 #define IDLE_FRAMES 5
 #define TAP_FRAMES 2
@@ -384,19 +386,15 @@ static void render_cat_idle(void) {
 #endif // ifndef RIGHTCAT
 
 	current_idle_frame = (current_idle_frame + 1) % IDLE_FRAMES;
-#if !defined(LEFTCAT) && !defined(RIGHTCAT)
+#if defined(LEFTCAT)
+	oled_write_raw_P(left_idle[abs((IDLE_FRAMES - 1) - current_idle_frame)], ANIM_SIZE);
+#elif defined(RIGHTCAT)
+	oled_write_raw_P(idle[abs((IDLE_FRAMES - 1) - current_idle_frame)], ANIM_SIZE);
+#else
 	if (is_keyboard_left())	{
-#endif
-#if !defined(RIGHTCAT)
 		oled_write_raw_P(left_idle[abs((IDLE_FRAMES - 1) - current_idle_frame)], ANIM_SIZE);
-#endif
-#if !defined(LEFTCAT) && !defined(RIGHTCAT)
 	} else {
-#endif
-#if !defined(LEFTCAT)
 		oled_write_raw_P(idle[abs((IDLE_FRAMES - 1) - current_idle_frame)], ANIM_SIZE);
-#endif
-#if !defined(LEFTCAT) && !defined(RIGHTCAT)
 	}
 #endif
 }
@@ -478,19 +476,15 @@ static void render_cat_prep(void) {
 	} };
 #endif
 
-#if !defined(LEFTCAT) && !defined(RIGHTCAT)
+#if defined(LEFTCAT)
+	oled_write_raw_P(left_prep[0], ANIM_SIZE);
+#elif defined(RIGHTCAT)
+	oled_write_raw_P(prep[0], ANIM_SIZE);
+#else
 	if (is_keyboard_left())	{
-#endif
-#if !defined(RIGHTCAT)
 		oled_write_raw_P(left_prep[0], ANIM_SIZE);
-#endif
-#if !defined(LEFTCAT) && !defined(RIGHTCAT)
 	} else {
-#endif
-#if !defined(LEFTCAT)
 		oled_write_raw_P(prep[0], ANIM_SIZE);
-#endif
-#if !defined(LEFTCAT) && !defined(RIGHTCAT)
 	}
 #endif
 }
@@ -639,25 +633,21 @@ static void render_cat_tap(void) {
 #endif // #ifndef RIGHTCAT
 
 	current_tap_frame = (current_tap_frame + 1) % TAP_FRAMES;
-#if !defined(LEFTCAT) && !defined(RIGHTCAT)
+#if defined(LEFTCAT)
+	oled_write_raw_P(left_tap[abs((TAP_FRAMES - 1) - current_tap_frame)], ANIM_SIZE);
+#elif defined(RIGHTCAT)
+	oled_write_raw_P(tap[abs((TAP_FRAMES - 1) - current_tap_frame)], ANIM_SIZE);
+#else
 	if (is_keyboard_left())	{
-#endif
-#if !defined(RIGHTCAT)
 		oled_write_raw_P(left_tap[abs((TAP_FRAMES - 1) - current_tap_frame)], ANIM_SIZE);
-#endif
-#if !defined(LEFTCAT) && !defined(RIGHTCAT)
 	} else {
-#endif
-#if !defined(LEFTCAT)
 		oled_write_raw_P(tap[abs((TAP_FRAMES - 1) - current_tap_frame)], ANIM_SIZE);
-#endif
-#if !defined(LEFTCAT) && !defined(RIGHTCAT)
 	}
 #endif
 }
 
 // Primary bongo cat animation function
-static void animate_cat(void) {
+void animate_cat(void) {
 
 	void animation_phase(void) {
 		if (get_current_wpm() >=TAP_SPEED && get_current_wpm() >=prev_wpm) {
@@ -669,7 +659,6 @@ static void animate_cat(void) {
 			// Animate idle when WPM drops
 			render_cat_idle();
 			prev_wpm = get_current_wpm()+1;
-		}
 #else
 		} else if (get_current_wpm() >IDLE_SPEED && (get_current_wpm() <TAP_SPEED || get_current_wpm() <prev_wpm)) {
 			// Animate prep when WPM drops
@@ -677,8 +666,8 @@ static void animate_cat(void) {
 			prev_wpm = get_current_wpm()+1;
 		} else { // (get_current_wpm() <=IDLE_SPEED)
 			render_cat_idle();
-		}
 #endif
+		}
 	}
 
 	// Animate on WPM, turn off OLED on idle
