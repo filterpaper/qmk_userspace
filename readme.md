@@ -85,7 +85,7 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
 ## Compiling the cat
-Bongocat is a fun typing animation for a split keyboard's secondary OLED display. The `bongo-cat.c` source has animation frames aligned correctly for both left and right OLED display. They are quite space consuming because each frame requires 512 bytes to fill the 128x32px OLED display. Preprocessor `SLIMCAT` in `filterpaper.h` will reduce size by 1060 bytes. To further halve build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side. All three preprocessors can be enabled with compile-time environment variables: `qmk flash -e LEFTCAT=yes corne.json`
+The `bongo-cat.c` source has typing animation frames aligned correctly for both left and right OLED display. They are quite space consuming because each frame requires 512 bytes to fill the 128x32px OLED display. Preprocessor `SLIMCAT` in `filterpaper.h` will reduce size by 1060 bytes. To further halve build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side. All three preprocessors can be enabled with compile-time environment variables: `qmk flash -e LEFTCAT=yes corne.json`
 
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:

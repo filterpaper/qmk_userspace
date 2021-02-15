@@ -109,6 +109,7 @@ void oled_task_user(void) {
 // Sends normal keycode on tap, macros on hold
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	switch (keycode) {
+	// VIM commands
 	case TH_Q:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_Q); }
@@ -121,6 +122,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			else { unregister_code(KC_W); }
 		} else { if (record->event.pressed) { SEND_STRING(":wq"); } }
 		return false;
+	// New tab and window
 	case TH_T:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_T); }
@@ -133,6 +135,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			else { unregister_code(KC_N); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_N)); } }
 		return false;
+	// Cut, copy and paste
 	case TH_X:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_X); }
@@ -151,7 +154,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			else { unregister_code(KC_V); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_V)); } }
 		return false;
-	}
+}
 	return true; // continue with unmatched keycodes
 }
 
