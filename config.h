@@ -47,7 +47,7 @@
 #	define RGB_MATRIX_KEYPRESSES
 #	define RGB_DISABLE_WHEN_USB_SUSPENDED true
 #	define RGB_MATRIX_MAXIMUM_BRIGHTNESS 100
-// Disable unused effects
+	// Disable unused effects
 #	define DISABLE_RGB_MATRIX_ALPHAS_MODS
 #	define DISABLE_RGB_MATRIX_GRADIENT_UP_DOWN
 #	define DISABLE_RGB_MATRIX_BREATHING
@@ -72,7 +72,7 @@
 #	define DISABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
 #endif
 
-// Layer tap hold macro references for keymap[]
+// Tap hold macro references for keymap[]
 #define TH_Q LT(0,KC_Q)
 #define TH_W LT(0,KC_W)
 #define TH_T LT(0,KC_T)

@@ -20,25 +20,40 @@ SPACE_CADET_ENABLE = no
 RGBLIGHT_ENABLE = no
 RGB_MATRIX_ENABLE = no
 
-# Common features
+# Media keys support
 EXTRAKEY_ENABLE = yes
 
-# Platform and keyboard specific features
+# Exclude LTO for Planck
 ifneq ($(PLATFORM),CHIBIOS)
 	LTO_ENABLE = yes
 endif
+
+# Boards with LEDs
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_mark))
 	BOOTMAGIC_ENABLE = lite
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 endif
+
+# Corne keyboard features
 ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	BOOTLOADER = atmel-dfu
-	WPM_ENABLE = yes
 	MOUSEKEY_ENABLE = yes
-	OLED_DRIVER_ENABLE = yes
-	SRC += mod-status.c bongo-cat.c
+	ifneq ($(CORNELP), yes)
+		WPM_ENABLE = yes
+		OLED_DRIVER_ENABLE = yes
+		SRC += mod-status.c bongo-cat.c
+		# Compile-time cat selection with env vars
+		ifeq ($(SLIMCAT), yes)
+			OPT_DEFS += -DSLIMCAT
+		endif
+		ifeq ($(RIGHTCAT), yes)
+			OPT_DEFS += -DRIGHTCAT
+		else ifeq ($(LEFTCAT), yes)
+			OPT_DEFS += -DLEFTCAT
+		endif
+	endif
 endif
 
-# Main shared source file
+# Main source file
 SRC += filterpaper.c

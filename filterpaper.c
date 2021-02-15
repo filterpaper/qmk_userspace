@@ -85,6 +85,24 @@ void rgb_matrix_indicators_user(void) {
 
 
 
+/////// OLED DISPLAY RENDERING ///////
+#ifdef OLED_DRIVER_ENABLE
+// Orientate display
+oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+	if (is_keyboard_master())    { return OLED_ROTATION_270; }
+	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
+	else                         { return OLED_ROTATION_180; }
+}
+
+// Render modules on both OLED
+void oled_task_user(void) {
+	if (is_keyboard_master()) { render_mod_status(); }
+	else                      { animate_cat(); }
+}
+#endif
+
+
+
 /////// TAP HOLD SHORTCUTS ///////
 // Shortcut macros using layer tap LT() tapping term delay
 // code to register hold, by @sigprof
@@ -133,15 +151,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			else { unregister_code(KC_V); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_V)); } }
 		return false;
-	case KC_BSPC: // Shift Backspace Delete
-		if (record->event.pressed) {
-			if (get_mods() & MOD_MASK_SHIFT) { register_code(KC_DEL); }
-			else { register_code(KC_BSPC); }
-		} else {
-			unregister_code(KC_DEL);
-			unregister_code(KC_BSPC);
-		}
-		return false;
 	}
 	return true; // continue with unmatched keycodes
 }
@@ -153,29 +162,14 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	case LSFT_T(KC_SPC):
 	case RSFT_T(KC_SPC):
 		return TAPPING_TERM - 80;
+	case TH_X:
+	case TH_C:
+	case TH_V:
+		return TAPPING_TERM - 50;
 	default:
 		return TAPPING_TERM;
 	}
 }
-
-
-
-/////// OLED DISPLAY RENDERING ///////
-#ifdef OLED_DRIVER_ENABLE
-// Orientate display
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-	if (is_keyboard_master())    { return OLED_ROTATION_270; }
-	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
-	else                         { return OLED_ROTATION_180; }
-}
-
-// Render modules on both OLED
-void oled_task_user(void) {
-	if (is_keyboard_master()) { render_mod_status(); }
-	else                      { animate_cat(); }
-}
-#endif
-
 
 
 /////// INIT AND SUSPEND ///////

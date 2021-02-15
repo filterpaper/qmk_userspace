@@ -37,6 +37,6 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 void render_mod_status(void);
 void animate_cat(void);
 #	define SLIMCAT
-// #	define LEFTCAT
-// #	define RIGHTCAT
+//#	define LEFTCAT
+//#	define RIGHTCAT
 #endif
