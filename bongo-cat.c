@@ -29,10 +29,10 @@
 #define IDLE_FRAMES 5
 #define TAP_FRAMES 2
 #define ANIM_SIZE 512
+#define IDLE_SPEED 45
 #ifdef SLIMCAT
+#	undef IDLE_SPEED
 #	define IDLE_SPEED 0
-#else
-#	define IDLE_SPEED 45
 #endif
 #define TAP_SPEED 60
 #define ANIM_FRAME_DURATION 200
@@ -42,7 +42,7 @@ uint32_t anim_timer = 0;
 uint32_t anim_sleep = 0;
 uint8_t current_idle_frame = 0;
 uint8_t current_tap_frame = 0;
-static long int oled_timeout = 10000;
+static long int oled_timeout = 5000;
 
 // 512-byte arrays to fill 128x32px (bits)
 static void render_cat_idle(void) {
@@ -671,7 +671,7 @@ void animate_cat(void) {
 	}
 
 	// Animate on WPM, turn off OLED on idle
-	if (get_current_wpm() != 000 && get_current_wpm() >=prev_wpm) {
+	if (get_current_wpm() != 000) {
 		oled_on();
 		if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
 			anim_timer = timer_read32();

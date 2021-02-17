@@ -89,7 +89,6 @@ void rgb_matrix_indicators_user(void) {
 
 /////// OLED DISPLAY RENDERING ///////
 #ifdef OLED_DRIVER_ENABLE
-// Orientate display
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 	if (is_keyboard_master())    { return OLED_ROTATION_270; }
 	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
@@ -175,6 +174,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 		return TAPPING_TERM;
 	}
 }
+
 
 
 /////// INIT AND SUSPEND ///////
