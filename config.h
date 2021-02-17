@@ -24,29 +24,9 @@
 #define TAP_CODE_DELAY 50
 #define LAYER_STATE_8BIT // 8-layer limit, saves ~462 bytes
 
-#ifdef MOUSEKEY_ENABLE
-#	define MOUSEKEY_DELAY 0
-#	define MOUSEKEY_INTERVAL 16
-#	define MOUSEKEY_MAX_SPEED 7
-#	define MOUSEKEY_TIME_TO_MAX 40
-#	define MOUSEKEY_WHEEL_DELAY 0
-#	define MOUSEKEY_WHEEL_INTERVAL 50
-#	define MOUSEKEY_WHEEL_TIME_TO_MAX 100
-#endif
-
-#ifdef SPLIT_KEYBOARD
-#	define EE_HANDS
-#endif
-
-#ifdef OLED_DRIVER_ENABLE
-#	define OLED_TIMEOUT 8000
-#	define OLED_FONT_H "users/filterpaper/glcdfont.c"
-#endif
-
 #ifdef RGB_MATRIX_ENABLE
 #	define RGB_MATRIX_KEYPRESSES
 #	define RGB_DISABLE_WHEN_USB_SUSPENDED true
-#	define RGB_MATRIX_MAXIMUM_BRIGHTNESS 100
 	// Disable unused effects
 #	define DISABLE_RGB_MATRIX_ALPHAS_MODS
 #	define DISABLE_RGB_MATRIX_GRADIENT_UP_DOWN
@@ -72,11 +52,34 @@
 #	define DISABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
 #endif
 
+#ifdef RGBLIGHT_ENABLE
+#	define RGBLIGHT_LAYERS
+#endif
+
+#ifdef MOUSEKEY_ENABLE
+#	define MOUSEKEY_DELAY 0
+#	define MOUSEKEY_INTERVAL 16
+#	define MOUSEKEY_MAX_SPEED 7
+#	define MOUSEKEY_TIME_TO_MAX 40
+#	define MOUSEKEY_WHEEL_DELAY 0
+#	define MOUSEKEY_WHEEL_INTERVAL 50
+#	define MOUSEKEY_WHEEL_TIME_TO_MAX 100
+#endif
+
+#ifdef SPLIT_KEYBOARD
+#	define EE_HANDS
+#endif
+
+#ifdef OLED_DRIVER_ENABLE
+#	define OLED_TIMEOUT 8000
+#	define OLED_FONT_H "users/filterpaper/glcdfont.c"
+#endif
+
 // Tap hold macro references for keymap[]
 #define TH_Q LT(0,KC_Q)
 #define TH_W LT(0,KC_W)
 #define TH_T LT(0,KC_T)
 #define TH_N LT(0,KC_N)
-#define TH_X LT(0,KC_X)
-#define TH_C LT(0,KC_C)
-#define TH_V LT(0,KC_V)
+#define TH_DOT LT(0,KC_DOT)
+#define TH_COMM LT(0,KC_COMM)
+#define TH_M LT(0,KC_M)

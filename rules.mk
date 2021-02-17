@@ -32,7 +32,7 @@ endif
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_mark))
 	BOOTMAGIC_ENABLE = lite
 	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = yes
+	RGB_MATRIX_CUSTOM_USER = no
 endif
 
 # Corne keyboard features

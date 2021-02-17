@@ -37,9 +37,8 @@ void matrix_init_user(void) {
 #endif
 }
 
-layer_state_t layer_state_set_user(layer_state_t state) {
 #ifndef KEYBOARD_planck_rev6
-	// Default layer keypress effects
+layer_state_t layer_state_set_user(layer_state_t state) {
 	switch (get_highest_layer(state)) {
 	case CMK:
 		rgb_matrix_mode_noeeprom(MATRIX_SHIFT);
@@ -47,9 +46,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 	default:
 		rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 	}
-#endif // KEYBOARD_planck_rev6
 	return state;
 }
+#endif
 
 void rgb_matrix_indicators_user(void) {
 	// Modifier keys indicator
@@ -80,6 +79,9 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
+#ifdef KEYBOARD_planck_rev6
+	if (layer_state_is(CMK)) { rgb_matrix_set_color_all(RGB_LAYER); }
+#endif
 }
 #endif // RGB_MATRIX_ENABLE
 
@@ -135,26 +137,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			else { unregister_code(KC_N); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_N)); } }
 		return false;
-	// Cut, copy and paste
-	case TH_X:
+	// Right hand cut copy paste
+	case TH_DOT:
 		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_X); }
-			else { unregister_code(KC_X); }
+			if (record->event.pressed) { register_code(KC_DOT); }
+			else { unregister_code(KC_DOT); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_X)); } }
 		return false;
-	case TH_C:
+	case TH_COMM:
 		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_C); }
-			else { unregister_code(KC_C); }
+			if (record->event.pressed) { register_code(KC_COMM); }
+			else { unregister_code(KC_COMM); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_C)); } }
 		return false;
-	case TH_V:
+	case TH_M:
 		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_V); }
-			else { unregister_code(KC_V); }
+			if (record->event.pressed) { register_code(KC_M); }
+			else { unregister_code(KC_M); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_V)); } }
 		return false;
-}
+	}
 	return true; // continue with unmatched keycodes
 }
 
@@ -165,9 +167,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	case LSFT_T(KC_SPC):
 	case RSFT_T(KC_SPC):
 		return TAPPING_TERM - 80;
-	case TH_X:
-	case TH_C:
-	case TH_V:
+	case TH_DOT:
+	case TH_COMM:
+	case TH_M:
 		return TAPPING_TERM - 50;
 	default:
 		return TAPPING_TERM;
