@@ -154,9 +154,19 @@ void render_mod_status_ctrl_shift(uint8_t modifiers) {
 // Primary modifier status display function
 void render_mod_status(void) {
 	render_logo();
+#ifndef LUNA
 	oled_set_cursor(0,6); // col 0,line 6 on 5x16 OLED
 	render_layer_state();
 	oled_set_cursor(0,11);
 	render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
 	render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
+#else
+	oled_set_cursor(0,4); // col 0,line 6 on 5x16 OLED
+	render_layer_state();
+	oled_set_cursor(0,7);
+	render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
+	render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
+	oled_set_cursor(0,12);
+	animate_luna();
+#endif
 }

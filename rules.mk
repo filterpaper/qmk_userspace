@@ -50,7 +50,7 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	ifneq ($(CORNELP), yes)
 		WPM_ENABLE = yes
 		OLED_DRIVER_ENABLE = yes
-		SRC += mod-status.c bongo-cat.c
+		SRC += mod-status.c bongocat.c
 		# Compile-time cat selection
 		ifeq ($(SLIMCAT), yes)
 			OPT_DEFS += -DSLIMCAT
@@ -59,6 +59,10 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 			OPT_DEFS += -DRIGHTCAT
 		else ifeq ($(LEFTCAT), yes)
 			OPT_DEFS += -DLEFTCAT
+		endif
+		ifeq ($(LUNA), yes)
+			SRC += luna.c
+			OPT_DEFS += -DLUNA
 		endif
 	endif
 endif

@@ -22,6 +22,7 @@ config.h | QMK configuration variables and options, see [configuring QMK](../../
 filterpaper.h | User specific variables and options
 filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
 bongo-cat.c | Bongocat typing animation source code
+luna.c | Tiny Luna the dog typing animation source code for modifier module
 mod-status.c | Graphical layer and modifier status module for primary OLED
 glcdfont.c | Corne logo, コルネ katakana name, fonts and icon images—required by mod-status.c
 rgb_matrix_user.inc | Custom RGB matrix effects collected from Reddit, see [Custom RGB Matrix](../../docs/feature_rgb_matrix.md#custom-rgb-matrix-effects-idcustom-rgb-matrix-effects)
@@ -86,6 +87,9 @@ Subsequently, the same firmware binary can be flashed normally to both sides. Se
 
 ## Compiling the cat
 The `bongo-cat.c` source has typing animation frames aligned correctly for both left and right OLED display. They are quite space consuming because each frame requires 512 bytes to fill the 128x32px OLED display. Preprocessor `SLIMCAT` in `filterpaper.h` will reduce size by 1060 bytes. To further halve build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side. All three preprocessors can be enabled with compile-time environment variables: `qmk flash -e LEFTCAT=yes corne.json`
+
+## Compiling the cat
+The `luna.c` source has a tiny animated dog that reacts to typing speed, modifier activation and caps lock. It will be added below modifier status icons. Luna can be included with variable `qmk flash -e LUNA=yes corne.json`.
 
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:

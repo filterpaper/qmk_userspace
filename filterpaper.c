@@ -19,25 +19,53 @@
 
 /////// RGB LIGHTING ///////
 #ifdef RGB_MATRIX_ENABLE
-// Reduces matrix effect brightness by 60% to lower USB
-// power consumption. Applies only to matrix effects using
-// rgb_matrix_hsv_to_rgb() for color selection (by @tzarc)
-/*
+/* // by @tzarc
 RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 	hsv.v = (uint8_t)(hsv.v * 0.6);
 	return hsv_to_rgb(hsv);
 }; */
 
-void matrix_init_user(void) {
-#ifdef KEYBOARD_planck_rev6
-	rgb_matrix_sethsv_noeeprom(HSV_OFF);
-#else
+void keyboard_post_init_user(void) {
+#if defined(KEYBOARD_planck_rev6)
+	g_led_config = (led_config_t){ {
+		// Map LEDs to nearby keys
+		{ 6, 6, 6, 5, 5, 5 },
+		{ 6, 6, 6, 5, 5, 5 },
+		{ 7, 7, 8, 8, 8, 8 },
+		{ 7, 7, 8, 1, 2, 2 },
+		{ 4, 4, 4, 3, 3, 3 },
+		{ 4, 4, 4, 3, 3, 3 },
+		{ 1, 1, 1, 1, 2, 2 },
+		{ 1, 1, 1, 8, 8, 8 },
+	}, {
+		{112, 39}, {148, 60}, {206, 53}, {206, 3}, {150, 3}, {74, 3}, {18, 3}, {18, 54}, {77, 60}
+	}, {
+		// Change middle LED flags
+		255, 255, 255, 255, 4,
+		4, 255, 255, 255
+	} };
+#elif defined(KEYBOARD_boardsource_the_mark)
+	g_led_config = (led_config_t){ {
+		// Map LEDs to nearby keys
+		{ 10, 10, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 1 , 1  },
+		{ 11, 11, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 0 , 0  },
+		{ 12, 12, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 23, 23 },
+		{ 13, 13, 14, 14, 15, 16, 16, 17, 18, 19, 19, 20, 21, 21, 22, 22 },
+		{ 13, 13, 14, 14, 15, 16, 16, 17, 18, 19, 19, 20, 21, 21, 22, 22 },
+	}, {
+		{224, 42}, {224, 21}, {209, 21}, {179, 21}, {164, 21}, {134, 21}, {119, 21}, {89, 21}, {74, 21}, {45, 21}, {30, 21}, {30, 42},
+		{30, 64}, {30, 85}, {45, 85}, {74, 85}, {89, 85}, {119, 85}, {134, 85}, {164, 85}, {179, 85}, {209, 85}, {224, 85}, {224, 64}
+	}, {
+		// Change middle LED flags
+		255, 255, 4, 4, 4, 4, 4, 4,
+		4, 4, 255, 255, 255, 255, 4, 4,
+		4, 4, 4, 4, 4, 4, 255, 255
+	} };
+#endif
 	rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
 	rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
-#endif
 }
 
-#ifndef KEYBOARD_planck_rev6
 layer_state_t layer_state_set_user(layer_state_t state) {
 	switch (get_highest_layer(state)) {
 	case CMK:
@@ -48,12 +76,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 	}
 	return state;
 }
-#endif
 
 void rgb_matrix_indicators_user(void) {
 	// Modifier keys indicator
-	if (get_mods() & (MOD_MASK_ALT|MOD_MASK_GUI|MOD_MASK_CTRL|MOD_MASK_SHIFT)) {
-		for (int i = 0; i <DRIVER_LED_TOTAL; i++) {
+	if (get_mods() & (MOD_MASK_CSAG)) {
+		for (uint8_t i = 0; i <DRIVER_LED_TOTAL; i++) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_MODIFIER)) {
 				rgb_matrix_set_color(i, RGB_MODS);
 			}
@@ -61,7 +88,7 @@ void rgb_matrix_indicators_user(void) {
 	}
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
-		for (int i = 0; i <DRIVER_LED_TOTAL; i++) {
+		for (uint8_t i = 0; i <DRIVER_LED_TOTAL; i++) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_KEYLIGHT)) {
 				rgb_matrix_set_color(i, RGB_CAPS);
 			}
@@ -79,9 +106,6 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
-#ifdef KEYBOARD_planck_rev6
-	if (layer_state_is(CMK)) { rgb_matrix_set_color_all(RGB_LAYER); }
-#endif
 }
 #endif // RGB_MATRIX_ENABLE
 

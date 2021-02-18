@@ -39,4 +39,7 @@ void animate_cat(void);
 #	define SLIMCAT
 //#	define LEFTCAT
 //#	define RIGHTCAT
+#ifdef LUNA
+void animate_luna(void);
+#endif
 #endif
