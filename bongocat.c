@@ -28,14 +28,14 @@
 // Animation frame defaults
 #define IDLE_FRAMES 5
 #define TAP_FRAMES 2
-#define ANIM_SIZE 512
+#define ANIM_SIZE 512 // 512-byte arrays to fill 128x32px (bits)
 #define IDLE_SPEED 45
 #ifdef SLIMCAT
 #	undef IDLE_SPEED
 #	define IDLE_SPEED 0
 #endif
 #define TAP_SPEED 60
-#define ANIM_FRAME_DURATION 200
+#define ANIM_FRAME_DURATION 200 // Number of ms per frame
 
 uint8_t prev_wpm = 0;
 uint32_t anim_timer = 0;
@@ -44,7 +44,6 @@ uint8_t current_idle_frame = 0;
 uint8_t current_tap_frame = 0;
 static long int oled_timeout = 5000;
 
-// 512-byte arrays to fill 128x32px (bits)
 static void render_cat_idle(void) {
 #ifndef LEFTCAT
 	// Idle animation

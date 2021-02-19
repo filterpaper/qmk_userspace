@@ -63,6 +63,9 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 		ifeq ($(LUNA), yes)
 			SRC += luna.c
 			OPT_DEFS += -DLUNA
+		else ifeq ($(FELIX), yes)
+			SRC += luna.c
+			OPT_DEFS += -DLUNA -DFELIX
 		endif
 	endif
 endif

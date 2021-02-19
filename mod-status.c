@@ -23,7 +23,7 @@
 
 #include "filterpaper.h"
 
-void render_logo(void) {
+static void render_logo(void) {
 	static const char PROGMEM corne_logo[] = {
 		0x80, 0x81, 0x82, 0x83, 0x84,
 		0xa0, 0xa1, 0xa2, 0xa3, 0xa4,
@@ -37,7 +37,7 @@ void render_logo(void) {
 }
 
 // Graphical layer display
-void render_layer_state(void) {
+static void render_layer_state(void) {
 	static const char PROGMEM default_layer[] = {
 		0x20, 0x94, 0x95, 0x96, 0x20,
 		0x20, 0xb4, 0xb5, 0xb6, 0x20,
@@ -61,7 +61,7 @@ void render_layer_state(void) {
 	else { oled_write_P(default_layer, false); }
 }
 
-void render_mod_status_gui_alt(uint8_t modifiers) {
+static void render_mod_status_gui_alt(uint8_t modifiers) {
 	static const char PROGMEM gui_off_1[] = {0x85, 0x86, 0};
 	static const char PROGMEM gui_off_2[] = {0xa5, 0xa6, 0};
 	static const char PROGMEM gui_on_1[] = {0x8d, 0x8e, 0};
@@ -105,7 +105,7 @@ void render_mod_status_gui_alt(uint8_t modifiers) {
 	else { oled_write_P(alt_off_2, false); }
 }
 
-void render_mod_status_ctrl_shift(uint8_t modifiers) {
+static void render_mod_status_ctrl_shift(uint8_t modifiers) {
 	static const char PROGMEM ctrl_off_1[] = {0x89, 0x8a, 0};
 	static const char PROGMEM ctrl_off_2[] = {0xa9, 0xaa, 0};
 	static const char PROGMEM ctrl_on_1[] = {0x91, 0x92, 0};
@@ -154,19 +154,13 @@ void render_mod_status_ctrl_shift(uint8_t modifiers) {
 // Primary modifier status display function
 void render_mod_status(void) {
 	render_logo();
-#ifndef LUNA
 	oled_set_cursor(0,6); // col 0,line 6 on 5x16 OLED
-	render_layer_state();
+#ifdef LUNA
+	if (layer_state_is(CMK)) { animate_luna(); }
+	else
+#endif
+	{ render_layer_state(); }
 	oled_set_cursor(0,11);
 	render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
 	render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
-#else
-	oled_set_cursor(0,4); // col 0,line 6 on 5x16 OLED
-	render_layer_state();
-	oled_set_cursor(0,7);
-	render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
-	render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
-	oled_set_cursor(0,12);
-	animate_luna();
-#endif
 }

@@ -27,26 +27,19 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 
 void keyboard_post_init_user(void) {
 #if defined(KEYBOARD_planck_rev6)
-	g_led_config = (led_config_t){ {
-		// Map LEDs to nearby keys
-		{ 6, 6, 6, 5, 5, 5 },
-		{ 6, 6, 6, 5, 5, 5 },
-		{ 7, 7, 8, 8, 8, 8 },
-		{ 7, 7, 8, 1, 2, 2 },
-		{ 4, 4, 4, 3, 3, 3 },
-		{ 4, 4, 4, 3, 3, 3 },
-		{ 1, 1, 1, 1, 2, 2 },
-		{ 1, 1, 1, 8, 8, 8 },
+	g_led_config = (led_config_t){ { // Map LEDs to nearby keys
+		{ 6, 6, 6, 5, 5, 5 }, { 6, 6, 6, 5, 5, 5 },
+		{ 7, 7, 8, 8, 8, 8 }, { 7, 7, 8, 1, 2, 2 },
+		{ 4, 4, 4, 3, 3, 3 }, { 4, 4, 4, 3, 3, 3 },
+		{ 1, 1, 1, 1, 2, 2 }, { 1, 1, 1, 8, 8, 8 },
 	}, {
 		{112, 39}, {148, 60}, {206, 53}, {206, 3}, {150, 3}, {74, 3}, {18, 3}, {18, 54}, {77, 60}
-	}, {
-		// Change middle LED flags
+	}, { // Change middle LED flags
 		255, 255, 255, 255, 4,
 		4, 255, 255, 255
 	} };
 #elif defined(KEYBOARD_boardsource_the_mark)
-	g_led_config = (led_config_t){ {
-		// Map LEDs to nearby keys
+	g_led_config = (led_config_t){ { // Map LEDs to nearby keys
 		{ 10, 10, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 1 , 1  },
 		{ 11, 11, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 0 , 0  },
 		{ 12, 12, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 23, 23 },
@@ -55,8 +48,7 @@ void keyboard_post_init_user(void) {
 	}, {
 		{224, 42}, {224, 21}, {209, 21}, {179, 21}, {164, 21}, {134, 21}, {119, 21}, {89, 21}, {74, 21}, {45, 21}, {30, 21}, {30, 42},
 		{30, 64}, {30, 85}, {45, 85}, {74, 85}, {89, 85}, {119, 85}, {134, 85}, {164, 85}, {179, 85}, {209, 85}, {224, 85}, {224, 64}
-	}, {
-		// Change middle LED flags
+	}, { // Change middle LED flags
 		255, 255, 4, 4, 4, 4, 4, 4,
 		4, 4, 255, 255, 255, 255, 4, 4,
 		4, 4, 4, 4, 4, 4, 255, 255
@@ -110,7 +102,6 @@ void rgb_matrix_indicators_user(void) {
 #endif // RGB_MATRIX_ENABLE
 
 
-
 /////// OLED DISPLAY RENDERING ///////
 #ifdef OLED_DRIVER_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -125,7 +116,6 @@ void oled_task_user(void) {
 	else                      { animate_cat(); }
 }
 #endif
-
 
 
 /////// TAP HOLD SHORTCUTS ///////
@@ -198,7 +188,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 		return TAPPING_TERM;
 	}
 }
-
 
 
 /////// INIT AND SUSPEND ///////
