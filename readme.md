@@ -88,7 +88,7 @@ Subsequently, the same firmware binary can be flashed normally to both sides. Se
 ## Compiling the cat
 The `bongo-cat.c` source has typing animation frames aligned correctly for both left and right OLED display. They are quite space consuming because each frame requires 512 bytes to fill the 128x32px OLED display. Preprocessor `SLIMCAT` in `filterpaper.h` will reduce size by 1060 bytes. To further halve build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side. All three preprocessors can be enabled with compile-time environment variables: `qmk flash -e LEFTCAT=yes corne.json`
 
-## Compiling the cat
+## Compiling the dog
 The `luna.c` source has a tiny animated dog that reacts to typing speed, modifier activation and caps lock. It will be added below modifier status icons. Luna can be included with variable `qmk flash -e LUNA=yes corne.json`.
 
 ## Corne logo file
