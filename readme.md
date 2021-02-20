@@ -89,7 +89,7 @@ Subsequently, the same firmware binary can be flashed normally to both sides. Se
 The `bongo-cat.c` source has typing animation frames aligned correctly for both left and right secondary OLED display. They are quite space consuming because each frame requires 512 bytes to fill the 128x32px OLED display. Default preprocessor `SLIMCAT` in `filterpaper.h` will reduce size by 1060 bytes. To further halve build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side. All three preprocessors can be enabled with compile-time environment variables: `qmk flash -e LEFTCAT=yes corne.json`
 
 ## Compiling the dog
-The `luna.c` source has a tiny Luna dog that reacts to typing speed, modifier activation and caps lock. It is configured to replace layer status icon on Colemak layer in the primary OLED display. Luna can be included with build variable `qmk flash -e LUNA=yes corne.json`. Included is the alternative white Felix the dog that will be built with `qmk flash -e FELIX=yes corne.json`
+The `luna.c` source has a tiny Luna dog that reacts to typing speed, and modifier activation. Its 5 actions can be customised for reaction to any state. It replaces the layer icon in `mod-status.c` if included. Luna can be compiled with variable `qmk flash -e LUNA=yes corne.json`. An alternative white Felix the dog that will be built with `qmk flash -e FELIX=yes corne.json`
 
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:

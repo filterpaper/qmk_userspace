@@ -26,19 +26,20 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 }; */
 
 void keyboard_post_init_user(void) {
+	// Map under glow LEDs to nearby keys
 #if defined(KEYBOARD_planck_rev6)
-	g_led_config = (led_config_t){ { // Map LEDs to nearby keys
+	g_led_config = (led_config_t){ {
 		{ 6, 6, 6, 5, 5, 5 }, { 6, 6, 6, 5, 5, 5 },
 		{ 7, 7, 8, 8, 8, 8 }, { 7, 7, 8, 1, 2, 2 },
 		{ 4, 4, 4, 3, 3, 3 }, { 4, 4, 4, 3, 3, 3 },
 		{ 1, 1, 1, 1, 2, 2 }, { 1, 1, 1, 8, 8, 8 },
 	}, {
 		{112, 39}, {148, 60}, {206, 53}, {206, 3}, {150, 3}, {74, 3}, {18, 3}, {18, 54}, {77, 60}
-	}, { // Change middle LED flags
+	}, {
 		255, 255, 255, 255, 4, 4, 255, 255, 255
 	} };
 #elif defined(KEYBOARD_boardsource_the_mark)
-	g_led_config = (led_config_t){ { // Map LEDs to nearby keys
+	g_led_config = (led_config_t){ {
 		{ 10, 10, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 1 , 1  },
 		{ 11, 11, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 0 , 0  },
 		{ 12, 12, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 23, 23 },
@@ -47,11 +48,12 @@ void keyboard_post_init_user(void) {
 	}, {
 		{224, 42}, {224, 21}, {209, 21}, {179, 21}, {164, 21}, {134, 21}, {119, 21}, {89, 21}, {74, 21}, {45, 21}, {30, 21}, {30, 42},
 		{30, 64}, {30, 85}, {45, 85}, {74, 85}, {89, 85}, {119, 85}, {134, 85}, {164, 85}, {179, 85}, {209, 85}, {224, 85}, {224, 64}
-	}, { // Change middle LED flags
+	}, {
 		255, 255, 4, 4, 4, 4, 4, 4, 4, 4, 255, 255,
 		255, 255, 4, 4, 4, 4, 4, 4, 4, 4, 255, 255
 	} };
 #endif
+	// Startup defaults
 	rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
 	rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 }
@@ -69,7 +71,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 void rgb_matrix_indicators_user(void) {
 	// Modifier keys indicator
-	if (get_mods() & (MOD_MASK_CSAG)) {
+	if (get_mods() & MOD_MASK_CSAG) {
 		for (uint8_t i = 0; i <DRIVER_LED_TOTAL; i++) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_MODIFIER)) {
 				rgb_matrix_set_color(i, RGB_MODS);
@@ -174,8 +176,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // Fine tune tapping term delays
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	switch (keycode) {
-	case LSFT_T(KC_ENT):
-	case LSFT_T(KC_SPC):
+	case RSFT_T(KC_ENT):
 	case RSFT_T(KC_SPC):
 		return TAPPING_TERM - 80;
 	case TH_DOT:
