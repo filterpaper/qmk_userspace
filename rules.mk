@@ -28,7 +28,7 @@ SRC += filterpaper.c
 EXTRAKEY_ENABLE = yes
 
 # Exclude LTO for Planck
-ifneq ($(PLATFORM),CHIBIOS)
+ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
 endif
 
@@ -60,6 +60,7 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 		else ifeq ($(LEFTCAT), yes)
 			OPT_DEFS += -DLEFTCAT
 		endif
+		# Compile-time dog selection
 		ifeq ($(LUNA), yes)
 			SRC += luna.c
 			OPT_DEFS += -DLUNA

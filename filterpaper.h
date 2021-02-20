@@ -37,9 +37,7 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 void render_mod_status(void);
 void animate_cat(void);
 #	define SLIMCAT
-
 #	ifdef LUNA
 	void animate_luna(void);
 #	endif
-
 #endif
