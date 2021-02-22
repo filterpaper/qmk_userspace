@@ -258,15 +258,15 @@ static void render_luna_sneak(void) {
 void animate_luna(void) {
 
 	void animation_phase(void) {
-		if (host_keyboard_led_state().caps_lock) { render_luna_bark(); }
-		else if (get_mods() & MOD_MASK_CSAG) { render_luna_sneak(); }
+		if (get_mods() & MOD_MASK_SHIFT) { render_luna_bark(); }
+		else if (get_mods() & MOD_MASK_CAG) { render_luna_sneak(); }
 		else if (get_current_wpm() <= MIN_WALK_SPEED) { render_luna_sit(); }
 		else if (get_current_wpm() <= MIN_RUN_SPEED) { render_luna_walk(); }
 		else { render_luna_run(); }
 	}
 
 	// Animate on WPM, turn off OLED on idle
-	if (get_current_wpm() != 000 || host_keyboard_led_state().caps_lock || get_mods() & MOD_MASK_CSAG) {
+	if (get_current_wpm() != 000 || get_mods() & MOD_MASK_CSAG) {
 		oled_on();
 		if (timer_elapsed32(luna_anim_timer) >LUNA_FRAME_DURATION) {
 			luna_anim_timer = timer_read32();
