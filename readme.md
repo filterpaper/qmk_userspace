@@ -6,6 +6,14 @@ My personal user space is a self-contained folder that avoids placing keymap fil
 * Run `qmk flash` on the exported JSON file to build a custom firmware for each board.
 * See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
+## Setup
+Clone the QMK firmware, go into the user space directory and clone this repo into `users/filterpaper`:
+```sh
+git clone https://github.com/qmk/qmk_firmware
+cd qmk_firmware/users
+git clone https://github.com/filterpaper/qmk_userspace filterpaper
+```
+
 # Supported Keyboards
 ![corneplanck](corneplanck.png)
 
@@ -95,3 +103,4 @@ The `luna.c` source has a tiny Luna dog that reacts to typing speed, and modifie
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
 * [QMK Logo Editor](https://joric.github.io/qle/)
+
