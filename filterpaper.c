@@ -125,45 +125,45 @@ void oled_task_user(void) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	switch (keycode) {
 	// VIM commands
-	case TH_Q:
+	case Q_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_Q); }
 			else { unregister_code(KC_Q); }
 		} else { if (record->event.pressed) { SEND_STRING(":q!"); } }
 		return false;
-	case TH_W:
+	case W_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_W); }
 			else { unregister_code(KC_W); }
 		} else { if (record->event.pressed) { SEND_STRING(":wq"); } }
 		return false;
 	// New tab and window
-	case TH_T:
+	case T_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_T); }
 			else { unregister_code(KC_T); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_T)); } }
 		return false;
-	case TH_N:
+	case N_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_N); }
 			else { unregister_code(KC_N); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_N)); } }
 		return false;
 	// Right hand cut copy paste
-	case TH_DOT:
+	case DOT_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_DOT); }
 			else { unregister_code(KC_DOT); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_X)); } }
 		return false;
-	case TH_COMM:
+	case COMM_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_COMM); }
 			else { unregister_code(KC_COMM); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_C)); } }
 		return false;
-	case TH_M:
+	case M_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_M); }
 			else { unregister_code(KC_M); }
@@ -179,9 +179,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	case RSFT_T(KC_ENT):
 	case RSFT_T(KC_SPC):
 		return TAPPING_TERM - 80;
-	case TH_DOT:
-	case TH_COMM:
-	case TH_M:
+	case DOT_TH:
+	case COMM_TH:
+	case M_TH:
 		return TAPPING_TERM - 50;
 	default:
 		return TAPPING_TERM;

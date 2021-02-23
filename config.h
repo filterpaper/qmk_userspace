@@ -76,10 +76,10 @@
 #endif
 
 // Tap hold macro references for keymap[]
-#define TH_Q LT(0,KC_Q)
-#define TH_W LT(0,KC_W)
-#define TH_T LT(0,KC_T)
-#define TH_N LT(0,KC_N)
-#define TH_DOT LT(0,KC_DOT)
-#define TH_COMM LT(0,KC_COMM)
-#define TH_M LT(0,KC_M)
+#define Q_TH LT(0,KC_Q)
+#define W_TH LT(0,KC_W)
+#define T_TH LT(0,KC_T)
+#define N_TH LT(0,KC_N)
+#define DOT_TH LT(0,KC_DOT)
+#define COMM_TH LT(0,KC_COMM)
+#define M_TH LT(0,KC_M)

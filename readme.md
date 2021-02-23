@@ -1,16 +1,15 @@
 # Summary
-My personal user space is a self-contained folder that avoids placing keymap files inside any keyboard directories. All customisation required to build QMK firmware is configured here in the following manner:
+This is my personal `userspace` for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` source files deep inside QMK's sub-directories. All customisation required to build firmwares are configured within this space in the following manner:
 
-* Configure keyboard layout using [QMK Configurator](https://config.qmk.fm/#/) and export the JSON file with keymap named after this space.
+* Design keyboard layouts using [QMK Configurator](https://config.qmk.fm/#/) and export the JSON files with keymap named after this space.
 * Create `rules.mk`, `config.h` and shared source codes in this folder, with `#ifdef` preprocessors for unique keyboard or feature specific functions.
 * Run `qmk flash` on the exported JSON file to build a custom firmware for each board.
 * See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
 ## Setup
-Clone the QMK firmware, go into the user space directory and clone this repo into `users/filterpaper`:
+Clone the QMK firmware, followed by this repository into `users/filterpaper`:
 ```sh
-git clone https://github.com/qmk/qmk_firmware
-cd qmk_firmware/users
+git clone https://github.com/qmk/qmk_firmware ; cd qmk_firmware/users
 git clone https://github.com/filterpaper/qmk_userspace filterpaper
 ```
 
@@ -55,11 +54,11 @@ Code loops through every row and column on a per-key RGB board, scanning for con
 
 ## Tap hold macros
 ```c
-#define TH_W LT(0, KC_W)
+#define W_TH LT(0, KC_W)
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-    case TH_W:
+    case W_TH:
         // Send W on single tap
         if (record->tap.count) {
             if (record->event.pressed) { register_code(KC_W); }
@@ -73,7 +72,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true; // continue with unmatched keycodes
 }
 ```
-These features can be found QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated using `process_record_user()` with layer tap (`LT()`) key and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Key definition `TH_W` is placed on the key map (`keymap[]`).
+These features can be found QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated using `process_record_user()` with layer tap (`LT()`) key and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Key definition `W_TH` replaces `KC_W` on the key map (`keymap[]`).
 
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
@@ -103,4 +102,3 @@ The `luna.c` source has a tiny Luna dog that reacts to typing speed, and modifie
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
 * [QMK Logo Editor](https://joric.github.io/qle/)
-
