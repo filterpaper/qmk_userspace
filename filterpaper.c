@@ -60,6 +60,7 @@ void keyboard_post_init_user(void) {
 
 layer_state_t layer_state_set_user(layer_state_t state) {
 	switch (get_highest_layer(state)) {
+	case ADJ:
 	case CMK:
 		rgb_matrix_mode_noeeprom(MATRIX_SHIFT);
 		break;
@@ -87,8 +88,8 @@ void rgb_matrix_indicators_user(void) {
 		}
 	}
 	// Layer keys indicator by @rgoulter
-	uint8_t layer = get_highest_layer(layer_state);
-	if (layer >CMK) {
+	if (get_highest_layer(layer_state) >CMK) {
+		uint8_t layer = get_highest_layer(layer_state);
 		for (uint8_t row = 0; row <MATRIX_ROWS; row++) {
 			for (uint8_t col = 0; col <MATRIX_COLS; col++) {
 				if (g_led_config.matrix_co[row][col] !=NO_LED &&
