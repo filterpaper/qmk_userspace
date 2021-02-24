@@ -119,10 +119,9 @@ void oled_task_user(void) {
 #endif
 
 
-/////// TAP HOLD SHORTCUTS ///////
-// Shortcut macros using layer tap LT() tapping term delay
-// code to register hold, by @sigprof
-// Sends normal keycode on tap, macros on hold
+/////// TAP HOLD MACROS ///////
+// Macros that exploits layer tap's LT() tapping term delay
+// to register tap hold, by @sigprof
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	switch (keycode) {
 	// VIM commands

@@ -16,10 +16,10 @@ git clone https://github.com/filterpaper/qmk_userspace filterpaper
 # Supported Keyboards
 ![corneplanck](corneplanck.png)
 
-* [BM40 HS RGB](../../keyboards/bm40hsrgb) — Features layer key press effects, per key RGB modifier lights.
-* [Planck rev6](../../keyboards/planck) — RGB underglow lights as layer and modifier indicators.
-* [Corne Keyboard (CRKBD)](../../keyboards/crkbd) — Bongocat typing animation and graphical indicators on OLEDs.
-* [The Mark: 65](../../keyboards/boardsource/the_mark) — RGB underglow effects as layer and modifier indicators.
+* [BM40 HS RGB](../../keyboards/bm40hsrgb) — Per-key RGB matrix indicators.
+* [Planck rev6](../../keyboards/planck) — RGB underglow layer and modifier indicators.
+* [Corne Keyboard (CRKBD)](../../keyboards/crkbd) — Typing animation and graphical indicators on OLEDs.
+* [The Mark: 65](../../keyboards/boardsource/the_mark) — RGB underglow layer and modifier indicators.
 
 # File Listing
 File | Description
