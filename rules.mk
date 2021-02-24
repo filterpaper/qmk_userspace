@@ -24,8 +24,9 @@ RGB_MATRIX_ENABLE = no
 # Main source file
 SRC += filterpaper.c
 
-# Media keys support
+# Common features
 EXTRAKEY_ENABLE = yes
+GRAVE_ESC_ENABLE = yes
 
 # Exclude LTO for Planck
 ifneq ($(PLATFORM), CHIBIOS)
@@ -37,10 +38,6 @@ ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_ma
 	BOOTMAGIC_ENABLE = lite
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = no
-endif
-
-ifeq ($(strip $(KEYBOARD)), boardsource/the_mark)
-	GRAVE_ESC_ENABLE = yes
 endif
 
 # Corne keyboard features
