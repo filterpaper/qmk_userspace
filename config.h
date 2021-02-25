@@ -62,6 +62,10 @@
 #	define MOUSEKEY_WHEEL_TIME_TO_MAX 100
 #endif
 
+#ifdef GRAVE_ESC_ENABLE
+#	define GRAVE_ESC_SHIFT_OVERRIDE
+#endif
+
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
 #endif

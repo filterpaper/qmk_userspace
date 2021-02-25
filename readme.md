@@ -1,5 +1,5 @@
 # Summary
-This is my personal `userspace` for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` source files deep inside QMK's sub-directories. All customisation required to build firmwares are configured within this space in the following manner:
+This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` source files deep inside QMK's sub-directories. All customisation required to build firmwares are configured within this space in the following manner:
 
 * Design keyboard layouts using [QMK Configurator](https://config.qmk.fm/#/) and export the JSON files with keymap named after this space.
 * Create `rules.mk`, `config.h` and shared source codes in this folder, with `#ifdef` preprocessors for unique keyboard or feature specific functions.
@@ -28,7 +28,7 @@ rules.mk | QMK compile rules and hardware feature selection
 config.h | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
 filterpaper.h | User specific variables and options
 filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
-bongo-cat.c | Bongocat typing animation source code
+bongocat.c | Bongocat typing animation source code
 mod-status.c | Graphical layer and modifier status module for primary OLED
 luna.c | Tiny Luna and Felix the dog typing animation source code for primary status module
 glcdfont.c | Corne logo, コルネ katakana name, fonts and icon images—required by mod-status.c
@@ -38,8 +38,8 @@ json | Folder of supported keyboard layouts
 # Code Snippets
 ## Light configured layers keys
 ```c
-uint8_t layer = get_highest_layer(layer_state);
-if (layer >_COLEMAK) {
+if (get_highest_layer(layer_state); >_COLEMAK) {
+    uint8_t layer = get_highest_layer(layer_state);
     for (uint8_t row = 0; row <MATRIX_ROWS; row++) {
         for (uint8_t col = 0; col <MATRIX_COLS; col++) {
             if (g_led_config.matrix_co[row][col] !=NO_LED &&
@@ -72,7 +72,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true; // continue with unmatched keycodes
 }
 ```
-These features can be found QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated using `process_record_user()` with layer tap (`LT()`) key and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Key definition `W_TH` replaces `KC_W` on the key map (`keymap[]`).
+These features can be found QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated using `process_record_user()` with layer tap (`LT()`) key and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Macro `W_TH` replaces `KC_W` on the key map (`keymap[]`).
 
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
@@ -93,7 +93,7 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
 ## Compiling the cat
-The `bongo-cat.c` source has typing animation frames aligned correctly for both left and right secondary OLED display. They are quite space consuming because each frame requires 512 bytes to fill the 128x32px OLED display. Default preprocessor `SLIMCAT` in `filterpaper.h` will reduce size by 1060 bytes. To further halve build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side. All three preprocessors can be enabled with compile-time environment variables: `qmk flash -e LEFTCAT=yes corne.json`
+The `bongocat.c` source has typing animation frames aligned correctly for both left and right secondary OLED display. They are quite space consuming because each frame requires 512 bytes to fill the 128x32px OLED display. Default preprocessor `SLIMCAT` in `filterpaper.h` will reduce size by 1060 bytes. To further halve build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side. All three preprocessors can be enabled with compile-time environment variables: `qmk flash -e LEFTCAT=yes corne.json`
 
 ## Compiling the dog
 The `luna.c` source has a tiny Luna dog that reacts to typing speed, and modifier activation. Its 5 actions can be customised as reaction to any state. Luna replaces the layer icon in `mod-status.c` if included. It can be compiled with variable `qmk flash -e LUNA=yes corne.json`. An alternative white Felix the dog will be built with `qmk flash -e FELIX=yes corne.json`

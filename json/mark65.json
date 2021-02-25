@@ -5,7 +5,7 @@
     "keymap": "filterpaper",
     "layers": [
         [
-            "KC_GESC",
+            "KC_GRAVE",
             "KC_1",
             "KC_2",
             "KC_3",
@@ -36,7 +36,7 @@
             "KC_RBRC",
             "KC_BSPC",
             "KC_VOLD",
-            "KC_BSPC",
+            "KC_ESC",
             "LSFT_T(KC_A)",
             "LALT_T(KC_S)",
             "LCTL_T(KC_D)",
