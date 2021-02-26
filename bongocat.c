@@ -38,6 +38,7 @@
 #define ANIM_FRAME_DURATION 200 // Number of ms per frame
 #define WIDTH 128 // OLED width, Corne is 128x32px
 
+uint8_t prev_wpm = 0;
 uint32_t anim_timer = 0;
 uint32_t anim_sleep = 0;
 uint8_t current_idle_frame = 0;
@@ -106,7 +107,7 @@ void animate_cat(void)
 	};
 #endif // #ifndef RIGHTCAT
 
-	// Renders OLED by iterating through frame to write pixel bits
+	// Render OLED by looping through frame to write changed pixel bits
 	void render_short_array(const uint16_t* frame) {
 		uint16_t size = pgm_read_word(&(frame[0])) + 1;
 		for(uint16_t i=1; i<size; i++) {
@@ -180,14 +181,18 @@ void animate_cat(void)
 	#endif
 	}
 
-    void animation_phase(void) {
+	void animation_phase(void) {
 		oled_clear();
-		if (get_current_wpm() <= IDLE_SPEED) {
-			render_cat_idle();
-		} else if (get_current_wpm() > IDLE_SPEED && get_current_wpm() < TAP_SPEED) {
-			render_cat_prep();
-		} else { // if (get_current_wpm() >= TAP_SPEED)
+		if (get_current_wpm() >=TAP_SPEED && get_current_wpm() >=prev_wpm) {
+			// Animate tapping when WPM is sustained
 			render_cat_tap();
+			prev_wpm = get_current_wpm();
+		} else if (get_current_wpm() >IDLE_SPEED && (get_current_wpm() <TAP_SPEED || get_current_wpm() <prev_wpm)) {
+			// Animate prep when WPM drops
+			render_cat_prep();
+			prev_wpm = get_current_wpm()+1;
+		} else { // (get_current_wpm() <=IDLE_SPEED)
+			render_cat_idle();
 		}
 	}
 
