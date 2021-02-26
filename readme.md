@@ -35,6 +35,7 @@ glcdfont.c | Corne logo, コルネ katakana name, fonts and icon images—requir
 rgb_matrix_user.inc | Custom RGB matrix effects collected from Reddit, see [Custom RGB Matrix](../../docs/feature_rgb_matrix.md#custom-rgb-matrix-effects-idcustom-rgb-matrix-effects)
 bongocat-fat.c | Original full frame Bongocat typing animation source code that is space consuming
 json | Folder of supported keyboard layouts
+animation_frames | Folder of Bongocat animation images
 
 # Code Snippets
 ## Light configured layers keys
@@ -94,7 +95,7 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
 ## Compiling the cat
-The `bongocat.c` is an updated source with typing animation using *differential* pixels from the base frame. It uses less space compared to the original full frame bongocat by simply replacing pixels that changed instead of rendering entire frame. Left and right aligned cat are included by default. To reduce build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side: `qmk flash -e LEFTCAT=yes corne.json`
+The `bongocat.c` is an updated source with typing animation using *differential* pixels. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. It uses less space compared to full 512-byte frame renderings. Left and right aligned cat are built by default. To reduce firmware size, compile with `LEFTCAT` and `RIGHTCAT` preprocessor separately to flash on each side: `qmk flash -e LEFTCAT=yes corne.json`
 
 `bongocat-fat.c` is the original source with typing animation frames aligned correctly for both left and right secondary OLED display. They are quite space consuming because each frame requires 512 bytes to fill the 128x32px OLED display. Default preprocessor `SLIMCAT` in `filterpaper.h` will reduce size by 1060 bytes. To further halve build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side. All three preprocessors can be enabled with compile-time environment variables: `qmk flash -e LEFTCAT=yes corne.json`
 

@@ -13,6 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Bongocat images
+# Cat images
 
-Images used to generate differential bongo cat array content. PNG files are inverted with transparent background. The `png_to_short_arr.py` is a python3 script written by @Dake to generate a base image followed by differential data for rendering the animation using only pixel differences.
+Images used to generate differential bongocat array content. PNG files are inverted with transparent background. The `png_to_short_arr.py` is a python3 script written by @Dake to generate a base image followed by differential data for rendering the animation using only pixel differences.

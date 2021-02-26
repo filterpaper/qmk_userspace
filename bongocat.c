@@ -16,7 +16,7 @@
 
 /* Graphical bongocat animation display, requires WPM_ENABLE.
    It has both left and right aligned animation optimized for
-   both OLEDs. This uses differential images to reduce space.
+   both OLEDs. This uses image differential to reduce space.
 
    Inspired by @j-inc's bongocat animation code
    (keyboards/kyria/keymaps/j-inc)
@@ -106,10 +106,8 @@ void animate_cat(void)
 	};
 #endif // #ifndef RIGHTCAT
 
-	//renders a PROGMEM uint16_t array, smaller or equal in size than the OLED
-	// x, y: top left position of the image
-	// width: width of the image
-	void render_short_array_pos(const uint16_t* frame, uint8_t x, uint8_t y, uint8_t width) {
+	// Renders OLED by iterating through frame to write pixel bits
+	void render_short_array(const uint16_t* frame) {
 		uint16_t size = pgm_read_word(&(frame[0])) + 1;
 		for(uint16_t i=1; i<size; i++) {
 			uint16_t cur_px = pgm_read_word(&(frame[i]));
@@ -119,15 +117,10 @@ void animate_cat(void)
 			// remove pixel state bit
 			cur_px &= ~(1UL << 15);
 
-			uint8_t x_cur = (cur_px % width) + x;
-			uint8_t y_cur = (cur_px / width) + y;
+			uint8_t x_cur = (cur_px % WIDTH);
+			uint8_t y_cur = (cur_px / WIDTH);
 			oled_write_pixel(x_cur, y_cur, on);
 		}
-	}
-
-	// Shortcut to render images of the size of the OLED
-	void render_short_array(const uint16_t* frame) {
-		render_short_array_pos(frame, 0, 0, WIDTH);
 	}
 
 	void render_cat_idle(void) {
