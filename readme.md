@@ -28,12 +28,12 @@ rules.mk | QMK compile rules and hardware feature selection
 config.h | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
 filterpaper.h | User specific variables and options
 filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
-bongocat.c | Bongocat typing animation based on differential pixel of next frame.
+bongocat.c | Bongocat typing animation based on differential pixel of next frame (adds ~3768 bytes)
 mod-status.c | Graphical layer and modifier status module for primary OLED
 luna.c | Tiny Luna and Felix the dog typing animation source code for primary status module
 glcdfont.c | Corne logo, コルネ katakana name, fonts and icon images—required by mod-status.c
 rgb_matrix_user.inc | Custom RGB matrix effects collected from Reddit, see [Custom RGB Matrix](../../docs/feature_rgb_matrix.md#custom-rgb-matrix-effects-idcustom-rgb-matrix-effects)
-bongocat-fat.c | Original full frame Bongocat typing animation source code that is space consuming
+bongocat-fat.c | Original full frame Bongocat typing animation source code that is space consuming (adds ~7684 bytes)
 json | Folder of supported keyboard layouts
 animation_frames | Folder of Bongocat animation images
 
@@ -95,7 +95,7 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
 ## Compiling the cat
-The `bongocat.c` is an updated source with typing animation using *differential* pixels. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. It uses less space compared to full 512-byte frame renderings. Left and right aligned cat are built by default. To reduce firmware size, compile with `LEFTCAT` and `RIGHTCAT` preprocessor separately to flash on each side: `qmk flash -e LEFTCAT=yes corne.json`
+The `bongocat.c` is an updated source with typing animation using *differential* pixels. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. It uses less space compared to full 512-byte frame renderings. Left and right aligned cat are built by default. To reduce firmware size (about ~1622 bytes), compile with `LEFTCAT` and `RIGHTCAT` preprocessor separately to flash on each side: `qmk flash -e LEFTCAT=yes corne.json`
 
 `bongocat-fat.c` is the original source with typing animation frames aligned correctly for both left and right secondary OLED display. They are quite space consuming because each frame requires 512 bytes to fill the 128x32px OLED display. Default preprocessor `SLIMCAT` in `filterpaper.h` will reduce size by 1060 bytes. To further halve build size, compile with `LEFTCAT` and `RIGHTCAT` separately to flash on each side. All three preprocessors can be enabled with compile-time environment variables: `qmk flash -e LEFTCAT=yes corne.json`
 

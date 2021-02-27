@@ -30,12 +30,13 @@
 #define TAP_FRAMES 2
 #define ANIM_SIZE 512 // 512-byte arrays to fill 128x32px (bits)
 #define IDLE_SPEED 45
-#ifdef SLIMCAT
-#	undef IDLE_SPEED
-#	define IDLE_SPEED 0
-#endif
 #define TAP_SPEED 60
 #define ANIM_FRAME_DURATION 200 // Number of ms per frame
+
+#ifdef SLIMCAT
+#	undef TAP_SPEED
+#	define TAP_SPEED 5
+#endif
 
 uint8_t prev_wpm = 0;
 uint32_t anim_timer = 0;
@@ -649,23 +650,21 @@ static void render_cat_tap(void) {
 void animate_cat(void) {
 
 	void animation_phase(void) {
-		if (get_current_wpm() >=TAP_SPEED && get_current_wpm() >=prev_wpm) {
-			// Animate tapping when WPM is sustained
-			render_cat_tap();
-			prev_wpm = get_current_wpm();
-#ifdef SLIMCAT
-		} else { // (get_current_wpm() <TAP_SPEED || get_current_wpm() <prev_wpm)
-			// Animate idle when WPM drops
-			render_cat_idle();
-			prev_wpm = get_current_wpm()+1;
-#else
-		} else if (get_current_wpm() >IDLE_SPEED && (get_current_wpm() <TAP_SPEED || get_current_wpm() <prev_wpm)) {
-			// Animate prep when WPM drops
-			render_cat_prep();
-			prev_wpm = get_current_wpm()+1;
-		} else { // (get_current_wpm() <=IDLE_SPEED)
-			render_cat_idle();
-#endif
+		if (get_current_wpm() >=TAP_SPEED && typing) { render_cat_tap(); }
+	#ifndef SLIMCAT
+		else if (get_current_wpm() >IDLE_SPEED && !typing) { render_cat_prep(); }
+	#endif
+		else { render_cat_idle(); }
+
+		// Interval check for dropping WPM
+		if (!(anim_timer%2)) {
+			if (get_current_wpm() >=prev_wpm) {
+				prev_wpm = get_current_wpm();
+				typing = true;
+			} else {
+				prev_wpm = get_current_wpm()+1;
+				typing = false;
+			}
 		}
 	}
 

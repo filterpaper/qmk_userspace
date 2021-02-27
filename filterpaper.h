@@ -34,10 +34,10 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
+#define SLIMCAT
 void render_mod_status(void);
 void animate_cat(void);
-#	define SLIMCAT
-#	ifdef LUNA
-	void animate_luna(void);
-#	endif
+#ifdef LUNA
+void animate_luna(void);
+#endif
 #endif
