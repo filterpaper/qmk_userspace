@@ -22,13 +22,13 @@ show_diffs = False
 path_to_images = "./"
 
 frame_filenames = [
+    "idle_0_right.png",
     "idle_1_right.png",
+    "idle_2_right.png",
     "idle_3_right.png",
-    "idle_4_right.png",
-    "idle_5_right.png",
-    "prep_1_right.png",
-    "tap_1_right.png",
-    "tap_2_right.png"
+    "prep_0_right.png",
+    "tap_0_right.png",
+    "tap_1_right.png"
     ]
 
 base_frame = "idle_1_right.png"
