@@ -9,8 +9,8 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 ## Setup
 Clone the QMK firmware, followed by this repository into `users/filterpaper`:
 ```sh
-git clone https://github.com/qmk/qmk_firmware ; cd qmk_firmware/users
-git clone https://github.com/filterpaper/qmk_userspace filterpaper
+git clone https://github.com/qmk/qmk_firmware qmk_firmware
+git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filterpaper
 ```
 
 # Supported Keyboards

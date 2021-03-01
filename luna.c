@@ -20,23 +20,22 @@
 
    Modified from @HellSingCoder's Luna dog
    (https://github.com/HellSingCoder/qmk_firmware/tree/master/keyboards/sofle/keymaps/HellSingCoder)
+
    Includes white Felix dog frames from @ItsWaffIe
    (https://github.com/ItsWaffIe/waffle_corne/blob/proton-c/firmware/oled.c)
 */
 
 #include "filterpaper.h"
 
-// Animation frame defaults
 #define MIN_WALK_SPEED 10
 #define MIN_RUN_SPEED 40
-#define LUNA_SIZE 96 // 96-byte arrays for the little dog
 #define LUNA_FRAMES 2
 #define LUNA_FRAME_DURATION 200 // Number of ms per frame
+#define LUNA_SIZE 96 // 96-byte arrays for the little dog
 
 uint32_t luna_anim_timer = 0;
 uint32_t luna_anim_sleep = 0;
 uint8_t luna_current_frame = 0;
-static long int luna_oled_timeout = 5000;
 
 static void render_luna_sit(void) {
 	static const char PROGMEM sit[LUNA_FRAMES][LUNA_SIZE] = {
@@ -266,7 +265,7 @@ void animate_luna(void) {
 	}
 
 	// Animate on WPM, turn off OLED on idle
-	if (get_current_wpm() != 000 || get_mods() & MOD_MASK_CSAG) {
+	if (get_current_wpm() >0 || get_mods() & MOD_MASK_CSAG) {
 		oled_on();
 		if (timer_elapsed32(luna_anim_timer) >LUNA_FRAME_DURATION) {
 			luna_anim_timer = timer_read32();
@@ -274,7 +273,7 @@ void animate_luna(void) {
 		}
 		luna_anim_sleep = timer_read32();
 	} else {
-		if (timer_elapsed32(luna_anim_sleep) > luna_oled_timeout) {
+		if (timer_elapsed32(luna_anim_sleep) >OLED_TIMEOUT) {
 			oled_off();
 		} else {
 			if (timer_elapsed32(luna_anim_timer) >LUNA_FRAME_DURATION) {

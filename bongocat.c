@@ -29,17 +29,17 @@
 
 #include "filterpaper.h"
 
-#define IDLE_FRAMES 5
-#define PREP_FRAMES 1
-#define TAP_FRAMES 2
-#define IDLE_SPEED 45 // Idle animation WPM threshold
-#define TAP_SPEED 60 // Tapping animation WPM threshold
+#define IDLE_SPEED 45
+#define TAP_SPEED 60
 
 #ifdef SLIMCAT // Saves 246 bytes per side
 #	undef TAP_SPEED
 #	define TAP_SPEED 5
 #endif
 
+#define IDLE_FRAMES 5
+#define PREP_FRAMES 1
+#define TAP_FRAMES 2
 #define ANIM_FRAME_DURATION 200 // Number of ms per frame
 #define WIDTH 128 // OLED width, Corne is 128x32px
 
@@ -47,7 +47,6 @@ uint32_t anim_timer = 0;
 uint32_t anim_sleep = 0;
 uint8_t current_idle_frame = 0;
 uint8_t current_tap_frame = 0;
-static long int oled_timeout = 5000;
 
 uint8_t prev_wpm = 0;
 bool typing = false;
@@ -211,7 +210,7 @@ void animate_cat(void) {
 	}
 
 	// Animate on WPM, turn off OLED on idle
-	if (get_current_wpm() != 000) {
+	if (get_current_wpm() >0) {
 		oled_on();
 		if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
 			anim_timer = timer_read32();
@@ -219,7 +218,7 @@ void animate_cat(void) {
 		}
 		anim_sleep = timer_read32();
 	} else {
-		if (timer_elapsed32(anim_sleep) > oled_timeout) {
+		if (timer_elapsed32(anim_sleep) >OLED_TIMEOUT) {
 			oled_off();
 		} else {
 			if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
