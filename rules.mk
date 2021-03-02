@@ -36,7 +36,6 @@ endif
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_mark))
 	BOOTMAGIC_ENABLE = lite
 	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = no
 endif
 
 # Corne keyboard features
@@ -46,8 +45,20 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	ifneq ($(CORNELP), yes)
 		WPM_ENABLE = yes
 		OLED_DRIVER_ENABLE = yes
-		SRC += mod-status.c bongocat.c
-		# Compile-time cat selection
+
+		# primary OLED selection
+		ifeq ($(LUNA), yes)
+			SRC += luna-status.c
+			OPT_DEFS += -DLUNA
+		else ifeq ($(FELIX), yes)
+			SRC += luna-status.c
+			OPT_DEFS += -DLUNA -DFELIX
+		else
+			SRC += mod-status.c
+		endif
+
+		# secondary OLED selection
+		SRC += bongocat.c
 		ifeq ($(SLIMCAT), yes)
 			OPT_DEFS += -DSLIMCAT
 		endif
@@ -56,13 +67,6 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 		else ifeq ($(LEFTCAT), yes)
 			OPT_DEFS += -DLEFTCAT
 		endif
-		# Compile-time dog selection
-		ifeq ($(LUNA), yes)
-			SRC += luna.c
-			OPT_DEFS += -DLUNA
-		else ifeq ($(FELIX), yes)
-			SRC += luna.c
-			OPT_DEFS += -DLUNA -DFELIX
-		endif
+
 	endif
 endif
