@@ -96,14 +96,13 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
 ## Compiling the dog
-The `luna-status.c` source has a tiny dog animation that reacts to typing speed, modifier status and layer changes. Its 5 actions can be customised for any state conditions. Luna replaces `mod-status.c` on primary OLED with `LUNA` preprocessor: `qmk flash -e LUNA=yes corne.json`. An alternative white Felix the dog will be built with `qmk flash -e FELIX=yes corne.json`
+The `luna-status.c` source has a tiny dog animation that reacts to typing speed, modifier status and layer changes. Its 5 actions can be customised for any state conditions. Luna replaces `mod-status.c` on primary OLED with preprocessors `DOG=LUNA` (black) or `DOG=FELIX` (white). Example `qmk flash -e DOG=LUNA corne.json`.
 
 ## Compiling the cat
-The `bongocat.c` is an updated source with typing animation using *differential* pixels on secondary OLED. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. This uses less space compared to full 512-byte frame renderings. Left and right aligned cat are included by default. To reduce firmware size (about ~1622 bytes), compile with preprocessors `LEFTCAT` and `RIGHTCAT` separately to flash on each side: `qmk flash -e LEFTCAT=yes corne.json`
+The `bongocat.c` is an updated source with typing animation using *differential* pixels on secondary OLED. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. This trick uses less space compared to full 512-byte frame renderings. Both left and right aligned bongocat will be built by default. To reduce firmware size (about ~1622 bytes), compile with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side: `qmk flash -e CAT=LEFT corne.json`
 
 ## Additional build options
-* `PRIMARYONLY` will exclude secondary OLED display: `qmk flash -e PRIMARYONLY=yes corne.json`
-* `CORNELP` will compile with with no OLED support: `qmk flash -e CORNELP=yes corne.json`
+Adding `CORNELP=yes` preprocessor will result with a minimal build with no OLED support and overriding any pet selection above: `qmk flash -e CORNELP=yes corne.json`
 
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:

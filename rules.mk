@@ -39,36 +39,26 @@ ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_ma
 endif
 
 # Corne keyboard features
-ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
+ifeq ($(KEYBOARD) $(CORNELP), crkbd/rev1/common yes)
 	BOOTLOADER = atmel-dfu
 	MOUSEKEY_ENABLE = yes
-	ifneq ($(CORNELP), yes)
-		WPM_ENABLE = yes
-		OLED_DRIVER_ENABLE = yes
-
-		# Primary OLED selection
-		ifeq ($(LUNA), yes)
-			SRC += luna-status.c
-			OPT_DEFS += -DLUNA
-		else ifeq ($(FELIX), yes)
-			SRC += luna-status.c
-			OPT_DEFS += -DLUNA -DFELIX
-		else
-			SRC += mod-status.c
-		endif
-
-		# Secondary OLED selection
-		ifneq ($(PRIMARYONLY), yes)
-			SRC += bongocat.c
-			OPT_DEFS += -DSECONDARY
-			ifeq ($(SLIMCAT), yes)
-				OPT_DEFS += -DSLIMCAT
-			endif
-			ifeq ($(RIGHTCAT), yes)
-				OPT_DEFS += -DRIGHTCAT
-			else ifeq ($(LEFTCAT), yes)
-				OPT_DEFS += -DLEFTCAT
-			endif
-		endif
+else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
+	BOOTLOADER = atmel-dfu
+	MOUSEKEY_ENABLE = yes
+	WPM_ENABLE = yes
+	OLED_DRIVER_ENABLE = yes
+	# Primary OLED selection
+	ifneq ($(DOG),)
+		SRC += luna-status.c
+		OPT_DEFS += -D$DOG
+	else
+		SRC += mod-status.c
+	endif
+	# Secondary OLED selection
+	ifneq ($(CAT),)
+		SRC += bongocat.c
+		OPT_DEFS += -D${CAT}CAT
+	else
+		OPT_DEFS += -DPRIMARYONLY
 	endif
 endif
