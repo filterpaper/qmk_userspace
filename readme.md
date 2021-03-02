@@ -101,6 +101,10 @@ The `luna-status.c` source has a tiny dog animation that reacts to typing speed,
 ## Compiling the cat
 The `bongocat.c` is an updated source with typing animation using *differential* pixels on secondary OLED. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. This uses less space compared to full 512-byte frame renderings. Left and right aligned cat are included by default. To reduce firmware size (about ~1622 bytes), compile with preprocessors `LEFTCAT` and `RIGHTCAT` separately to flash on each side: `qmk flash -e LEFTCAT=yes corne.json`
 
+## Additional build options
+* `PRIMARYONLY` will exclude secondary OLED display: `qmk flash -e PRIMARYONLY=yes corne.json`
+* `CORNELP` will compile with with no OLED support: `qmk flash -e CORNELP=yes corne.json`
+
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)

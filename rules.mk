@@ -46,7 +46,7 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 		WPM_ENABLE = yes
 		OLED_DRIVER_ENABLE = yes
 
-		# primary OLED selection
+		# Primary OLED selection
 		ifeq ($(LUNA), yes)
 			SRC += luna-status.c
 			OPT_DEFS += -DLUNA
@@ -57,16 +57,18 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 			SRC += mod-status.c
 		endif
 
-		# secondary OLED selection
-		SRC += bongocat.c
-		ifeq ($(SLIMCAT), yes)
-			OPT_DEFS += -DSLIMCAT
+		# Secondary OLED selection
+		ifneq ($(PRIMARYONLY), yes)
+			SRC += bongocat.c
+			OPT_DEFS += -DSECONDARY
+			ifeq ($(SLIMCAT), yes)
+				OPT_DEFS += -DSLIMCAT
+			endif
+			ifeq ($(RIGHTCAT), yes)
+				OPT_DEFS += -DRIGHTCAT
+			else ifeq ($(LEFTCAT), yes)
+				OPT_DEFS += -DLEFTCAT
+			endif
 		endif
-		ifeq ($(RIGHTCAT), yes)
-			OPT_DEFS += -DRIGHTCAT
-		else ifeq ($(LEFTCAT), yes)
-			OPT_DEFS += -DLEFTCAT
-		endif
-
 	endif
 endif
