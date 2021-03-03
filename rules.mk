@@ -26,6 +26,7 @@ SRC += filterpaper.c
 # Common features
 EXTRAKEY_ENABLE = yes
 GRAVE_ESC_ENABLE = yes
+CAPSWORD_ENABLE = yes
 
 # Exclude LTO for Planck
 ifneq ($(PLATFORM), CHIBIOS)
@@ -59,6 +60,12 @@ else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 		SRC += bongocat.c
 		OPT_DEFS += -D${CAT}CAT
 	else
-		OPT_DEFS += -DPRIMARYONLY
+		OPT_DEFS += -DPRIMARY_ONLY
 	endif
+endif
+
+# Caps word feature
+ifeq ($(CAPSWORD_ENABLE), yes)
+	SRC += caps-word.c
+	OPT_DEFS += -DCAPSWORD_ENABLE
 endif

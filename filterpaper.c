@@ -114,7 +114,7 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 // Render modules on both OLED
 void oled_task_user(void) {
 	if (is_keyboard_master()) { render_primary(); }
-#ifndef PRIMARYONLY
+#ifndef PRIMARY_ONLY
 	else                      { render_secondary(); }
 #endif
 }
@@ -171,7 +171,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			else { unregister_code(KC_M); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_V)); } }
 		return false;
+#ifdef CAPSWORD_ENABLE
+	case KC_CAPS: // Replace caps lock with caps word function
+		if (record->event.pressed) { caps_word_toggle(); }
+		return false;
 	}
+	// Monitor key codes to deactivate caps word
+	process_caps_word(keycode, record);
+#else
+	}
+#endif
 	return true; // continue with unmatched keycodes
 }
 

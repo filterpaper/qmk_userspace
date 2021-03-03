@@ -34,7 +34,12 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
+#define SLIMCAT
 void render_primary(void);
 void render_secondary(void);
-#define SLIMCAT
+#endif
+
+#ifdef CAPSWORD_ENABLE
+void caps_word_toggle(void);
+void process_caps_word(uint16_t keycode, keyrecord_t *record);
 #endif
