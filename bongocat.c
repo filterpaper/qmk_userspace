@@ -64,7 +64,7 @@ static const uint16_t left_base[] PROGMEM = {208, 32822, 32823, 32949, 32952, 33
 // Render OLED by looping through frame to write changed pixel bits
 static void render_array(const uint16_t* frame) {
 	uint16_t size = pgm_read_word(&(frame[0])) + 1;
-	for (uint16_t i=1; i<size; i++) {
+	for (uint16_t i = 1; i <size; i++) {
 		uint16_t cur_px = pgm_read_word(&(frame[i]));
 
 		// get pixel state bit

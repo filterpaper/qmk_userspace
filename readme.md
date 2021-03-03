@@ -29,7 +29,7 @@ config.h | QMK configuration variables and options, see [configuring QMK](../../
 filterpaper.h | User specific variables and options
 filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
 mod-status.c | Graphical layer and modifier status indicators for primary OLED
-luna-status.c | Luna and Felix the dog as typing and modifier indicators for primary OLED
+luna-status.c | Luna and Felix the dog as typing and modifier indicators for primary OLED (adds ~876 bytes)
 bongocat.c | Bongocat typing animation based on differential pixels for secondary OLED (adds ~3768 bytes)
 glcdfont.c | Corne logo, コルネ katakana name, fonts and icon images
 json | Folder of supported keyboard layouts
@@ -99,7 +99,7 @@ Subsequently, the same firmware binary can be flashed normally to both sides. Se
 The `luna-status.c` source has a tiny dog animation that reacts to typing speed, modifier status and layer changes. Its 5 actions can be customised for any state conditions. Luna replaces `mod-status.c` on primary OLED with preprocessors `DOG=LUNA` (black) or `DOG=FELIX` (white). Example `qmk flash -e DOG=LUNA corne.json`.
 
 ## Compiling the cat
-The `bongocat.c` is an updated source with typing animation using *differential* pixels on secondary OLED. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. This trick uses less space compared to full 512-byte frame renderings. Both left and right aligned bongocat will be built by default. To reduce firmware size (about ~1622 bytes), compile with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side: `qmk flash -e CAT=LEFT corne.json`
+The `bongocat.c` is an updated source with typing animation using *differential* pixels on secondary OLED. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. This trick uses less space compared to full 512-byte frame renderings. Both left and right aligned bongocat will be built by default. To reduce firmware size (about ~1540 bytes), compile with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side: `qmk flash -e CAT=LEFT corne.json`
 
 ## Additional build options
 Adding `CORNELP=yes` preprocessor will result with a minimal build with no OLED support and overriding any pet selection above: `qmk flash -e CORNELP=yes corne.json`
