@@ -650,9 +650,9 @@ static void render_cat_tap(void) {
 void animate_cat(void) {
 
 	void animation_phase(void) {
-		if (get_current_wpm() >=TAP_SPEED && typing) { render_cat_tap(); }
+		if (get_current_wpm() >TAP_SPEED && typing) { render_cat_tap(); }
 	#ifndef SLIMCAT
-		else if (get_current_wpm() >IDLE_SPEED && !typing) { render_cat_prep(); }
+		else if (get_current_wpm() >IDLE_SPEED && typing) { render_cat_prep(); }
 	#endif
 		else { render_cat_idle(); }
 
