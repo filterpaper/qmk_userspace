@@ -121,6 +121,31 @@ void oled_task_user(void) {
 #endif
 
 
+/////// CAPS WORD FEATURE ///////
+// Deactivate caps lock following a word
+#ifdef CAPSWORD_ENABLE
+void process_caps_word(uint16_t keycode, keyrecord_t *record) {
+	// Get the base key code of a mod or layer tap
+	switch (keycode) {
+	case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+	case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+		if (!record->tap.count) { return; }
+		keycode = keycode & 0xFF;
+	}
+	// Toggle caps lock with the following key codes
+	switch (keycode & 0xFF) {
+	case KC_ESC:
+	case KC_SPC:
+	case KC_ENT:
+	case KC_TAB:
+	case KC_DOT:
+	case KC_COMM:
+		if (record->event.pressed) { tap_code(KC_CAPS); }
+	}
+}
+#endif
+
+
 /////// TAP HOLD MACROS ///////
 // Macros that exploits layer tap's LT() tapping term delay
 // to register tap hold, by @sigprof
@@ -171,18 +196,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			else { unregister_code(KC_M); }
 		} else { if (record->event.pressed) { tap_code16(G(KC_V)); } }
 		return false;
+	}
 #ifdef CAPSWORD_ENABLE
-	case KC_CAPS: // Replace caps lock with caps word function
-		if (record->event.pressed) { caps_word_toggle(); }
-		return false;
-	}
-	// Monitor key codes to deactivate caps word
-	process_caps_word(keycode, record);
-#else
-	}
+	// Monitor key codes to toggle caps lock
+	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
 #endif
 	return true; // continue with unmatched keycodes
 }
+
 
 // Fine tune tapping term delays
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {

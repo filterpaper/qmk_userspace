@@ -66,6 +66,5 @@ endif
 
 # Caps word feature
 ifeq ($(CAPSWORD_ENABLE), yes)
-	SRC += caps-word.c
 	OPT_DEFS += -DCAPSWORD_ENABLE
 endif

@@ -38,8 +38,3 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 void render_primary(void);
 void render_secondary(void);
 #endif
-
-#ifdef CAPSWORD_ENABLE
-void caps_word_toggle(void);
-void process_caps_word(uint16_t keycode, keyrecord_t *record);
-#endif
