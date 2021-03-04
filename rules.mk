@@ -40,16 +40,16 @@ ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_ma
 endif
 
 # Corne keyboard features
-ifeq ($(KEYBOARD) $(CORNELP), crkbd/rev1/common yes)
+ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 	BOOTLOADER = atmel-dfu
 	MOUSEKEY_ENABLE = yes
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	BOOTLOADER = atmel-dfu
 	MOUSEKEY_ENABLE = yes
-	WPM_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	# Primary OLED option
 	ifneq ($(DOG),)
+		WPM_ENABLE = yes
 		SRC += luna-status.c
 		OPT_DEFS += -D${DOG}
 	else
@@ -57,6 +57,7 @@ else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	endif
 	# Secondary OLED option
 	ifneq ($(CAT),)
+		WPM_ENABLE = yes
 		SRC += bongocat.c
 		OPT_DEFS += -D${CAT}CAT
 	else

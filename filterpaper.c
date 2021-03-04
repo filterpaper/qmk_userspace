@@ -17,7 +17,6 @@
 #include "filterpaper.h"
 
 
-/////// RGB LIGHTING ///////
 #ifdef RGB_MATRIX_ENABLE
 /* // by @tzarc
 RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
@@ -103,7 +102,6 @@ void rgb_matrix_indicators_user(void) {
 #endif // RGB_MATRIX_ENABLE
 
 
-/////// OLED DISPLAY RENDERING ///////
 #ifdef OLED_DRIVER_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 	if (is_keyboard_master())    { return OLED_ROTATION_270; }
@@ -114,16 +112,15 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 // Render modules on both OLED
 void oled_task_user(void) {
 	if (is_keyboard_master()) { render_primary(); }
-#ifndef PRIMARY_ONLY
+	#ifndef PRIMARY_ONLY
 	else                      { render_secondary(); }
-#endif
+	#endif
 }
 #endif
 
 
-/////// CAPS WORD FEATURE ///////
-// Deactivate caps lock following a word
 #ifdef CAPSWORD_ENABLE
+// Caps word: deactivate caps lock following a word
 void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	// Get the base key code of a mod or layer tap
 	switch (keycode) {
@@ -146,10 +143,14 @@ void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 
-/////// TAP HOLD MACROS ///////
-// Macros that exploits layer tap's LT() tapping term delay
-// to register tap hold, by @sigprof
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef CAPSWORD_ENABLE
+	// Monitor key codes to toggle caps lock
+	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
+#endif
+
+	// Macros using layer tap's LT() tapping term delay
+	// to use as tap hold shortcuts, by @sigprof
 	switch (keycode) {
 	// VIM commands
 	case Q_TH:
@@ -197,14 +198,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		} else { if (record->event.pressed) { tap_code16(G(KC_V)); } }
 		return false;
 	}
-#ifdef CAPSWORD_ENABLE
-	// Monitor key codes to toggle caps lock
-	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
-#endif
+
 	return true; // continue with unmatched keycodes
 }
 
 
+#ifdef TAPPING_TERM_PER_KEY
 // Fine tune tapping term delays
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	switch (keycode) {
@@ -221,9 +220,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 		return TAPPING_TERM;
 	}
 }
+#endif
 
 
-/////// INIT AND SUSPEND ///////
 void suspend_power_down_user(void) {
 #ifdef RGB_MATRIX_ENABLE
 	rgb_matrix_set_suspend_state(true);

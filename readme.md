@@ -77,6 +77,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 ```
 These features can be found QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated using `process_record_user()` with layer tap (`LT()`) key and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Macro `W_TH` replaces `KC_W` on the key map (`keymap[]`).
 
+## Caps word
+```c
+void process_caps_word(uint16_t keycode, keyrecord_t *record) {
+	// Get the base key code of a mod or layer tap
+	switch (keycode) {
+	case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+	case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+		if (!record->tap.count) { return; }
+		keycode = keycode & 0xFF;
+	}
+	// Toggle caps lock with the following key codes
+	switch (keycode & 0xFF) {
+	case KC_ESC:
+	case KC_SPC:
+	case KC_ENT:
+	case KC_TAB:
+	case KC_DOT:
+	case KC_COMM:
+		if (record->event.pressed) { tap_code(KC_CAPS); }
+	}
+}
+```
+Function is called when caps lock is enabled to turn it off after completing a word—caps lock is rarely used beyond capitalising a single word. Written by the `#ergonomics` enthusiasts of splitkb.com discord.
+```
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
 ```sh
@@ -102,7 +126,7 @@ The `luna-status.c` source has a tiny dog animation that reacts to typing speed,
 The `bongocat.c` is an updated source with typing animation using *differential* pixels on secondary OLED. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. This trick uses less space compared to full 512-byte frame renderings. Both left and right aligned bongocat will be built by default. To reduce firmware size (about ~1540 bytes), compile with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side: `qmk flash -e CAT=LEFT corne.json`
 
 ## Additional build options
-Adding `CORNELP=yes` preprocessor will result with a minimal build with no OLED support and overriding any pet selection above: `qmk flash -e CORNELP=yes corne.json`
+Adding `TINY=yes` preprocessor will result with a minimal build with no OLED support and overriding any pet selection above: `qmk flash -e CORNELP=yes corne.json`
 
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:
