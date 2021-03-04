@@ -41,7 +41,7 @@
 #define PREP_FRAMES 1
 #define TAP_FRAMES 2
 #define ANIM_FRAME_DURATION 200 // Number of ms per frame
-#define WIDTH 128 // OLED width, Corne is 128x32px
+#define WIDTH OLED_DISPLAY_WIDTH // 128x32px
 
 uint32_t anim_timer = 0;
 uint32_t anim_sleep = 0;

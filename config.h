@@ -68,10 +68,12 @@
 
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
+#	define SELECT_SOFT_SERIAL_SPEED 0
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
 #	define OLED_TIMEOUT 10000
+#	define OLED_UPDATE_INTERVAL 50
 #	define OLED_FONT_H "users/filterpaper/glcdfont.c"
 #endif
 
