@@ -120,7 +120,7 @@ void oled_task_user(void) {
 
 
 #ifdef CAPSWORD_ENABLE
-// Caps word: deactivate caps lock following a word
+// Deactivate caps lock following a word
 void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	// Get the base key code of a mod or layer tap
 	switch (keycode) {
@@ -130,13 +130,14 @@ void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 		keycode = keycode & 0xFF;
 	}
 	// Toggle caps lock with the following key codes
-	switch (keycode & 0xFF) {
+	switch (keycode) {
+	case KC_TAB:
 	case KC_ESC:
 	case KC_SPC:
 	case KC_ENT:
-	case KC_TAB:
 	case KC_DOT:
 	case KC_COMM:
+	case KC_GESC:
 		if (record->event.pressed) { tap_code(KC_CAPS); }
 	}
 }
@@ -148,9 +149,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	// Monitor key codes to toggle caps lock
 	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
 #endif
-
 	// Macros using layer tap's LT() tapping term delay
-	// to use as tap hold shortcuts, by @sigprof
+	// as tap hold shortcuts, by @sigprof
 	switch (keycode) {
 	// VIM commands
 	case Q_TH:
@@ -198,7 +198,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		} else { if (record->event.pressed) { tap_code16(G(KC_V)); } }
 		return false;
 	}
-
 	return true; // continue with unmatched keycodes
 }
 

@@ -30,7 +30,7 @@ filterpaper.h | User specific variables and options
 filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
 mod-status.c | Graphical layer and modifier status indicators for primary OLED
 luna-status.c | Luna and Felix the dog as typing and modifier indicators for primary OLED (adds ~876 bytes)
-bongocat.c | Bongocat typing animation based on differential pixels for secondary OLED (adds ~3768 bytes)
+bongocat.c | Bongocat typing animation using changed pixels for secondary OLED (adds ~3768 bytes)
 glcdfont.c | Corne logo, コルネ katakana name, fonts and icon images
 json | Folder of supported keyboard layouts
 animation_frames | Folder of Bongocat animation images
@@ -53,7 +53,7 @@ if (get_highest_layer(layer_state); >_COLEMAK) {
     }
 }
 ```
-Code loops through every row and column on a per-key RGB board, scanning for configured keys (not `KC_TRANS`) and lighting that index location. It is configured to activate on non-default layers. This can be further customised with specific layer colors in a `switch` condition inside the last `if` statement.
+Code loops through every row and column on a per-key RGB board, scanning for configured keys (not `KC_TRANS`) and lighting that index location. It is configured to activate on non-default layers. This can be further customised using layer `switch` condition inside the last `if` statement.
 
 ## Tap hold macros
 ```c
@@ -75,7 +75,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true; // continue with unmatched keycodes
 }
 ```
-These features can be found QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated using `process_record_user()` with layer tap (`LT()`) key and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Macro `W_TH` replaces `KC_W` on the key map (`keymap[]`).
+Tap hold macro can be found in QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated here using `process_record_user()` with layer tap (`LT()`) and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Macro `W_TH` replaces `KC_W` on the key map (`keymap[]`).
 
 ## Caps word
 ```c
@@ -88,19 +88,20 @@ void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 		keycode = keycode & 0xFF;
 	}
 	// Toggle caps lock with the following key codes
-	switch (keycode & 0xFF) {
+	switch (keycode) {
 	case KC_ESC:
 	case KC_SPC:
 	case KC_ENT:
 	case KC_TAB:
 	case KC_DOT:
 	case KC_COMM:
+    case KC_GESC:
 		if (record->event.pressed) { tap_code(KC_CAPS); }
 	}
 }
 ```
-Function is called when caps lock is enabled to turn it off after completing a word—caps lock is rarely used beyond capitalising a single word. Written by the `#ergonomics` enthusiasts of splitkb.com discord.
-```
+Function is called inside `process_record_user` when caps lock is enabled to turn it off after completing a word—because caps lock is rarely used beyond capitalising one word. The first `switch` statement performs a bitwise *AND* to filter base key codes (that ranges from 0x00-0xFF) from mod/layer taps to support toggle keys on a different layer. Written by the `#ergonomics` enthusiasts of splitkb.com discord.
+
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
 ```sh

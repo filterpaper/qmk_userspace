@@ -105,7 +105,7 @@ static void render_mod_status_gui_alt(uint8_t modifiers) {
 	else { oled_write_P(alt_off_2, false); }
 }
 
-static void render_mod_status_ctrl_shift(uint8_t modifiers) {
+static void render_mod_status_ctrl_shift(uint8_t modifiers, bool caps) {
 	static const char PROGMEM ctrl_off_1[] = {0x89, 0x8a, 0};
 	static const char PROGMEM ctrl_off_2[] = {0xa9, 0xaa, 0};
 	static const char PROGMEM ctrl_on_1[] = {0x91, 0x92, 0};
@@ -125,8 +125,6 @@ static void render_mod_status_ctrl_shift(uint8_t modifiers) {
 	static const char PROGMEM off_on_2[] = {0xca, 0};
 	static const char PROGMEM on_on_1[] = {0xcb, 0};
 	static const char PROGMEM on_on_2[] = {0xcc, 0};
-
-	bool caps = host_keyboard_led_state().caps_lock;
 
 	if (modifiers & MOD_MASK_CTRL) { oled_write_P(ctrl_on_1, false); }
 	else { oled_write_P(ctrl_off_1, false); }
@@ -158,7 +156,7 @@ static void render_mod_status(void) {
 	render_layer_state();
 	oled_set_cursor(0,11);
 	render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
-	render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
+	render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods(),host_keyboard_led_state().caps_lock);
 }
 
 void render_primary(void) {

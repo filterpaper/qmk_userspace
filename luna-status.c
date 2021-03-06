@@ -255,7 +255,7 @@ static void render_luna_status(void) {
 		else if (get_current_wpm() >MIN_WALK_SPEED && luna_typing) { render_luna_walk(); }
 		else { render_luna_sit(); }
 
-		// Interval check for dropping WPM
+		// Stop typing on decreasing WPM
 		if (!(luna_anim_timer%2)) {
 			if (get_current_wpm() >=luna_prev_wpm) {
 				luna_prev_wpm = get_current_wpm();
