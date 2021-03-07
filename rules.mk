@@ -28,6 +28,11 @@ EXTRAKEY_ENABLE = yes
 GRAVE_ESC_ENABLE = yes
 CAPSWORD_ENABLE = yes
 
+# Caps word preprocessor
+ifeq ($(CAPSWORD_ENABLE), yes)
+	OPT_DEFS += -DCAPSWORD_ENABLE
+endif
+
 # Exclude LTO for Planck
 ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
@@ -63,9 +68,4 @@ else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	else
 		OPT_DEFS += -DPRIMARY_ONLY
 	endif
-endif
-
-# Caps word feature
-ifeq ($(CAPSWORD_ENABLE), yes)
-	OPT_DEFS += -DCAPSWORD_ENABLE
 endif

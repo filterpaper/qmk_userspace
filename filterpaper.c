@@ -61,9 +61,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 	switch (get_highest_layer(state)) {
 	case ADJ:
 	case CMK:
+		rgb_matrix_sethsv_noeeprom(HSV_SHIFT);
 		rgb_matrix_mode_noeeprom(MATRIX_SHIFT);
 		break;
 	default:
+		rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
 		rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 	}
 	return state;

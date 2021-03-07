@@ -113,7 +113,7 @@ qmk flash ~/qmk_firmware/users/filterpaper/json/mark65.json
 
 # Building Corne Keyboard (CRKBD)
 ## Corne split setup
-Corne is configured with EE_HANDS for controllers to read left or right values off EEPROM, allowing USB-C cable to be used on either side. These are one-time flash commands to write left and right handedness into Elite-C MCUs:
+Corne is configured with EE_HANDS for controllers to read left or right values off EEPROM, allowing USB-C cable to be used on either side. These are one-time flash commands to write left and right handedness bootloader into Elite-C MCUs:
 ```sh
 qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-left
 qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
