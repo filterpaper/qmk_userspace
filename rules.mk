@@ -26,9 +26,9 @@ SRC += filterpaper.c
 # Common features
 EXTRAKEY_ENABLE = yes
 GRAVE_ESC_ENABLE = yes
-CAPSWORD_ENABLE = yes
 
-# Caps word preprocessor
+# Custom caps word feature
+CAPSWORD_ENABLE = yes
 ifeq ($(CAPSWORD_ENABLE), yes)
 	OPT_DEFS += -DCAPSWORD_ENABLE
 endif

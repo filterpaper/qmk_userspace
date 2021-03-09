@@ -24,8 +24,8 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 	return hsv_to_rgb(hsv);
 }; */
 
-void keyboard_post_init_user(void) {
-	// Map under glow LEDs to nearby keys
+void matrix_init_user(void) {
+	// Remap under glow LEDs to nearby keys
 #if defined(KEYBOARD_planck_rev6)
 	g_led_config = (led_config_t){ {
 		{ 6, 6, 6, 5, 5, 5 }, { 6, 6, 6, 5, 5, 5 },
@@ -52,8 +52,11 @@ void keyboard_post_init_user(void) {
 		255, 255, 4, 4, 4, 4, 4, 4, 4, 4, 255, 255
 	} };
 #endif
-	// Startup defaults
-	rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
+}
+
+void keyboard_post_init_user(void) {
+	// Startup default effects
+	rgb_matrix_sethsv_noeeprom(HSV_NORMAL);
 	rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 }
 
@@ -65,7 +68,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 		rgb_matrix_mode_noeeprom(MATRIX_SHIFT);
 		break;
 	default:
-		rgb_matrix_sethsv_noeeprom(HSV_DEFAULT);
+		rgb_matrix_sethsv_noeeprom(HSV_NORMAL);
 		rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 	}
 	return state;
@@ -111,7 +114,6 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 	else                         { return OLED_ROTATION_180; }
 }
 
-// Render modules on both OLED
 void oled_task_user(void) {
 	if (is_keyboard_master()) { render_primary(); }
 	#ifndef PRIMARY_ONLY
