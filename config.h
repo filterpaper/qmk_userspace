@@ -15,9 +15,9 @@
  */
 
 #pragma once
-//ifndef KEYBOARD_boardsource_the_mark
+
+// Keymap wrapper macros
 #include "wrappers.h"
-//#endif
 
 // Common QMK settings
 #define TAPPING_TERM 230
