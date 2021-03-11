@@ -1,9 +1,9 @@
 # Summary
 This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` source files deep inside QMK's sub-directories. All customisation required to build firmwares are configured within this space in the following manner:
 
-* Design keyboard layouts using [QMK Configurator](https://config.qmk.fm/#/) and export the JSON files with keymap named after this space.
+* Store [QMK Configurator](https://config.qmk.fm/#/) exported layouts or wrapper based macro key map in JSON format.
 * Create `rules.mk`, `config.h` and shared source codes in this folder, with `#ifdef` preprocessors for unique keyboard or feature specific functions.
-* Run `qmk flash` on the exported JSON file to build a custom firmware for each board.
+* Run `qmk flash` on JSON layout files to build a custom firmware for each board.
 * See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
 ## Setup
@@ -32,11 +32,10 @@ mod-status.c | Graphical layer and modifier status indicators for primary OLED
 luna-status.c | Luna and Felix the dog as typing and modifier indicators for primary OLED (adds ~876 bytes)
 bongocat.c | Bongocat typing animation using changed pixels for secondary OLED (adds ~3768 bytes)
 glcdfont.c | Corne logo, コルネ katakana name, fonts and icon images
-json | Folder of supported keyboard layouts
-animation_frames | Folder of Bongocat animation images
-archive/bongocat-original.c | Original full frame Bongocat typing animation source code that is space consuming (adds ~7684 bytes)
-archive/luna.c | Luna and Felix the dog typing animation stand alone source code
-archive/rgb_matrix_user.inc | Custom RGB matrix effects collected from Reddit, see [Custom RGB Matrix](../../docs/feature_rgb_matrix.md#custom-rgb-matrix-effects-idcustom-rgb-matrix-effects)
+wrappers.h | Key map wrappers for shared ortholinear and Corne layouts
+json/ | Folder of supported keyboard layouts
+animation_frames/ | Folder of Bongocat animation images
+archive/ | Archived files of original codes and layouts
 
 # Code Snippets
 ## Light configured layers keys

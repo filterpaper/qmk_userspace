@@ -206,22 +206,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-#ifdef TAPPING_TERM_PER_KEY
-// Fine tune tapping term delays
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	switch (keycode) {
-	case LT(2,KC_SPC):
-	case LT(3,KC_SPC):
-	case RSFT_T(KC_SPC):
-	case RSFT_T(KC_ENT):
-		return TAPPING_TERM - 50;
-	default:
-		return TAPPING_TERM;
-	}
-}
-#endif
-
-
 void suspend_power_down_user(void) {
 #ifdef RGB_MATRIX_ENABLE
 	rgb_matrix_set_suspend_state(true);
