@@ -25,7 +25,6 @@ SRC += filterpaper.c
 
 # Common features
 EXTRAKEY_ENABLE = yes
-GRAVE_ESC_ENABLE = yes
 
 # Custom caps word feature
 CAPSWORD_ENABLE = yes

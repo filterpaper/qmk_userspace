@@ -20,10 +20,12 @@
 #include "wrappers.h"
 
 // Common QMK settings
-#define TAPPING_TERM 220
+#define TAPPING_TERM 250
+#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAP_CODE_DELAY 50
+#define GRAVE_ESC_SHIFT_OVERRIDE
 #define LAYER_STATE_8BIT // 8-layer limit, saves ~462 bytes
 
 #ifdef RGB_MATRIX_ENABLE
@@ -62,10 +64,6 @@
 #	define MOUSEKEY_WHEEL_DELAY 0
 #	define MOUSEKEY_WHEEL_INTERVAL 50
 #	define MOUSEKEY_WHEEL_TIME_TO_MAX 100
-#endif
-
-#ifdef GRAVE_ESC_ENABLE
-#	define GRAVE_ESC_SHIFT_OVERRIDE
 #endif
 
 #ifdef SPLIT_KEYBOARD
