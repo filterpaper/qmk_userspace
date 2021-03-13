@@ -14,7 +14,7 @@ git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filter
 ```
 
 # Supported Keyboards
-![corneplanck](corneplanck.png)
+![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
 * [BM40 HS RGB](../../keyboards/bm40hsrgb) — Per-key RGB matrix indicators.
 * [Planck rev6](../../keyboards/planck) — RGB underglow layer and modifier indicators.
