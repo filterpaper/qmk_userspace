@@ -15,31 +15,32 @@
  */
 
 /* Layout wrapper macros for ortholinear and split Corne boards.
- * The top 3x12 is shared across all 3 layouts.
+ * The top 3x12 is shared with 3 keyboards.
  */
 
 #pragma once
 
-// Wrapper macro names for layouts
+
+// Base layout wrapper macros
 #define LAYOUT_wrapper_split_3x6_3(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 #define LAYOUT_wrapper_ortho_4x12(...) LAYOUT_ortho_4x12(__VA_ARGS__)
 #define LAYOUT_wrapper_planck_mit(...) LAYOUT_planck_mit(__VA_ARGS__)
 
 
 // Base QWERTY
-#define BASE1 KC_TAB,  Q_TH,         W_TH,         KC_E,         KC_R,         T_TH, KC_Y, KC_U,         KC_I,         KC_O,         KC_P,            KC_BSPC
-#define BASE2 KC_GESC, LSFT_T(KC_A), LALT_T(KC_S), LCTL_T(KC_D), LGUI_T(KC_F), KC_G, KC_H, RGUI_T(KC_J), RCTL_T(KC_K), RALT_T(KC_L), RSFT_T(KC_SCLN), KC_QUOT
-#define BASE3 KC_LSFT, KC_Z,         KC_X,         KC_C,         KC_V,         KC_B, N_TH, M_TH,         COMM_TH,      DOT_TH,       KC_SLSH,         KC_ENT
+#define BASE1 KC_TAB,  Q_TH,        W_TH,        KC_E,        KC_R,        T_TH, KC_Y, KC_U,        KC_I,        KC_O,        KC_P,           KC_BSPC
+#define BASE2 KC_GESC, SFT_T(KC_A), ALT_T(KC_S), CTL_T(KC_D), GUI_T(KC_F), KC_G, KC_H, GUI_T(KC_J), CTL_T(KC_K), ALT_T(KC_L), SFT_T(KC_SCLN), KC_QUOT
+#define BASE3 KC_LSFT, KC_Z,        KC_X,        KC_C,        KC_V,        KC_B, N_TH, M_TH,        COMM_TH,     DOT_TH,      KC_SLSH,        KC_ENT
 // Last row
-#define CORNEBASE                                     LT(5,KC_VOLD), LT(2,KC_VOLU), RSFT_T(KC_ENT), RSFT_T(KC_SPC), LT(3,KC_SPC), KC_RGUI
-#define PLANCKBASE KC_DEL, LALT_T(KC_VOLD), LCTL_T(KC_VOLU), KC_LGUI, LT(2,KC_SPC), RSFT_T(KC_SPC), RSFT_T(KC_SPC), LT(3,KC_SPC), KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
-#define BM40BASE   KC_DEL, LALT_T(KC_VOLD), LCTL_T(KC_VOLU), KC_LGUI, LT(2,KC_SPC), RSFT_T(KC_SPC), LT(3,KC_SPC), KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
+#define CORNEBASE                                   LT(5,KC_VOLD), LT(2,KC_VOLU), SFT_T(KC_ENT), SFT_T(KC_SPC), LT(3,KC_SPC), KC_RGUI
+#define PLANCKBASE KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(2,KC_SPC), SFT_T(KC_SPC), SFT_T(KC_SPC), LT(3,KC_SPC), KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
+#define BM40BASE   KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(2,KC_SPC), SFT_T(KC_SPC), LT(3,KC_SPC), KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
 
 
 // COLEMAK
-#define COLEMAK1 _______, _______, _______,      KC_F,         KC_P,         KC_G, KC_J,    KC_L,         KC_U,         KC_Y,         KC_SCLN,      _______
-#define COLEMAK2 _______, _______, LALT_T(KC_R), LCTL_T(KC_S), LGUI_T(KC_T), KC_D, _______, RGUI_T(KC_N), RCTL_T(KC_E), RALT_T(KC_I), RSFT_T(KC_O), _______
-#define COLEMAK3 _______, _______, _______,      _______,      _______,      KC_B, KC_K,    _______,      _______,      _______,      _______,      _______
+#define COLEMAK1 _______, _______, _______,     KC_F,        KC_P,        KC_G, KC_J,    KC_L,        KC_U,        KC_Y,        KC_SCLN,     _______
+#define COLEMAK2 _______, _______, ALT_T(KC_R), CTL_T(KC_S), GUI_T(KC_T), KC_D, _______, GUI_T(KC_N), CTL_T(KC_E), ALT_T(KC_I), SFT_T(KC_O), _______
+#define COLEMAK3 _______, _______, _______,     _______,     _______,     KC_B, KC_K,    _______,     _______,     _______,     _______,     _______
 // Last row
 #define CORNECOLEMAK                             _______, _______, _______, _______, _______, _______
 #define PLANCKCOLEMAK _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
@@ -71,13 +72,13 @@
 #define ADJUST2 _______, KC_F11,       KC_F12,  _______, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  _______,    _______
 #define ADJUST3 _______, A(G(KC_PWR)), _______, _______, _______, _______, _______, KC_INS,  KC_DEL,  _______, C(G(KC_Q)), _______
 // Last row
-#define CORNEADJUST                             _______, _______, _______, _______, _______, _______
-#define PLANCKADJUST _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-#define BM40ADJUST   _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______
+#define CORNEADJUST  CORNECOLEMAK
+#define PLANCKADJUST PLANCKCOLEMAK
+#define BM40ADJUST   BM40COLEMAK
 
 
 // Mouse
 #define MOUSE1 _______, _______, _______, _______, _______, _______, _______, KC_WH_U, KC_WH_D, _______, _______, _______
 #define MOUSE2 _______, _______, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______
 #define MOUSE3 _______, _______, _______, _______, _______, _______, _______, KC_BTN2, KC_BTN1, _______, _______, _______
-#define CORNEMOUSE                        _______, _______, _______, _______, _______, _______
+#define CORNEMOUSE CORNECOLEMAK
