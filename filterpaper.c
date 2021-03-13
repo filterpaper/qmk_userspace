@@ -35,7 +35,7 @@ void matrix_init_user(void) {
 	}, {
 		{112, 39}, {148, 60}, {206, 53}, {206, 3}, {150, 3}, {74, 3}, {18, 3}, {18, 54}, {77, 60}
 	}, {
-		255, 255, 255, 255, 4, 4, 255, 255, 255
+		2, 255, 2, 255, 4, 4, 255, 2, 255
 	} };
 #elif defined(KEYBOARD_boardsource_the_mark)
 	g_led_config = (led_config_t){ {

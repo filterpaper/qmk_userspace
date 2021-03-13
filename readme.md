@@ -31,7 +31,7 @@ filterpaper.c | User source with custom functions, see [RGB matrix lighting](../
 mod-status.c | Graphical layer and modifier status indicators for primary OLED
 luna-status.c | Luna and Felix the dog as typing and modifier indicators for primary OLED (adds ~876 bytes)
 bongocat.c | Bongocat typing animation using changed pixels for secondary OLED (adds ~3768 bytes)
-glcdfont.c | Corne logo, コルネ katakana name, fonts and icon images
+oledfont.c | Corne logo, コルネ katakana name, fonts and icon images
 wrappers.h | Key map wrappers for shared ortholinear and Corne layouts
 json/ | Folder of supported keyboard layouts
 animation_frames/ | Folder of Bongocat animation images
