@@ -1,0 +1,47 @@
+{
+    "author": "",
+    "documentation": "Wrapper based keymap",
+    "keyboard": "crkbd/rev1/common",
+    "keymap": "filterpaper",
+    "layers": [
+        [
+            "BASE1",
+            "BASE2",
+            "BASE3",
+            "CORNEBASE"
+        ],
+        [
+            "COLEMAK1",
+            "COLEMAK2",
+            "COLEMAK3",
+            "CORNECOLEMAK"
+        ],
+        [
+            "LOWER1",
+            "LOWER2",
+            "LOWER3",
+            "CORNELOWER"
+        ],
+        [
+            "RAISE1",
+            "RAISE2",
+            "RAISE3",
+            "CORNERAISE"
+        ],
+        [
+            "ADJUST1",
+            "ADJUST2",
+            "ADJUST3",
+            "CORNEADJUST"
+        ],
+        [
+            "MOUSE1",
+            "MOUSE2",
+            "MOUSE3",
+            "CORNEMOUSE"
+        ]
+    ],
+    "layout": "LAYOUT_wrapper_split_3x6_3",
+    "notes": "",
+    "version": 1
+}

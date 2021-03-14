@@ -1,0 +1,41 @@
+{
+    "author": "",
+    "documentation": "Wrapper based keymap",
+    "keyboard": "bm40hsrgb",
+    "keymap": "filterpaper",
+    "layers": [
+        [
+            "BASE1",
+            "BASE2",
+            "BASE3",
+            "BM40BASE"
+        ],
+        [
+            "COLEMAK1",
+            "COLEMAK2",
+            "COLEMAK3",
+            "BM40COLEMAK"
+        ],
+        [
+            "LOWER1",
+            "LOWER2",
+            "LOWER3",
+            "BM40LOWER"
+        ],
+        [
+            "RAISE1",
+            "RAISE2",
+            "RAISE3",
+            "BM40RAISE"
+        ],
+        [
+            "ADJUST1",
+            "ADJUST2",
+            "ADJUST3",
+            "BM40ADJUST"
+        ]
+    ],
+    "layout": "LAYOUT_wrapper_planck_mit",
+    "notes": "",
+    "version": 1
+}
