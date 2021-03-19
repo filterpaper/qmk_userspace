@@ -214,7 +214,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	case LT(3,KC_SPC):
 	case SFT_T(KC_SPC):
 	case SFT_T(KC_ENT):
-		return TAPPING_TERM - 80;
 	case DOT_TH:
 	case COMM_TH:
 	case M_TH:
@@ -224,19 +223,3 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	}
 }
 #endif
-
-
-void suspend_power_down_user(void) {
-#ifdef RGB_MATRIX_ENABLE
-	rgb_matrix_set_suspend_state(true);
-#endif
-#ifdef OLED_DRIVER_ENABLE
-	oled_off();
-#endif
-}
-
-void suspend_wakeup_init_user(void) {
-#ifdef RGB_MATRIX_ENABLE
-	rgb_matrix_set_suspend_state(false);
-#endif
-}
