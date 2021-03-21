@@ -255,7 +255,7 @@
             "KC_TRNS"
         ]
     ],
-    "layout": "LAYOUT_ortho_4x12",
+    "layout": "LAYOUT_planck_grid",
     "notes": "",
     "version": 1
 }

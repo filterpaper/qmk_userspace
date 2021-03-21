@@ -25,6 +25,7 @@ SRC += filterpaper.c
 
 # Common features
 EXTRAKEY_ENABLE = yes
+BOOTLOADER = atmel-dfu
 
 # Custom caps word feature
 CAPSWORD_ENABLE = yes
@@ -45,10 +46,8 @@ endif
 
 # Corne keyboard features
 ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
-	BOOTLOADER = atmel-dfu
 	MOUSEKEY_ENABLE = yes
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
-	BOOTLOADER = atmel-dfu
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	# Primary OLED option

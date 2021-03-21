@@ -35,7 +35,7 @@
             "PLANCKADJUST"
         ]
     ],
-    "layout": "LAYOUT_wrapper_ortho_4x12",
+    "layout": "LAYOUT_wrapper_planck_grid",
     "notes": "",
     "version": 1
 }
