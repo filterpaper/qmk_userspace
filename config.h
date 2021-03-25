@@ -69,6 +69,9 @@
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
 #	define SELECT_SOFT_SERIAL_SPEED 0
+// Top right corner of right-side Corne
+#	define BOOTMAGIC_LITE_ROW_RIGHT 4
+#	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
 #endif
 
 #ifdef OLED_DRIVER_ENABLE

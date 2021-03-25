@@ -11,14 +11,13 @@ COMMAND_ENABLE = no
 MOUSEKEY_ENABLE = no
 TERMINAL_ENABLE = no
 KEY_LOCK_ENABLE = no
+RGBLIGHT_ENABLE = no
 BOOTMAGIC_ENABLE = no
 SLEEP_LED_ENABLE = no
 TAP_DANCE_ENABLE = no
 VELOCIKEY_ENABLE = no
 SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
-RGBLIGHT_ENABLE = no
-RGB_MATRIX_ENABLE = no
 
 # Main source file
 SRC += filterpaper.c
@@ -26,6 +25,8 @@ SRC += filterpaper.c
 # Common features
 EXTRAKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
+BOOTMAGIC_ENABLE = lite
+RGB_MATRIX_ENABLE = yes
 
 # Custom caps word feature
 CAPSWORD_ENABLE = yes
@@ -38,15 +39,10 @@ ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
 endif
 
-# Boards with LEDs
-ifeq ($(KEYBOARD),$(filter $(KEYBOARD), bm40hsrgb planck/rev6 boardsource/the_mark))
-	BOOTMAGIC_ENABLE = lite
-	RGB_MATRIX_ENABLE = yes
-endif
-
 # Corne keyboard features
 ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
+	RGB_MATRIX_ENABLE = no
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
