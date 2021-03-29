@@ -75,7 +75,7 @@
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
-#	define OLED_TIMEOUT 10000
+#	define OLED_TIMEOUT 8000
 #	define OLED_UPDATE_INTERVAL 50
 #	define OLED_FONT_H "users/filterpaper/oledfont.c"
 #endif

@@ -61,7 +61,7 @@ static void render_layer_state(void) {
 	else { oled_write_P(default_layer, false); }
 }
 
-static void render_mod_status_gui_alt(uint8_t modifiers) {
+static void render_mod_status_gui_alt(const uint_fast8_t modifiers) {
 	static const char PROGMEM gui_off_1[] = {0x85, 0x86, 0};
 	static const char PROGMEM gui_off_2[] = {0xa5, 0xa6, 0};
 	static const char PROGMEM gui_on_1[] = {0x8d, 0x8e, 0};
@@ -105,7 +105,7 @@ static void render_mod_status_gui_alt(uint8_t modifiers) {
 	else { oled_write_P(alt_off_2, false); }
 }
 
-static void render_mod_status_ctrl_shift(uint8_t modifiers, bool caps) {
+static void render_mod_status_ctrl_shift(const uint_fast8_t modifiers, const bool caps) {
 	static const char PROGMEM ctrl_off_1[] = {0x89, 0x8a, 0};
 	static const char PROGMEM ctrl_off_2[] = {0xa9, 0xaa, 0};
 	static const char PROGMEM ctrl_on_1[] = {0x91, 0x92, 0};

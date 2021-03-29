@@ -33,12 +33,7 @@
 #define LUNA_FRAME_DURATION 200 // Number of ms per frame
 #define LUNA_SIZE 96 // 96-byte arrays for the little dog
 
-uint32_t luna_anim_timer = 0;
-uint32_t luna_anim_sleep = 0;
-uint8_t luna_current_frame = 0;
-
-bool luna_typing = false;
-uint8_t luna_prev_wpm = 0;
+static uint_fast8_t current_frame = 0;
 
 static void render_logo(void) {
 	static const char PROGMEM corne_logo[] = {
@@ -86,8 +81,8 @@ static void render_luna_sit(void) {
 #endif
 	} };
 
-	luna_current_frame = (luna_current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(sit[abs(1 - luna_current_frame)], LUNA_SIZE);
+	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	oled_write_raw_P(sit[abs(1 - current_frame)], LUNA_SIZE);
 }
 
 static void render_luna_walk(void) {
@@ -123,8 +118,8 @@ static void render_luna_walk(void) {
 #endif
 	} };
 
-	luna_current_frame = (luna_current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(walk[abs(1 - luna_current_frame)], LUNA_SIZE);
+	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	oled_write_raw_P(walk[abs(1 - current_frame)], LUNA_SIZE);
 }
 
 static void render_luna_run(void) {
@@ -160,8 +155,8 @@ static void render_luna_run(void) {
 #endif
 	} };
 
-	luna_current_frame = (luna_current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(run[abs(1 - luna_current_frame)], LUNA_SIZE);
+	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	oled_write_raw_P(run[abs(1 - current_frame)], LUNA_SIZE);
 }
 
 static void render_luna_bark(void) {
@@ -197,8 +192,8 @@ static void render_luna_bark(void) {
 #endif
 	} };
 
-	luna_current_frame = (luna_current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(bark[abs(1 - luna_current_frame)], LUNA_SIZE);
+	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	oled_write_raw_P(bark[abs(1 - current_frame)], LUNA_SIZE);
 }
 
 static void render_luna_sneak(void) {
@@ -234,11 +229,15 @@ static void render_luna_sneak(void) {
 #endif
 	} };
 
-	luna_current_frame = (luna_current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(sneak[abs(1 - luna_current_frame)], LUNA_SIZE);
+	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	oled_write_raw_P(sneak[abs(1 - current_frame)], LUNA_SIZE);
 }
 
 static void render_luna_status(void) {
+	static uint_fast32_t anim_timer = 0;
+	static uint_fast32_t anim_sleep = 0;
+	static bool typing = false;
+	static uint_fast8_t prev_wpm = 0;
 
 	void render_phase(void) {
 		oled_clear();
@@ -251,23 +250,23 @@ static void render_luna_status(void) {
 
 		if (get_mods() & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock) { render_luna_bark(); }
 		else if (get_mods() & MOD_MASK_CAG) { render_luna_sneak(); }
-		else if (get_current_wpm() >MIN_RUN_SPEED && luna_typing) { render_luna_run(); }
-		else if (get_current_wpm() >MIN_WALK_SPEED && luna_typing) { render_luna_walk(); }
+		else if (get_current_wpm() >MIN_RUN_SPEED && typing) { render_luna_run(); }
+		else if (get_current_wpm() >MIN_WALK_SPEED && typing) { render_luna_walk(); }
 		else { render_luna_sit(); }
 	}
 
 	void render_loop(void) {
 		// Render frame on every preset ms
-		if (timer_elapsed32(luna_anim_timer) >LUNA_FRAME_DURATION) {
-			luna_anim_timer = timer_read32();
+		if (timer_elapsed32(anim_timer) >LUNA_FRAME_DURATION) {
+			anim_timer = timer_read32();
 			render_phase();
 			// Stop typing on decreasing WPM
-			if (get_current_wpm() >=luna_prev_wpm) {
-				luna_prev_wpm = get_current_wpm();
-				luna_typing = true;
+			if (get_current_wpm() >=prev_wpm) {
+				prev_wpm = get_current_wpm();
+				typing = true;
 			} else {
-				luna_prev_wpm = get_current_wpm()+1;
-				luna_typing = false;
+				prev_wpm = get_current_wpm()+1;
+				typing = false;
 			}
 		}
 	}
@@ -275,9 +274,9 @@ static void render_luna_status(void) {
 	// Animate on WPM, off OLED on idle
 	if (get_current_wpm() >0 || get_mods() & MOD_MASK_CSAG) {
 		render_loop();
-		luna_anim_sleep = timer_read32();
+		anim_sleep = timer_read32();
 	} else {
-		if (timer_elapsed32(luna_anim_sleep) >OLED_TIMEOUT) { oled_off(); }
+		if (timer_elapsed32(anim_sleep) >OLED_TIMEOUT) { oled_off(); }
 		else { render_loop(); }
 	}
 }
