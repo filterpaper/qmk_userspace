@@ -60,7 +60,7 @@ void keyboard_post_init_user(void) {
 	rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 }
 
-layer_state_t layer_state_set_user(const layer_state_t state) {
+layer_state_t layer_state_set_user(layer_state_t const state) {
 	switch (get_highest_layer(state)) {
 	case CMK:
 		rgb_matrix_sethsv_noeeprom(HSV_SHIFT);
@@ -76,7 +76,7 @@ layer_state_t layer_state_set_user(const layer_state_t state) {
 void rgb_matrix_indicators_user(void) {
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
-		for (uint_fast8_t i = 0; i <DRIVER_LED_TOTAL; i++) {
+		for (uint_fast8_t i = 0; i <DRIVER_LED_TOTAL; ++i) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_MODIFIER)) {
 				rgb_matrix_set_color(i, RGB_MODS);
 			}
@@ -84,7 +84,7 @@ void rgb_matrix_indicators_user(void) {
 	}
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
-		for (uint_fast8_t i = 0; i <DRIVER_LED_TOTAL; i++) {
+		for (uint_fast8_t i = 0; i <DRIVER_LED_TOTAL; ++i) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_KEYLIGHT)) {
 				rgb_matrix_set_color(i, RGB_CAPS);
 			}
@@ -92,9 +92,9 @@ void rgb_matrix_indicators_user(void) {
 	}
 	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) >CMK) {
-		const uint_fast8_t layer = get_highest_layer(layer_state);
-		for (uint_fast8_t row = 0; row <MATRIX_ROWS; row++) {
-			for (uint_fast8_t col = 0; col <MATRIX_COLS; col++) {
+		uint_fast8_t const layer = get_highest_layer(layer_state);
+		for (uint_fast8_t row = 0; row <MATRIX_ROWS; ++row) {
+			for (uint_fast8_t col = 0; col <MATRIX_COLS; ++col) {
 				if (g_led_config.matrix_co[row][col] !=NO_LED &&
 					keymap_key_to_keycode(layer, (keypos_t){col,row}) !=KC_TRNS) {
 					rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_LAYER);
@@ -107,7 +107,7 @@ void rgb_matrix_indicators_user(void) {
 
 
 #ifdef OLED_DRIVER_ENABLE
-oled_rotation_t oled_init_user(const oled_rotation_t rotation) {
+oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 	if (is_keyboard_master())    { return OLED_ROTATION_270; }
 	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
 	else                         { return OLED_ROTATION_180; }
@@ -124,7 +124,7 @@ void oled_task_user(void) {
 
 #ifdef CAPSWORD_ENABLE
 // Deactivate caps lock following a word
-void process_caps_word(uint_fast16_t keycode, const keyrecord_t *record) {
+static void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) {
 	// Get base key code of mod or layer tap with bitmask
 	if (((keycode >=QK_MOD_TAP && keycode <=QK_MOD_TAP_MAX) ||
 		(keycode >=QK_LAYER_TAP && keycode <=QK_LAYER_TAP_MAX)) &&
@@ -144,7 +144,7 @@ void process_caps_word(uint_fast16_t keycode, const keyrecord_t *record) {
 #endif
 
 
-bool process_record_user(const uint16_t keycode, keyrecord_t *record) {
+bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #ifdef CAPSWORD_ENABLE
 	// Monitor key codes to toggle caps lock
 	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
@@ -204,7 +204,7 @@ bool process_record_user(const uint16_t keycode, keyrecord_t *record) {
 
 #ifdef TAPPING_TERM_PER_KEY
 // Fine tune tapping term delays
-uint16_t get_tapping_term(const uint16_t keycode, keyrecord_t *record) {
+uint16_t get_tapping_term(uint16_t const keycode, keyrecord_t *record) {
 	switch (keycode) {
 	case LT(2,KC_SPC):
 	case LT(3,KC_SPC):
