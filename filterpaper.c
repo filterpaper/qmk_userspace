@@ -129,12 +129,11 @@ void suspend_power_down_user() {
 #ifdef CAPSWORD_ENABLE
 // Deactivate caps lock following a word
 void process_caps_word(uint16_t keycode, keyrecord_t *record) {
-	// Get the base key code of a mod or layer tap
-	switch (keycode) {
-	case QK_MOD_TAP ... QK_MOD_TAP_MAX:
-	case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+	// Get base key code of mod or layer tap with bitmask
+	if ((keycode >=QK_MOD_TAP && keycode <=QK_MOD_TAP_MAX) ||
+		(keycode >=QK_LAYER_TAP && keycode <=QK_LAYER_TAP_MAX)) {
 		if (!record->tap.count) { return; }
-		keycode = keycode & 0xFF;
+		else { keycode = keycode & 0xFF; }
 	}
 	// Toggle caps lock with the following key codes
 	switch (keycode) {
