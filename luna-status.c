@@ -234,10 +234,10 @@ static void render_luna_sneak(void) {
 }
 
 static void render_luna_status(void) {
-	static uint_fast32_t anim_timer = 0;
-	static uint_fast32_t anim_sleep = 0;
 	static bool typing = false;
 	static uint_fast8_t prev_wpm = 0;
+	static uint_fast32_t anim_timer = 0;
+	static uint_fast32_t anim_sleep = 0;
 
 	void render_phase(void) {
 		oled_clear();
@@ -280,7 +280,6 @@ static void render_luna_status(void) {
 		else { render_loop(); }
 	}
 }
-
 
 void render_primary(void) {
 	render_luna_status();

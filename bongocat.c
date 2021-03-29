@@ -195,10 +195,10 @@ static void render_cat_tap(void) {
 
 
 static void animate_cat(void) {
-	static uint_fast32_t anim_timer = 0;
-	static uint_fast32_t anim_sleep = 0;
 	static bool typing = false;
 	static uint_fast8_t prev_wpm = 0;
+	static uint_fast32_t anim_timer = 0;
+	static uint_fast32_t anim_sleep = 0;
 
 	void animation_phase(void) {
 		oled_clear();
