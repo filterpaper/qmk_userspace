@@ -35,6 +35,7 @@
 
 static uint_fast8_t current_frame = 0;
 
+
 static void render_logo(void) {
 	static char const PROGMEM corne_logo[] = {
 		0x80, 0x81, 0x82, 0x83, 0x84,
@@ -47,6 +48,7 @@ static void render_logo(void) {
 	if (layer_state_is(CMK)) { oled_write_P(katakana, false); }
 	else { oled_write_P(PSTR("corne"), false); }
 }
+
 
 static void render_luna_sit(void) {
 	static char const PROGMEM sit[LUNA_FRAMES][LUNA_SIZE] = { {
@@ -85,6 +87,7 @@ static void render_luna_sit(void) {
 	oled_write_raw_P(sit[abs(1 - current_frame)], LUNA_SIZE);
 }
 
+
 static void render_luna_walk(void) {
 	static char const PROGMEM walk[LUNA_FRAMES][LUNA_SIZE] = { {
 #ifndef FELIX
@@ -121,6 +124,7 @@ static void render_luna_walk(void) {
 	current_frame = (current_frame + 1) % LUNA_FRAMES;
 	oled_write_raw_P(walk[abs(1 - current_frame)], LUNA_SIZE);
 }
+
 
 static void render_luna_run(void) {
 	static char const PROGMEM run[LUNA_FRAMES][LUNA_SIZE] = { {
@@ -159,6 +163,7 @@ static void render_luna_run(void) {
 	oled_write_raw_P(run[abs(1 - current_frame)], LUNA_SIZE);
 }
 
+
 static void render_luna_bark(void) {
 	static char const PROGMEM bark[LUNA_FRAMES][LUNA_SIZE] = { {
 #ifndef FELIX
@@ -195,6 +200,7 @@ static void render_luna_bark(void) {
 	current_frame = (current_frame + 1) % LUNA_FRAMES;
 	oled_write_raw_P(bark[abs(1 - current_frame)], LUNA_SIZE);
 }
+
 
 static void render_luna_sneak(void) {
 	static char const PROGMEM sneak[LUNA_FRAMES][LUNA_SIZE] = { {
@@ -233,13 +239,14 @@ static void render_luna_sneak(void) {
 	oled_write_raw_P(sneak[abs(1 - current_frame)], LUNA_SIZE);
 }
 
+
 static void render_luna_status(void) {
 	static bool typing = false;
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t anim_timer = 0;
 	static uint_fast32_t anim_sleep = 0;
 
-	void render_phase(void) {
+	void animation_phase(void) {
 		oled_clear();
 		render_logo();
 
@@ -255,11 +262,11 @@ static void render_luna_status(void) {
 		else { render_luna_sit(); }
 	}
 
-	void render_loop(void) {
+	void animation_loop(void) {
 		// Render frame on every preset ms
 		if (timer_elapsed32(anim_timer) >LUNA_FRAME_DURATION) {
 			anim_timer = timer_read32();
-			render_phase();
+			animation_phase();
 			// Stop typing on decreasing WPM
 			if (get_current_wpm() >=prev_wpm) {
 				prev_wpm = get_current_wpm();
@@ -273,13 +280,14 @@ static void render_luna_status(void) {
 
 	// Animate on WPM, off OLED on idle
 	if (get_current_wpm() >0 || get_mods() & MOD_MASK_CSAG) {
-		render_loop();
+		animation_loop();
 		anim_sleep = timer_read32();
 	} else {
 		if (timer_elapsed32(anim_sleep) >OLED_TIMEOUT) { oled_off(); }
-		else { render_loop(); }
+		else { animation_loop(); }
 	}
 }
+
 
 void render_primary(void) {
 	render_luna_status();

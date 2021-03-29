@@ -32,20 +32,15 @@
 #include "filterpaper.h"
 
 #define IDLE_SPEED 45
-#define TAP_SPEED 60
-
-#ifdef SLIMCAT // Saves 246 bytes per side
-#	undef TAP_SPEED
-#	define TAP_SPEED 5
+#ifdef SLIMCAT
+#	define TAP_SPEED 10
+#else
+#	define TAP_SPEED 60
 #endif
-
 #define IDLE_FRAMES 5
-#define PREP_FRAMES 1
 #define TAP_FRAMES 2
 #define ANIM_FRAME_DURATION 200 // Number of ms per frame
 #define WIDTH OLED_DISPLAY_WIDTH // 128x32px
-
-static uint_fast8_t current_frame = 0;
 
 
 // Base animation frame, where all subsequent frames will differ by pixels
@@ -57,17 +52,14 @@ static uint_fast16_t const left_base[] PROGMEM = {208, 32822, 32823, 32949, 3295
 #endif
 
 
-// Render OLED by looping through frame to write changed pixel bits
+// Loop through array to render changed OLED pixel bits
 static void render_array(uint_fast16_t const *frame) {
 	uint_fast16_t const size = pgm_read_word(&(frame[0])) + 1;
 	for (uint_fast16_t i = 1; i <size; ++i) {
 		uint_fast16_t cur_px = pgm_read_word(&(frame[i]));
-
-		// Get pixel state bit
-		bool on = (cur_px & ( 1 << 15 )) >> 15;
-		// Gemove pixel state bit
-		cur_px &= ~(1UL << 15);
-
+		bool const on = (cur_px & ( 1 << 15 )) >> 15; // Get pixel state bit
+		cur_px &= ~(1UL << 15); // Remove pixel state bit
+		
 		oled_write_pixel(cur_px % WIDTH, cur_px / WIDTH, on);
 	}
 }
@@ -101,23 +93,20 @@ static void render_cat_idle(void) {
 		left_idle_diff_3
 	};
 #endif
+	static uint_fast8_t current_frame = 0;
 
 	current_frame = (current_frame + 1) % IDLE_FRAMES;
-#if defined(LEFTCAT)
-	render_array(left_base);
-	render_array(left_idle_diff[current_frame]);
-#elif defined(RIGHTCAT)
-	render_array(base);
-	render_array(idle_diff[current_frame]);
-#else
 	if (is_keyboard_left()) {
+	#ifndef RIGHTCAT
 		render_array(left_base);
 		render_array(left_idle_diff[current_frame]);
+	#endif
 	} else {
+	#ifndef LEFTCAT
 		render_array(base);
 		render_array(idle_diff[current_frame]);
+	#endif
 	}
-#endif
 }
 
 
@@ -126,32 +115,28 @@ static void render_cat_prep(void) {
 	// Differential prep frame
 #ifndef LEFTCAT
 	static uint_fast16_t const prep_diff_0[] PROGMEM = {88, 33875, 33876, 33877, 33878, 34002, 34007, 34133, 34136, 34257, 34263, 34264, 34385, 34389, 34392, 34512, 34516, 34520, 1870, 1871, 1873, 1878, 34648, 34745, 34746, 34747, 1998, 1999, 2001, 34872, 34874, 34876, 34999, 35004, 35028, 35029, 35030, 2264, 35127, 35128, 2364, 2366, 35152, 35153, 35154, 35155, 2392, 35254, 35257, 35258, 2491, 2492, 2494, 2512, 2513, 2520, 35382, 35385, 35386, 35389, 2642, 2643, 2644, 2645, 2646, 2647, 35517, 35644, 35645, 35646, 35647, 35648, 35769, 35770, 35771, 35772, 3010, 3138, 3257, 3258, 3266, 3387, 3388, 3394, 3517, 3518, 3519, 3520, 3521};
-	static uint_fast16_t const *prep_diff[PREP_FRAMES] = {
+	static uint_fast16_t const *prep_diff[] = {
 		prep_diff_0
 	};
 #endif
 #ifndef RIGHTCAT
 	static uint_fast16_t const left_prep_diff_0[] PROGMEM = {88, 33833, 33834, 33835, 33836, 33960, 33965, 34087, 34090, 34215, 34216, 34222, 34343, 34346, 34350, 34471, 34475, 34479, 34599, 1833, 1838, 1840, 1841, 1966, 1968, 1969, 34756, 34757, 34758, 34883, 34885, 34887, 2215, 34985, 34986, 34987, 35011, 35016, 2343, 35116, 35117, 35118, 35119, 2369, 2371, 35143, 35144, 2471, 2478, 2479, 2497, 2499, 2500, 35269, 35270, 35273, 2600, 2601, 2602, 2603, 2604, 2605, 35394, 35397, 35398, 35401, 35522, 35647, 35648, 35649, 35650, 35651, 3005, 35779, 35780, 35781, 35782, 3133, 3261, 3269, 3270, 3389, 3395, 3396, 3518, 3519, 3520, 3521, 3522};
-	static uint_fast16_t const *left_prep_diff[PREP_FRAMES] = {
+	static uint_fast16_t const *left_prep_diff[] = {
 		left_prep_diff_0
 	};
 #endif
 
-#if defined(LEFTCAT)
-	render_array(left_base);
-	render_array(left_prep_diff[0]);
-#elif defined(RIGHTCAT)
-	render_array(base);
-	render_array(prep_diff[0]);
-#else
 	if (is_keyboard_left()) {
+	#ifndef RIGHTCAT
 		render_array(left_base);
 		render_array(left_prep_diff[0]);
+	#endif
 	} else {
+	#ifndef LEFTCAT
 		render_array(base);
 		render_array(prep_diff[0]);
+	#endif
 	}
-#endif
 }
 #endif // SLIMCAT
 
@@ -174,23 +159,20 @@ static void render_cat_tap(void) {
 		left_tap_diff_1
 	};
 #endif
+	static uint_fast8_t current_frame = 0;
 
 	current_frame = (current_frame + 1) % TAP_FRAMES;
-#if defined(LEFTCAT)
-	render_array(left_base);
-	render_array(left_tap_diff[current_frame]);
-#elif defined(RIGHTCAT)
-	render_array(base);
-	render_array(tap_diff[current_frame]);
-#else
 	if (is_keyboard_left()) {
+	#ifndef RIGHTCAT
 		render_array(left_base);
 		render_array(left_tap_diff[current_frame]);
+	#endif
 	} else {
+	#ifndef LEFTCAT
 		render_array(base);
 		render_array(tap_diff[current_frame]);
+	#endif
 	}
-#endif
 }
 
 
