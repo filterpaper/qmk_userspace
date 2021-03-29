@@ -47,8 +47,7 @@
 
 uint32_t anim_timer = 0;
 uint32_t anim_sleep = 0;
-uint8_t current_idle_frame = 0;
-uint8_t current_tap_frame = 0;
+uint8_t current_frame = 0;
 
 bool typing = false;
 uint8_t prev_wpm = 0;
@@ -108,20 +107,20 @@ static void render_cat_idle(void) {
 	};
 #endif
 
-	current_idle_frame = (current_idle_frame + 1) % IDLE_FRAMES;
+	current_frame = (current_frame + 1) % IDLE_FRAMES;
 #if defined(LEFTCAT)
 	render_array(left_base);
-	render_array(left_idle_diff[current_idle_frame]);
+	render_array(left_idle_diff[current_frame]);
 #elif defined(RIGHTCAT)
 	render_array(base);
-	render_array(idle_diff[current_idle_frame]);
+	render_array(idle_diff[current_frame]);
 #else
 	if (is_keyboard_left()) {
 		render_array(left_base);
-		render_array(left_idle_diff[current_idle_frame]);
+		render_array(left_idle_diff[current_frame]);
 	} else {
 		render_array(base);
-		render_array(idle_diff[current_idle_frame]);
+		render_array(idle_diff[current_frame]);
 	}
 #endif
 }
@@ -181,20 +180,20 @@ static void render_cat_tap(void) {
 	};
 #endif
 
-	current_tap_frame = (current_tap_frame + 1) % TAP_FRAMES;
+	current_frame = (current_frame + 1) % TAP_FRAMES;
 #if defined(LEFTCAT)
 	render_array(left_base);
-	render_array(left_tap_diff[current_tap_frame]);
+	render_array(left_tap_diff[current_frame]);
 #elif defined(RIGHTCAT)
 	render_array(base);
-	render_array(tap_diff[current_tap_frame]);
+	render_array(tap_diff[current_frame]);
 #else
 	if (is_keyboard_left()) {
 		render_array(left_base);
-		render_array(left_tap_diff[current_tap_frame]);
+		render_array(left_tap_diff[current_frame]);
 	} else {
 		render_array(base);
-		render_array(tap_diff[current_tap_frame]);
+		render_array(tap_diff[current_frame]);
 	}
 #endif
 }
