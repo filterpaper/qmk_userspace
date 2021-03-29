@@ -50,8 +50,8 @@ uint32_t anim_sleep = 0;
 uint8_t current_idle_frame = 0;
 uint8_t current_tap_frame = 0;
 
-uint8_t prev_wpm = 0;
 bool typing = false;
+uint8_t prev_wpm = 0;
 
 
 // Base animation frame, where all subsequent frames will differ by pixels
@@ -69,9 +69,9 @@ static void render_array(const uint16_t* frame) {
 	for (uint16_t i = 1; i <size; i++) {
 		uint16_t cur_px = pgm_read_word(&(frame[i]));
 
-		// get pixel state bit
+		// Get pixel state bit
 		bool on = (cur_px & ( 1 << 15 )) >> 15;
-		// remove pixel state bit
+		// Gemove pixel state bit
 		cur_px &= ~(1UL << 15);
 
 		oled_write_pixel(cur_px % WIDTH, cur_px / WIDTH, on);
@@ -88,7 +88,7 @@ static void render_cat_idle(void) {
 	static const uint16_t idle_diff_3[] PROGMEM = {21, 72, 73, 199, 32968, 32969, 326, 33095, 33222, 459, 33228, 947, 948, 1074, 33843, 33844, 1077, 1078, 1201, 33970, 33973, 33974};
 	static const uint16_t *idle_diff[IDLE_FRAMES] = {
 		idle_diff_0,
-		idle_diff_0, // first two frames are identical
+		idle_diff_0, // First two frames are identical
 		idle_diff_1,
 		idle_diff_2,
 		idle_diff_3
@@ -101,7 +101,7 @@ static void render_cat_idle(void) {
 	static const uint16_t left_idle_diff_3[] PROGMEM = {21, 54, 55, 32950, 32951, 184, 33080, 313, 33203, 436, 33209, 971, 972, 1097, 1098, 33867, 33868, 1101, 33993, 33994, 33997, 1230};
 	static const uint16_t *left_idle_diff[IDLE_FRAMES] = {
 		left_idle_diff_0,
-		left_idle_diff_0, // first two frames are identical
+		left_idle_diff_0, // First two frames are identical
 		left_idle_diff_1,
 		left_idle_diff_2,
 		left_idle_diff_3
@@ -209,9 +209,14 @@ static void animate_cat(void) {
 		else if (get_current_wpm() >IDLE_SPEED && typing) { render_cat_prep(); }
 	#endif
 		else { render_cat_idle(); }
+	}
 
-		// Stop typing on decreasing WPM
-		if (!(anim_timer%2)) {
+	void animation_loop(void) {
+		// Render frame on every preset ms
+		if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
+			anim_timer = timer_read32();
+			animation_phase();
+			// Stop typing on decreasing WPM
 			if (get_current_wpm() >=prev_wpm) {
 				prev_wpm = get_current_wpm();
 				typing = true;
@@ -222,23 +227,13 @@ static void animate_cat(void) {
 		}
 	}
 
-	// Animate on WPM, turn off OLED on idle
+	// Animate on WPM, off OLED on idle
 	if (get_current_wpm() >0) {
-		oled_on();
-		if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
-			anim_timer = timer_read32();
-			animation_phase();
-		}
+		animation_loop();
 		anim_sleep = timer_read32();
 	} else {
-		if (timer_elapsed32(anim_sleep) >OLED_TIMEOUT) {
-			oled_off();
-		} else {
-			if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
-				anim_timer = timer_read32();
-				animation_phase();
-			}
-		}
+		if (timer_elapsed32(anim_sleep) >OLED_TIMEOUT) { oled_off(); }
+		else { animation_loop(); }
 	}
 }
 

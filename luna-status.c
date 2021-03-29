@@ -37,8 +37,8 @@ uint32_t luna_anim_timer = 0;
 uint32_t luna_anim_sleep = 0;
 uint8_t luna_current_frame = 0;
 
-uint8_t luna_prev_wpm = 0;
 bool luna_typing = false;
+uint8_t luna_prev_wpm = 0;
 
 static void render_logo(void) {
 	static const char PROGMEM corne_logo[] = {
@@ -254,9 +254,14 @@ static void render_luna_status(void) {
 		else if (get_current_wpm() >MIN_RUN_SPEED && luna_typing) { render_luna_run(); }
 		else if (get_current_wpm() >MIN_WALK_SPEED && luna_typing) { render_luna_walk(); }
 		else { render_luna_sit(); }
+	}
 
-		// Stop typing on decreasing WPM
-		if (!(luna_anim_timer%2)) {
+	void render_loop(void) {
+		// Render frame on every preset ms
+		if (timer_elapsed32(luna_anim_timer) >LUNA_FRAME_DURATION) {
+			luna_anim_timer = timer_read32();
+			render_phase();
+			// Stop typing on decreasing WPM
 			if (get_current_wpm() >=luna_prev_wpm) {
 				luna_prev_wpm = get_current_wpm();
 				luna_typing = true;
@@ -267,25 +272,16 @@ static void render_luna_status(void) {
 		}
 	}
 
-	// Animate on WPM, turn off OLED on idle
+	// Animate on WPM, off OLED on idle
 	if (get_current_wpm() >0 || get_mods() & MOD_MASK_CSAG) {
-		oled_on();
-		if (timer_elapsed32(luna_anim_timer) >LUNA_FRAME_DURATION) {
-			luna_anim_timer = timer_read32();
-			render_phase();
-		}
+		render_loop();
 		luna_anim_sleep = timer_read32();
 	} else {
-		if (timer_elapsed32(luna_anim_sleep) >OLED_TIMEOUT) {
-			oled_off();
-		} else {
-			if (timer_elapsed32(luna_anim_timer) >LUNA_FRAME_DURATION) {
-				luna_anim_timer = timer_read32();
-				render_phase();
-			}
-		}
+		if (timer_elapsed32(luna_anim_sleep) >OLED_TIMEOUT) { oled_off(); }
+		else { render_loop(); }
 	}
 }
+
 
 void render_primary(void) {
 	render_luna_status();

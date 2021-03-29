@@ -119,6 +119,10 @@ void oled_task_user(void) {
 	else                      { render_secondary(); }
 	#endif
 }
+
+void suspend_power_down_user() {
+	oled_off();
+}
 #endif
 
 
