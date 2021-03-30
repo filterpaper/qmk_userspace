@@ -23,7 +23,7 @@
 
 // Base layout wrapper macros
 #define LAYOUT_wrapper_split_3x6_3(...) LAYOUT_split_3x6_3(__VA_ARGS__)
-#define LAYOUT_wrapper_planck_grid(...) LAYOUT_planck_grid(__VA_ARGS__)
+#define LAYOUT_wrapper_ortho_4x12(...) LAYOUT_ortho_4x12(__VA_ARGS__)
 #define LAYOUT_wrapper_planck_mit(...) LAYOUT_planck_mit(__VA_ARGS__)
 
 

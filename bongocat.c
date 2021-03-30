@@ -59,7 +59,7 @@ static void render_array(uint_fast16_t const *frame) {
 		uint_fast16_t cur_px = pgm_read_word(&(frame[i]));
 		bool const on = (cur_px & ( 1 << 15 )) >> 15; // Get pixel state bit
 		cur_px &= ~(1UL << 15); // Remove pixel state bit
-		
+
 		oled_write_pixel(cur_px % WIDTH, cur_px / WIDTH, on);
 	}
 }
