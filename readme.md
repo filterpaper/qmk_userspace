@@ -41,9 +41,9 @@ archive/ | Archived files of original codes and layouts
 ## Light configured layers keys
 ```c
 if (get_highest_layer(layer_state); >_COLEMAK) {
-    uint8_t layer = get_highest_layer(layer_state);
-    for (uint8_t row = 0; row <MATRIX_ROWS; row++) {
-        for (uint8_t col = 0; col <MATRIX_COLS; col++) {
+    uint_fast8_t layer = get_highest_layer(layer_state);
+    for (uint_fast8_t row = 0; row <MATRIX_ROWS; ++row) {
+        for (uint_fast8_t col = 0; col <MATRIX_COLS; ++col) {
             if (g_led_config.matrix_co[row][col] !=NO_LED &&
                 keymap_key_to_keycode(layer, (keypos_t){col, row}) !=KC_TRNS) {
                 rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_LAYER);
@@ -78,14 +78,11 @@ Tap hold macro can be found in QMK's [tap dance feature](../../docs/feature_tap_
 
 ## Caps word
 ```c
-void process_caps_word(uint16_t keycode, keyrecord_t *record) {
-	// Get the base key code of a mod or layer tap
-	switch (keycode) {
-	case QK_MOD_TAP ... QK_MOD_TAP_MAX:
-	case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
-		if (!record->tap.count) { return; }
-		keycode = keycode & 0xFF;
-	}
+void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) {
+	// Get base key code of mod or layer tap with bitmask
+	if (((keycode >=QK_MOD_TAP && keycode <=QK_MOD_TAP_MAX) ||
+		(keycode >=QK_LAYER_TAP && keycode <=QK_LAYER_TAP_MAX)) &&
+		(record->tap.count)) { keycode = keycode & 0xFF; }
 	// Toggle caps lock with the following key codes
 	switch (keycode) {
 	case KC_ESC:
