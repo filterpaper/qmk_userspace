@@ -31,10 +31,10 @@
 
 #include "filterpaper.h"
 
-#define IDLE_SPEED 45
 #ifdef SLIMCAT
 #	define TAP_SPEED 10
 #else
+#	define IDLE_SPEED 45
 #	define TAP_SPEED 60
 #endif
 #define IDLE_FRAMES 5
@@ -54,7 +54,7 @@ static uint_fast16_t const left_base[] PROGMEM = {208, 32822, 32823, 32949, 3295
 
 // Loop through array to render changed OLED pixel bits
 static void render_array(uint_fast16_t const *frame) {
-	// Size is the first frame array element
+	// First frame array element is the size
 	uint_fast16_t const size = pgm_read_word(&(frame[0]));
 	for (uint_fast16_t i = size; i !=0; --i) {
 		uint_fast16_t cur_px = pgm_read_word(&(frame[i]));
@@ -97,8 +97,8 @@ static void render_cat_idle(void) {
 	};
 #endif
 	static uint_fast8_t current_frame = 0;
-
 	current_frame = (current_frame + 1) % IDLE_FRAMES;
+
 	if (is_keyboard_left()) {
 	#ifndef RIGHTCAT
 		render_array(left_base);
@@ -163,8 +163,8 @@ static void render_cat_tap(void) {
 	};
 #endif
 	static uint_fast8_t current_frame = 0;
-
 	current_frame = (current_frame + 1) % TAP_FRAMES;
+
 	if (is_keyboard_left()) {
 	#ifndef RIGHTCAT
 		render_array(left_base);
