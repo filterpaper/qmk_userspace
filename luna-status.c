@@ -244,7 +244,7 @@ static void render_luna_status(void) {
 	static bool typing = false;
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t anim_timer = 0;
-	static uint_fast32_t anim_sleep = 0;
+	static uint_fast32_t sleep_timer = 0;
 
 	void animation_phase(void) {
 		oled_clear();
@@ -279,11 +279,12 @@ static void render_luna_status(void) {
 	}
 
 	// Animate on WPM, off OLED on idle
-	if (get_current_wpm() >0 || get_mods() & MOD_MASK_CSAG) {
+	// if (get_current_wpm() >0 || get_mods() & MOD_MASK_CSAG) {
+	if (get_current_wpm() || get_mods()) {
 		animation_loop();
-		anim_sleep = timer_read32();
+		sleep_timer = timer_read32();
 	} else {
-		if (timer_elapsed32(anim_sleep) >OLED_TIMEOUT) { oled_off(); }
+		if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) { oled_off(); }
 		else { animation_loop(); }
 	}
 }

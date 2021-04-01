@@ -45,6 +45,7 @@ ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 	RGB_MATRIX_ENABLE = no
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	MOUSEKEY_ENABLE = yes
+	RGB_MATRIX_ENABLE = no
 	OLED_DRIVER_ENABLE = yes
 	# Primary OLED option
 	ifneq ($(DOG),)
