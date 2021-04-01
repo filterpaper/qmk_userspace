@@ -108,7 +108,11 @@ void rgb_matrix_indicators_user(void) {
 
 #ifdef OLED_DRIVER_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
+	#ifdef OLEDCOMBO
+	if (!is_keyboard_master())   { return OLED_ROTATION_270; }
+	#else
 	if (is_keyboard_master())    { return OLED_ROTATION_270; }
+	#endif
 	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
 	else                         { return OLED_ROTATION_180; }
 }
@@ -144,7 +148,14 @@ static void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) 
 #endif
 
 
+#ifdef OLEDCOMBO
+uint_fast32_t sleep_timer = 0;
+#endif
+
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
+#if defined(OLED_DRIVER_ENABLE) && defined(OLEDCOMBO)
+	if (record->event.pressed) { sleep_timer = timer_read32(); }
+#endif
 #ifdef CAPSWORD_ENABLE
 	// Monitor key codes to toggle caps lock
 	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }

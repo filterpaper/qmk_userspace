@@ -43,6 +43,13 @@ endif
 ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
 	RGB_MATRIX_ENABLE = no
+else ifeq ($(KEYBOARD) $(COMBO), crkbd/rev1/common yes)
+	MOUSEKEY_ENABLE = yes
+	RGB_MATRIX_ENABLE = no
+	SPLIT_MODS_ENABLE = yes
+	OLED_DRIVER_ENABLE = yes
+	SRC += oledcombo.c
+	OPT_DEFS += -DOLEDCOMBO
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	MOUSEKEY_ENABLE = yes
 	RGB_MATRIX_ENABLE = no
