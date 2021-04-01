@@ -279,13 +279,13 @@ static void render_luna_status(void) {
 	}
 
 	// Animate on WPM, off OLED on idle
-	// if (get_current_wpm() >0 || get_mods() & MOD_MASK_CSAG) {
 	if (get_current_wpm() || get_mods()) {
 		animation_loop();
 		sleep_timer = timer_read32();
+	} else if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) {
+		oled_off();
 	} else {
-		if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) { oled_off(); }
-		else { animation_loop(); }
+		animation_loop();
 	}
 }
 

@@ -214,9 +214,10 @@ static void animate_cat(void) {
 	if (get_current_wpm()) {
 		animation_loop();
 		sleep_timer = timer_read32();
+	} else if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) {
+		oled_off();
 	} else {
-		if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) { oled_off(); }
-		else { animation_loop(); }
+		animation_loop();
 	}
 }
 
