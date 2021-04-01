@@ -183,7 +183,6 @@ static void animate_cat(void) {
 	static bool typing = false;
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t anim_timer = 0;
-	static uint_fast32_t sleep_timer = 0;
 
 	void animation_phase(void) {
 		oled_clear();
@@ -194,30 +193,20 @@ static void animate_cat(void) {
 		else { render_cat_idle(); }
 	}
 
-	void animation_loop(void) {
-		// Render frame on every preset ms
-		if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
-			anim_timer = timer_read32();
-			animation_phase();
-			// Stop typing on decreasing WPM
-			if (get_current_wpm() >=prev_wpm) {
-				prev_wpm = get_current_wpm();
-				typing = true;
-			} else {
-				prev_wpm = get_current_wpm()+1;
-				typing = false;
-			}
-		}
-	}
-
-	// Animate on WPM, off OLED on idle
-	if (get_current_wpm()) {
-		animation_loop();
-		sleep_timer = timer_read32();
-	} else if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) {
+	if (!get_current_wpm()) {
 		oled_off();
-	} else {
-		animation_loop();
+	} else if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
+		anim_timer = timer_read32();
+		animation_phase();
+
+		// Stop typing on decreasing WPM
+		if (get_current_wpm() >=prev_wpm) {
+			prev_wpm = get_current_wpm();
+			typing = true;
+		} else {
+			prev_wpm = get_current_wpm()+1;
+			typing = false;
+		}
 	}
 }
 

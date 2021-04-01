@@ -151,15 +151,17 @@ static void animate_cat(void) {
 	extern uint_fast32_t sleep_timer;
 	static uint_fast32_t anim_timer = 0;
 
+	void animation_phase(void) {
+		oled_clear();
+		if (timer_elapsed32(sleep_timer) <ANIM_FRAME_DURATION) { render_cat_tap(); }
+		else { render_cat_idle(); }
+	}
+
 	if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) {
 		oled_off();
-	} else {
-		if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
-			anim_timer = timer_read32();
-			oled_clear();
-			if (timer_elapsed32(sleep_timer) <ANIM_FRAME_DURATION) { render_cat_tap(); }
-			else { render_cat_idle(); }
-		}
+	} else if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
+		anim_timer = timer_read32();
+		animation_phase();
 	}
 }
 
