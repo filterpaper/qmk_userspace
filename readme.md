@@ -28,9 +28,10 @@ rules.mk | QMK compile rules and hardware feature selection
 config.h | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
 filterpaper.h | User specific variables and options
 filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
-mod-status.c | Graphical layer and modifier status indicators for primary OLED
-luna-status.c | Luna and Felix the dog as typing and modifier indicators for primary OLED (adds ~876 bytes)
-bongocat.c | Bongocat typing animation using changed pixels for secondary OLED (adds ~3768 bytes)
+mod-status.c | Graphical layer and modifier status indicators for primary OLED (adds ~4018 bytes)
+luna-status.c | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
+bongocat.c | Bongocat WPM animation using changed pixels for secondary OLED (adds ~3062 bytes)
+oledcombo.c | Primary OLED Bongocat and secondary OLED mod status indicator (adds ~7088 bytes)
 oledfont.c | Corne logo, コルネ katakana name, fonts and icon images
 wrappers.h | Key map wrappers for shared ortholinear and Corne layouts
 json/ | Folder of supported keyboard layouts
