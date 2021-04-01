@@ -69,18 +69,19 @@
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
 #	define SELECT_SOFT_SERIAL_SPEED 0
-// Top right corner of right-side Corne
+	// Top right corner of right-side Corne
 #	define BOOTMAGIC_LITE_ROW_RIGHT 4
 #	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
-	#ifdef OLEDCOMBO
-#	define SPLIT_MODS_ENABLE
-	#endif
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
 #	define OLED_TIMEOUT 8000
+#	define OLED_DISABLE_TIMEOUT // Prevents oled_on() from matrix_changed
 #	define OLED_UPDATE_INTERVAL 50
 #	define OLED_FONT_H "users/filterpaper/oledfont.c"
+#ifdef OLEDCOMBO
+#	define SPLIT_MODS_ENABLE
+#endif
 #endif
 
 // Tap hold macro references for keymap[]

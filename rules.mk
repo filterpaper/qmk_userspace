@@ -29,10 +29,7 @@ BOOTMAGIC_ENABLE = lite
 RGB_MATRIX_ENABLE = yes
 
 # Custom caps word feature
-CAPSWORD_ENABLE = yes
-ifeq ($(CAPSWORD_ENABLE), yes)
-	OPT_DEFS += -DCAPSWORD_ENABLE
-endif
+OPT_DEFS += -DCAPSWORD_ENABLE
 
 # Exclude LTO for Planck
 ifneq ($(PLATFORM), CHIBIOS)
@@ -46,7 +43,6 @@ ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 else ifeq ($(KEYBOARD) $(COMBO), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
 	RGB_MATRIX_ENABLE = no
-	SPLIT_MODS_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	SRC += oledcombo.c
 	OPT_DEFS += -DOLEDCOMBO
