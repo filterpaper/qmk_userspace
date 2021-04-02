@@ -121,38 +121,35 @@ QMK's split common `transport.c` code limits data type sent from the primary USB
 ### Key press driven Bongocat
 Bongocat animation on primary display driven by key presses with simple modifier state on secondary OLED:
 ```
-qmk flash corne.json
+qmk compile corne.json
 ```
 Firmware size can be further reduced by building with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side:
 ```
-qmk flash -e CAT=LEFT corne.json
+qmk compile -e CAT=LEFT corne.json
 ```
 ### Primary status
 Keyboard layer and modifier status on primary OLED:
 ```
-qmk flash -e PRIMARY=yes corne.json
+qmk compile -e PRIMARY=yes corne.json
 ```
 ### Primary dog status
 Luna the dog WPM-driven animation status on primary OLED
 ```
-qmk flash -e PRIMARY=yes -e DOG=LUNA corne.json
+qmk compile -e PRIMARY=yes -e DOG=LUNA corne.json
 ```
-White Felix the dog will be built with:
-```
-qmk flash -e PRIMARY=yes -e DOG=FELIX corne.json
-```
+White Felix the dog will be built with `DOG=FELIX`.
 ### Secondary Bongocat animation
 Both primary status display above can be paired with WPM-driven Bongocat animation on secondary OLED by adding `-e CAT=yes`:
 ```sh
-qmk flash -e PRIMARY=yes -e CAT=yes corne.json
-qmk flash -e PRIMARY=yes -e DOG=LUNA -e CAT=yes corne.json
+qmk compile -e PRIMARY=yes -e CAT=yes corne.json
+qmk compile -e PRIMARY=yes -e DOG=LUNA -e CAT=yes corne.json
 
 ```
 Bongocat animation uses pixel differential frames to save space and the code contains left and right aligned frames. Firmware size can be further reduced by replacing preprocessors `CAT=yes` with `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side.
 ## Tiny build
 `TINY=yes` preprocessor will result with a minimal build with no OLED support and overriding any pet selection above:
 ```
-qmk flash -e TINY=yes corne.json
+qmk compile -e TINY=yes corne.json
 ```
 
 ## Corne logo file
