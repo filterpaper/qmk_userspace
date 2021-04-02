@@ -14,7 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Graphical bongocat animation display, requires WPM_ENABLE.
+/* Graphical bongocat animation display, that is driven by key press
+   timer variable or WPM_ENABLE.
    It has both left and right aligned animation optimized for
    both OLEDs. This code uses space-saving differential pixels,
    by rendering the base frame, following by only pixels that

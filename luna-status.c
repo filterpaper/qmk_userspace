@@ -292,7 +292,3 @@ void oled_task_user(void) {
 	else                      { render_secondary(); }
 	#endif
 }
-/*
-void render_primary(void) {
-	render_luna_status();
-} */

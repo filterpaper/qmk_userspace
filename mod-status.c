@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Graphical active layer and modifier status display. Module must be
-   rendered on primary OLED
+/* Graphical active layer and modifier status display. Module can be
+   rendered on primary OLED or without layer state on secondary.
 
    Modified from @soundmonster's graphical status code
    (keyboards/crkbd/keymaps/soundmonster)
@@ -170,32 +170,24 @@ static void render_mod_status(void) {
 
 
 // Init and rendering calls
-#ifdef SPLIT_MODS_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
+#ifdef SPLIT_MODS_ENABLE
 	if (!is_keyboard_master())   { return OLED_ROTATION_270; }
+#else
+	if (is_keyboard_master())    { return OLED_ROTATION_270; }
+#endif
 	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
 	else                         { return OLED_ROTATION_180; }
 }
 
 void oled_task_user(void) {
+#ifdef SPLIT_MODS_ENABLE
 	if (is_keyboard_master()) { render_secondary();  }
 	else                      { render_mod_status(); }
-}
 #else
-oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
-	if (is_keyboard_master())    { return OLED_ROTATION_270; }
-	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
-	else                         { return OLED_ROTATION_180; }
-}
-
-void oled_task_user(void) {
 	if (is_keyboard_master()) { render_mod_status(); }
 	#ifndef PRIMARY_ONLY
 	else                      { render_secondary(); }
 	#endif
-}
 #endif
-/*
-void render_primary(void) {
-	render_mod_status();
-} */
+}
