@@ -114,7 +114,7 @@ static void render_cat_idle(void) {
 }
 
 
-#if !defined(SLIMCAT) && defined(WPM_ENABLE)
+#ifndef SLIMCAT
 static void render_cat_prep(void) {
 	// Differential prep frame
 #ifndef LEFTCAT
@@ -142,7 +142,7 @@ static void render_cat_prep(void) {
 	#endif
 	}
 }
-#endif // SLIMCAT WPM_ENABLE
+#endif // SLIMCAT
 
 
 static void render_cat_tap(void) {
@@ -217,6 +217,9 @@ void render_bongocat(void) {
 	void animation_phase(void) {
 		oled_clear();
 		if (timer_elapsed32(sleep_timer) <ANIM_FRAME_DURATION) { render_cat_tap(); }
+	#ifndef SLIMCAT
+		else if (timer_elapsed32(sleep_timer) <ANIM_FRAME_DURATION*5) { render_cat_prep(); }
+	#endif
 		else { render_cat_idle(); }
 	}
 
