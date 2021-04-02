@@ -116,14 +116,21 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 ```
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
-## Compiling OLED display
-QMK's split common `transport.c` code limits data type sent from the primary USB-connected controller to the secondary. Animation on the secondary display can only be driven by WPM and keyboard status is limited to modifier state. My code can be built with the following options:
+## Compiling with OLED display
+QMK's split common `transport.c` code limits data type sent from the primary USB-connected controller to the secondary. Animation on the secondary display can only be driven by WPM and keyboard status is limited to modifier state. My code can be built with the following `rules.mk` options:
 ### Key press driven Bongocat
-Bongocat animation on primary display driven by key presses with simple modifier state on secondary OLED: `qmk flash corne.json`. Firmware size can be further reduced by building with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side: `qmk flash -e CAT=LEFT corne.json`.
+Bongocat animation on primary display driven by key presses with simple modifier state on secondary OLED:
+```qmk flash corne.json```
+Firmware size can be further reduced by building with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side:
+```qmk flash -e CAT=LEFT corne.json```
 ### Primary status
-Keyboard layer and modifier status on primary OLED: `qmk flash -e PRIMARY=yes corne.json`.
+Keyboard layer and modifier status on primary OLED:
+```qmk flash -e PRIMARY=yes corne.json```
 ### Primary dog status
-Luna the dog WPM-driven animation status on primary OLED: `qmk flash -e PRIMARY=yes -e DOG=LUNA corne.json`. White Felix the dog will be built with: `qmk flash -e PRIMARY=yes -e DOG=FELIX corne.json`.
+Luna the dog WPM-driven animation status on primary OLED
+```qmk flash -e PRIMARY=yes -e DOG=LUNA corne.json```
+White Felix the dog will be built with:
+```qmk flash -e PRIMARY=yes -e DOG=FELIX corne.json```
 ### Secondary Bongocat animation
 Both primary status display above can be paired with WPM-driven Bongocat animation on secondary OLED by adding `-e CAT=yes`:
 ```sh
@@ -132,9 +139,9 @@ qmk flash -e PRIMARY=yes -e DOG=LUNA -e CAT=yes corne.json
 
 ```
 Bongocat animation uses pixel differential frames to save space and the code contains left and right aligned frames. Firmware size can be further reduced by replacing preprocessors `CAT=yes` with `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side.
-
-## Additional build options
-Adding `TINY=yes` preprocessor will result with a minimal build with no OLED support and overriding any pet selection above: `qmk flash -e TINY=yes corne.json`
+## Tiny build
+`TINY=yes` preprocessor will result with a minimal build with no OLED support and overriding any pet selection above:
+```qmk flash -e TINY=yes corne.json```
 
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:
