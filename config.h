@@ -79,7 +79,7 @@
 #	define OLED_DISABLE_TIMEOUT // Prevents oled_on() from matrix_changed
 #	define OLED_UPDATE_INTERVAL 50
 #	define OLED_FONT_H "users/filterpaper/oledfont.c"
-#	if !defined(WPM) && !defined(WPM_ENABLE)
+#	if !defined(PRIMARY) && !defined(WPM_ENABLE)
 #	define SPLIT_MODS_ENABLE
 #	endif
 #endif

@@ -43,10 +43,10 @@ endif
 # Corne keyboard features
 ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
-else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
+else ifeq ($(KEYBOARD) $(PRIMARY), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
-	OPT_DEFS += -DWPM
+	OPT_DEFS += -DPRIMARY
 	# Primary OLED option
 	ifneq ($(DOG),)
 		WPM_ENABLE = yes
@@ -66,5 +66,8 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
+	ifneq ($(CAT),)
+		OPT_DEFS += -D${CAT}CAT
+	endif
 	SRC += mod-status.c bongocat.c
 endif

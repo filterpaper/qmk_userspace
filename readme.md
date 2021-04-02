@@ -28,10 +28,9 @@ rules.mk | QMK compile rules and hardware feature selection
 config.h | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
 filterpaper.h | User specific variables and options
 filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
-mod-status.c | Graphical layer and modifier status indicators for primary OLED (adds ~4018 bytes)
+mod-status.c | Graphical layer and modifier status indicators (adds ~4018 bytes)
 luna-status.c | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
-bongocat.c | Bongocat WPM animation using changed pixels for secondary OLED (adds ~3062 bytes)
-oledcombo.c | Primary OLED Bongocat and secondary OLED mod status indicator (adds ~7088 bytes)
+bongocat.c | Bongocat WPM animation using changed pixels
 oledfont.c | Corne logo, コルネ katakana name, fonts and icon images
 wrappers.h | Key map wrappers for shared ortholinear and Corne layouts
 json/ | Folder of supported keyboard layouts
@@ -117,11 +116,22 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 ```
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
-## Compiling the dog
-The `luna-status.c` source has a tiny dog animation that reacts to typing speed, modifier status and layer changes. Its 5 actions can be customised for any state conditions. Luna replaces `mod-status.c` on primary OLED with preprocessors `DOG=LUNA` (black) or `DOG=FELIX` (white). Example `qmk flash -e DOG=LUNA corne.json`.
+## Compiling OLED display
+QMK's split common `transport.c` code limits data type sent from the primary USB-connected controller to the secondary. Animation on the secondary display can only be driven by WPM and keyboard status is limited to modifier state. My code can be built with the following options:
+### Key press driven Bongocat
+Bongocat animation on primary display driven by key presses with simple modifier state on secondary OLED: `qmk flash corne.json`. Firmware size can be further reduced by building with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side: `qmk flash -e CAT=LEFT corne.json`.
+### Primary status
+Keyboard layer and modifier status on primary OLED: `qmk flash -e PRIMARY=yes corne.json`.
+### Primary dog status
+Luna the dog WPM-driven animation status on primary OLED: `qmk flash -e PRIMARY=yes -e DOG=LUNA corne.json`. White Felix the dog will be built with: `qmk flash -e PRIMARY=yes -e DOG=FELIX corne.json`.
+### Secondary Bongocat animation
+Both primary status display above can be paired with WPM-driven Bongocat animation on secondary OLED by adding `-e CAT=yes`:
+```sh
+qmk flash -e PRIMARY=yes -e CAT=yes corne.json
+qmk flash -e PRIMARY=yes -e DOG=LUNA -e CAT=yes corne.json
 
-## Compiling the cat
-The `bongocat.c` is an updated source with typing animation using *differential* pixels on secondary OLED. The code renders a base frame, followed by *changed* pixels of subsequent animation frames. This trick uses less space compared to full 512-byte frame renderings. Both left and right aligned bongocat will be built by default. To reduce firmware size (about ~1540 bytes), compile with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side: `qmk flash -e CAT=LEFT corne.json`
+```
+Bongocat animation uses pixel differential frames to save space and the code contains left and right aligned frames. Firmware size can be further reduced by replacing preprocessors `CAT=yes` with `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side.
 
 ## Additional build options
 Adding `TINY=yes` preprocessor will result with a minimal build with no OLED support and overriding any pet selection above: `qmk flash -e TINY=yes corne.json`
