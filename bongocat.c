@@ -113,6 +113,7 @@ static void render_cat_idle(void) {
 	}
 }
 
+
 #if !defined(SLIMCAT) && defined(WPM_ENABLE)
 static void render_cat_prep(void) {
 	// Differential prep frame
@@ -179,7 +180,7 @@ static void render_cat_tap(void) {
 }
 
 
-static void animate_cat(void) {
+void render_bongocat(void) {
 #ifdef WPM_ENABLE
 	static bool typing = false;
 	static uint_fast8_t prev_wpm = 0;
@@ -226,9 +227,4 @@ static void animate_cat(void) {
 		animation_phase();
 	}
 #endif
-}
-
-
-void render_secondary(void) {
-	animate_cat();
 }
