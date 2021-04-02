@@ -46,7 +46,6 @@ ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 else ifeq ($(KEYBOARD) $(PRIMARY), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
-	OPT_DEFS += -DPRIMARY
 	# Primary OLED option
 	ifneq ($(DOG),)
 		WPM_ENABLE = yes
