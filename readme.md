@@ -91,7 +91,7 @@ void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) {
 	case KC_TAB:
 	case KC_DOT:
 	case KC_COMM:
-    case KC_GESC:
+	case KC_GESC:
 		if (record->event.pressed) { tap_code(KC_CAPS); }
 	}
 }
