@@ -23,6 +23,7 @@
 
 #include "filterpaper.h"
 
+
 static void render_logo(void) {
 	static char const corne_logo[] PROGMEM = {
 		0x80, 0x81, 0x82, 0x83, 0x84,
@@ -36,6 +37,8 @@ static void render_logo(void) {
 	else { oled_write_P(PSTR("corne"), false); }
 }
 
+
+#ifndef SPLIT_MODS_ENABLE
 // Graphical layer display
 static void render_layer_state(void) {
 	static char const default_layer[] PROGMEM = {
@@ -60,6 +63,8 @@ static void render_layer_state(void) {
 	else if (layer_state_is(LWR)) { oled_write_P(lower_layer, false); }
 	else { oled_write_P(default_layer, false); }
 }
+#endif
+
 
 static void render_mod_status_gui_alt(uint_fast8_t const modifiers) {
 	static char const gui_off_1[] PROGMEM = {0x85, 0x86, 0};
@@ -105,6 +110,7 @@ static void render_mod_status_gui_alt(uint_fast8_t const modifiers) {
 	else { oled_write_P(alt_off_2, false); }
 }
 
+
 static void render_mod_status_ctrl_shift(uint_fast8_t const modifiers, bool const caps) {
 	static char const ctrl_off_1[] PROGMEM = {0x89, 0x8a, 0};
 	static char const ctrl_off_2[] PROGMEM = {0xa9, 0xaa, 0};
@@ -149,16 +155,47 @@ static void render_mod_status_ctrl_shift(uint_fast8_t const modifiers, bool cons
 	else { oled_write_P(shift_off_2, false); }
 }
 
+
 // Primary modifier status display function
 static void render_mod_status(void) {
 	render_logo();
 	oled_set_cursor(0,6);
+#ifndef SPLIT_MODS_ENABLE
 	render_layer_state();
 	oled_set_cursor(0,11);
+#endif
 	render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
 	render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods(),host_keyboard_led_state().caps_lock);
 }
 
+
+// Init and rendering calls
+#ifdef SPLIT_MODS_ENABLE
+oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
+	if (!is_keyboard_master())   { return OLED_ROTATION_270; }
+	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
+	else                         { return OLED_ROTATION_180; }
+}
+
+void oled_task_user(void) {
+	if (is_keyboard_master()) { render_secondary();  }
+	else                      { render_mod_status(); }
+}
+#else
+oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
+	if (is_keyboard_master())    { return OLED_ROTATION_270; }
+	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
+	else                         { return OLED_ROTATION_180; }
+}
+
+void oled_task_user(void) {
+	if (is_keyboard_master()) { render_mod_status(); }
+	#ifndef PRIMARY_ONLY
+	else                      { render_secondary(); }
+	#endif
+}
+#endif
+/*
 void render_primary(void) {
 	render_mod_status();
-}
+} */

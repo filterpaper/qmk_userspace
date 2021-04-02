@@ -17,6 +17,7 @@ SLEEP_LED_ENABLE = no
 TAP_DANCE_ENABLE = no
 VELOCIKEY_ENABLE = no
 SWAP_HANDS_ENABLE = no
+RGB_MATRIX_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Main source file
@@ -26,10 +27,13 @@ SRC += filterpaper.c
 EXTRAKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
-RGB_MATRIX_ENABLE = yes
 
 # Custom caps word feature
 OPT_DEFS += -DCAPSWORD_ENABLE
+
+ifneq ($(strip $(KEYBOARD)), crkbd/rev1/common)
+	RGB_MATRIX_ENABLE = yes
+endif
 
 # Exclude LTO for Planck
 ifneq ($(PLATFORM), CHIBIOS)
@@ -39,17 +43,10 @@ endif
 # Corne keyboard features
 ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
-	RGB_MATRIX_ENABLE = no
-else ifeq ($(KEYBOARD) $(COMBO), crkbd/rev1/common yes)
+else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
-	RGB_MATRIX_ENABLE = no
 	OLED_DRIVER_ENABLE = yes
-	SRC += oledcombo.c
-	OPT_DEFS += -DOLEDCOMBO
-else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
-	MOUSEKEY_ENABLE = yes
-	RGB_MATRIX_ENABLE = no
-	OLED_DRIVER_ENABLE = yes
+	OPT_DEFS += -DWPM
 	# Primary OLED option
 	ifneq ($(DOG),)
 		WPM_ENABLE = yes
@@ -66,4 +63,8 @@ else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	else
 		OPT_DEFS += -DPRIMARY_ONLY
 	endif
+else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
+	MOUSEKEY_ENABLE = yes
+	OLED_DRIVER_ENABLE = yes
+	SRC += mod-status.c bongocat.c
 endif

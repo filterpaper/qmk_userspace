@@ -279,6 +279,20 @@ static void render_luna_status(void) {
 }
 
 
+// Init and rendering calls
+oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
+	if (is_keyboard_master())    { return OLED_ROTATION_270; }
+	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
+	else                         { return OLED_ROTATION_180; }
+}
+
+void oled_task_user(void) {
+	if (is_keyboard_master()) { render_luna_status(); }
+	#ifndef PRIMARY_ONLY
+	else                      { render_secondary(); }
+	#endif
+}
+/*
 void render_primary(void) {
 	render_luna_status();
-}
+} */

@@ -106,26 +106,6 @@ void rgb_matrix_indicators_user(void) {
 #endif // RGB_MATRIX_ENABLE
 
 
-#ifdef OLED_DRIVER_ENABLE
-oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
-	#ifdef SPLIT_MODS_ENABLE
-	if (!is_keyboard_master())   { return OLED_ROTATION_270; }
-	#else
-	if (is_keyboard_master())    { return OLED_ROTATION_270; }
-	#endif
-	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
-	else                         { return OLED_ROTATION_180; }
-}
-
-void oled_task_user(void) {
-	if (is_keyboard_master()) { render_primary(); }
-	#ifndef PRIMARY_ONLY
-	else                      { render_secondary(); }
-	#endif
-}
-#endif
-
-
 #ifdef CAPSWORD_ENABLE
 // Deactivate caps lock following a word
 static void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) {

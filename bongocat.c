@@ -112,8 +112,7 @@ static void render_cat_idle(void) {
 	}
 }
 
-
-#ifndef SLIMCAT
+#if !defined(SLIMCAT) && defined(WPM_ENABLE)
 static void render_cat_prep(void) {
 	// Differential prep frame
 #ifndef LEFTCAT
@@ -141,7 +140,7 @@ static void render_cat_prep(void) {
 	#endif
 	}
 }
-#endif // SLIMCAT
+#endif // SLIMCAT WPM_ENABLE
 
 
 static void render_cat_tap(void) {
@@ -180,6 +179,7 @@ static void render_cat_tap(void) {
 
 
 static void animate_cat(void) {
+#ifdef WPM_ENABLE
 	static bool typing = false;
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t anim_timer = 0;
@@ -208,6 +208,23 @@ static void animate_cat(void) {
 			typing = false;
 		}
 	}
+#else
+	extern uint_fast32_t sleep_timer; // Reset on key presses
+	static uint_fast32_t anim_timer = 0;
+
+	void animation_phase(void) {
+		oled_clear();
+		if (timer_elapsed32(sleep_timer) <ANIM_FRAME_DURATION) { render_cat_tap(); }
+		else { render_cat_idle(); }
+	}
+
+	if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) {
+		oled_off();
+	} else if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
+		anim_timer = timer_read32();
+		animation_phase();
+	}
+#endif
 }
 
 

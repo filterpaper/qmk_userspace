@@ -36,6 +36,5 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 
 #ifdef OLED_DRIVER_ENABLE
 #define SLIMCAT
-void render_primary(void);
 void render_secondary(void);
 #endif
