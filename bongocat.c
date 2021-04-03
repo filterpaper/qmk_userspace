@@ -174,21 +174,21 @@ void render_bongocat(void) {
 #ifdef WPM_ENABLE
 	// WPM driven typing timer
 	static uint_fast8_t prev_wpm = 0;
-	static uint_fast16_t key_timer = 0;
+	static uint_fast32_t key_timer = 0;
 
 	if (get_current_wpm() && get_current_wpm() >=prev_wpm) {
 		prev_wpm = get_current_wpm();
-		key_timer = timer_read();
+		key_timer = timer_read32();
 	} else if (get_current_wpm()) {
 		prev_wpm = get_current_wpm()+1;
 	}
 #else
 	// process_record_user driven typing timer
-	extern uint_fast16_t key_timer;
+	extern uint_fast32_t key_timer;
 #endif
 
 	static uint_fast16_t anim_timer = 0;
-	uint_fast16_t elapsed_time = timer_elapsed(key_timer);
+	uint_fast32_t elapsed_time = timer_elapsed32(key_timer);
 
 	void animation_phase(void) {
 		oled_clear();

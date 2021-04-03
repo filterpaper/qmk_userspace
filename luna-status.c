@@ -27,8 +27,6 @@
 
 #include "filterpaper.h"
 
-#define MIN_WALK_SPEED 10
-#define MIN_RUN_SPEED 60
 #define LUNA_FRAMES 2
 #define LUNA_FRAME_DURATION 200 // Number of ms per frame
 #define LUNA_SIZE 96 // 96-byte arrays for the little dog
@@ -243,19 +241,19 @@ static void render_luna_sneak(void) {
 static void render_luna_status(void) {
 	// WPM and mod driven typing timer
 	static uint_fast8_t prev_wpm = 0;
-	static uint_fast16_t key_timer = 0;
+	static uint_fast32_t key_timer = 0;
 
 	if (get_mods()) {
-		key_timer = timer_read();
+		key_timer = timer_read32();
 	} else if (get_current_wpm() && get_current_wpm() >=prev_wpm) {
 		prev_wpm = get_current_wpm();
-		key_timer = timer_read();
+		key_timer = timer_read32();
 	} else if (get_current_wpm()) {
 		prev_wpm = get_current_wpm()+1;
 	}
 
 	static uint_fast16_t anim_timer = 0;
-	uint_fast16_t elapsed_time = timer_elapsed(key_timer);
+	uint_fast32_t elapsed_time = timer_elapsed32(key_timer);
 
 	void animation_phase(void) {
 		oled_clear();
