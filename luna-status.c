@@ -239,17 +239,17 @@ static void render_luna_sneak(void) {
 
 
 static void render_luna_status(void) {
-	// WPM and mod driven typing timer
+	// WPM and mod triggered typing timer
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t key_timer = 0;
 
-	if (get_mods()) {
-		key_timer = timer_read32();
-	} else if (get_current_wpm() && get_current_wpm() >=prev_wpm) {
+	if (get_current_wpm() && get_current_wpm() >=prev_wpm) {
 		prev_wpm = get_current_wpm();
 		key_timer = timer_read32();
 	} else if (get_current_wpm()) {
 		prev_wpm = get_current_wpm()+1;
+	} else if (get_mods()) {
+		key_timer = timer_read32();
 	}
 
 	static uint_fast16_t anim_timer = 0;
@@ -266,7 +266,7 @@ static void render_luna_status(void) {
 
 		if (get_mods() & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock) { render_luna_bark(); }
 		else if (get_mods() & MOD_MASK_CAG) { render_luna_sneak(); }
-		else if (elapsed_time <LUNA_FRAME_DURATION) { render_luna_run(); }
+		else if (elapsed_time <LUNA_FRAME_DURATION*2) { render_luna_run(); }
 		else if (elapsed_time <LUNA_FRAME_DURATION*15) { render_luna_walk(); }
 		else { render_luna_sit(); }
 	}

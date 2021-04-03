@@ -172,7 +172,7 @@ static void render_cat_tap(void) {
 
 void render_bongocat(void) {
 #ifdef WPM_ENABLE
-	// WPM driven typing timer
+	// WPM triggered typing timer
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t key_timer = 0;
 
@@ -183,7 +183,7 @@ void render_bongocat(void) {
 		prev_wpm = get_current_wpm()+1;
 	}
 #else
-	// process_record_user driven typing timer
+	// process_record_user() triggered typing timer
 	extern uint_fast32_t key_timer;
 #endif
 
@@ -192,8 +192,8 @@ void render_bongocat(void) {
 
 	void animation_phase(void) {
 		oled_clear();
-		if (elapsed_time <FRAME_DURATION) { render_cat_tap(); }
-		else if (elapsed_time <FRAME_DURATION*5) { render_cat_prep(); }
+		if (elapsed_time <FRAME_DURATION*2) { render_cat_tap(); }
+		else if (elapsed_time <FRAME_DURATION*10) { render_cat_prep(); }
 		else { render_cat_idle(); }
 	}
 
