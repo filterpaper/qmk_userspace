@@ -172,35 +172,35 @@ static void render_cat_tap(void) {
 
 void render_bongocat(void) {
 #ifdef WPM_ENABLE
+	// WPM driven typing timer
 	static uint_fast8_t prev_wpm = 0;
-	static uint_fast32_t sleep_timer = 0;
+	static uint_fast32_t key_timer = 0;
+
+	if (get_current_wpm() >=prev_wpm) {
+		prev_wpm = get_current_wpm();
+		key_timer = timer_read32();
+	} else if (get_current_wpm()) {
+		prev_wpm = get_current_wpm()+1;
+	}
 #else
-	// Elapsed time between key presses
-	extern uint_fast32_t sleep_timer;
+	// process_record_user driven typing timer
+	extern uint_fast32_t key_timer;
 #endif
+
 	static uint_fast32_t anim_timer = 0;
+	uint_fast32_t elapsed_time = timer_elapsed32(key_timer);
 
 	void animation_phase(void) {
 		oled_clear();
-		if (timer_elapsed32(sleep_timer) <FRAME_DURATION) { render_cat_tap(); }
-		else if (timer_elapsed32(sleep_timer) <FRAME_DURATION*5) { render_cat_prep(); }
+		if (elapsed_time <FRAME_DURATION) { render_cat_tap(); }
+		else if (elapsed_time <FRAME_DURATION*5) { render_cat_prep(); }
 		else { render_cat_idle(); }
 	}
 
-	if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) {
+	if (elapsed_time >OLED_TIMEOUT) {
 		oled_off();
 	} else if (timer_elapsed32(anim_timer) >FRAME_DURATION) {
 		anim_timer = timer_read32();
 		animation_phase();
 	}
-
-#ifdef WPM_ENABLE
-	// Reset timer on sustained WPM
-	if (get_current_wpm() >=prev_wpm) {
-		prev_wpm = get_current_wpm();
-		sleep_timer = timer_read32();
-	} else if (get_current_wpm()) {
-		prev_wpm = get_current_wpm()+1;
-	}
-#endif
 }
