@@ -35,6 +35,5 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
-#define SLIMCAT
 void render_bongocat(void);
 #endif

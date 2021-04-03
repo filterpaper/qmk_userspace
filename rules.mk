@@ -43,6 +43,7 @@ endif
 # Corne keyboard features
 ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
+# Primary status with secondary WPM-driven animaion
 else ifeq ($(KEYBOARD) $(PRIMARY), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
@@ -62,6 +63,7 @@ else ifeq ($(KEYBOARD) $(PRIMARY), crkbd/rev1/common yes)
 	else
 		OPT_DEFS += -DPRIMARY_ONLY
 	endif
+# Primary animation with secondary mod status
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes

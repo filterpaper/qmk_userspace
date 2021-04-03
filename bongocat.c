@@ -14,12 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Graphical bongocat animation display, that is driven by key press
-   timer variable or WPM_ENABLE.
-   It has both left and right aligned animation optimized for
-   both OLEDs. This code uses space-saving differential pixels,
-   by rendering the base frame, following by only pixels that
-   changed on subsequent animation frames.
+/* Graphical bongocat animation, driven by key press timer or WPM.
+   It has left and right aligned cats optimized for both OLEDs.
+   This code uses space-saving differential pixels, by rendering a
+   base frame following by only changed pixels on subsequent frames.
 
    Inspired by @j-inc's bongocat animation code
    (keyboards/kyria/keymaps/j-inc)
@@ -32,12 +30,6 @@
 
 #include "filterpaper.h"
 
-#ifdef SLIMCAT
-#	define TAP_SPEED 10
-#else
-#	define IDLE_SPEED 45
-#	define TAP_SPEED 60
-#endif
 #define IDLE_FRAMES 5
 #define TAP_FRAMES 2
 #define ANIM_FRAME_DURATION 200 // Number of ms per frame
@@ -114,7 +106,6 @@ static void render_cat_idle(void) {
 }
 
 
-#ifndef SLIMCAT
 static void render_cat_prep(void) {
 	// Differential prep frame
 #ifndef LEFTCAT
@@ -142,7 +133,6 @@ static void render_cat_prep(void) {
 	#endif
 	}
 }
-#endif // SLIMCAT
 
 
 static void render_cat_tap(void) {
@@ -182,44 +172,18 @@ static void render_cat_tap(void) {
 
 void render_bongocat(void) {
 #ifdef WPM_ENABLE
-	static bool typing = false;
 	static uint_fast8_t prev_wpm = 0;
-	static uint_fast32_t anim_timer = 0;
-
-	void animation_phase(void) {
-		oled_clear();
-		if (get_current_wpm() >TAP_SPEED && typing) { render_cat_tap(); }
-	#ifndef SLIMCAT
-		else if (get_current_wpm() >IDLE_SPEED && typing) { render_cat_prep(); }
-	#endif
-		else { render_cat_idle(); }
-	}
-
-	if (!get_current_wpm()) {
-		oled_off();
-	} else if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
-		anim_timer = timer_read32();
-		animation_phase();
-
-		// Stop typing on decreasing WPM
-		if (get_current_wpm() >=prev_wpm) {
-			prev_wpm = get_current_wpm();
-			typing = true;
-		} else {
-			prev_wpm = get_current_wpm()+1;
-			typing = false;
-		}
-	}
+	static uint_fast32_t sleep_timer = 0;
 #else
-	extern uint_fast32_t sleep_timer; // Reset on key presses
+	// Elapsed time between key presses
+	extern uint_fast32_t sleep_timer;
+#endif
 	static uint_fast32_t anim_timer = 0;
 
 	void animation_phase(void) {
 		oled_clear();
 		if (timer_elapsed32(sleep_timer) <ANIM_FRAME_DURATION) { render_cat_tap(); }
-	#ifndef SLIMCAT
 		else if (timer_elapsed32(sleep_timer) <ANIM_FRAME_DURATION*5) { render_cat_prep(); }
-	#endif
 		else { render_cat_idle(); }
 	}
 
@@ -228,6 +192,15 @@ void render_bongocat(void) {
 	} else if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
 		anim_timer = timer_read32();
 		animation_phase();
+	}
+
+#ifdef WPM_ENABLE
+	// Reset timer on sustained WPM
+	if (get_current_wpm() >=prev_wpm) {
+		prev_wpm = get_current_wpm();
+		sleep_timer = timer_read32();
+	} else if (get_current_wpm()) {
+		prev_wpm = get_current_wpm()+1;
 	}
 #endif
 }
