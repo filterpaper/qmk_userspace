@@ -32,7 +32,7 @@
 
 #define IDLE_FRAMES 5
 #define TAP_FRAMES 2
-#define ANIM_FRAME_DURATION 200 // Number of ms per frame
+#define FRAME_DURATION 200 // Number of ms per frame
 #define WIDTH OLED_DISPLAY_WIDTH // 128x32px
 
 
@@ -182,14 +182,14 @@ void render_bongocat(void) {
 
 	void animation_phase(void) {
 		oled_clear();
-		if (timer_elapsed32(sleep_timer) <ANIM_FRAME_DURATION) { render_cat_tap(); }
-		else if (timer_elapsed32(sleep_timer) <ANIM_FRAME_DURATION*5) { render_cat_prep(); }
+		if (timer_elapsed32(sleep_timer) <FRAME_DURATION) { render_cat_tap(); }
+		else if (timer_elapsed32(sleep_timer) <FRAME_DURATION*5) { render_cat_prep(); }
 		else { render_cat_idle(); }
 	}
 
 	if (timer_elapsed32(sleep_timer) >OLED_TIMEOUT) {
 		oled_off();
-	} else if (timer_elapsed32(anim_timer) >ANIM_FRAME_DURATION) {
+	} else if (timer_elapsed32(anim_timer) >FRAME_DURATION) {
 		anim_timer = timer_read32();
 		animation_phase();
 	}
