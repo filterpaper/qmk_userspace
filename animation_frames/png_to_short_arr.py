@@ -31,7 +31,7 @@ frame_filenames = [
     "tap_1_right.png"
     ]
 
-base_frame = "idle_1_right.png"
+base_frame = "idle_0_right.png"
 base_path = path_to_images + base_frame
 
 
