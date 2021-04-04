@@ -187,9 +187,7 @@ oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 void oled_task_user(void) {
 #ifndef SPLIT_MODS_ENABLE
 	if (is_keyboard_master()) { render_mod_status(); }
-	#ifndef PRIMARY_ONLY
 	else                      { render_bongocat(); }
-	#endif
 #else
 	if (is_keyboard_master()) { render_bongocat();  }
 	else                      { render_mod_status(); }

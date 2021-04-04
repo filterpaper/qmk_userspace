@@ -30,7 +30,7 @@ filterpaper.h | User specific variables and options
 filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
 mod-status.c | Graphical layer and modifier status indicators (adds ~4018 bytes)
 luna-status.c | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
-bongocat.c | Bongocat WPM animation using changed pixels
+bongocat.c | Bongocat animation using differential pixels
 oledfont.c | Corne logo, コルネ katakana name, fonts and icon images
 wrappers.h | Key map wrappers for shared ortholinear and Corne layouts
 json/ | Folder of supported keyboard layouts
@@ -117,37 +117,27 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
 ## Compiling with OLED display
-QMK's split common `transport.c` code limits data type sent from the primary USB-connected controller to the secondary. Animation on the secondary display can only be driven by WPM and keyboard status is limited to modifier state. My code can be built with the following `rules.mk` options:
+QMK's split common `transport.c` code limits type of data sent the secondary (non-USB) controller. Animation on the secondary display can only be driven by WPM while keyboard status is limited to modifier state. My code can be built with the following `rules.mk` options:
 ### Key press driven Bongocat
-Bongocat animation on primary display driven by key presses with simple modifier state on secondary OLED:
+Default Corne keyboard is built with Bongocat animation on primary display driven by key presses with simple modifier state on secondary OLED:
 ```
 qmk compile corne.json
 ```
-Firmware size can be further reduced by building with preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side:
+### WPM driven Bongocat
+Keyboard layer and modifier status on primary OLED with Bongocat animation on secondary, driven by WPM:
 ```
-qmk compile -e CAT=LEFT corne.json
-```
-### Primary status
-Keyboard layer and modifier status on primary OLED:
-```
-qmk compile -e PRIMARY=yes corne.json
+qmk compile -e WPM=yes corne.json
 ```
 ### Primary dog status
-Luna the dog WPM-driven animation status on primary OLED
+Luna the dog animation status on primary OLED with Bongocat on secondary, both driven by WPM:
 ```
-qmk compile -e PRIMARY=yes -e DOG=LUNA corne.json
+qmk compile -e WPM=yes -e DOG=LUNA corne.json
 ```
-White Felix the dog will be built with `DOG=FELIX`.
-### Secondary Bongocat animation
-Both primary status display above can be paired with WPM-driven Bongocat animation on secondary OLED by adding `-e CAT=yes`:
-```sh
-qmk compile -e PRIMARY=yes -e CAT=yes corne.json
-qmk compile -e PRIMARY=yes -e DOG=LUNA -e CAT=yes corne.json
-
-```
-Bongocat animation uses pixel differential frames to save space and the code contains left and right aligned frames. Firmware size can be further reduced by replacing preprocessors `CAT=yes` with `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side.
+White Felix the dog can be built with `DOG=FELIX`.
+### Bongocat options
+Bongocat animation uses pixel differential frames to save space and the code contains left and right aligned cats. Firmware size can be further reduced by adding preprocessors `CAT=LEFT` and `CAT=RIGHT` separately to flash on each side.
 ## Tiny build
-`TINY=yes` preprocessor will result with a minimal build with no OLED support and overriding any pet selection above:
+Minimal firmware with no OLED support can be built with `TINY=yes` preprocessor:
 ```
 qmk compile -e TINY=yes corne.json
 ```

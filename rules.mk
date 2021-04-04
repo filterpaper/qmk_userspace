@@ -43,32 +43,24 @@ endif
 # Corne keyboard features
 ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
-# Primary status with secondary WPM-driven animaion
-else ifeq ($(KEYBOARD) $(PRIMARY), crkbd/rev1/common yes)
+# Primary status with secondary WPM-driven animation
+else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
+	WPM_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
+	SRC += bongocat.c
+	OPT_DEFS += -D${CAT}CAT
 	# Primary OLED option
 	ifneq ($(DOG),)
-		WPM_ENABLE = yes
 		SRC += luna-status.c
 		OPT_DEFS += -D${DOG}
 	else
 		SRC += mod-status.c
 	endif
-	# Secondary OLED option
-	ifneq ($(CAT),)
-		WPM_ENABLE = yes
-		SRC += bongocat.c
-		OPT_DEFS += -D${CAT}CAT
-	else
-		OPT_DEFS += -DPRIMARY_ONLY
-	endif
-# Primary animation with secondary mod status
+# Primary tap-driven animation with secondary mod status
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
-	ifneq ($(CAT),)
-		OPT_DEFS += -D${CAT}CAT
-	endif
+	OPT_DEFS += -D${CAT}CAT
 	SRC += mod-status.c bongocat.c
 endif
