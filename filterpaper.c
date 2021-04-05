@@ -61,12 +61,10 @@ void keyboard_post_init_user(void) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
-	switch (get_highest_layer(state)) {
-	case CMK:
+	if (layer_state_is(CMK)) {
 		rgb_matrix_sethsv_noeeprom(HSV_SHIFT);
 		rgb_matrix_mode_noeeprom(MATRIX_SHIFT);
-		break;
-	default:
+	} else {
 		rgb_matrix_sethsv_noeeprom(HSV_NORMAL);
 		rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 	}
@@ -134,6 +132,7 @@ uint_fast32_t key_timer = 0;
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #ifdef SPLIT_MODS_ENABLE
+	// Reset typing timer for OLED animation
 	if (record->event.pressed) { key_timer = timer_read32(); }
 #endif
 #ifdef CAPSWORD_ENABLE

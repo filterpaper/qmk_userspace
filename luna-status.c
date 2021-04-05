@@ -256,18 +256,16 @@ static void render_luna_status(void) {
 	uint_fast32_t elapsed_time = timer_elapsed32(key_timer);
 
 	void animation_phase(void) {
-		oled_clear();
+		uint_fast8_t const mods = get_mods();
+		bool const caps = host_keyboard_led_state().caps_lock;
+
 		render_logo();
+		oled_set_cursor(0,8);
 
-		// Display position relative to layers
-		if (layer_state_is(RSE)) { oled_set_cursor(0,7); }
-		else if (layer_state_is(LWR)) { oled_set_cursor(0,9); }
-		else { oled_set_cursor(0,8); }
-
-		if (get_mods() & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock) { render_luna_bark(); }
-		else if (get_mods() & MOD_MASK_CAG) { render_luna_sneak(); }
-		else if (elapsed_time <LUNA_FRAME_DURATION*2) { render_luna_run(); }
-		else if (elapsed_time <LUNA_FRAME_DURATION*15) { render_luna_walk(); }
+		if (mods & MOD_MASK_SHIFT || caps) { render_luna_bark(); }
+		else if (mods & MOD_MASK_CAG) { render_luna_sneak(); }
+		else if (get_current_wpm() && elapsed_time <LUNA_FRAME_DURATION*2) { render_luna_run(); }
+		else if (get_current_wpm() && elapsed_time <LUNA_FRAME_DURATION*15) { render_luna_walk(); }
 		else { render_luna_sit(); }
 	}
 
