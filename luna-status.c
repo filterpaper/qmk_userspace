@@ -243,14 +243,8 @@ static void render_luna_status(void) {
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t key_timer = 0;
 
-	if (get_current_wpm() && get_current_wpm() >=prev_wpm) {
-		prev_wpm = get_current_wpm();
-		key_timer = timer_read32();
-	} else if (get_current_wpm()) {
-		prev_wpm = get_current_wpm()+1;
-	} else if (get_mods()) {
-		key_timer = timer_read32();
-	}
+	if (get_current_wpm() >prev_wpm || get_mods()) { key_timer = timer_read32(); }
+	prev_wpm = get_current_wpm();
 
 	static uint_fast16_t anim_timer = 0;
 	uint_fast32_t elapsed_time = timer_elapsed32(key_timer);
@@ -261,11 +255,10 @@ static void render_luna_status(void) {
 
 		render_logo();
 		oled_set_cursor(0,8);
-
 		if (mods & MOD_MASK_SHIFT || caps) { render_luna_bark(); }
 		else if (mods & MOD_MASK_CAG) { render_luna_sneak(); }
-		else if (get_current_wpm() && elapsed_time <LUNA_FRAME_DURATION*2) { render_luna_run(); }
-		else if (get_current_wpm() && elapsed_time <LUNA_FRAME_DURATION*15) { render_luna_walk(); }
+		else if (prev_wpm && elapsed_time <LUNA_FRAME_DURATION*3) { render_luna_run(); }
+		else if (prev_wpm && elapsed_time <LUNA_FRAME_DURATION*15) { render_luna_walk(); }
 		else { render_luna_sit(); }
 	}
 

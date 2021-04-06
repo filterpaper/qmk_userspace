@@ -175,12 +175,8 @@ void render_bongocat(void) {
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t key_timer = 0;
 
-	if (get_current_wpm() && get_current_wpm() >=prev_wpm) {
-		prev_wpm = get_current_wpm();
-		key_timer = timer_read32();
-	} else if (get_current_wpm()) {
-		prev_wpm = get_current_wpm()+1;
-	}
+	if (get_current_wpm() >prev_wpm) { key_timer = timer_read32(); }
+	prev_wpm = get_current_wpm();
 #else
 	// process_record_user() triggered typing timer
 	extern uint_fast32_t key_timer;
@@ -191,7 +187,7 @@ void render_bongocat(void) {
 
 	void animation_phase(void) {
 		oled_clear();
-		if (elapsed_time <FRAME_DURATION*2) { render_cat_tap(); }
+		if (elapsed_time <FRAME_DURATION*3) { render_cat_tap(); }
 		else if (elapsed_time <FRAME_DURATION*10) { render_cat_prep(); }
 		else { render_cat_idle(); }
 	}
