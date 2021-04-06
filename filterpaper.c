@@ -127,13 +127,13 @@ static void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) 
 
 
 #ifdef SPLIT_MODS_ENABLE
-uint_fast32_t key_timer = 0;
+uint_fast32_t tap_timer = 0;
 #endif
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #ifdef SPLIT_MODS_ENABLE
 	// Reset typing timer for OLED animation
-	if (record->event.pressed) { key_timer = timer_read32(); }
+	if (record->event.pressed) { tap_timer = timer_read32(); }
 #endif
 #ifdef CAPSWORD_ENABLE
 	// Monitor key codes to toggle caps lock
