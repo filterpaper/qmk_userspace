@@ -82,7 +82,7 @@ static void render_luna_sit(void) {
 	} };
 
 	current_frame = (current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(sit[abs(1 - current_frame)], LUNA_SIZE);
+	oled_write_raw_P(sit[current_frame], LUNA_SIZE);
 }
 
 
@@ -120,7 +120,7 @@ static void render_luna_walk(void) {
 	} };
 
 	current_frame = (current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(walk[abs(1 - current_frame)], LUNA_SIZE);
+	oled_write_raw_P(walk[current_frame], LUNA_SIZE);
 }
 
 
@@ -158,7 +158,7 @@ static void render_luna_run(void) {
 	} };
 
 	current_frame = (current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(run[abs(1 - current_frame)], LUNA_SIZE);
+	oled_write_raw_P(run[current_frame], LUNA_SIZE);
 }
 
 
@@ -196,7 +196,7 @@ static void render_luna_bark(void) {
 	} };
 
 	current_frame = (current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(bark[abs(1 - current_frame)], LUNA_SIZE);
+	oled_write_raw_P(bark[current_frame], LUNA_SIZE);
 }
 
 
@@ -234,7 +234,7 @@ static void render_luna_sneak(void) {
 	} };
 
 	current_frame = (current_frame + 1) % LUNA_FRAMES;
-	oled_write_raw_P(sneak[abs(1 - current_frame)], LUNA_SIZE);
+	oled_write_raw_P(sneak[current_frame], LUNA_SIZE);
 }
 
 
@@ -242,21 +242,25 @@ static void render_luna_status(void) {
 	// WPM and mod triggered typing timer
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t tap_timer = 0;
-
 	if (get_current_wpm() >prev_wpm || get_mods()) { tap_timer = timer_read32(); }
 	prev_wpm = get_current_wpm();
 
-	static uint_fast16_t anim_timer = 0;
 	uint_fast32_t keystroke = timer_elapsed32(tap_timer);
+	static uint_fast16_t anim_timer = 0;
 
 	void animation_phase(void) {
-		uint_fast8_t const mods = get_mods();
 		bool const caps = host_keyboard_led_state().caps_lock;
 
 		render_logo();
 		oled_set_cursor(0,8);
-		if (mods & MOD_MASK_SHIFT || caps) { render_luna_bark(); }
-		else if (mods & MOD_MASK_CAG) { render_luna_sneak(); }
+		if (get_mods() & MOD_MASK_SHIFT || caps) {
+			render_luna_bark();
+			set_current_wpm(0);
+		}
+		else if (get_mods() & MOD_MASK_CAG) {
+			render_luna_sneak();
+			set_current_wpm(0);
+		}
 		else if (prev_wpm && keystroke <LUNA_FRAME_DURATION*3) { render_luna_run(); }
 		else if (prev_wpm && keystroke <LUNA_FRAME_DURATION*15) { render_luna_walk(); }
 		else { render_luna_sit(); }
@@ -273,9 +277,7 @@ static void render_luna_status(void) {
 
 // Init and rendering calls
 oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
-	if (is_keyboard_master())    { return OLED_ROTATION_270; }
-	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
-	else                         { return OLED_ROTATION_180; }
+	return OLED_ROTATION_270;
 }
 
 void oled_task_user(void) {

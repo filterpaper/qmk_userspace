@@ -183,13 +183,7 @@ static void render_mod_status(void) {
 
 // Init and rendering calls
 oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
-#ifndef SPLIT_MODS_ENABLE
-	if (is_keyboard_master())    { return OLED_ROTATION_270; }
-#else
-	if (!is_keyboard_master())   { return OLED_ROTATION_270; }
-#endif
-	else if (is_keyboard_left()) { return OLED_ROTATION_0; }
-	else                         { return OLED_ROTATION_180; }
+	return OLED_ROTATION_270;
 }
 
 void oled_task_user(void) {

@@ -146,3 +146,4 @@ qmk compile -e TINY=yes corne.json
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
 * [QMK Logo Editor](https://joric.github.io/qle/)
+* [image2cpp](https://javl.github.io/image2cpp/)

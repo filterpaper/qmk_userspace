@@ -190,22 +190,3 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	}
 	return true; // continue with unmatched keycodes
 }
-
-
-#ifdef TAPPING_TERM_PER_KEY
-// Fine tune tapping term delays
-uint16_t get_tapping_term(uint16_t const keycode, keyrecord_t *record) {
-	switch (keycode) {
-	case LT(2,KC_SPC):
-	case LT(3,KC_SPC):
-	case SFT_T(KC_SPC):
-	case SFT_T(KC_ENT):
-	case DOT_TH:
-	case COMM_TH:
-	case M_TH:
-		return TAPPING_TERM - 50;
-	default:
-		return TAPPING_TERM;
-	}
-}
-#endif
