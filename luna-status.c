@@ -28,7 +28,7 @@
 #include "filterpaper.h"
 
 #define LUNA_FRAMES 2
-#define LUNA_FRAME_DURATION 200 // Number of ms per frame
+#define LUNA_FRAME_DURATION 200 // Number of ms between frames
 #define LUNA_SIZE 96 // 96-byte arrays for the little dog
 
 static uint_fast8_t current_frame = 0;
@@ -239,12 +239,12 @@ static void render_luna_sneak(void) {
 
 
 static void render_luna_status(void) {
-	// WPM and mod triggered typing timer
 	static uint_fast8_t prev_wpm = 0;
-	static uint_fast32_t tap_timer = 0;
+	static uint_fast32_t tap_timer = 0; // WPM and mod triggered
 	if (get_current_wpm() >prev_wpm || get_mods()) { tap_timer = timer_read32(); }
 	prev_wpm = get_current_wpm();
 
+	// Elapsed time between key presses
 	uint_fast32_t keystroke = timer_elapsed32(tap_timer);
 	static uint_fast16_t anim_timer = 0;
 
@@ -281,6 +281,7 @@ oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 }
 
 void oled_task_user(void) {
+	extern void render_bongocat(void);
 	if (is_keyboard_master()) { render_luna_status(); }
 	else                      { render_bongocat(); }
 }

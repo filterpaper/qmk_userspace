@@ -33,7 +33,3 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #	define MATRIX_NORMAL	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #	define MATRIX_SHIFT		RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
 #endif
-
-#ifdef OLED_DRIVER_ENABLE
-void render_bongocat(void);
-#endif

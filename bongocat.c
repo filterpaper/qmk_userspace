@@ -18,6 +18,7 @@
    It has left and right aligned cats optimized for both OLEDs.
    This code uses space-saving differential pixels, by rendering a
    base frame following by only changed pixels on subsequent frames.
+   This should be rendered with OLED_ROTATION_270.
 
    Inspired by @j-inc's bongocat animation code
    (keyboards/kyria/keymaps/j-inc)
@@ -32,8 +33,8 @@
 
 #define IDLE_FRAMES 5
 #define TAP_FRAMES 2
-#define FRAME_DURATION 200 // Number of ms per frame
-#define WIDTH OLED_DISPLAY_HEIGHT // Images rotated 90 degrees
+#define FRAME_DURATION 200 // Number of ms between frames
+#define WIDTH OLED_DISPLAY_HEIGHT // OLED is rotated vertically
 
 
 // Base animation frame that all subsequent ones will differ by pixels
@@ -69,7 +70,7 @@ static void render_cat_idle(void) {
 	static uint_fast16_t const idle_diff_3[] PROGMEM = {21, 1590, 34390, 1623, 34423, 1656, 34455, 1688, 34486, 1719, 34518, 1751, 35036, 2269, 35069, 2302, 35102, 2335, 35134, 2367, 2428, 35228};
 	static uint_fast16_t const *idle_diff[IDLE_FRAMES] = {
 		idle_diff_0,
-		idle_diff_0, // First two frames are identical
+		idle_diff_0,
 		idle_diff_1,
 		idle_diff_2,
 		idle_diff_3
@@ -82,7 +83,7 @@ static void render_cat_idle(void) {
 	static uint_fast16_t const left_idle_diff_3[] PROGMEM = {21, 1577, 1608, 34377, 1639, 34408, 1671, 34440, 1704, 34473, 1736, 34505, 2242, 35011, 2273, 35042, 2304, 35073, 2336, 35105, 2403, 35203};
 	static uint_fast16_t const *left_idle_diff[IDLE_FRAMES] = {
 		left_idle_diff_0,
-		left_idle_diff_0, // First two frames are identical
+		left_idle_diff_0,
 		left_idle_diff_1,
 		left_idle_diff_2,
 		left_idle_diff_3
@@ -171,22 +172,20 @@ static void render_cat_tap(void) {
 
 void render_bongocat(void) {
 #ifdef WPM_ENABLE
-	// WPM triggered typing timer
 	static uint_fast8_t prev_wpm = 0;
-	static uint_fast32_t tap_timer = 0;
+	static uint_fast32_t tap_timer = 0; // WPM triggered
 	if (get_current_wpm() >prev_wpm) { tap_timer = timer_read32(); }
 	prev_wpm = get_current_wpm();
 #else
-	// process_record_user() triggered typing timer
-	extern uint_fast32_t tap_timer;
+	extern uint_fast32_t tap_timer; // process_record_user() triggered
 #endif
-
+	// Elapsed time between key presses
 	uint_fast32_t keystroke = timer_elapsed32(tap_timer);
 	static uint_fast16_t anim_timer = 0;
 
 	void animation_phase(void) {
 		oled_clear();
-		if (keystroke <FRAME_DURATION*3) { render_cat_tap(); }
+		if (keystroke <FRAME_DURATION*2) { render_cat_tap(); }
 		else if (keystroke <FRAME_DURATION*10) { render_cat_prep(); }
 		else { render_cat_idle(); }
 	}
