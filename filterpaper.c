@@ -74,7 +74,7 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 void rgb_matrix_indicators_user(void) {
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
-		for (uint_fast8_t i = 0; i <DRIVER_LED_TOTAL; ++i) {
+		for (uint_fast8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_MODIFIER)) {
 				rgb_matrix_set_color(i, RGB_MODS);
 			}
@@ -82,19 +82,19 @@ void rgb_matrix_indicators_user(void) {
 	}
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
-		for (uint_fast8_t i = 0; i <DRIVER_LED_TOTAL; ++i) {
+		for (uint_fast8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_KEYLIGHT)) {
 				rgb_matrix_set_color(i, RGB_CAPS);
 			}
 		}
 	}
 	// Layer keys indicator by @rgoulter
-	if (get_highest_layer(layer_state) >CMK) {
+	if (get_highest_layer(layer_state) > CMK) {
 		uint_fast8_t const layer = get_highest_layer(layer_state);
-		for (uint_fast8_t row = 0; row <MATRIX_ROWS; ++row) {
-			for (uint_fast8_t col = 0; col <MATRIX_COLS; ++col) {
-				if (g_led_config.matrix_co[row][col] !=NO_LED &&
-					keymap_key_to_keycode(layer, (keypos_t){col,row}) !=KC_TRNS) {
+		for (uint_fast8_t row = 0; row < MATRIX_ROWS; ++row) {
+			for (uint_fast8_t col = 0; col < MATRIX_COLS; ++col) {
+				if (g_led_config.matrix_co[row][col] != NO_LED &&
+					keymap_key_to_keycode(layer, (keypos_t){col,row}) != KC_TRNS) {
 					rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_LAYER);
 				}
 			}
@@ -108,8 +108,8 @@ void rgb_matrix_indicators_user(void) {
 // Deactivate caps lock following a word
 static void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) {
 	// Get base key code of mod or layer tap with bitmask
-	if (((keycode >=QK_MOD_TAP && keycode <=QK_MOD_TAP_MAX) ||
-		(keycode >=QK_LAYER_TAP && keycode <=QK_LAYER_TAP_MAX)) &&
+	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
+		(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
 		(record->tap.count)) { keycode = keycode & 0xFF; }
 	// Toggle caps lock with the following key codes
 	switch (keycode) {

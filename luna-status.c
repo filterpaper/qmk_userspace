@@ -39,12 +39,11 @@ static void render_logo(void) {
 		0x80, 0x81, 0x82, 0x83, 0x84,
 		0xa0, 0xa1, 0xa2, 0xa3, 0xa4,
 		0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0};
-	static char const katakana[] PROGMEM = {
+	static char const corne[] PROGMEM = {
 		0x20, 0xd1, 0xd2, 0xd3, 0x20, 0};
 
 	oled_write_P(corne_logo, false);
-	if (layer_state_is(CMK)) { oled_write_P(katakana, false); }
-	else { oled_write_P(PSTR("corne"), false); }
+	layer_state_is(CMK) ? oled_write_P(corne, false) : oled_write_P(PSTR("corne"), false);
 }
 
 
@@ -241,7 +240,7 @@ static void render_luna_sneak(void) {
 static void render_luna_status(void) {
 	static uint_fast8_t prev_wpm = 0;
 	static uint_fast32_t tap_timer = 0; // WPM and mod triggered
-	if (get_current_wpm() >prev_wpm || get_mods()) { tap_timer = timer_read32(); }
+	if (get_current_wpm() > prev_wpm || get_mods()) { tap_timer = timer_read32(); }
 	prev_wpm = get_current_wpm();
 
 	// Elapsed time between key presses
@@ -261,13 +260,13 @@ static void render_luna_status(void) {
 			render_luna_sneak();
 			set_current_wpm(0);
 		}
-		else if (prev_wpm && keystroke <LUNA_FRAME_DURATION*2) { render_luna_run(); }
-		else if (prev_wpm && keystroke <LUNA_FRAME_DURATION*8) { render_luna_walk(); }
+		else if (prev_wpm && keystroke < LUNA_FRAME_DURATION*2) { render_luna_run(); }
+		else if (prev_wpm && keystroke < LUNA_FRAME_DURATION*8) { render_luna_walk(); }
 		else { render_luna_sit(); }
 	}
 
-	if (keystroke >OLED_TIMEOUT) { oled_off(); }
-	else if (timer_elapsed(anim_timer) >LUNA_FRAME_DURATION) {
+	if (keystroke > OLED_TIMEOUT) { oled_off(); }
+	else if (timer_elapsed(anim_timer) > LUNA_FRAME_DURATION) {
 		anim_timer = timer_read();
 		animation_phase();
 	}
