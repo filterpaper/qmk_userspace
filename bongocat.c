@@ -34,7 +34,7 @@
 #define IDLE_FRAMES 5
 #define TAP_FRAMES 2
 #define FRAME_DURATION 200 // Number of ms between frames
-#define WIDTH OLED_DISPLAY_HEIGHT // OLED is rotated vertically
+#define WIDTH OLED_DISPLAY_HEIGHT // 32 px when OLED is vertical
 
 
 // Base animation frame that all subsequent ones will differ by pixels
@@ -186,13 +186,12 @@ void render_bongocat(void) {
 	void animation_phase(void) {
 		oled_clear();
 		if (keystroke <FRAME_DURATION*2) { render_cat_tap(); }
-		else if (keystroke <FRAME_DURATION*10) { render_cat_prep(); }
+		else if (keystroke <FRAME_DURATION*8) { render_cat_prep(); }
 		else { render_cat_idle(); }
 	}
 
-	if (keystroke >OLED_TIMEOUT) {
-		oled_off();
-	} else if (timer_elapsed(anim_timer) >FRAME_DURATION) {
+	if (keystroke >OLED_TIMEOUT) { oled_off(); }
+	else if (timer_elapsed(anim_timer) >FRAME_DURATION) {
 		anim_timer = timer_read();
 		animation_phase();
 	}

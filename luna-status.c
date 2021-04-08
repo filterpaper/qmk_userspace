@@ -261,14 +261,13 @@ static void render_luna_status(void) {
 			render_luna_sneak();
 			set_current_wpm(0);
 		}
-		else if (prev_wpm && keystroke <LUNA_FRAME_DURATION*3) { render_luna_run(); }
-		else if (prev_wpm && keystroke <LUNA_FRAME_DURATION*15) { render_luna_walk(); }
+		else if (prev_wpm && keystroke <LUNA_FRAME_DURATION*2) { render_luna_run(); }
+		else if (prev_wpm && keystroke <LUNA_FRAME_DURATION*8) { render_luna_walk(); }
 		else { render_luna_sit(); }
 	}
 
-	if (keystroke >OLED_TIMEOUT) {
-		oled_off();
-	} else if (timer_elapsed(anim_timer) >LUNA_FRAME_DURATION) {
+	if (keystroke >OLED_TIMEOUT) { oled_off(); }
+	else if (timer_elapsed(anim_timer) >LUNA_FRAME_DURATION) {
 		anim_timer = timer_read();
 		animation_phase();
 	}
@@ -282,6 +281,5 @@ oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 
 void oled_task_user(void) {
 	extern void render_bongocat(void);
-	if (is_keyboard_master()) { render_luna_status(); }
-	else                      { render_bongocat(); }
+	is_keyboard_master() ? render_luna_status() : render_bongocat();
 }

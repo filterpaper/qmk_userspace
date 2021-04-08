@@ -62,15 +62,6 @@ static void render_layer_state(void) {
 		0x20, 0xbd, 0xbe, 0xbf, 0x20,
 		0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
 
-/*	static char const *layer[] = {
-		default_layer,
-		default_layer,
-		lower_layer,
-		raise_layer,
-		adjust_layer
-	};
-	oled_write_P(layer[get_highest_layer(layer_state)], false); */
-
 	if (layer_state_is(ADJ)) { oled_write_P(adjust_layer, false); }
 	else if (layer_state_is(RSE)) { oled_write_P(raise_layer, false); }
 	else if (layer_state_is(LWR)) { oled_write_P(lower_layer, false); }
@@ -189,10 +180,8 @@ oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 void oled_task_user(void) {
 	extern void render_bongocat(void);
 #ifndef SPLIT_MODS_ENABLE
-	if (is_keyboard_master()) { render_mod_status(); }
-	else                      { render_bongocat(); }
+	is_keyboard_master() ? render_mod_status() : render_bongocat();
 #else
-	if (is_keyboard_master()) { render_bongocat();  }
-	else                      { render_mod_status(); }
+	is_keyboard_master() ? render_bongocat() : render_mod_status();
 #endif
 }
