@@ -28,16 +28,18 @@ EXTRAKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
 
-# Custom caps word feature
-OPT_DEFS += -DCAPSWORD_ENABLE
-
-ifneq ($(strip $(KEYBOARD)), crkbd/rev1/common)
-	RGB_MATRIX_ENABLE = yes
-endif
-
 # Exclude LTO for Planck
 ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
+endif
+
+# Custom caps word feature
+ifneq ($(strip $(KEYBOARD)), boardsource/the_mark)
+	OPT_DEFS += -DCAPSWORD_ENABLE
+endif
+
+ifneq ($(strip $(KEYBOARD)), crkbd/rev1/common)
+	RGB_MATRIX_ENABLE = yes
 endif
 
 # Corne keyboard features

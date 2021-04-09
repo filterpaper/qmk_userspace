@@ -79,21 +79,21 @@ Tap hold macro can be found in QMK's [tap dance feature](../../docs/feature_tap_
 ## Caps word
 ```c
 void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) {
-	// Get base key code of mod or layer tap with bitmask
-	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
-		(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
-		(record->tap.count)) { keycode = keycode & 0xFF; }
-	// Toggle caps lock with the following key codes
-	switch (keycode) {
-	case KC_ESC:
-	case KC_SPC:
-	case KC_ENT:
-	case KC_TAB:
-	case KC_DOT:
-	case KC_COMM:
-	case KC_GESC:
-		if (record->event.pressed) { tap_code(KC_CAPS); }
-	}
+    // Get base key code of mod or layer tap with bitmask
+    if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
+       (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
+       (record->tap.count)) { keycode = keycode & 0xFF; }
+    // Toggle caps lock with the following key codes
+    switch (keycode) {
+    case KC_ESC:
+    case KC_SPC:
+    case KC_ENT:
+    case KC_TAB:
+    case KC_DOT:
+    case KC_COMM:
+    case KC_GESC:
+        if (record->event.pressed) { tap_code(KC_CAPS); }
+    }
 }
 ```
 Function is called inside `process_record_user` when caps lock is enabled to turn it off after completing a word—because caps lock is rarely used beyond capitalising one word. The first `switch` statement performs a bitwise *AND* to filter base key codes (that ranges from 0x00-0xFF) from mod/layer taps to support toggle keys on a different layer. Written by the `#ergonomics` enthusiasts of splitkb.com discord.
@@ -123,7 +123,7 @@ Default Corne keyboard is built with Bongocat animation on primary display drive
 ```
 qmk compile corne.json
 ```
-Bongocat code uses spacing-saving differential pixels to animate, with left and right-aligned animation arrays to support `EE_HANDS` configuration. Arrays for one of the sides (and its associated `if-else` statements) can be removed to save additional space.
+Bongocat code uses spacing-saving pixel differences to animate, with left and right-aligned animation arrays to support `EE_HANDS` configuration. Arrays for one of the sides (and its associated `if-else` statements) can be removed to save additional space.
 ### WPM driven Bongocat
 Keyboard layer and modifier status on primary OLED with Bongocat animation on secondary, driven by WPM:
 ```
