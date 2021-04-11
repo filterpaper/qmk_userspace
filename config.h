@@ -21,6 +21,7 @@
 
 // Common QMK settings
 #define TAPPING_TERM 280
+#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAP_CODE_DELAY 50

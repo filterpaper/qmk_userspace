@@ -147,46 +147,54 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_Q); }
 			else { unregister_code(KC_Q); }
-		} else { if (record->event.pressed) { SEND_STRING(":q!"); } }
+		} else if (record->event.pressed) { SEND_STRING(":q!"); }
 		return false;
 	case W_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_W); }
 			else { unregister_code(KC_W); }
-		} else { if (record->event.pressed) { SEND_STRING(":wq"); } }
+		} else if (record->event.pressed) { SEND_STRING(":wq"); }
 		return false;
 	// New tab and window
 	case T_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_T); }
 			else { unregister_code(KC_T); }
-		} else { if (record->event.pressed) { tap_code16(G(KC_T)); } }
+		} else if (record->event.pressed) { tap_code16(G(KC_T)); }
 		return false;
 	case N_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_N); }
 			else { unregister_code(KC_N); }
-		} else { if (record->event.pressed) { tap_code16(G(KC_N)); } }
+		} else if (record->event.pressed) { tap_code16(G(KC_N)); }
 		return false;
 	// Right hand cut copy paste
 	case DOT_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_DOT); }
 			else { unregister_code(KC_DOT); }
-		} else { if (record->event.pressed) { tap_code16(G(KC_X)); } }
+		} else if (record->event.pressed) { tap_code16(G(KC_X)); }
 		return false;
 	case COMM_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_COMM); }
 			else { unregister_code(KC_COMM); }
-		} else { if (record->event.pressed) { tap_code16(G(KC_C)); } }
+		} else if (record->event.pressed) { tap_code16(G(KC_C)); }
 		return false;
 	case M_TH:
 		if (record->tap.count) {
 			if (record->event.pressed) { register_code(KC_M); }
 			else { unregister_code(KC_M); }
-		} else { if (record->event.pressed) { tap_code16(G(KC_V)); } }
+		} else if (record->event.pressed) { tap_code16(G(KC_V)); }
 		return false;
 	}
 	return true; // continue with unmatched keycodes
 }
+
+
+#ifdef TAPPING_TERM_PER_KEY
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+	// Longer delay for ALT_T()
+	return ((keycode & 0xFF00) == 0x6400) ? TAPPING_TERM + 200 : TAPPING_TERM;
+}
+#endif
