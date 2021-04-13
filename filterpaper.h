@@ -23,13 +23,24 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 // Custom dimmer indicator colors and effects
 #ifdef RGB_MATRIX_ENABLE
 #	define RGB_BSTEEL	60, 90, 128
-#	define RGB_DGRAY	77, 77, 77
+#	define RGB_DGRAY	77, 88, 99
 #	define RGB_DEFAULT	RGB_BSTEEL
 #	define RGB_MODS		RGB_BSTEEL
 #	define RGB_CAPS		RGB_PURPLE
 #	define RGB_LAYER	RGB_DGRAY
 #	define HSV_NORMAL	HSV_AZURE
-#	define HSV_SHIFT	HSV_YELLOW
 #	define MATRIX_NORMAL	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #	define MATRIX_SHIFT		RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
+#endif
+
+// Mod and layer tap bitmasks
+#ifdef TAPPING_TERM_PER_KEY
+#	define CTL_T_MASK 0x6100
+#	define SFT_T_MASK 0x6200
+#	define ALT_T_MASK 0x6400
+#	define GUI_T_MASK 0x6800
+#	define LT0_MASK 0x4000
+#	define LT1_MASK 0x4100
+#	define LT2_MASK 0x4200
+#	define LT3_MASK 0x4300
 #endif

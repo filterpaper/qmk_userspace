@@ -16,6 +16,73 @@
 
 #include "filterpaper.h"
 
+// Tap hold macro function for process_record_user()
+// using layer tap LT() tapping term delay as a
+// hold shortcut, by @sigprof
+#define TAP_HOLD(_tap_, _hold_) \
+	if (record->tap.count) { \
+		if (record->event.pressed) { register_code(_tap_); } \
+		else { unregister_code(_tap_); } \
+	} else if (record->event.pressed) { _hold_; } \
+	return false;
+
+
+#ifdef SPLIT_MODS_ENABLE
+uint_fast32_t tap_timer = 0; // Timer for OLED animation
+#endif
+
+
+#ifdef CAPSWORD_ENABLE
+// Deactivate caps lock following a word
+static void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) {
+	// Get base key code of mod or layer tap with bitmask
+	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
+		(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
+		(record->tap.count)) { keycode = keycode & 0xFF; }
+	// Toggle caps lock with the following key codes
+	switch (keycode) {
+		case KC_TAB:
+		case KC_ESC:
+		case KC_SPC:
+		case KC_ENT:
+		case KC_DOT:
+		case KC_COMM:
+		case KC_GESC:
+			if (record->event.pressed) { tap_code(KC_CAPS); }
+	}
+}
+#endif
+
+
+bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
+#ifdef SPLIT_MODS_ENABLE // Reset typing timer for OLED animation
+	if (record->event.pressed) { tap_timer = timer_read32(); }
+#endif
+#ifdef CAPSWORD_ENABLE // Monitor key codes to toggle caps lock
+	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
+#endif
+	switch (keycode) {
+		// VIM commands
+		case Q_TH: TAP_HOLD(KC_Q, SEND_STRING(":q!"));
+		case W_TH: TAP_HOLD(KC_W, SEND_STRING(":wq"));
+		// New tab and window
+		case T_TH: TAP_HOLD(KC_T, tap_code16(G(KC_T)));
+		case N_TH: TAP_HOLD(KC_N, tap_code16(G(KC_N)));
+		// Right hand cut copy paste
+		case DOT_TH: TAP_HOLD(KC_DOT, tap_code16(G(KC_X)));
+		case COMM_TH: TAP_HOLD(KC_COMM, tap_code16(G(KC_C)));
+		case M_TH: TAP_HOLD(KC_M, tap_code16(G(KC_V)));
+	}
+	return true; // Continue with unmatched keycodes
+}
+
+
+#ifdef TAPPING_TERM_PER_KEY
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+	return ((keycode & 0xFF00) == ALT_T_MASK) ? TAPPING_TERM + 200 : return TAPPING_TERM;
+}
+#endif
+
 
 #ifdef RGB_MATRIX_ENABLE
 /* // by @tzarc
@@ -61,13 +128,7 @@ void keyboard_post_init_user(void) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
-	if (layer_state_is(CMK)) {
-		rgb_matrix_sethsv_noeeprom(HSV_SHIFT);
-		rgb_matrix_mode_noeeprom(MATRIX_SHIFT);
-	} else {
-		rgb_matrix_sethsv_noeeprom(HSV_NORMAL);
-		rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
-	}
+	layer_state_cmp(state, CMK) ? rgb_matrix_mode_noeeprom(MATRIX_SHIFT) : rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 	return state;
 }
 
@@ -100,101 +161,11 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
+	// Randomize effect colors
+	static uint_fast16_t hsv_timer = 0;
+	if (timer_elapsed(hsv_timer) > TAPPING_TERM*4) {
+		hsv_timer = timer_read();
+		rgb_matrix_sethsv_noeeprom(rand() & 255, rand() & 255, rgb_matrix_config.hsv.v);
+	}
 }
 #endif // RGB_MATRIX_ENABLE
-
-
-#ifdef CAPSWORD_ENABLE
-// Deactivate caps lock following a word
-static void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) {
-	// Get base key code of mod or layer tap with bitmask
-	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
-		(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
-		(record->tap.count)) { keycode = keycode & 0xFF; }
-	// Toggle caps lock with the following key codes
-	switch (keycode) {
-	case KC_TAB:
-	case KC_ESC:
-	case KC_SPC:
-	case KC_ENT:
-	case KC_DOT:
-	case KC_COMM:
-	case KC_GESC:
-		if (record->event.pressed) { tap_code(KC_CAPS); }
-	}
-}
-#endif
-
-
-#ifdef SPLIT_MODS_ENABLE
-uint_fast32_t tap_timer = 0;
-#endif
-
-bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
-#ifdef SPLIT_MODS_ENABLE
-	// Reset typing timer for OLED animation
-	if (record->event.pressed) { tap_timer = timer_read32(); }
-#endif
-#ifdef CAPSWORD_ENABLE
-	// Monitor key codes to toggle caps lock
-	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
-#endif
-	// Macros using layer tap's LT() tapping term delay
-	// as tap hold shortcuts, by @sigprof
-	switch (keycode) {
-	// VIM commands
-	case Q_TH:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_Q); }
-			else { unregister_code(KC_Q); }
-		} else if (record->event.pressed) { SEND_STRING(":q!"); }
-		return false;
-	case W_TH:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_W); }
-			else { unregister_code(KC_W); }
-		} else if (record->event.pressed) { SEND_STRING(":wq"); }
-		return false;
-	// New tab and window
-	case T_TH:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_T); }
-			else { unregister_code(KC_T); }
-		} else if (record->event.pressed) { tap_code16(G(KC_T)); }
-		return false;
-	case N_TH:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_N); }
-			else { unregister_code(KC_N); }
-		} else if (record->event.pressed) { tap_code16(G(KC_N)); }
-		return false;
-	// Right hand cut copy paste
-	case DOT_TH:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_DOT); }
-			else { unregister_code(KC_DOT); }
-		} else if (record->event.pressed) { tap_code16(G(KC_X)); }
-		return false;
-	case COMM_TH:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_COMM); }
-			else { unregister_code(KC_COMM); }
-		} else if (record->event.pressed) { tap_code16(G(KC_C)); }
-		return false;
-	case M_TH:
-		if (record->tap.count) {
-			if (record->event.pressed) { register_code(KC_M); }
-			else { unregister_code(KC_M); }
-		} else if (record->event.pressed) { tap_code16(G(KC_V)); }
-		return false;
-	}
-	return true; // continue with unmatched keycodes
-}
-
-
-#ifdef TAPPING_TERM_PER_KEY
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	// Longer delay for ALT_T()
-	return ((keycode & 0xFF00) == 0x6400) ? TAPPING_TERM + 200 : TAPPING_TERM;
-}
-#endif

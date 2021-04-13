@@ -66,15 +66,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) { register_code(KC_W); }
             else { unregister_code(KC_W); }
         // Send macro string on hold
-        } else {
-            if (record->event.pressed) { SEND_STRING(":wq"); }
-        }
+        } else if (record->event.pressed) { SEND_STRING(":wq"); }
         return false;
     }
     return true; // continue with unmatched keycodes
 }
 ```
-Tap hold macro can be found in QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated here using `process_record_user()` with layer tap (`LT()`) and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Macro `W_TH` replaces `KC_W` on the key map (`keymap[]`).
+Tap hold shortcut can be found in QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated here inside `process_record_user()` with layer tap (`LT()`) and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Key macro `W_TH` replaces `KC_W` on the key map (`keymap[]`). The `if-else` statements are in a `#define TAP_HOLD(_tap_, _hold_)` macro.
 
 ## Caps word
 ```c

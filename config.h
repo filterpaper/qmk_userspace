@@ -20,9 +20,9 @@
 #include "wrappers.h"
 
 // Common QMK settings
-#define TAPPING_TERM 280
-#define TAPPING_TERM_PER_KEY
-#define PERMISSIVE_HOLD
+#define TAPPING_TERM 250
+//#define TAPPING_TERM_PER_KEY
+//#define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAP_CODE_DELAY 50
 #define GRAVE_ESC_SHIFT_OVERRIDE
@@ -84,7 +84,7 @@
 #	endif
 #endif
 
-// Tap hold macro references for keymap[]
+// Tap hold macro keys for keymap[]
 #define Q_TH LT(0,KC_Q)
 #define W_TH LT(0,KC_W)
 #define T_TH LT(0,KC_T)
