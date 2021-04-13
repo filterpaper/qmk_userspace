@@ -122,8 +122,6 @@ void matrix_init_user(void) {
 }
 
 void keyboard_post_init_user(void) {
-	// Startup default effects
-	rgb_matrix_sethsv_noeeprom(HSV_NORMAL);
 	rgb_matrix_mode_noeeprom(MATRIX_NORMAL);
 }
 
@@ -163,7 +161,7 @@ void rgb_matrix_indicators_user(void) {
 	}
 	// Randomize effect colors
 	static uint_fast16_t hsv_timer = 0;
-	if (timer_elapsed(hsv_timer) > TAPPING_TERM*4) {
+	if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
 		hsv_timer = timer_read();
 		rgb_matrix_sethsv_noeeprom(rand() & 255, rand() & 255, rgb_matrix_config.hsv.v);
 	}

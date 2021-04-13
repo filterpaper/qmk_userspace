@@ -23,12 +23,11 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 // Custom dimmer indicator colors and effects
 #ifdef RGB_MATRIX_ENABLE
 #	define RGB_BSTEEL	60, 90, 128
-#	define RGB_DGRAY	77, 88, 99
+#	define RGB_DGRAY	50, 70, 90
 #	define RGB_DEFAULT	RGB_BSTEEL
 #	define RGB_MODS		RGB_BSTEEL
 #	define RGB_CAPS		RGB_PURPLE
 #	define RGB_LAYER	RGB_DGRAY
-#	define HSV_NORMAL	HSV_AZURE
 #	define MATRIX_NORMAL	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #	define MATRIX_SHIFT		RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
 #endif
