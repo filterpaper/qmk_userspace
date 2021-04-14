@@ -4,36 +4,11 @@
     "keyboard": "planck/rev6",
     "keymap": "filterpaper",
     "layers": [
-        [
-            "BASE1",
-            "BASE2",
-            "BASE3",
-            "PLANCKBASE"
-        ],
-        [
-            "COLEMAK1",
-            "COLEMAK2",
-            "COLEMAK3",
-            "PLANCKCOLEMAK"
-        ],
-        [
-            "LOWER1",
-            "LOWER2",
-            "LOWER3",
-            "PLANCKLOWER"
-        ],
-        [
-            "RAISE1",
-            "RAISE2",
-            "RAISE3",
-            "PLANCKRAISE"
-        ],
-        [
-            "ADJUST1",
-            "ADJUST2",
-            "ADJUST3",
-            "PLANCKADJUST"
-        ]
+        [ "QWERTY", "PLANCKQWERTY" ],
+        [ "COLEMAK", "PLANCKBLANK" ],
+        [ "LOWER", "PLANCKLOWER" ],
+        [ "RAISE", "PLANCKRAISE" ],
+        [ "ADJUST", "PLANCKBLANK" ]
     ],
     "layout": "LAYOUT_wrapper_ortho_4x12",
     "notes": "",

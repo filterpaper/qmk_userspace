@@ -20,13 +20,13 @@ SWAP_HANDS_ENABLE = no
 RGB_MATRIX_ENABLE = no
 SPACE_CADET_ENABLE = no
 
-# Main source file
-SRC += filterpaper.c
-
 # Common features
 EXTRAKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
+
+# Main source file
+SRC += filterpaper.c
 
 # Exclude LTO for Planck
 ifneq ($(PLATFORM), CHIBIOS)
@@ -40,6 +40,7 @@ endif
 
 ifneq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	RGB_MATRIX_ENABLE = yes
+	SRC += rgb-matrix.c
 endif
 
 # Corne keyboard features

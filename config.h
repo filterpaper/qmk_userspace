@@ -16,9 +16,6 @@
 
 #pragma once
 
-// Keymap wrapper macros
-#include "wrappers.h"
-
 // Common QMK settings
 #define TAPPING_TERM 250
 //#define TAPPING_TERM_PER_KEY
@@ -83,6 +80,9 @@
 #	define SPLIT_MODS_ENABLE
 #	endif
 #endif
+
+// Key map layout wrapper macros
+#include "layout.h"
 
 // Tap hold macro keys for keymap[]
 #define Q_TH LT(0,KC_Q)

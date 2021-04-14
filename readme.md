@@ -27,7 +27,8 @@ File | Description
 rules.mk | QMK compile rules and hardware feature selection
 config.h | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
 filterpaper.h | User specific variables and options
-filterpaper.c | User source with custom functions, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md) and [custom quantum functions](../../docs/custom_quantum_functions.md)
+filterpaper.c | Mainj source with macro functions, see [custom quantum functions](../../docs/custom_quantum_functions.md)
+rgb-matrix.c | RGB matrix effect and custom codes, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md)
 mod-status.c | Graphical layer and modifier status indicators (adds ~4018 bytes)
 luna-status.c | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
 bongocat.c | Bongocat animation using differential pixels
