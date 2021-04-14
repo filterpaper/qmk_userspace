@@ -79,6 +79,13 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 
 #ifdef TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xFF00) == ALT_T_MASK) ? TAPPING_TERM + 200 : return TAPPING_TERM;
+	return ((keycode & 0xFF00) == ALT_T_MASK) ? TAPPING_TERM + 100 : TAPPING_TERM;
+}
+#endif
+
+
+#ifdef PERMISSIVE_HOLD_PER_KEY
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+	return ((keycode & 0xFF00) == SFT_T_MASK) ? true : false;
 }
 #endif

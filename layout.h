@@ -62,7 +62,7 @@
 // Last row
 #define CORNEQWERTY                                   LT(5,KC_VOLD), LT(2,KC_VOLU), SFT_T(KC_ENT), SFT_T(KC_SPC), LT(3,KC_SPC), KC_RGUI
 #define PLANCKQWERTY KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(2,KC_SPC), SFT_T(KC_SPC), SFT_T(KC_SPC), LT(3,KC_SPC), KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
-#define BM40QWERTY   KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(2,KC_SPC), SFT_T(KC_SPC), LT(3,KC_SPC), KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
+#define BM40QWERTY   KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(2,KC_SPC),        SFT_T(KC_SPC),         LT(3,KC_SPC), KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
 
 #define CORNELOWER                             _______, _______, _______, _______, MO(4),   _______
 #define PLANCKLOWER _______, _______, _______, _______, _______, _______, _______, MO(4),   KC_HOME, KC_PGDN, KC_PGUP, KC_END
