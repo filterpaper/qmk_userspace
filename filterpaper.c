@@ -86,9 +86,13 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+<<<<<<< HEAD
 	if (((keycode & 0xFF00) == LT2_MASK) ||
 		((keycode & 0xFF00) == LT3_MASK) ||
 		(keycode == SFT_T(KC_SPC))) { return true; }
 	else { return false; }
+=======
+	return ((keycode & 0xFF00) == SFT_T_MASK) ? true : false;
+>>>>>>> 47ab1c9a6bfe0907662cbf71009d5f9621cf5d51
 }
 #endif
