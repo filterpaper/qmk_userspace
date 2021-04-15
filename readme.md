@@ -33,7 +33,7 @@ mod-status.c | Graphical layer and modifier status indicators (adds ~4018 bytes)
 luna-status.c | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
 bongocat.c | Bongocat animation using differential pixels
 oledfont.c | Corne logo, コルネ katakana name, fonts and icon images
-wrappers.h | Key map wrappers for shared ortholinear and Corne layouts
+layout.h | Key map macro wrapper for shared ortholinear and Corne layouts
 json/ | Folder of supported keyboard layouts
 animation_frames/ | Folder of Bongocat animation images
 archive/ | Archived files of original codes and layouts
@@ -146,3 +146,37 @@ Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
 * [QMK Logo Editor](https://joric.github.io/qle/)
 * [image2cpp](https://javl.github.io/image2cpp/)
+
+# Layout macro wrapper
+Text-based layout (in `keymap.c` format) editing is supported with the use of preprocessor macros. Each layer, in text format, is created as a preprocessor macro for viewing and editing inside `layout.h`, example of one layer:
+```c
+#define RAISE \
+	KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,        KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______, \
+	KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,          KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
+	_______, _______, _______, _______, S(G(A(KC_V))), _______, _______, _______, _______, _______, _______, _______
+
+#define CORNERAISE                             _______, MO(4),   _______, _______, _______, _______
+```
+The wrapper layout name for each keyboard should be a macro mapped to the real layout inside `layout.h`, like this Corne example:
+```c
+#define LAYOUT_wrapper_split_3x6_3(...) LAYOUT_split_3x6_3(__VA_ARGS__)
+```
+Finally the keyboard's JSON file can be created by referencing the key code macros of each layer, along with the layout macro at the bottom:
+```c
+{
+    "author": "",
+    "documentation": "Wrapper based keymap",
+    "keyboard": "crkbd/rev1/common",
+    "keymap": "filterpaper",
+    "layers": [
+        [ "QWERTY", "CORNEQWERTY" ],
+        [ "LOWER", "CORNELOWER" ],
+        [ "RAISE", "CORNERAISE" ],
+        [ "ADJUST", "CORNEBLANK" ],
+    ],
+    "layout": "LAYOUT_wrapper_split_3x6_3",
+    "notes": "",
+    "version": 1
+}
+```
+The build process will construct a transient `keymap.c` from JSON file into the format `[0] = LAYOUT_wrapper_split_3x6_3(QWERTY, CORNEQWERTY)`, and C preprocessor will use macros inside `layout.h` to expand that into the full layout key code for compilation.
