@@ -38,7 +38,7 @@ ifneq ($(strip $(KEYBOARD)), boardsource/the_mark)
 	OPT_DEFS += -DCAPSWORD_ENABLE
 endif
 
-ifneq ($(strip $(KEYBOARD)), crkbd/rev1/common)
+ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1/common))
 	RGB_MATRIX_ENABLE = yes
 	SRC += rgb-matrix.c
 endif
