@@ -23,6 +23,15 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 }; */
 
 
+// Simple xorshift pseudo RNG
+static uint_fast8_t prng(void) {
+	static uint_fast8_t s = 173, a = 0;
+	s ^= s << 3;
+	s ^= s >> 5;
+	return s ^= (++a >> 2);
+}
+
+
 void matrix_init_user(void) {
 	// Remap under glow LEDs to nearby keys
 #if defined(KEYBOARD_planck_rev6)
@@ -65,7 +74,7 @@ void rgb_matrix_indicators_user(void) {
 	static uint_fast16_t hsv_timer = 0;
 	if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
 		hsv_timer = timer_read();
-		rgb_matrix_sethsv_noeeprom(rand() & 255, rand() & 255, rgb_matrix_config.hsv.v);
+		rgb_matrix_sethsv_noeeprom(prng(), prng(), rgb_matrix_config.hsv.v);
 	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
