@@ -29,9 +29,9 @@
 
 // Shared 3x12
 #define QWERTY \
-	KC_TAB,  Q_TH,        W_TH,        KC_E,        KC_R,        T_TH, KC_Y, KC_U,        KC_I,        KC_O,        KC_P,           KC_BSPC, \
+	KC_TAB,  Q_TH,        W_TH,        KC_E,        KC_R,        KC_T, KC_Y, KC_U,        KC_I,        KC_O,        KC_P,           KC_BSPC, \
 	KC_GESC, SFT_T(KC_A), ALT_T(KC_S), CTL_T(KC_D), GUI_T(KC_F), KC_G, KC_H, GUI_T(KC_J), CTL_T(KC_K), ALT_T(KC_L), SFT_T(KC_SCLN), KC_QUOT, \
-	KC_LSFT, KC_Z,        KC_X,        KC_C,        KC_V,        KC_B, N_TH, M_TH,        COMM_TH,     DOT_TH,      KC_SLSH,        KC_ENT
+	KC_LSFT, KC_Z,        KC_X,        KC_C,        KC_V,        KC_B, KC_N, M_TH,        COMM_TH,     DOT_TH,      KC_SLSH,        KC_ENT
 
 #define COLEMAK \
 	_______, _______, _______,     KC_F,        KC_P,        KC_G, KC_J,    KC_L,        KC_U,        KC_Y,        KC_SCLN,     _______, \
