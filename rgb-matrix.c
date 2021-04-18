@@ -14,6 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* The random color HSV function relies on two random number generator
+   instead of rand() from C library.
+
+   PCG-XSH-RR is a permuted congruential generator modified from:
+   https://en.wikipedia.org/wiki/Permuted_congruential_generator
+
+   The 8-bit XORshift pseudo randon number generator modified from:
+   http://b2d-f9r.blogspot.com/2010/08/16-bit-xorshift-rng-now-with-more.html
+
+ */
 #include "filterpaper.h"
 
 /* // by @tzarc
@@ -23,10 +33,29 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 }; */
 
 
+// PCG-XSH-RR with 64-bit state and 32-bit output
+static uint_fast32_t pcg32(void) {
+	static uint_fast64_t const multiplier = 6364136223846793005u;
+	static uint_fast64_t const increment  = 1442695040888963407u; // Or an arbitrary odd constant
+	static uint_fast64_t state = increment + 0x82ada77010adc5de;  // Seed this 16-bit yourself
+
+	uint_fast32_t rotr32(uint_fast32_t x, uint_fast16_t const r) {
+		return x >> r | x << (-r & 31);
+	}
+
+	uint_fast64_t x = state;
+	uint_fast16_t count = (uint_fast16_t)(x >> 59); // 59 = 64 - 5
+
+	state = x * multiplier + increment;
+	x ^= x >> 18;                                   // 18 = (64 - 27)/2
+	return rotr32((uint_fast32_t)(x >> 27), count); // 27 = 32 - 5
+}
+
+
 // XORshift pseudo RNG
-static uint_fast8_t prng(void) {
-	static uint_fast8_t x = 1,y = 1;
-	uint_fast8_t t = (x ^ (x << 5));
+static uint_fast16_t prng(void) {
+	static uint_fast16_t x = 1,y = 1;
+	uint_fast16_t t = (x ^ (x << 5));
 	x = y;
 	return y = (y ^ (y >> 1)) ^ (t ^ (t >> 3));
 }
@@ -74,7 +103,7 @@ void rgb_matrix_indicators_user(void) {
 	static uint_fast16_t hsv_timer = 0;
 	if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
 		hsv_timer = timer_read();
-		rgb_matrix_sethsv_noeeprom(prng(), (prng() % 125) + 130, rgb_matrix_config.hsv.v);
+		rgb_matrix_sethsv_noeeprom((uint8_t)pcg32(), ((uint8_t)prng() % 125) + 130, rgb_matrix_config.hsv.v);
 	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
