@@ -20,10 +20,13 @@
    PCG-XSH-RR is a permuted congruential generator modified from:
    https://en.wikipedia.org/wiki/Permuted_congruential_generator
 
-   The 8-bit XORshift pseudo randon number generator modified from:
+   The 16-bit XORshift is a small pseudo randon number generator from:
    http://b2d-f9r.blogspot.com/2010/08/16-bit-xorshift-rng-now-with-more.html
 
+   Both are pseudo generators because QMK keyboards do not have any
+   real random seed for RNGs.
  */
+
 #include "filterpaper.h"
 
 /* // by @tzarc
@@ -39,12 +42,12 @@ static uint_fast32_t pcg32(void) {
 	static uint_fast64_t const increment  = 1442695040888963407u; // Or an arbitrary odd constant
 	static uint_fast64_t state = increment + 0x82ada77010adc5de;  // Seed this 16-bit yourself
 
-	uint_fast32_t rotr32(uint_fast32_t x, uint_fast16_t const r) {
+	uint_fast32_t rotr32(uint_fast32_t x, uint_fast32_t const r) {
 		return x >> r | x << (-r & 31);
 	}
 
 	uint_fast64_t x = state;
-	uint_fast16_t count = (uint_fast16_t)(x >> 59); // 59 = 64 - 5
+	uint_fast32_t count = (uint_fast32_t)(x >> 59); // 59 = 64 - 5
 
 	state = x * multiplier + increment;
 	x ^= x >> 18;                                   // 18 = (64 - 27)/2
@@ -52,9 +55,9 @@ static uint_fast32_t pcg32(void) {
 }
 
 
-// XORshift pseudo RNG
-static uint_fast16_t prng(void) {
-	static uint_fast16_t x = 1,y = 1;
+// XORshift16 pseudo RNG
+static uint_fast16_t xshft16(void) {
+	static uint_fast16_t x = 1, y = 1;
 	uint_fast16_t t = (x ^ (x << 5));
 	x = y;
 	return y = (y ^ (y >> 1)) ^ (t ^ (t >> 3));
@@ -103,7 +106,7 @@ void rgb_matrix_indicators_user(void) {
 	static uint_fast16_t hsv_timer = 0;
 	if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
 		hsv_timer = timer_read();
-		rgb_matrix_sethsv_noeeprom((uint8_t)pcg32(), ((uint8_t)prng() % 125) + 130, rgb_matrix_config.hsv.v);
+		rgb_matrix_sethsv_noeeprom((uint8_t)pcg32(), ((uint8_t)xshft16() % 125) + 130, rgb_matrix_config.hsv.v);
 	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
