@@ -30,12 +30,12 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 }; */
 
 
-// 8-bit XORshift RNG
+// Simple 8-bit XORshift PRNG
 static uint_fast8_t xshift8(void) {
 	static uint_fast8_t x = 1, y = 1, z = 1;
 	uint_fast8_t t = (x ^ (x << 3));
 	x = y; y = z;
-	return z ^= (z >> 1) ^ (t ^ (t >> 5));
+	return z ^= (z >> 1) ^ (t ^ (t >> 7));
 }
 
 
