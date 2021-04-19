@@ -30,12 +30,12 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 }; */
 
 
-// 16 bit xorshift RNG
-static uint_fast16_t xshft16(void) {
-	static uint_fast16_t x = 1, y = 1;
-	uint_fast16_t t = (x ^ (x << 5));
-	x = y;
-	return y = (y ^ (y >> 1)) ^ (t ^ (t >> 3));
+// 8-bit XORshift RNG
+static uint_fast8_t xshift8(void) {
+	static uint_fast8_t x = 1, y = 1, z = 1;
+	uint_fast8_t t = (x ^ (x << 3));
+	x = y; y = z;
+	return z ^= (z >> 1) ^ (t ^ (t >> 5));
 }
 
 
@@ -81,7 +81,7 @@ void rgb_matrix_indicators_user(void) {
 	static uint_fast16_t hsv_timer = 0;
 	if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
 		hsv_timer = timer_read();
-		rgb_matrix_sethsv_noeeprom((uint8_t)xshft16(), ((uint8_t)xshft16() % 125) + 130, rgb_matrix_config.hsv.v);
+		rgb_matrix_sethsv_noeeprom(xshift8(), (xshift8() % 125) + 130, rgb_matrix_config.hsv.v);
 	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
