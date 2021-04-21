@@ -30,12 +30,17 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 }; */
 
 
-// Brad Forschinger's 16 bit xorshift rng
-static uint_fast16_t xorshift16(void) {
-	static uint_fast16_t x = 1, y = 1;
-	uint_fast16_t t = (x ^ (x << 5));
-	x = y;
-	return y ^= (y >> 1) ^ t ^ (t >> 3);
+// Bob Jenkins PRNG in 8-bit
+#define rot8(x,k) ((x << k)|(x >> (8 - k)))
+uint8_t jsf8(void) {
+	static uint8_t a = 0xf1;
+	static uint8_t b = 0xee, c = 0xee, d = 0xee;
+
+	uint8_t e = a - rot8(b, 1);
+	a = b ^ rot8(c, 4);
+	b = c + d;
+	c = d + e;
+	return d = e + a;
 }
 
 
@@ -81,7 +86,7 @@ void rgb_matrix_indicators_user(void) {
 	static uint_fast16_t hsv_timer = 0;
 	if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
 		hsv_timer = timer_read();
-		rgb_matrix_sethsv_noeeprom(xorshift16(), (xorshift16() % 125) + 130, rgb_matrix_config.hsv.v);
+		rgb_matrix_sethsv_noeeprom(jsf8(), (jsf8() % 125) + 130, rgb_matrix_config.hsv.v);
 	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
