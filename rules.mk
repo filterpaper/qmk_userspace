@@ -41,6 +41,7 @@ endif
 ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1/common))
 	RGB_MATRIX_ENABLE = yes
 	SRC += rgb-matrix.c
+	RGB_MATRIX_CUSTOM_USER = yes
 endif
 
 # Corne keyboard features
