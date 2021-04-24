@@ -28,13 +28,13 @@
 
 
 #ifdef SPLIT_MODS_ENABLE
-uint_fast32_t tap_timer = 0; // Timer for OLED animation
+uint32_t tap_timer = 0; // Timer for OLED animation
 #endif
 
 
 #ifdef CAPSWORD_ENABLE
 // Deactivate caps lock following a word
-static void process_caps_word(uint_fast16_t keycode, keyrecord_t const *record) {
+static void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
 	// Get base key code of mod or layer tap with bitmask
 	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
 		(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&

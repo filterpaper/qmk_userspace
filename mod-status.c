@@ -70,7 +70,7 @@ static void render_layer_state(void) {
 #endif
 
 
-static void render_mod_status_gui_alt(uint_fast8_t const mods) {
+static void render_mod_status_gui_alt(uint8_t const mods) {
 	static char const gui_off_1[] PROGMEM = {0x85, 0x86, 0};
 	static char const gui_off_2[] PROGMEM = {0xa5, 0xa6, 0};
 	static char const gui_on_1[] PROGMEM = {0x8d, 0x8e, 0};
@@ -115,7 +115,7 @@ static void render_mod_status_gui_alt(uint_fast8_t const mods) {
 }
 
 
-static void render_mod_status_ctrl_shift(uint_fast8_t const mods, bool const caps) {
+static void render_mod_status_ctrl_shift(uint8_t const mods, bool const caps) {
 	static char const ctrl_off_1[] PROGMEM = {0x89, 0x8a, 0};
 	static char const ctrl_off_2[] PROGMEM = {0xa9, 0xaa, 0};
 	static char const ctrl_on_1[] PROGMEM = {0x91, 0x92, 0};

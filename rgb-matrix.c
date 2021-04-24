@@ -32,11 +32,10 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 
 // Bob Jenkins chaotic PRNG in 8-bit
 #define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
-static uint_fast8_t jsf8(void) {
-	static uint_fast8_t a = 0xf1;
-	static uint_fast8_t b = 0xee, c = 0xee, d = 0xee;
+static uint8_t jsf8(void) {
+	static uint8_t a = 0xf1, b = 0xee, c = 0xee, d = 0xee;
 
-	uint_fast8_t e = a - rot8(b, 1);
+	uint8_t e = a - rot8(b, 1);
 	a = b ^ rot8(c, 4);
 	b = c + d;
 	c = d + e;
@@ -83,14 +82,14 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 
 void rgb_matrix_indicators_user(void) {
 	// Randomize effect colors
-	static uint_fast16_t hsv_timer = 0;
+	static uint16_t hsv_timer = 0;
 	if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
 		hsv_timer = timer_read();
 		rgb_matrix_sethsv_noeeprom(jsf8(), (jsf8() % 125) + 130, rgb_matrix_config.hsv.v);
 	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
-		for (uint_fast8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
+		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_MODIFIER)) {
 				rgb_matrix_set_color(i, RGB_MODS);
 			}
@@ -98,7 +97,7 @@ void rgb_matrix_indicators_user(void) {
 	}
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
-		for (uint_fast8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
+		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
 			if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_KEYLIGHT)) {
 				rgb_matrix_set_color(i, RGB_CAPS);
 			}
@@ -106,9 +105,9 @@ void rgb_matrix_indicators_user(void) {
 	}
 	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
-		uint_fast8_t const layer = get_highest_layer(layer_state);
-		for (uint_fast8_t row = 0; row < MATRIX_ROWS; ++row) {
-			for (uint_fast8_t col = 0; col < MATRIX_COLS; ++col) {
+		uint8_t const layer = get_highest_layer(layer_state);
+		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+			for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
 				if (g_led_config.matrix_co[row][col] != NO_LED &&
 					keymap_key_to_keycode(layer, (keypos_t){col,row}) != KC_TRNS) {
 					rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_LAYER);

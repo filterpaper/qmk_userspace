@@ -31,7 +31,7 @@
 #define LUNA_FRAME_DURATION 200 // Number of ms between frames
 #define LUNA_SIZE 96 // 96-byte arrays for the little dog
 
-static uint_fast8_t current_frame = 0;
+static uint8_t current_frame = 0;
 
 
 static void render_logo(void) {
@@ -238,14 +238,14 @@ static void render_luna_sneak(void) {
 
 
 static void render_luna_status(void) {
-	static uint_fast8_t prev_wpm = 0;
-	static uint_fast32_t tap_timer = 0; // WPM and mod triggered
+	static uint8_t prev_wpm = 0;
+	static uint32_t tap_timer = 0; // WPM and mod triggered
 	if (get_current_wpm() > prev_wpm || get_mods()) { tap_timer = timer_read32(); }
 	prev_wpm = get_current_wpm();
 
 	// Elapsed time between key presses
-	uint_fast32_t keystroke = timer_elapsed32(tap_timer);
-	static uint_fast16_t anim_timer = 0;
+	uint32_t keystroke = timer_elapsed32(tap_timer);
+	static uint16_t anim_timer = 0;
 
 	void animation_phase(void) {
 		bool const caps = host_keyboard_led_state().caps_lock;
