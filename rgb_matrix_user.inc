@@ -20,31 +20,21 @@ RGB_MATRIX_EFFECT(PIXELATION)
 //RGB_MATRIX_EFFECT(REACTIVE_PIXELATION)
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-uint16_t rand16seed = 0x759f;
-static bool PIXELATION(effect_params_t* params) {
 
-	// Bob Jenkin's fast PRNG, smaller than rand()
-/*	#define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
-	uint8_t prng(void) {
-		static uint8_t a = 0x71, b = 0x1f, c = 0x2f, d = 0x3f;
-		uint8_t e = a - rot8(b, 1);
-		a = b ^ rot8(c, 4);
-		b = c + d;
-		c = d + e;
-		return d = e + a;
-	}*/
+#ifndef RAND16_SEED
+uint16_t rand16seed = 0x759f;
+#endif
+
+static bool PIXELATION(effect_params_t* params) {
 
 	void set_rgb(int i, effect_params_t* params, bool on) {
 		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) { return; }
 		on ? rgb_matrix_set_color(i, random8(), random8(), random8()) : rgb_matrix_set_color(i, RGB_OFF);
 	}
 
-	if (mod8(scale16by8(g_rgb_timer, qadd8((rgb_matrix_config.speed >> 5), 1)), 10) == 0) {
-		set_rgb(mod8(random8(), DRIVER_LED_TOTAL), params, 1);
-	}
-	if (mod8(scale16by8(g_rgb_timer, qadd8((rgb_matrix_config.speed >> 5), 1)), 5) == 0) {
-		set_rgb(mod8(random8(), DRIVER_LED_TOTAL), params, 0);
-	}
+	uint16_t tick = scale16by8(g_rgb_timer, qadd8((rgb_matrix_config.speed >> 5), 1));
+	if (tick % 10 == 0) { set_rgb(mod8(random8(), DRIVER_LED_TOTAL), params, 1); }
+	if (tick % 5 == 0)  { set_rgb(mod8(random8(), DRIVER_LED_TOTAL), params, 0); }
 	return false;
 }
 /*
