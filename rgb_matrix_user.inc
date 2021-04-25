@@ -17,40 +17,77 @@
 
 
 RGB_MATRIX_EFFECT(PIXELATION)
-#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+//RGB_MATRIX_EFFECT(REACTIVE_PIXELATION)
 
+#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+uint16_t rand16seed = 0x759f;
 static bool PIXELATION(effect_params_t* params) {
-	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
 	// Bob Jenkin's fast PRNG, smaller than rand()
-	#define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
+/*	#define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
 	uint8_t prng(void) {
 		static uint8_t a = 0x71, b = 0x1f, c = 0x2f, d = 0x3f;
-
 		uint8_t e = a - rot8(b, 1);
 		a = b ^ rot8(c, 4);
 		b = c + d;
 		c = d + e;
 		return d = e + a;
-	}
+	}*/
 
-	void set_pixel_rgb(int i, effect_params_t* params, bool on) {
+	void set_rgb(int i, effect_params_t* params, bool on) {
 		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) { return; }
-		on ? rgb_matrix_set_color(i, prng(), prng(), prng()) : rgb_matrix_set_color(i, RGB_OFF);
+		on ? rgb_matrix_set_color(i, random8(), random8(), random8()) : rgb_matrix_set_color(i, RGB_OFF);
 	}
 
-	#define PIXEL_SPD 10
-
-	if (!params->init) {
-		if (scale16by8(g_rgb_timer, qadd8((rgb_matrix_config.speed >> 5), 1)) % 10 == 0) {
-			set_pixel_rgb(prng() % DRIVER_LED_TOTAL, params, 1);
-		}
-		if (scale16by8(g_rgb_timer, qadd8((rgb_matrix_config.speed >> 5), 1)) % 5 == 0) {
-			set_pixel_rgb(prng() % DRIVER_LED_TOTAL, params, 0);
-		}
-		return false;
+	if (mod8(scale16by8(g_rgb_timer, qadd8((rgb_matrix_config.speed >> 5), 1)), 10) == 0) {
+		set_rgb(random8() % DRIVER_LED_TOTAL, params, 1);
 	}
-	return led_max < DRIVER_LED_TOTAL;
+	if (mod8(scale16by8(g_rgb_timer, qadd8((rgb_matrix_config.speed >> 5), 1)), 5) == 0) {
+		set_rgb(random8() % DRIVER_LED_TOTAL, params, 0);
+	}
+	return false;
 }
+/*
+static bool REACTIVE_PIXELATION(effect_params_t* params) {
 
+	HSV REACTIVE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
+		uint16_t effect = tick + dist * 5;
+		if (effect > 255) effect = 255;
+		hsv.v = qadd8(hsv.v, 255 - effect);
+		return hsv;
+	}
+	HSV SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
+		uint16_t effect = tick - dist;
+		if (effect > 255) effect = 255;
+		//hsv.h += effect;
+		hsv.h += prng();
+		hsv.v = qadd8(hsv.v, 255 - effect);
+		return hsv;
+	}
+
+	bool effect_runner_reactive_splash(uint8_t start, effect_params_t* params, reactive_splash_f effect_func) {
+		RGB_MATRIX_USE_LIMITS(led_min, led_max);
+		uint8_t count = g_last_hit_tracker.count;
+		for (uint8_t i = led_min; i < led_max; i++) {
+			RGB_MATRIX_TEST_LED_FLAGS();
+			HSV hsv = rgb_matrix_config.hsv;
+			hsv.v   = 0;
+			for (uint8_t j = start; j < count; j++) {
+				int16_t  dx   = g_led_config.point[i].x - g_last_hit_tracker.x[j];
+				int16_t  dy   = g_led_config.point[i].y - g_last_hit_tracker.y[j];
+				uint8_t  dist = sqrt16(dx * dx + dy * dy);
+				uint16_t tick = scale16by8(g_last_hit_tracker.tick[j], rgb_matrix_config.speed);
+				hsv           = effect_func(hsv, dx, dy, dist, tick);
+			}
+			hsv.v   = scale8(hsv.v, rgb_matrix_config.hsv.v);
+			RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
+			rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+		}
+		return led_max < DRIVER_LED_TOTAL;
+	}
+
+	//return effect_runner_reactive_splash(qsub8(g_last_hit_tracker.count, 1), params, &REACTIVE_math);
+	return effect_runner_reactive_splash(qsub8(g_last_hit_tracker.count, 1), params, &SPLASH_math);
+}
+*/
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
