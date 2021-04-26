@@ -29,7 +29,7 @@ static bool PIXEL_RAIN(effect_params_t* params) {
 		on ? rgb_matrix_set_color(i, jsf8(), jsf8(), jsf8()) : rgb_matrix_set_color(i, RGB_OFF);
 	// This retain user's max HSV brightness setting
 	//	if (on) {
-	//		RGB rgb = rgb_matrix_hsv_to_rgb((HSV){jsf8(), add8(mod8(jsf8(), 125), 130), rgb_matrix_config.hsv.v});
+	//		RGB rgb = rgb_matrix_hsv_to_rgb((HSV){jsf8(), add8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
 	//		RGB rgb = rgb_matrix_hsv_to_rgb((HSV){scale16by8(g_rgb_timer, (rgb_matrix_config.speed >> 3)), rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v});
 	//		rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 	//	} else { rgb_matrix_set_color(i, RGB_OFF); }
