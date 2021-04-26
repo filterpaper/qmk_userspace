@@ -35,7 +35,7 @@ static bool PIXEL_RAIN(effect_params_t* params) {
 	//	} else { rgb_matrix_set_color(i, RGB_OFF); }
 	}
 
-	uint16_t tick = scale16by8(g_rgb_timer, add8((rgb_matrix_config.speed >> 5), 1));
+	uint16_t tick = scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed >> 5, 1));
 	if (mod8(tick, 10) == 0) { set_rgb(mod8(jsf8(), DRIVER_LED_TOTAL), params, 1); }
 	if (mod8(tick,  5) == 0) { set_rgb(mod8(jsf8(), DRIVER_LED_TOTAL), params, 0); }
 	return false;
@@ -50,7 +50,7 @@ static bool PIXEL_TYPE(effect_params_t* params) {
 		if ((dx > 8 || dx < -8) && (dy > 8 || dy < -8)) effect = 255;
 		hsv.v = qadd8(hsv.v, 255 - effect);
 		hsv.h = rgb_matrix_config.hsv.h + dy / 4;
-		//hsv.h = scale16by8(g_rgb_timer, add8((rgb_matrix_config.speed ), 1));
+		//hsv.h = scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed >> 4, 1));
 		return hsv;
 	}
 
