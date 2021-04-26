@@ -34,7 +34,6 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 uint8_t jsf8(void) {
 	#define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
 	static uint8_t a = 0xf1, b = 0xee, c = 0xee, d = 0xee;
-
 	uint8_t e = a - rot8(b, 1);
 	a = b ^ rot8(c, 4);
 	b = c + d;
@@ -81,11 +80,13 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 
 
 void rgb_matrix_indicators_user(void) {
-	// Randomize effect colors
-	static uint16_t hsv_timer = 0;
-	if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
-		hsv_timer = timer_read();
-		rgb_matrix_sethsv_noeeprom(jsf8(), (jsf8() >> 1) + 127, rgb_matrix_config.hsv.v);
+	// Randomize key presses effect colors
+	if ( RGB_MATRIX_SOLID_REACTIVE_SIMPLE <= rgb_matrix_get_mode() && rgb_matrix_get_mode() <= RGB_MATRIX_SOLID_MULTISPLASH) {
+		static uint16_t hsv_timer = 0;
+		if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
+			hsv_timer = timer_read();
+			rgb_matrix_sethsv_noeeprom(jsf8(), (jsf8() >> 1) + 127, rgb_matrix_config.hsv.v);
+		}
 	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
