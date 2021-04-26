@@ -16,13 +16,14 @@
 
 /* Three custom matrix animation that were collected from reddit users.
    define RGB_MATRIX_CUSTOM_USER in rules.mk to use them.
- */  
+ */
 
 
-// Custom RGB_MATRIX_EFFECT macro declaration 
+// Custom RGB_MATRIX_EFFECT macro declaration
 RGB_MATRIX_EFFECT(FRACTAL)
 RGB_MATRIX_EFFECT(FRACTAL_RGB)
 RGB_MATRIX_EFFECT(kitt_effect)
+RGB_MATRIX_EFFECT(CANDY_TYPE)
 
 // Define effects inside the `RGB_MATRIX_CUSTOM_EFFECT_IMPLS` ifdef block
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
@@ -118,7 +119,7 @@ FRACTAL RGB
 by u/_GEIST_/
 https://www.reddit.com/r/MechanicalKeyboards/comments/jyx2zm/i_created_a_custom_rgb_animation_two_more_in_the/
 Effect is optimised for ortholinear 4x12
- */ 
+ */
 
 uint32_t frgb_timer = 0;
 
@@ -212,49 +213,58 @@ KITT EFFECT
 by u/jumper149/ (@jumper149)
 https://www.reddit.com/r/MechanicalKeyboards/comments/jb0gjc/knight_industries_sixty_five/
  */
+bool kitt_effect(effect_params_t* params) {
 
-uint8_t k_led_count = 8;
-uint8_t k_led_first = 14;
+	static uint8_t k_led_count = 8;
+	static uint8_t k_led_first = 14;
 
-static uint8_t time_to_led(uint8_t time, uint8_t led_behind) {
-	uint16_t led_time = k_led_count * time;
-	uint16_t step = ((2 * k_led_count + (led_time / 128)) - led_behind) % (2 * k_led_count);
-	uint8_t led;
-	if (step < k_led_count) {
-		led = step;
-	} else {
-		led = k_led_count - 1 - (step - k_led_count);
+	uint8_t time_to_led(uint8_t time, uint8_t led_behind) {
+		uint16_t led_time = k_led_count * time;
+		uint16_t step = ((2 * k_led_count + (led_time / 128)) - led_behind) % (2 * k_led_count);
+		uint8_t led;
+		if (step < k_led_count) {
+			led = step;
+		} else {
+			led = k_led_count - 1 - (step - k_led_count);
+		}
+		return led;
 	}
-	return led;
-}
 
-static HSV kitt_effect_math(HSV hsv, uint8_t i, uint8_t time) {
+	HSV kitt_effect_math(HSV hsv, uint8_t i, uint8_t time) {
+		hsv.h = 0;
+		hsv.s = 255;
 
-	hsv.h = 0;
-	hsv.s = 255;
-
-	if (i >= k_led_first && i < k_led_first + k_led_count) {
-		uint8_t j = i - k_led_first;
-		if (j == time_to_led(time, 0)) {
-			hsv.v = hsv.v;
-		} else if (j == time_to_led(time, 1)) {
-			hsv.v = hsv.v/2;
-		} else if (j == time_to_led(time, 2)) {
-			hsv.v = hsv.v/4;
-		} else if (j == time_to_led(time, 3)) {
-			hsv.v = hsv.v/8;
+		if (i >= k_led_first && i < k_led_first + k_led_count) {
+			uint8_t j = i - k_led_first;
+			if (j == time_to_led(time, 0)) {
+				hsv.v = hsv.v;
+			} else if (j == time_to_led(time, 1)) {
+				hsv.v = hsv.v/2;
+			} else if (j == time_to_led(time, 2)) {
+				hsv.v = hsv.v/4;
+			} else if (j == time_to_led(time, 3)) {
+				hsv.v = hsv.v/8;
+			} else {
+				hsv.v = 0;
+			}
 		} else {
 			hsv.v = 0;
 		}
-	} else {
-		hsv.v = 0;
+		return hsv;
 	}
 
-	return hsv;
+	return effect_runner_i(params, &kitt_effect_math);
 }
 
-bool kitt_effect(effect_params_t* params) {
-	return effect_runner_i(params, &kitt_effect_math);
+
+static bool CANDY_TYPE(effect_params_t* params) {
+	RGB_MATRIX_USE_LIMITS(led_min, led_max);
+	HSV CANDY_TYPE_math(HSV hsv, uint16_t offset) {
+		hsv.v = scale8(255 - offset, hsv.v);
+		hsv.h = mod8(scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed >> 5, 1)), 255);
+		return hsv;
+	}
+	return effect_runner_reactive(params, &CANDY_TYPE_math);
 }
 
 
