@@ -31,8 +31,8 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 
 
 // Bob Jenkins chaotic PRNG in 8-bit
-#define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
-static uint8_t jsf8(void) {
+uint8_t jsf8(void) {
+	#define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
 	static uint8_t a = 0xf1, b = 0xee, c = 0xee, d = 0xee;
 
 	uint8_t e = a - rot8(b, 1);
@@ -85,7 +85,7 @@ void rgb_matrix_indicators_user(void) {
 	static uint16_t hsv_timer = 0;
 	if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
 		hsv_timer = timer_read();
-		rgb_matrix_sethsv_noeeprom(jsf8(), (jsf8() % 125) + 130, rgb_matrix_config.hsv.v);
+		rgb_matrix_sethsv_noeeprom(jsf8(), (jsf8() >> 1) + 127, rgb_matrix_config.hsv.v);
 	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {

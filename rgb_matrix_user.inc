@@ -16,79 +16,48 @@
 
 
 
-RGB_MATRIX_EFFECT(PIXELATION)
-//RGB_MATRIX_EFFECT(REACTIVE_PIXELATION)
+RGB_MATRIX_EFFECT(PIXEL_RAIN)
+//RGB_MATRIX_EFFECT(PIXEL_TYPE)
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
-static bool PIXELATION(effect_params_t* params) {
-	uint8_t prng8(void) {
-		#define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
-		static uint8_t a = 73, b = 29;
-		uint8_t t = sub8(a, rot8(b, 1));
-		a = b ^ rot8(t, 4);
-		return b = add8(t, a);
-	}
+static bool PIXEL_RAIN(effect_params_t* params) {
+	extern uint8_t jsf8(void);
 
 	void set_rgb(int i, effect_params_t* params, bool on) {
 		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) { return; }
-		on ? rgb_matrix_set_color(i, prng8(), prng8(), prng8()) : rgb_matrix_set_color(i, RGB_OFF);
-		// This cater for user max HSV brightness setting
-		/*if (on) {
-			RGB rgb = rgb_matrix_hsv_to_rgb((HSV){prng8(), add8(mod8(prng8(), 125), 130), rgb_matrix_config.hsv.v});
-			rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
-		} else {
-			rgb_matrix_set_color(i, RGB_OFF);
-		}*/
+		on ? rgb_matrix_set_color(i, jsf8(), jsf8(), jsf8()) : rgb_matrix_set_color(i, RGB_OFF);
+	// This retain user's max HSV brightness setting
+	//	if (on) {
+	//		RGB rgb = rgb_matrix_hsv_to_rgb((HSV){jsf8(), add8(mod8(jsf8(), 125), 130), rgb_matrix_config.hsv.v});
+	//		RGB rgb = rgb_matrix_hsv_to_rgb((HSV){scale16by8(g_rgb_timer, (rgb_matrix_config.speed >> 3)), rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v});
+	//		rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+	//	} else { rgb_matrix_set_color(i, RGB_OFF); }
 	}
 
 	uint16_t tick = scale16by8(g_rgb_timer, add8((rgb_matrix_config.speed >> 5), 1));
-	if (mod8(tick, 10) == 0) { set_rgb(mod8(prng8(), DRIVER_LED_TOTAL), params, 1); }
-	if (mod8(tick,  5) == 0) { set_rgb(mod8(prng8(), DRIVER_LED_TOTAL), params, 0); }
+	if (mod8(tick, 10) == 0) { set_rgb(mod8(jsf8(), DRIVER_LED_TOTAL), params, 1); }
+	if (mod8(tick,  5) == 0) { set_rgb(mod8(jsf8(), DRIVER_LED_TOTAL), params, 0); }
 	return false;
-}j
-
+}
 /*
-static bool REACTIVE_PIXELATION(effect_params_t* params) {
+static bool PIXEL_TYPE(effect_params_t* params) {
 
-	HSV REACTIVE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
-		uint16_t effect = tick + dist * 5;
-		if (effect > 255) effect = 255;
-		hsv.v = qadd8(hsv.v, 255 - effect);
-		return hsv;
-	}
-	HSV SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
+	HSV PIXEL_TYPE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
 		uint16_t effect = tick - dist;
 		if (effect > 255) effect = 255;
-		//hsv.h += effect;
-		hsv.h += prng();
+		if (dist > 72) effect = 255;
+		if ((dx > 8 || dx < -8) && (dy > 8 || dy < -8)) effect = 255;
 		hsv.v = qadd8(hsv.v, 255 - effect);
+		hsv.h = rgb_matrix_config.hsv.h + dy / 4;
+		//hsv.h = scale16by8(g_rgb_timer, add8((rgb_matrix_config.speed ), 1));
 		return hsv;
 	}
 
-	bool effect_runner_reactive_splash(uint8_t start, effect_params_t* params, reactive_splash_f effect_func) {
-		RGB_MATRIX_USE_LIMITS(led_min, led_max);
-		uint8_t count = g_last_hit_tracker.count;
-		for (uint8_t i = led_min; i < led_max; i++) {
-			RGB_MATRIX_TEST_LED_FLAGS();
-			HSV hsv = rgb_matrix_config.hsv;
-			hsv.v   = 0;
-			for (uint8_t j = start; j < count; j++) {
-				int16_t  dx   = g_led_config.point[i].x - g_last_hit_tracker.x[j];
-				int16_t  dy   = g_led_config.point[i].y - g_last_hit_tracker.y[j];
-				uint8_t  dist = sqrt16(dx * dx + dy * dy);
-				uint16_t tick = scale16by8(g_last_hit_tracker.tick[j], rgb_matrix_config.speed);
-				hsv           = effect_func(hsv, dx, dy, dist, tick);
-			}
-			hsv.v   = scale8(hsv.v, rgb_matrix_config.hsv.v);
-			RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
-			rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
-		}
-		return led_max < DRIVER_LED_TOTAL;
-	}
+	// RGB_MATRIX_SOLID_REACTIVE_NEXUS
+	return effect_runner_reactive_splash(qsub8(g_last_hit_tracker.count, 1), params, &PIXEL_TYPE_math);
+	// MATRIX_SOLID_REACTIVE_MULTINEXUS
+	//return effect_runner_reactive_splash(0, params, &PIXEL_TYPE_math);
+}*/
 
-	//return effect_runner_reactive_splash(qsub8(g_last_hit_tracker.count, 1), params, &REACTIVE_math);
-	return effect_runner_reactive_splash(qsub8(g_last_hit_tracker.count, 1), params, &SPLASH_math);
-}
-*/
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
