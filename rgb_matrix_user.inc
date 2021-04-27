@@ -14,7 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#define TIMER_TICK (timer_read32() >> 4) // every 10 is half second
+#define RGB_TICK ((g_rgb_timer * (1 + (rgb_matrix_config.speed >> 5))) >> 8)
+#define RGB_EFFECT_TICK (scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed >> 5, 1)))
 
 RGB_MATRIX_EFFECT(PIXEL_RAIN)
 #ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
@@ -24,7 +26,16 @@ RGB_MATRIX_EFFECT(CANDY_TYPE)
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
 static bool PIXEL_RAIN(effect_params_t* params) {
-	extern uint8_t jsf8(void);
+	//extern uint8_t jsf8(void);
+	uint8_t jsf8(void) {
+		#define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
+		static uint8_t a = 0xf1, b = 0xee, c = 0xee, d = 0xee;
+		uint8_t e = a - rot8(b, 1);
+		a = b ^ rot8(c, 4);
+		b = c + d;
+		c = d + e;
+		return d = e + a;
+	}
 
 	void set_rgb(int i, effect_params_t* params, bool on) {
 		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) { return; }

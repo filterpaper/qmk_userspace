@@ -30,21 +30,9 @@ RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
 }; */
 
 
-// Bob Jenkins chaotic PRNG in 8-bit
-uint8_t jsf8(void) {
-	#define rot8(x,k) (((x) << (k))|((x) >> (8 - (k))))
-	static uint8_t a = 0xf1, b = 0xee, c = 0xee, d = 0xee;
-	uint8_t e = a - rot8(b, 1);
-	a = b ^ rot8(c, 4);
-	b = c + d;
-	c = d + e;
-	return d = e + a;
-}
-
-
 void matrix_init_user(void) {
 	// Remap under glow LEDs to nearby keys
-#if defined(KEYBOARD_planck_rev6)
+#ifdef KEYBOARD_planck_rev6
 	g_led_config = (led_config_t){ {
 		{ 6, 6, 6, 5, 5, 5 }, { 6, 6, 6, 5, 5, 5 },
 		{ 7, 7, 8, 8, 8, 8 }, { 7, 7, 8, 1, 2, 2 },
@@ -55,7 +43,8 @@ void matrix_init_user(void) {
 	}, {
 		2, 255, 2, 255, 4, 4, 255, 2, 255
 	} };
-#elif defined(KEYBOARD_boardsource_the_mark)
+#endif
+#ifdef KEYBOARD_boardsource_the_mark
 	g_led_config = (led_config_t){ {
 		{ 10, 10, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 1 , 1  },
 		{ 11, 11, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 0 , 0  },
@@ -70,6 +59,14 @@ void matrix_init_user(void) {
 		255, 255, 4, 4, 4, 4, 4, 4, 4, 4, 255, 255
 	} };
 #endif
+	// Disable underglow LEDs
+#ifdef KEYBOARD_bm40hsrgb
+	for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
+		if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_UNDERGLOW)) {
+			g_led_config.flags[i] = LED_FLAG_NONE;
+		}
+	}
+#endif
 }
 
 
@@ -81,13 +78,10 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 
 void rgb_matrix_indicators_user(void) {
 	// Randomize key presses effect colors
-	if ( RGB_MATRIX_SOLID_REACTIVE_SIMPLE <= rgb_matrix_get_mode() && rgb_matrix_get_mode() <= RGB_MATRIX_SOLID_MULTISPLASH) {
-		static uint16_t hsv_timer = 0;
-		if (timer_elapsed(hsv_timer) > TAPPING_TERM*8) {
-			hsv_timer = timer_read();
-			rgb_matrix_sethsv_noeeprom(jsf8(), (jsf8() >> 1) + 127, rgb_matrix_config.hsv.v);
-		}
-	}
+/*	if ( RGB_MATRIX_SOLID_REACTIVE_SIMPLE <= rgb_matrix_get_mode() && rgb_matrix_get_mode() <= RGB_MATRIX_SOLID_MULTISPLASH) {
+		#define RGB_TICK ((g_rgb_timer * (1 + (rgb_matrix_config.speed >> 5))) >> 8)
+		if ((RGB_TICK & 31) == 0) { rgb_matrix_sethsv_noeeprom((g_rgb_timer >> 6) & 255, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v); }
+	}*/
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
