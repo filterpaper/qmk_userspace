@@ -258,7 +258,6 @@ bool kitt_effect(effect_params_t* params) {
 
 
 static bool CANDY_TYPE(effect_params_t* params) {
-	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	HSV CANDY_TYPE_math(HSV hsv, uint16_t offset) {
 		hsv.v = scale8(255 - offset, hsv.v);
 		hsv.h = mod8(scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed >> 5, 1)), 255);
