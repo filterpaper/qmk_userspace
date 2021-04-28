@@ -256,15 +256,4 @@ bool kitt_effect(effect_params_t* params) {
 	return effect_runner_i(params, &kitt_effect_math);
 }
 
-
-static bool CANDY_TYPE(effect_params_t* params) {
-	HSV CANDY_TYPE_math(HSV hsv, uint16_t offset) {
-		hsv.v = scale8(255 - offset, hsv.v);
-		hsv.h = mod8(scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed >> 5, 1)), 255);
-		return hsv;
-	}
-	return effect_runner_reactive(params, &CANDY_TYPE_math);
-}
-
-
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS

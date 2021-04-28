@@ -27,10 +27,13 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #	define RGB_MODS		RGB_BSTEEL
 #	define RGB_CAPS		RGB_PURPLE
 #	define RGB_LAYER	RGB_DGRAY
-//#	define DEF_MODE	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
-//#	define CMK_MODE	RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
+#if defined(KEYBOARD_bm40hsrgb) || defined(KEYBOARD_boardsource_the_mark)
 #	define DEF_MODE	RGB_MATRIX_CUSTOM_PIXEL_RAIN
 #	define CMK_MODE	RGB_MATRIX_CUSTOM_PIXEL_FLOW
+#else
+#	define DEF_MODE	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
+#	define CMK_MODE	RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
+#endif
 #endif
 
 // Mod and layer tap bitmasks
