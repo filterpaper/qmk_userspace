@@ -22,7 +22,7 @@
 
 
 RGB_MATRIX_EFFECT(PIXEL_RAIN)
-RGB_MATRIX_EFFECT(PIXEL_SHIFT)
+RGB_MATRIX_EFFECT(PIXEL_FLOW)
 
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
@@ -46,7 +46,7 @@ static bool PIXEL_RAIN(effect_params_t* params) {
 		if (off) {
 			rgb_matrix_set_color(i, RGB_OFF);
 		} else {
-			HSV hsv = {random8(), qadd8(random8() >> 1, 127), rgb_matrix_config.hsv.v};
+			HSV hsv = {jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v};
 			RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
 			rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 		}
@@ -55,17 +55,17 @@ static bool PIXEL_RAIN(effect_params_t* params) {
 	}
 
 	if (params->init) { random16_set_seed((uint16_t)g_rgb_timer); }
-	return set_rgb(mod8(random8(), DRIVER_LED_TOTAL), params, random8() & 3);
+	return set_rgb(mod8(jsf8(), DRIVER_LED_TOTAL), params, jsf8() & 3);
 }
 
-static bool PIXEL_SHIFT(effect_params_t* params) {
+static bool PIXEL_FLOW(effect_params_t* params) {
 	static RGB led[DRIVER_LED_TOTAL];
 	static uint32_t timer = 0;
 	uint16_t speed = 1500 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16);
 	if (timer > g_rgb_timer) { return false; }
 
 	void set_rgb(uint8_t i) {
-		led[i] = (random8() & 3) ? (RGB){0,0,0} : rgb_matrix_hsv_to_rgb((HSV){random8(), qadd8(random8() >> 1, 127), rgb_matrix_config.hsv.v});
+		led[i] = (jsf8() & 3) ? (RGB){0,0,0} : rgb_matrix_hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
 	}
 	if (params->init) {
 		random16_set_seed((uint16_t)g_rgb_timer);
