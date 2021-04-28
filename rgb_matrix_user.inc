@@ -64,7 +64,7 @@ static bool PIXEL_RAIN(effect_params_t* params) {
 		return false;
 	}
 
-	if (params->init) { random16_set_seed((uint16_t)g_rgb_timer); }
+	//if (params->init) { random16_set_seed((uint16_t)g_rgb_timer); }
 	return set_rgb(mod8(jsf8(), DRIVER_LED_TOTAL), params, jsf8() & 3);
 }
 
@@ -78,7 +78,7 @@ static bool PIXEL_FLOW(effect_params_t* params) {
 		led[i] = (jsf8() & 3) ? (RGB){0,0,0} : rgb_matrix_hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
 	}
 	if (params->init) {
-		random16_set_seed((uint16_t)g_rgb_timer);
+		//random16_set_seed((uint16_t)g_rgb_timer);
 		for (uint8_t k = 0; k < DRIVER_LED_TOTAL; ++k) { set_rgb(k); }
 	}
 
