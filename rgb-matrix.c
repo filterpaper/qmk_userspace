@@ -47,8 +47,8 @@ void matrix_init_user(void) {
 #ifdef KEYBOARD_boardsource_the_mark
 	g_led_config = (led_config_t){ {
 		{ 10, 10, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 1 , 1  },
-		{ 11, 11, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 0 , 0  },
-		{ 12, 12, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 2 , 23, 23 },
+		{ 11, 11, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 5 , 4 , 3 , 2 , 2 , 0 , 0  },
+		{ 12, 12, 14, 14, 15, 16, 16, 17, 18, 18, 19, 20, 21, 21, 23, 23 },
 		{ 13, 13, 14, 14, 15, 16, 16, 17, 18, 19, 19, 20, 21, 21, 22, 22 },
 		{ 13, 13, 14, 14, 15, 16, 16, 17, 18, 19, 19, 20, 21, 21, 22, 22 },
 	}, {
@@ -78,10 +78,10 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 
 void rgb_matrix_indicators_user(void) {
 	// Randomize key presses effect colors
-/*	if ( RGB_MATRIX_SOLID_REACTIVE_SIMPLE <= rgb_matrix_get_mode() && rgb_matrix_get_mode() <= RGB_MATRIX_SOLID_MULTISPLASH) {
+	if ( RGB_MATRIX_SOLID_REACTIVE_SIMPLE <= rgb_matrix_get_mode() && rgb_matrix_get_mode() <= RGB_MATRIX_SOLID_MULTISPLASH) {
 		#define RGB_TICK ((g_rgb_timer * (1 + (rgb_matrix_config.speed >> 5))) >> 8)
 		if ((RGB_TICK & 31) == 0) { rgb_matrix_sethsv_noeeprom((g_rgb_timer >> 6) & 255, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v); }
-	}*/
+	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
