@@ -114,8 +114,8 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	for (uint8_t i = led_min; i < led_max; ++i) {
-		uint8_t x = g_led_config.point[i].x / 16;
-		uint8_t y = g_led_config.point[i].y / 16;
+		uint8_t x = g_led_config.point[i].x >> 4;
+		uint8_t y = g_led_config.point[i].y >> 4;
 		rgb_matrix_set_color(i, led[x][y].r, led[x][y].g, led[x][y].b);
 	}
 	if (led_max == DRIVER_LED_TOTAL) {
