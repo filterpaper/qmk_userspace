@@ -102,6 +102,7 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 	#define FRACTAL_WIDTH 14
 	#define FRACTAL_HEIGHT 4
 	#define FRACTAL_SPLIT  6
+	#define FRACTAL_RATIO 16.2
 
 	static RGB led[FRACTAL_WIDTH][FRACTAL_HEIGHT];
 	static uint32_t wait_timer = 0;
@@ -112,12 +113,13 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 	void set_rgb(uint8_t x, uint8_t y) {
 		led[x][y] = (jsf8() & 3) ? (RGB){0,0,0} : rgb_matrix_hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
 	}
+	//if (params->init) { random16_set_seed((uint16_t)g_rgb_timer); }
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	for (uint8_t i = led_min; i < led_max; ++i) {
 		RGB_MATRIX_TEST_LED_FLAGS();
-		uint8_t x = g_led_config.point[i].x / 16.2;
-		uint8_t y = g_led_config.point[i].y / 16.2;
+		uint8_t x = g_led_config.point[i].x / FRACTAL_RATIO;
+		uint8_t y = g_led_config.point[i].y / FRACTAL_RATIO;
 		rgb_matrix_set_color(i, led[x][y].r, led[x][y].g, led[x][y].b);
 	}
 	if (led_max == DRIVER_LED_TOTAL) {
