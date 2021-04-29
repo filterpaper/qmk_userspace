@@ -99,14 +99,15 @@ static bool PIXEL_FLOW(effect_params_t* params) {
 }
 
 static bool PIXEL_FRACTAL(effect_params_t* params) {
-	#define FLOW_WIDTH 14
-	#define FLOW_HEIGHT 4
-	#define FLOW_SPLIT  6
-	static RGB led[FLOW_WIDTH][FLOW_HEIGHT];
+	#define FRACTAL_WIDTH 14
+	#define FRACTAL_HEIGHT 4
+	#define FRACTAL_SPLIT  6
+
+	static RGB led[FRACTAL_WIDTH][FRACTAL_HEIGHT];
 	static uint32_t wait_timer = 0;
 	if (wait_timer > g_rgb_timer) { return false; }
 
-	uint32_t interval(void) { return 2000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
+	uint32_t interval(void) { return 2500 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
 
 	void set_rgb(uint8_t x, uint8_t y) {
 		led[x][y] = (jsf8() & 3) ? (RGB){0,0,0} : rgb_matrix_hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
@@ -114,18 +115,17 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	for (uint8_t i = led_min; i < led_max; ++i) {
-		uint8_t x = g_led_config.point[i].x >> 4;
-		uint8_t y = g_led_config.point[i].y >> 4;
+		RGB_MATRIX_TEST_LED_FLAGS();
+		uint8_t x = g_led_config.point[i].x / 16.2;
+		uint8_t y = g_led_config.point[i].y / 16.2;
 		rgb_matrix_set_color(i, led[x][y].r, led[x][y].g, led[x][y].b);
 	}
 	if (led_max == DRIVER_LED_TOTAL) {
-		for (uint8_t h = 0; h < FLOW_HEIGHT; ++h) {
-			for (uint8_t l = 0; l < FLOW_SPLIT; ++l) { led[l][h] = led[l+1][h]; }
-			for (uint8_t r = FLOW_WIDTH-1; r > FLOW_SPLIT+1; --r) { led[r][h] = led[r-1][h]; }
-		}
-		for (uint8_t n = 0; n < FLOW_HEIGHT; ++n) {
-			set_rgb(FLOW_SPLIT,n);
-			led[FLOW_SPLIT+1][n] = led[FLOW_SPLIT][n];
+		for (uint8_t h = 0; h < FRACTAL_HEIGHT; ++h) {
+			for (uint8_t l = 0; l < FRACTAL_SPLIT; ++l) { led[l][h] = led[l+1][h]; }
+			for (uint8_t r = FRACTAL_WIDTH-1; r > FRACTAL_SPLIT+1; --r) { led[r][h] = led[r-1][h]; }
+			set_rgb(FRACTAL_SPLIT, h);
+			led[FRACTAL_SPLIT+1][h] = led[FRACTAL_SPLIT][h];
 		}
 		wait_timer = g_rgb_timer + interval();
 	}
