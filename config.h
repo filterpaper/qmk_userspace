@@ -22,8 +22,11 @@
 //#define PERMISSIVE_HOLD_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAP_CODE_DELAY 50
-#define GRAVE_ESC_SHIFT_OVERRIDE
 #define LAYER_STATE_8BIT // 8-layer limit, saves ~462 bytes
+
+#ifndef KEYBOARD_boardsource_the_mark
+#	define GRAVE_ESC_SHIFT_OVERRIDE
+#endif
 
 #ifdef RGB_MATRIX_ENABLE
 #	define RGB_MATRIX_KEYPRESSES
