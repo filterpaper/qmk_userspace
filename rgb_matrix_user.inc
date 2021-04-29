@@ -83,14 +83,14 @@ static bool PIXEL_FLOW(effect_params_t* params) {
 	}
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
-	if (led_max == DRIVER_LED_TOTAL) {
-		for (uint8_t j = 0; j < DRIVER_LED_TOTAL-1; ++j) { led[j] = led[j+1]; }
-		set_rgb(DRIVER_LED_TOTAL-1);
-		wait_timer = g_rgb_timer + interval;;
-	}
 	for (uint8_t i = led_min; i < led_max; ++i) {
 		RGB_MATRIX_TEST_LED_FLAGS();
 		rgb_matrix_set_color(i, led[i].r, led[i].g, led[i].b);
+	}
+	if (led_max == DRIVER_LED_TOTAL) {
+		for (uint8_t j = 0; j < DRIVER_LED_TOTAL-1; ++j) { led[j] = led[j+1]; }
+		set_rgb(DRIVER_LED_TOTAL-1);
+		wait_timer = g_rgb_timer + interval;
 	}
 	return led_max < DRIVER_LED_TOTAL;
 }
