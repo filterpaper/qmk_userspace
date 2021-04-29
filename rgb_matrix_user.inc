@@ -31,7 +31,7 @@ if ( RGB_MATRIX_SOLID_REACTIVE_SIMPLE <= rgb_matrix_get_mode() && rgb_matrix_get
 
 RGB_MATRIX_EFFECT(PIXEL_RAIN)
 RGB_MATRIX_EFFECT(PIXEL_FLOW)
-RGB_MATRIX_EFFECT(PIXEL_FLOW2)
+RGB_MATRIX_EFFECT(PIXEL_FRACTAL)
 #ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
 RGB_MATRIX_EFFECT(CANDY_TAP)
 #endif
@@ -98,25 +98,18 @@ static bool PIXEL_FLOW(effect_params_t* params) {
 	return led_max < DRIVER_LED_TOTAL;
 }
 
-static bool PIXEL_FLOW2(effect_params_t* params) {
+static bool PIXEL_FRACTAL(effect_params_t* params) {
 	#define FLOW_WIDTH 14
 	#define FLOW_HEIGHT 4
+	#define FLOW_SPLIT  6
 	static RGB led[FLOW_WIDTH][FLOW_HEIGHT];
 	static uint32_t wait_timer = 0;
 	if (wait_timer > g_rgb_timer) { return false; }
 
-	uint32_t interval(void) { return 1500 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
+	uint32_t interval(void) { return 2000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
 
 	void set_rgb(uint8_t x, uint8_t y) {
 		led[x][y] = (jsf8() & 3) ? (RGB){0,0,0} : rgb_matrix_hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
-	}
-	if (params->init) {
-		//random16_set_seed((uint16_t)g_rgb_timer);
-		for (uint8_t a = 0; a < FLOW_WIDTH; ++a) {
-			for (uint8_t b = 0; b < FLOW_HEIGHT; ++b) {
-				set_rgb(a,b);
-			}
-		}
 	}
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
@@ -127,12 +120,12 @@ static bool PIXEL_FLOW2(effect_params_t* params) {
 	}
 	if (led_max == DRIVER_LED_TOTAL) {
 		for (uint8_t h = 0; h < FLOW_HEIGHT; ++h) {
-			for (uint8_t w = 0; w < FLOW_WIDTH-1; ++w) {
-				led[w][h] = led[w+1][h];
-			}
+			for (uint8_t l = 0; l < FLOW_SPLIT; ++l) { led[l][h] = led[l+1][h]; }
+			for (uint8_t r = FLOW_WIDTH-1; r > FLOW_SPLIT+1; --r) { led[r][h] = led[r-1][h]; }
 		}
 		for (uint8_t n = 0; n < FLOW_HEIGHT; ++n) {
-			set_rgb(FLOW_WIDTH-1,n);
+			set_rgb(FLOW_SPLIT,n);
+			led[FLOW_SPLIT+1][n] = led[FLOW_SPLIT][n];
 		}
 		wait_timer = g_rgb_timer + interval();
 	}
