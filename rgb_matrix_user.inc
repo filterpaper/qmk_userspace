@@ -29,9 +29,9 @@ if ( RGB_MATRIX_SOLID_REACTIVE_SIMPLE <= rgb_matrix_get_mode() && rgb_matrix_get
 	if ((RGB_TICK & 31) == 0) { rgb_matrix_sethsv_noeeprom((g_rgb_timer >> 6) & 255, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v); }
 }*/
 
-RGB_MATRIX_EFFECT(PIXEL_RAIN)
-RGB_MATRIX_EFFECT(PIXEL_FLOW)
-RGB_MATRIX_EFFECT(PIXEL_FRACTAL)
+RGB_MATRIX_EFFECT(PIXEL_RAIN) // 226 bytes
+RGB_MATRIX_EFFECT(PIXEL_FLOW) // 400 bytes
+RGB_MATRIX_EFFECT(PIXEL_FRACTAL) // 1286 bytes
 #ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
 RGB_MATRIX_EFFECT(CANDY_TAP)
 #endif
@@ -124,24 +124,23 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 			led[x][y].used = true;
 		}
 	}
-
 	for (uint8_t i = led_min; i < led_max; ++i) {
 		RGB_MATRIX_TEST_LED_FLAGS();
 		uint8_t x = g_led_config.point[i].x / FRACTAL_RATIO;
 		uint8_t y = g_led_config.point[i].y / FRACTAL_RATIO;
 		rgb_matrix_set_color(i, led[x][y].rgb.r, led[x][y].rgb.g, led[x][y].rgb.b);
 	}
-
 	if (led_max == DRIVER_LED_TOTAL) {
 		for (uint8_t h = 0; h < FRACTAL_HEIGHT; ++h) {
 			for (uint8_t l = 0; l < FRACTAL_SPLIT; ++l) {
 				led[l][h].rgb = (led[l+1][h].used) ? led[l+1][h].rgb : led[l+2][h].rgb;
 			}
 			for (uint8_t r = FRACTAL_WIDTH-1; r > FRACTAL_SPLIT+1; --r) {
-				led[r][h].rgb = (led[r-1][h].used) ? led[r-1][h].rgb :  led[r-2][h].rgb;
+				led[r][h].rgb = (led[r-1][h].used) ? led[r-1][h].rgb : led[r-2][h].rgb;
 			}
 			set_rgb(FRACTAL_SPLIT, h);
 			led[FRACTAL_SPLIT+1][h].rgb = led[FRACTAL_SPLIT][h].rgb;
+			led[FRACTAL_SPLIT+1][h].used = led[FRACTAL_SPLIT][h].used = true;
 		}
 		wait_timer = g_rgb_timer + interval();
 	}
