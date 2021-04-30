@@ -34,6 +34,7 @@ RGB_MATRIX_EFFECT(PIXEL_FLOW) // 400 bytes
 RGB_MATRIX_EFFECT(PIXEL_FRACTAL) // 1194 bytes
 #ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
 RGB_MATRIX_EFFECT(CANDY_TAP)
+RGB_MATRIX_EFFECT(CANDY_NEXUS)
 #endif
 
 
@@ -98,7 +99,6 @@ static bool PIXEL_FLOW(effect_params_t* params) {
 	return led_max < DRIVER_LED_TOTAL;
 }
 
-
 static bool PIXEL_FRACTAL(effect_params_t* params) {
 	#define FRACTAL_WIDTH 14
 	#define FRACTAL_HEIGHT 5
@@ -159,6 +159,19 @@ static bool CANDY_TAP(effect_params_t* params) {
 	}
 	return effect_runner_reactive(params, &CANDY_TAP_math);
 }
-#endif
+
+static bool CANDY_NEXUS(effect_params_t* params) {
+	HSV CANDY_NEXUS_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
+		uint16_t effect = tick - dist;
+		if (effect > 255) effect = 255;
+		if (dist > 72) effect = 255;
+		if ((dx > 8 || dx < -8) && (dy > 8 || dy < -8)) effect = 255;
+		hsv.v = qadd8(hsv.v, 255 - effect);
+		hsv.h = mod8(scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed >> 5, 1)), 255) + dy / 4;
+		return hsv;
+	}
+	return effect_runner_reactive_splash(0, params, &CANDY_NEXUS_math);
+}
+#endif // RGB_MATRIX_KEYREACTIVE_ENABLED
 
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS

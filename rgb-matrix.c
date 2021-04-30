@@ -93,6 +93,7 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
+#ifdef KEYBOARD_bm40hsrgb
 	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
 		uint8_t const layer = get_highest_layer(layer_state);
@@ -105,4 +106,13 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
+#else
+	if (get_highest_layer(layer_state) > CMK) {
+		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
+			if (HAS_ANY_FLAGS(g_led_config.flags[i], LED_FLAG_ALL)) {
+				rgb_matrix_set_color(i, RGB_MODS);
+			}
+		}
+	}
+#endif
 }
