@@ -24,6 +24,7 @@ SPACE_CADET_ENABLE = no
 EXTRAKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
+OPT_DEFS += -DCAPSWORD_ENABLE
 
 # Main source file
 SRC += filterpaper.c
@@ -31,11 +32,6 @@ SRC += filterpaper.c
 # Exclude LTO for Planck
 ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
-endif
-
-# Custom caps word feature
-ifneq ($(strip $(KEYBOARD)), boardsource/the_mark)
-	OPT_DEFS += -DCAPSWORD_ENABLE
 endif
 
 ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1/common))
