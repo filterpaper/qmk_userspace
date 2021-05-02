@@ -1,0 +1,15 @@
+{
+    "author": "",
+    "documentation": "Wrapper based keymap",
+    "keyboard": "boardsource/the_mark",
+    "keymap": "filterpaper",
+    "layers": [
+        [ "MARK_QWERTY" ],
+        [ "MARK_COLEMAK" ],
+        [ "MARK_LAYER2" ],
+        [ "MARK_LAYER3" ]
+    ],
+    "layout": "LAYOUT_wrapper_all",
+    "notes": "",
+    "version": 1
+}
