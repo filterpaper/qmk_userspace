@@ -23,7 +23,7 @@
 RGB_MATRIX_EFFECT(FRACTAL)
 RGB_MATRIX_EFFECT(FRACTAL_RGB)
 RGB_MATRIX_EFFECT(kitt_effect)
-RGB_MATRIX_EFFECT(CANDY_TYPE)
+RGB_MATRIX_EFFECT(PIXEL_FRACTAL_OLD)
 
 // Define effects inside the `RGB_MATRIX_CUSTOM_EFFECT_IMPLS` ifdef block
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
@@ -254,6 +254,48 @@ bool kitt_effect(effect_params_t* params) {
 	}
 
 	return effect_runner_i(params, &kitt_effect_math);
+}
+
+
+static bool PIXEL_FRACTAL_OLD(effect_params_t* params) {
+	#define FRACTAL_WIDTH 14
+	#define FRACTAL_HEIGHT 5
+	#define FRACTAL_SPLIT  6
+	#define FRACTAL_RATIO 16.2
+
+	typedef struct PACKED { RGB rgb; bool tag; } fractal_led_t;
+	static fractal_led_t led[FRACTAL_WIDTH][FRACTAL_HEIGHT];
+	static uint32_t wait_timer = 0;
+	if (wait_timer > g_rgb_timer) { return false; }
+
+	inline uint32_t interval(void) { return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
+
+	#define FRACTAL_PIXEL() (jsf8() & 3) ? (RGB){0,0,0} : rgb_matrix_hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v})
+	#define GET_FRACTAL_POINT(k) (point_t){g_led_config.point[k].x / FRACTAL_RATIO, g_led_config.point[k].y / FRACTAL_RATIO}
+
+	RGB_MATRIX_USE_LIMITS(led_min, led_max);
+	//if (params->init) { }
+	for (uint8_t i = led_min; i < led_max; ++i) {
+		RGB_MATRIX_TEST_LED_FLAGS();
+		point_t map = GET_FRACTAL_POINT(i);
+		led[map.x][map.y].tag = true;
+		rgb_matrix_set_color(i, led[map.x][map.y].rgb.r, led[map.x][map.y].rgb.g, led[map.x][map.y].rgb.b);
+	}
+	if (led_max == DRIVER_LED_TOTAL) {
+		for (uint8_t h = 0; h < FRACTAL_HEIGHT; ++h) {
+			for (uint8_t l = 0; l < FRACTAL_SPLIT; ++l) {
+				led[l][h].rgb = (led[l+1][h].tag) ? led[l+1][h].rgb : led[l+2][h].rgb;
+			}
+			for (uint8_t r = FRACTAL_WIDTH-1; r > FRACTAL_SPLIT+1; --r) {
+				led[r][h].rgb = (led[r-1][h].tag) ? led[r-1][h].rgb : led[r-2][h].rgb;
+			}
+			led[FRACTAL_SPLIT][h].rgb   = FRACTAL_PIXEL();
+			led[FRACTAL_SPLIT+1][h].rgb = led[FRACTAL_SPLIT][h].rgb;
+			led[FRACTAL_SPLIT+1][h].tag = led[FRACTAL_SPLIT][h].tag = true;
+		}
+		wait_timer = g_rgb_timer + interval();
+	}
+	return led_max < DRIVER_LED_TOTAL;
 }
 
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
