@@ -17,21 +17,20 @@
 #pragma once
 
 // Common QMK settings
-#define TAPPING_TERM 300
+#define TAPPING_TERM 280
+//#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
-//#define PERMISSIVE_HOLD_PER_KEY
+#define PERMISSIVE_HOLD_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAP_CODE_DELAY 50
 #define LAYER_STATE_8BIT // 8-layer limit, saves ~462 bytes
-
-#ifndef KEYBOARD_boardsource_the_mark
-#	define GRAVE_ESC_SHIFT_OVERRIDE
-#endif
+#define GRAVE_ESC_SHIFT_OVERRIDE
 
 #ifdef RGB_MATRIX_ENABLE
 #	define RGB_MATRIX_KEYPRESSES
 #	define RGB_MATRIX_MAXIMUM_BRIGHTNESS 200
 #	define RGB_DISABLE_WHEN_USB_SUSPENDED true
+#   define RGB_DISABLE_TIMEOUT 180000
 #	define RGB_MATRIX_STARTUP_HUE 208
 #	define RGB_MATRIX_STARTUP_SAT 135
 #	define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_SOLID_REACTIVE_SIMPLE
@@ -91,14 +90,5 @@
 #	endif
 #endif
 
-// Key map layout wrapper macros
+// Key and layout wrapper macros
 #include "layout.h"
-
-// Tap hold macro keys for keymap[]
-#define Q_TH LT(0,KC_Q)
-#define W_TH LT(0,KC_W)
-#define T_TH LT(0,KC_T)
-#define N_TH LT(0,KC_N)
-#define DOT_TH LT(0,KC_DOT)
-#define COMM_TH LT(0,KC_COMM)
-#define M_TH LT(0,KC_M)

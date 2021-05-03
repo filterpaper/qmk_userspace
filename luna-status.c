@@ -80,7 +80,8 @@ static void render_luna_sit(void) {
 #endif
 	} };
 
-	current_frame = (current_frame + 1) % LUNA_FRAMES;
+//	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	current_frame = (current_frame + 1) & 1; // Faster and smaller than % 2
 	oled_write_raw_P(sit[current_frame], LUNA_SIZE);
 }
 
@@ -118,7 +119,8 @@ static void render_luna_walk(void) {
 #endif
 	} };
 
-	current_frame = (current_frame + 1) % LUNA_FRAMES;
+//	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	current_frame = (current_frame + 1) & 1; // Faster and smaller than % 2
 	oled_write_raw_P(walk[current_frame], LUNA_SIZE);
 }
 
@@ -156,7 +158,8 @@ static void render_luna_run(void) {
 #endif
 	} };
 
-	current_frame = (current_frame + 1) % LUNA_FRAMES;
+//	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	current_frame = (current_frame + 1) & 1; // Faster and smaller than % 2
 	oled_write_raw_P(run[current_frame], LUNA_SIZE);
 }
 
@@ -194,7 +197,8 @@ static void render_luna_bark(void) {
 #endif
 	} };
 
-	current_frame = (current_frame + 1) % LUNA_FRAMES;
+//	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	current_frame = (current_frame + 1) & 1; // Faster and smaller than % 2
 	oled_write_raw_P(bark[current_frame], LUNA_SIZE);
 }
 
@@ -232,7 +236,8 @@ static void render_luna_sneak(void) {
 #endif
 	} };
 
-	current_frame = (current_frame + 1) % LUNA_FRAMES;
+//	current_frame = (current_frame + 1) % LUNA_FRAMES;
+	current_frame = (current_frame + 1) & 1; // Faster and smaller than % 2
 	oled_write_raw_P(sneak[current_frame], LUNA_SIZE);
 }
 

@@ -57,6 +57,12 @@ static void render_array(uint16_t const *frame) {
 }
 
 
+static void render_frames(uint16_t const *base, uint16_t const *frame) {
+	render_array(base);
+	render_array(frame);
+}
+
+
 static void render_cat_idle(void) {
 	// Idle frames pixel differences
 	static uint16_t const idle_diff_0[] PROGMEM = {0};
@@ -82,15 +88,10 @@ static void render_cat_idle(void) {
 		left_idle_diff_3
 	};
 	static uint8_t current_frame = 0;
-	current_frame = (current_frame + 1) % IDLE_FRAMES;
+//	current_frame = (current_frame + 1) % IDLE_FRAMES;
+	current_frame = (current_frame + 1 > 4) ? 0 : current_frame + 1; // Faster and smaller than % 5
 
-	if (is_keyboard_left()) {
-		render_array(left_base);
-		render_array(left_idle_diff[current_frame]);
-	} else {
-		render_array(base);
-		render_array(idle_diff[current_frame]);
-	}
+	is_keyboard_left() ? render_frames(left_base, left_idle_diff[current_frame]) : render_frames(base, idle_diff[current_frame]);
 }
 
 
@@ -105,13 +106,7 @@ static void render_cat_prep(void) {
 		left_prep_diff_0
 	};
 
-	if (is_keyboard_left()) {
-		render_array(left_base);
-		render_array(left_prep_diff[0]);
-	} else {
-		render_array(base);
-		render_array(prep_diff[0]);
-	}
+	is_keyboard_left() ? render_frames(left_base, left_prep_diff[0]) : render_frames(base, prep_diff[0]);
 }
 
 
@@ -130,15 +125,10 @@ static void render_cat_tap(void) {
 		left_tap_diff_1
 	};
 	static uint8_t current_frame = 0;
-	current_frame = (current_frame + 1) % TAP_FRAMES;
+//	current_frame = (current_frame + 1) % TAP_FRAMES;
+	current_frame = (current_frame + 1) & 1; // Faster and smaller than % 2
 
-	if (is_keyboard_left()) {
-		render_array(left_base);
-		render_array(left_tap_diff[current_frame]);
-	} else {
-		render_array(base);
-		render_array(tap_diff[current_frame]);
-	}
+	is_keyboard_left() ? render_frames(left_base, left_tap_diff[current_frame]) : render_frames(base, tap_diff[current_frame]);
 }
 
 

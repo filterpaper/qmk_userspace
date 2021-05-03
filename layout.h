@@ -14,11 +14,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Layout wrapper macros for ortholinear and split Corne boards.
- * The top 3x12 is shared with 3 keyboards.
+/* Tap hold shortcuts and layout wrapper macros.
+ * Ortholinears and split Corne board share the top 3x12 layout
  */
 
 #pragma once
+
+
+// Tap hold macro keys for keymap[]
+#define Q_TH LT(0,KC_Q)
+#define W_TH LT(0,KC_W)
+#define T_TH LT(0,KC_T)
+#define N_TH LT(0,KC_N)
+#define DOT_TH LT(0,KC_DOT)
+#define COMM_TH LT(0,KC_COMM)
+#define M_TH LT(0,KC_M)
 
 
 // Base layout wrapper macros
@@ -77,9 +87,10 @@
 #define PLANCKBLANK _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 #define BM40BLANK   _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______
 
+
 // Boardsource The Mark 65
 #define MARK_QWERTY \
-KC_GESC, KC_1,        KC_2,        KC_3,        KC_4,        KC_5,       KC_6,    KC_7,        KC_8,        KC_9,        KC_0,           KC_MINS, KC_EQL,  KC_BSLS, KC_DEL,  KC_VOLU, \
+KC_ESC,  KC_1,        KC_2,        KC_3,        KC_4,        KC_5,       KC_6,    KC_7,        KC_8,        KC_9,        KC_0,           KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  KC_VOLU, \
 KC_TAB,  Q_TH,        W_TH,        KC_E,        KC_R,        T_TH,       KC_Y,    KC_U,        KC_I,        KC_O,        KC_P,           KC_LBRC, KC_RBRC, KC_BSPC,          KC_VOLD, \
 KC_CAPS, SFT_T(KC_A), ALT_T(KC_S), CTL_T(KC_D), GUI_T(KC_F), KC_G,       KC_H,    GUI_T(KC_J), CTL_T(KC_K), ALT_T(KC_L), SFT_T(KC_SCLN), KC_QUOT, KC_ENT,                    KC_MUTE, \
 KC_LSFT, KC_LSFT,     KC_Z,        KC_X,        KC_C,        KC_V,       KC_B,    N_TH,        M_TH,        COMM_TH,     DOT_TH,         KC_SLSH, KC_RSFT,          KC_UP, \
@@ -91,11 +102,11 @@ _______, _______,     ALT_T(KC_R), CTL_T(KC_S), GUI_T(KC_T), KC_D,       _______
 _______, _______,     _______,     _______,     _______,     _______,    KC_B,    KC_K,        _______,     _______,     _______,        _______, _______,          _______, \
 _______, _______,     _______,                  _______,                 _______,              _______,                  _______,        _______, _______, _______, _______, _______
 #define MARK_LAYER2 \
-KC_GRV,  KC_F1,      KC_F2,        KC_F3,      KC_F4,        KC_F5,      KC_F6,   KC_F7,       KC_F8,       KC_F9,       KC_F10,         KC_F11,  KC_F12,  _______, _______, _______, \
+_______, KC_F1,      KC_F2,        KC_F3,      KC_F4,        KC_F5,      KC_F6,   KC_F7,       KC_F8,       KC_F9,       KC_F10,         KC_F11,  KC_F12,  _______, _______, _______, \
 _______, _______,    _______,      _______,    _______,      _______,    _______, _______,     _______,     _______,     _______,        _______, _______, _______,          _______, \
 _______, _______,    _______,      _______,    _______,      _______,    KC_LEFT, KC_DOWN,     KC_UP,       KC_RGHT,     _______,        _______, _______,                   _______, \
 _______, _______,    _______,      _______,    _______,      S(G(A(KC_V))), _______, _______,  _______,     _______,     _______,        _______, _______,          _______, \
-_______, _______,    _______,                  _______,                 _______,              MO(3),                     _______,        _______, _______, _______, _______, _______
+_______, _______,    _______,                  _______,                 _______,               MO(3),                    _______,        _______, _______, _______, _______, _______
 #define MARK_LAYER3 \
 RESET,   _______,    _______,      _______,    _______,      _______,    _______, _______,     _______,     _______,     _______,        _______, _______, _______, TG(1),   _______, \
 _______, _______,    _______,      _______,    _______,      _______,    _______, _______,     _______,     _______,     _______,        _______, _______, _______,          _______, \

@@ -5,7 +5,7 @@
     "keymap": "filterpaper",
     "layers": [
         [
-            "KC_GESC",
+            "KC_ESC",
             "KC_1",
             "KC_2",
             "KC_3",
@@ -19,7 +19,7 @@
             "KC_MINS",
             "KC_EQL",
             "KC_BSLS",
-            "KC_DEL",
+            "KC_GRV",
             "KC_VOLU",
             "KC_TAB",
             "ANY(Q_TH)",
@@ -151,7 +151,7 @@
             "KC_TRNS"
         ],
         [
-            "KC_GRV",
+            "KC_TRNS",
             "KC_F1",
             "KC_F2",
             "KC_F3",
