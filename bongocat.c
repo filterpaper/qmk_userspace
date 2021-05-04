@@ -88,8 +88,7 @@ static void render_cat_idle(void) {
 		left_idle_diff_3
 	};
 	static uint8_t current_frame = 0;
-//	current_frame = (current_frame + 1) % IDLE_FRAMES;
-	current_frame = (current_frame + 1 > 4) ? 0 : current_frame + 1; // Faster and smaller than % 5
+	current_frame = (current_frame + 1 > IDLE_FRAMES - 1) ? 0 : current_frame + 1;
 
 	is_keyboard_left() ? render_frames(left_base, left_idle_diff[current_frame]) : render_frames(base, idle_diff[current_frame]);
 }
@@ -125,8 +124,9 @@ static void render_cat_tap(void) {
 		left_tap_diff_1
 	};
 	static uint8_t current_frame = 0;
-//	current_frame = (current_frame + 1) % TAP_FRAMES;
-	current_frame = (current_frame + 1) & 1; // Faster and smaller than % 2
+//	current_frame = (current_frame + 1 > TAP_FRAMES - 1) ? 0 : current_frame + 1;
+	current_frame = (current_frame + 1) & 1;
+
 
 	is_keyboard_left() ? render_frames(left_base, left_tap_diff[current_frame]) : render_frames(base, tap_diff[current_frame]);
 }
