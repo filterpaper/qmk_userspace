@@ -21,8 +21,7 @@
 // hold shortcut, by @sigprof
 #define TAP_HOLD(_tap_, _hold_) \
 	if (record->tap.count) { \
-		if (record->event.pressed) { register_code(_tap_); } \
-		else { unregister_code(_tap_); } \
+		record->event.pressed ? register_code(_tap_) : unregister_code(_tap_); \
 	} else if (record->event.pressed) { _hold_; } \
 	return false;
 
@@ -86,10 +85,10 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	if ((keycode & 0xFF00) == LT2_MASK ||
-		(keycode & 0xFF00) == LT3_MASK ||
-		keycode == SFT_T(KC_SPC) ||
-		keycode == SFT_T(KC_ENT)) { return true; }
-	else { return false; }
+	return ((keycode & 0xFF00) == LT2_MASK ||
+			(keycode & 0xFF00) == LT3_MASK ||
+			keycode == SFT_T(KC_SPC) ||
+			keycode == SFT_T(KC_ENT)) ?
+			true : false;
 }
 #endif
