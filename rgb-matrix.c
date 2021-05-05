@@ -55,8 +55,8 @@ void matrix_init_user(void) {
 		{224, 42}, {224, 21}, {209, 21}, {179, 21}, {164, 21}, {134, 21}, {119, 21}, {89, 21}, {74, 21}, {45, 21}, {30, 21}, {30, 42},
 		{30, 64}, {30, 85}, {45, 85}, {74, 85}, {89, 85}, {119, 85}, {134, 85}, {164, 85}, {179, 85}, {209, 85}, {224, 85}, {224, 64}
 	}, {
-		255, 255, 4, 4, 4, 4, 4, 4, 4, 4, 255, 255,
-		255, 255, 4, 4, 4, 4, 4, 4, 4, 4, 255, 255
+		255, 255, 255, 4, 4, 4, 4, 4, 4, 255, 255, 255,
+		255, 255, 255, 4, 4, 4, 4, 4, 4, 255, 255, 255
 	} };
 #endif
 	// Disable underglow LEDs
@@ -110,7 +110,8 @@ void rgb_matrix_indicators_user(void) {
 	if (get_highest_layer(layer_state) > CMK) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
 			if (HAS_ANY_FLAGS(g_led_config.flags[i], LED_FLAG_ALL)) {
-				rgb_matrix_set_color(i, RGB_MODS);
+				RGB rgb = hsv_to_rgb((HSV){rgb_matrix_config.hsv.h >> get_highest_layer(layer_state), rgb_matrix_config.hsv.v, rgb_matrix_config.hsv.v});
+				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 			}
 		}
 	}
