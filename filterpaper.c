@@ -17,13 +17,13 @@
 #include "filterpaper.h"
 
 // Tap hold macro function for process_record_user()
-// using layer tap LT() tapping term delay as a
-// hold shortcut, by @sigprof
+// Uses layer tap LT(0,keycode) tapping term delay
+// as a hold shortcut:
 #define TAP_HOLD(_tap_, _hold_) \
 	if (record->tap.count) { \
 		record->event.pressed ? register_code(_tap_) : unregister_code(_tap_); \
 	} else if (record->event.pressed) { _hold_; } \
-	return false;
+	return false
 
 
 #ifdef SPLIT_MODS_ENABLE
@@ -64,9 +64,6 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		// VIM commands
 		case Q_TH: TAP_HOLD(KC_Q, SEND_STRING(":q!"));
 		case W_TH: TAP_HOLD(KC_W, SEND_STRING(":wq"));
-		// New tab and window
-		case T_TH: TAP_HOLD(KC_T, tap_code16(G(KC_T)));
-		case N_TH: TAP_HOLD(KC_N, tap_code16(G(KC_N)));
 		// Right hand cut copy paste
 		case DOT_TH: TAP_HOLD(KC_DOT, tap_code16(G(KC_X)));
 		case COMM_TH: TAP_HOLD(KC_COMM, tap_code16(G(KC_C)));
@@ -85,10 +82,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xFF00) == LT2_MASK ||
-			(keycode & 0xFF00) == LT3_MASK ||
+	return ((keycode & 0xF000) == LT_MASK ||
 			keycode == SFT_T(KC_SPC) ||
-			keycode == SFT_T(KC_ENT)) ?
-			true : false;
+			keycode == SFT_T(KC_ENT)) ? true : false;
 }
 #endif

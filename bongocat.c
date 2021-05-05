@@ -17,7 +17,7 @@
 /* Graphical bongocat animation, driven by key press timer or WPM.
    It has left and right aligned cats optimized for both OLEDs.
    This code uses space-saving pixel differences, by rendering a
-   base frame following by only changed pixels on subsequent frames.
+   base frame following by only changed pixels on animation frames.
    This should be rendered with OLED_ROTATION_270.
 
    Inspired by @j-inc's bongocat animation code
@@ -42,7 +42,7 @@ static uint16_t const base[] PROGMEM = {192, 33312, 33344, 33376, 33408, 33440, 
 static uint16_t const left_base[] PROGMEM = {192, 33343, 33375, 33407, 33439, 33471, 33502, 33534, 33566, 33598, 33630, 33661, 33693, 33725, 33757, 33789, 33820, 33852, 33884, 33916, 33948, 33979, 34011, 34043, 34075, 34107, 34138, 34170, 34202, 34234, 34266, 34297, 34327, 34328, 34329, 34345, 34346, 34347, 34348, 34356, 34357, 34358, 34361, 34376, 34381, 34382, 34383, 34386, 34387, 34393, 34407, 34416, 34417, 34424, 34439, 34456, 34472, 34488, 34504, 34520, 34537, 34552, 34569, 34584, 34600, 34617, 34631, 34649, 34662, 34682, 34694, 34714, 34725, 34747, 34757, 34767, 34768, 34779, 34789, 34799, 34800, 34811, 34821, 34843, 34852, 34870, 34875, 34884, 34901, 34903, 34904, 34905, 34906, 34916, 34928, 34933, 34948, 34961, 34965, 34979, 34993, 34996, 35010, 35024, 35028, 35041, 35056, 35060, 35072, 35088, 35092, 35104, 35119, 35120, 35123, 35137, 35155, 35170, 35171, 35180, 35181, 35187, 35204, 35205, 35212, 35213, 35219, 35238, 35251, 35271, 35282, 35304, 35314, 35336, 35347, 35369, 35379, 35402, 35412, 35435, 35444, 35468, 35476, 35501, 35508, 35534, 35540, 35567, 35568, 35572, 35600, 35601, 35602, 35603, 35632, 35664, 35695, 35727, 35759, 35791, 35822, 35854, 35886, 35918, 35949, 35981, 36013, 36045, 36076, 36108, 36140, 36172, 36203, 36235, 36267, 36299, 36331, 36362, 36394, 36426, 36458, 36490, 36521, 36553, 36585, 36617, 36648, 36680, 36712, 36744, 36775, 36807, 36839};
 
 
-// Array loop to render changed OLED pixel
+// Loop array to render pixels on OLED
 static void render_array(uint16_t const *frame) {
 	// First array element is the size
 	uint16_t const size = pgm_read_word(&(frame[0]));
@@ -57,9 +57,9 @@ static void render_array(uint16_t const *frame) {
 }
 
 
-static void render_frames(uint16_t const *base, uint16_t const *frame) {
+static void render_frames(uint16_t const *base, uint16_t const *diff) {
 	render_array(base);
-	render_array(frame);
+	render_array(diff);
 }
 
 
@@ -126,7 +126,6 @@ static void render_cat_tap(void) {
 	static uint8_t current_frame = 0;
 //	current_frame = (current_frame + 1 > TAP_FRAMES - 1) ? 0 : current_frame + 1;
 	current_frame = (current_frame + 1) & 1;
-
 
 	is_keyboard_left() ? render_frames(left_base, left_tap_diff[current_frame]) : render_frames(base, tap_diff[current_frame]);
 }

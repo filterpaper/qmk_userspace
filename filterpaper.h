@@ -40,10 +40,7 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #endif
 
 // Mod and layer tap bitmasks
-#define LT0_MASK 0x4000
-#define LT1_MASK 0x4100
-#define LT2_MASK 0x4200
-#define LT3_MASK 0x4300
+#define LT_MASK 0x4000
 #define CTL_T_MASK 0x6100
 #define SFT_T_MASK 0x6200
 #define ALT_T_MASK 0x6400

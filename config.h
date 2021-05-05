@@ -16,8 +16,11 @@
 
 #pragma once
 
+// Key and layout wrapper macros
+#include "layout.h"
+
 // Common QMK settings
-#define TAPPING_TERM 280
+#define TAPPING_TERM 250
 //#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
@@ -89,6 +92,3 @@
 #	define SPLIT_MODS_ENABLE
 #	endif
 #endif
-
-// Key and layout wrapper macros
-#include "layout.h"
