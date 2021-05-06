@@ -45,3 +45,25 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #define SFT_T_MASK 0x6200
 #define ALT_T_MASK 0x6400
 #define GUI_T_MASK 0x6800
+
+/** \brief Key Actions
+ * (kc >> 8) & 0x1F) for mod bits
+ *
+ * Mod bits:    43210
+ *   bit 0      ||||+- Control
+ *   bit 1      |||+-- Shift
+ *   bit 2      ||+--- Alt
+ *   bit 3      |+---- Gui
+ *   bit 4      +----- LR flag(Left:0, Right:1)
+ */
+/*
+enum mods_bit {
+	MOD_LCTL = 0x01,
+	MOD_LSFT = 0x02,
+	MOD_LALT = 0x04,
+	MOD_LGUI = 0x08,
+	MOD_RCTL = 0x11,
+	MOD_RSFT = 0x12,
+	MOD_RALT = 0x14,
+	MOD_RGUI = 0x18,
+}; */

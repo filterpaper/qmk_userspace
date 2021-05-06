@@ -20,9 +20,8 @@
 // Uses layer tap LT(0,keycode) tapping term delay
 // as a hold shortcut:
 #define TAP_HOLD(_tap_, _hold_) \
-	if (record->tap.count) { \
-		record->event.pressed ? register_code(_tap_) : unregister_code(_tap_); \
-	} else if (record->event.pressed) { _hold_; } \
+	if (record->tap.count) record->event.pressed ? register_code(_tap_) : unregister_code(_tap_); \
+	else if (record->event.pressed) _hold_; \
 	return false
 
 
