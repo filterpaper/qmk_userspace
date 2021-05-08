@@ -74,15 +74,15 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 
 #ifdef TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xFF00) == ALT_T_MASK) ? TAPPING_TERM + 100 : TAPPING_TERM;
+	// Increase for tap hold macros
+	return ((keycode & 0xFF00) == LT0_MASK) ? TAPPING_TERM + 80 : TAPPING_TERM;
 }
 #endif
 
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xF000) == LT_MASK ||
-			keycode == SFT_T(KC_SPC) ||
-			keycode == SFT_T(KC_ENT)) ? true : false;
+	// Disable for home row mods
+	return ((keycode & 0xF000) == LMOD_T_MASK) ? false : true;
 }
 #endif

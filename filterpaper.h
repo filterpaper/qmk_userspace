@@ -21,30 +21,36 @@
 enum layers { DEF, CMK, LWR, RSE, ADJ };
 
 // Custom dimmer indicator colors and effects
-#ifdef RGB_MATRIX_ENABLE
-#	define RGB_BSTEEL	60, 90, 128
-#	define RGB_DGRAY	50, 70, 90
-#	define RGB_MODS		RGB_BSTEEL
-#	define RGB_CAPS		RGB_PURPLE
-#	define RGB_LAYER	RGB_DGRAY
+#define RGB_BSTEEL	60, 90, 128
+#define RGB_DGRAY	50, 70, 90
+#define RGB_MODS	RGB_BSTEEL
+#define RGB_CAPS	RGB_PURPLE
+#define RGB_LAYER	RGB_DGRAY
 #if defined(KEYBOARD_bm40hsrgb) && defined(RGB_MATRIX_CUSTOM_USER)
 #	define DEF_MODE	RGB_MATRIX_CUSTOM_CANDY_WIDE
 #	define CMK_MODE	RGB_MATRIX_CUSTOM_PIXEL_RAIN
-#elif defined(KEYBOARD_boardsource_the_mark) && defined(RGB_MATRIX_CUSTOM_USER)
+#elif defined(RGB_MATRIX_CUSTOM_USER)
 #	define DEF_MODE	RGB_MATRIX_CUSTOM_CANDY_WIDE
 #	define CMK_MODE	RGB_MATRIX_CUSTOM_PIXEL_RAIN
 #else
 #	define DEF_MODE	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #	define CMK_MODE	RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
 #endif
-#endif
 
-// Mod and layer tap bitmasks
-#define LT_MASK 0x4000
+// Layer and mod tap bitmasks
+// 0xFF00 bitmask
+#define LT0_MASK 0x4000
+#define LT1_MASK 0x4100
+#define LT2_MASK 0x4200
+#define LT3_MASK 0x4300
 #define CTL_T_MASK 0x6100
 #define SFT_T_MASK 0x6200
 #define ALT_T_MASK 0x6400
 #define GUI_T_MASK 0x6800
+// 0xF000 bitmask
+#define LT_MASK LT0_MASK
+#define LMOD_T_MASK 0x6000
+#define RMOD_T_MASK 0x7000
 
 /** \brief Key Actions
  * (kc >> 8) & 0x1F) for mod bits

@@ -69,7 +69,7 @@
             "KC_LGUI",
             "LT(2,KC_SPC)",
             "KC_SPC",
-            "ANY(SFT_T(KC_SPC))",
+            "ANY(RSFT_T(KC_SPC))",
             "KC_RGUI",
             "KC_RCTL",
             "KC_RALT",

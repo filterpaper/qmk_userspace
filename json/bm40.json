@@ -46,7 +46,7 @@
             "CTL_T(KC_VOLU)",
             "KC_LGUI",
             "LT(2,KC_SPC)",
-            "SFT_T(KC_SPC)",
+            "RSFT_T(KC_SPC)",
             "LT(3,KC_SPC)",
             "KC_LEFT",
             "KC_DOWN",

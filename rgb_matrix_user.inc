@@ -130,8 +130,8 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 #ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
 HSV hsv_by_time(HSV hsv) {
 	return (HSV){
-		scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 5) & 255,
-		qadd8(scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 3) & 127, 127),
+		scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 6) & 255,
+		qadd8(scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 4) & 127, 127),
 		hsv.v };
 }
 

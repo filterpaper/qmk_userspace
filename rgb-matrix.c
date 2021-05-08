@@ -23,12 +23,6 @@
 
 #include "filterpaper.h"
 
-/* // by @tzarc
-RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
-	hsv.v = (uint8_t)(hsv.v * 0.6);
-	return hsv_to_rgb(hsv);
-}; */
-
 
 void matrix_init_user(void) {
 	// Remap under glow LEDs to nearby keys
@@ -93,7 +87,7 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
-#ifdef KEYBOARD_bm40hsrgb
+#if defined(KEYBOARD_bm40hsrgb) || defined(KEYBOARD_planck_rev6)
 	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
 		uint8_t const layer = get_highest_layer(layer_state);
