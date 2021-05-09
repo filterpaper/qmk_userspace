@@ -147,7 +147,8 @@ Images in `glcdfont.c` can be viewed and edited with:
 * [QMK Logo Editor](https://joric.github.io/qle/)
 * [image2cpp](https://javl.github.io/image2cpp/)
 
-# Layout macro wrapper
+# Layout wrapper macros
+## Basic layout
 Text-based layout (in `keymap.c` format) editing is supported with the use of preprocessor macros. Each layer, in text format, is created as a preprocessor macro for viewing and editing inside `layout.h`, example of one layer:
 ```c
 #define RAISE \
@@ -155,7 +156,7 @@ Text-based layout (in `keymap.c` format) editing is supported with the use of pr
 	KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,          KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
 	_______, _______, _______, _______, S(G(A(KC_V))), _______, _______, _______, _______, _______, _______, _______
 
-#define CORNERAISE                             _______, MO(4),   _______, _______, _______, _______
+#define CORNERAISE                            _______, MO(4),   _______, _______, _______, _______
 ```
 The wrapper layout name for each keyboard should be a macro mapped to the real layout inside `layout.h`, like this Corne example:
 ```c
@@ -180,3 +181,25 @@ Finally the keyboard's JSON file can be created by referencing the key code macr
 }
 ```
 The build process will construct a transient `keymap.c` from JSON file into the format `[0] = LAYOUT_wrapper_split_3x6_3(QWERTY, CORNEQWERTY)`, and C preprocessor will use macros inside `layout.h` to expand that into the full layout key code for compilation.
+## Layering home row modifiers
+The use of [home row mods](https://precondition.github.io/home-row-mods) can also be layered on the layout macro. The home row mod macro is first defined in here (`#define HRM(a) HRM_SACG(a)` is required for preprocessor to correct expand the HRM macro before passing the right number of keys to the `LAYOUT_wrapper` macros above):
+```c
+#define HRM(a) HRM_SACG(a)
+#define HRM_SACG( \
+    k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
+    k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
+    k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36  \
+) \
+    k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
+    k13, SFT_T(k14), ALT_T(k15), CTL_T(k16), GUI_T(k17), k18, \
+    k19, GUI_T(k20), CTL_T(k21), ALT_T(k22), SFT_T(k23), k24, \
+    k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36
+```
+Next, the layer that requires the home row mod can be wrapped inside `HRM()`:
+```
+"layers": [
+    [ "HRM(QWERTY)", "CORNEQWERTY" ],
+    [ "LOWER", "CORNELOWER" ],
+    [ "RAISE", "CORNERAISE" ],
+    [ "ADJUST", "CORNEBLANK" ],
+],```

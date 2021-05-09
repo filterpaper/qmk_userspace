@@ -4,8 +4,8 @@
     "keyboard": "crkbd/rev1/common",
     "keymap": "filterpaper",
     "layers": [
-        [ "QWERTY", "CORNEQWERTY" ],
-        [ "COLEMAK", "CORNEBLANK" ],
+        [ "HRM(QWERTY)", "CORNEQWERTY" ],
+        [ "HRM(COLEMAK)", "CORNEBLANK" ],
         [ "LOWER", "CORNELOWER" ],
         [ "RAISE", "CORNERAISE" ],
         [ "ADJUST", "CORNEBLANK" ],

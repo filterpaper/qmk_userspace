@@ -4,8 +4,8 @@
     "keyboard": "bm40hsrgb",
     "keymap": "filterpaper",
     "layers": [
-        [ "QWERTY", "BM40QWERTY" ],
-        [ "COLEMAK", "BM40BLANK" ],
+        [ "HRM(QWERTY)", "BM40QWERTY" ],
+        [ "HRM(COLEMAK)", "BM40BLANK" ],
         [ "LOWER", "BM40LOWER" ],
         [ "RAISE", "BM40RAISE" ],
         [ "ADJUST", "BM40BLANK" ]

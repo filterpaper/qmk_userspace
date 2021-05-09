@@ -4,8 +4,8 @@
     "keyboard": "planck/rev6",
     "keymap": "filterpaper",
     "layers": [
-        [ "QWERTY", "PLANCKQWERTY" ],
-        [ "COLEMAK", "PLANCKBLANK" ],
+        [ "HRM(QWERTY)", "PLANCKQWERTY" ],
+        [ "HRM(COLEMAK)", "PLANCKBLANK" ],
         [ "LOWER", "PLANCKLOWER" ],
         [ "RAISE", "PLANCKRAISE" ],
         [ "ADJUST", "PLANCKBLANK" ]
