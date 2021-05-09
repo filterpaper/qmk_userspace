@@ -10,7 +10,7 @@
         [ "RAISE", "PLANCKRAISE" ],
         [ "ADJUST", "PLANCKBLANK" ]
     ],
-    "layout": "LAYOUT_wrapper_ortho_4x12",
+    "layout": "PLANCK_wrapper",
     "notes": "",
     "version": 1
 }

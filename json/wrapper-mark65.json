@@ -9,7 +9,7 @@
         [ "MARK_LAYER2" ],
         [ "MARK_LAYER3" ]
     ],
-    "layout": "LAYOUT_wrapper_all",
+    "layout": "MARK65_wrapper",
     "notes": "",
     "version": 1
 }

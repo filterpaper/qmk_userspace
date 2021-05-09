@@ -10,7 +10,7 @@
         [ "RAISE", "BM40RAISE" ],
         [ "ADJUST", "BM40BLANK" ]
     ],
-    "layout": "LAYOUT_wrapper_planck_mit",
+    "layout": "BM40_wrapper",
     "notes": "",
     "version": 1
 }

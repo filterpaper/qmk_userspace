@@ -57,10 +57,10 @@
 
 
 // Base layout wrapper macros
-#define LAYOUT_wrapper_split_3x6_3(...) LAYOUT_split_3x6_3(__VA_ARGS__)
-#define LAYOUT_wrapper_ortho_4x12(...) LAYOUT_ortho_4x12(__VA_ARGS__)
-#define LAYOUT_wrapper_planck_mit(...) LAYOUT_planck_mit(__VA_ARGS__)
-#define LAYOUT_wrapper_all(...) LAYOUT_all(__VA_ARGS__)
+#define CORNE_wrapper(...)  LAYOUT_split_3x6_3(__VA_ARGS__)
+#define PLANCK_wrapper(...) LAYOUT_ortho_4x12(__VA_ARGS__)
+#define BM40_wrapper(...)   LAYOUT_planck_mit(__VA_ARGS__)
+#define MARK65_wrapper(...) LAYOUT_all(__VA_ARGS__)
 
 
 // Shared 3x12

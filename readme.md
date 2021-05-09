@@ -149,7 +149,7 @@ Images in `glcdfont.c` can be viewed and edited with:
 
 # Layout wrapper macros
 ## Basic layout
-Text-based layout (in `keymap.c` format) editing is supported with the use of preprocessor macros. Each layer, in text format, is created as a preprocessor macro for viewing and editing inside `layout.h`, example of one layer:
+Text-based key map layout (in `keymap.c` format) is supported with the use of preprocessor wrapper macros. Create each layer as a macro, saved them in `layout.h`, and include this file inside `config.h`. Here is an example of a Corne "raise" layer, in a 3x12 and bottom 6-key macro:
 ```c
 #define RAISE \
 	KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,        KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______, \
@@ -158,11 +158,11 @@ Text-based layout (in `keymap.c` format) editing is supported with the use of pr
 
 #define CORNERAISE                            _______, MO(4),   _______, _______, _______, _______
 ```
-The wrapper layout name for each keyboard should be a macro mapped to the real layout inside `layout.h`, like this Corne example:
+Next, create a wrapper name in `layout.h` that points to the actual layout macro used by the keyboard, example:
 ```c
-#define LAYOUT_wrapper_split_3x6_3(...) LAYOUT_split_3x6_3(__VA_ARGS__)
+#define CORNE_wrapper(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 ```
-Finally the keyboard's JSON file can be created by referencing the key code macros of each layer, along with the layout macro at the bottom:
+Finally the keyboard's JSON file content can reference the key code macros of each layer, along with the layout wrapper at the bottom:
 ```c
 {
     "author": "",
@@ -175,14 +175,14 @@ Finally the keyboard's JSON file can be created by referencing the key code macr
         [ "RAISE", "CORNERAISE" ],
         [ "ADJUST", "CORNEBLANK" ],
     ],
-    "layout": "LAYOUT_wrapper_split_3x6_3",
+    "layout": "CORNE_wrapper",
     "notes": "",
     "version": 1
 }
 ```
-The build process will construct a transient `keymap.c` from JSON file into the format `[0] = LAYOUT_wrapper_split_3x6_3(QWERTY, CORNEQWERTY)`, and C preprocessor will use macros inside `layout.h` to expand that into the full layout key code for compilation.
+The build process will construct a transient `keymap.c` from JSON file into the format `[0] = CORNE_wrapper(QWERTY, CORNEQWERTY)`, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure for compilation.
 ## Layering home row modifiers
-The use of [home row mods](https://precondition.github.io/home-row-mods) can also be layered on the layout macro. The home row mod macro is first defined in here (`#define HRM(a) HRM_SACG(a)` is required for preprocessor to correct expand the HRM macro before passing the right number of keys to the `LAYOUT_wrapper` macros above):
+The use of [home row mods](https://precondition.github.io/home-row-mods) can also be layered over the layout macros. The home row mod macro is defined in here (with the corresponding letter position wrapped by mod-tap):
 ```c
 #define HRM(a) HRM_SACG(a)
 #define HRM_SACG( \
@@ -195,7 +195,7 @@ The use of [home row mods](https://precondition.github.io/home-row-mods) can als
     k19, GUI_T(k20), CTL_T(k21), ALT_T(k22), SFT_T(k23), k24, \
     k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36
 ```
-Next, the layer that requires the home row mod can be wrapped inside `HRM()`:
+Next, the layer macro that requires the home row mod can be wrapped inside `HRM()`:
 ```
 "layers": [
     [ "HRM(QWERTY)", "CORNEQWERTY" ],
@@ -203,3 +203,4 @@ Next, the layer that requires the home row mod can be wrapped inside `HRM()`:
     [ "RAISE", "CORNERAISE" ],
     [ "ADJUST", "CORNEBLANK" ],
 ],```
+During the compile process, the preprocessor will expand `HRM(QWERTY)` and wrap the right key code inside `QWERTY` with the mod-tap define inside `HRM_SACG`. These will then be passed on `CORNE_wrapper()`, the alias macro of the structure used by the keyboard.
