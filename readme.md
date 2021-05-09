@@ -152,9 +152,9 @@ Images in `glcdfont.c` can be viewed and edited with:
 Text-based key map layout (in `keymap.c` format) is supported with the use of preprocessor wrapper macros. Create each layer as a macro, saved them in `layout.h`, and include this file inside `config.h`. Here is an example of a Corne "raise" layer, in a 3x12 and bottom 6-key macro:
 ```c
 #define RAISE \
-	KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,        KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______, \
-	KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,          KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
-	_______, _______, _______, _______, S(G(A(KC_V))), _______, _______, _______, _______, _______, _______, _______
+    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,        KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______, \
+    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,          KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
+    _______, _______, _______, _______, S(G(A(KC_V))), _______, _______, _______, _______, _______, _______, _______
 
 #define CORNERAISE                            _______, MO(4),   _______, _______, _______, _______
 ```
