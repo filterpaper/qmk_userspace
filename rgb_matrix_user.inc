@@ -145,16 +145,6 @@ static bool CANDY_TAP(effect_params_t* params) {
 }
 
 static bool CANDY_WIDE(effect_params_t* params) {
-/*	HSV CANDY_NEXUS_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
-		uint16_t effect = tick - dist;
-		if (effect > 255) effect = 255;
-		if (dist > 72) effect = 255;
-		if ((dx > 8 || dx < -8) && (dy > 8 || dy < -8)) effect = 255;
-		hsv = hsv_by_time(hsv);
-		hsv.h = qadd8(hsv.h, dy >> 2);
-		hsv.v = qadd8(hsv.v, 255 - effect);
-		return hsv;
-	} */
 	HSV CANDY_WIDE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
 		uint16_t effect = tick + dist * 5;
 		if (effect > 255) effect = 255;

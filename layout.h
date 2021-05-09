@@ -28,8 +28,7 @@
 #define COMM_TH LT(0,KC_COMM)
 #define M_TH LT(0,KC_M)
 
-// Home row modifier wrappers
-#define HRM(a) HRM_SACG(a)
+// Mod-tap wrappers
 #define HRM_SACG( \
 	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
 	k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
@@ -40,7 +39,6 @@
 	k19, GUI_T(k20), CTL_T(k21), ALT_T(k22), SFT_T(k23), k24, \
 	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36
 
-#define HRM65(a) HRM65_SACG(a)
 #define HRM65_SACG( \
 	k000, k001, k002, k003, k004, k005, k006, k007, k008, k009, k010, k011, k012, k013, k014, k015, \
 	k100,       k102, k103, k104, k105, k106, k107, k108, k109, k110, k111, k112, k113, k114, k115, \
@@ -55,6 +53,8 @@
 	k300, k301, k302, k303, k304, k305, k306, k307, k308, k309, k310, k311,       k313, k314,       \
 	k400, k401,       k403, k404,       k406,       k408,       k410, k411, k412, k413, k414, k415
 
+#define HRM(k)   HRM_SACG(k)
+#define HRM65(k) HRM65_SACG(k)
 
 // Base layout wrapper macros
 #define CORNE_wrapper(...)  LAYOUT_split_3x6_3(__VA_ARGS__)
@@ -68,7 +68,6 @@
 	KC_TAB,  Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
 	KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    M_TH,    COMM_TH, DOT_TH,  KC_SLSH, KC_ENT
-
 
 #define COLEMAK \
 	_______, _______, _______, KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, \
