@@ -4,8 +4,8 @@
     "keyboard": "boardsource/the_mark",
     "keymap": "filterpaper",
     "layers": [
-        [ "MARK_QWERTY" ],
-        [ "MARK_COLEMAK" ],
+        [ "HRM65(MARK_QWERTY)" ],
+        [ "HRM65(MARK_COLEMAK)" ],
         [ "MARK_LAYER2" ],
         [ "MARK_LAYER3" ]
     ],
