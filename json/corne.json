@@ -46,7 +46,7 @@
             "RSFT_T(KC_ENT)",
             "RSFT_T(KC_SPC)",
             "LT(3,KC_SPC)",
-            "KC_RGUI"
+            "RGUI_T(KC_BSPC)"
         ],
         [
             "KC_TRNS",
