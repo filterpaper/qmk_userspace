@@ -89,6 +89,9 @@
 // Top right corner of right-side Corne
 #	define BOOTMAGIC_LITE_ROW_RIGHT 4
 #	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
+#	ifdef RGB_MATRIX_ENABLE
+#	define SPLIT_TRANSPORT_MIRROR
+#	endif
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
