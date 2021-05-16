@@ -61,4 +61,6 @@ else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	SRC += mod-status.c bongocat.c
+	RGBLIGHT_ENABLE = yes
+	SRC += rgb-light.c
 endif
