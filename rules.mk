@@ -49,6 +49,7 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	WPM_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	SRC += bongocat.c
+	OPT_DEFS += -D${CAT}CAT
 	# Primary OLED option
 	ifneq ($(DOG),)
 		SRC += luna-status.c
@@ -61,6 +62,10 @@ else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	SRC += mod-status.c bongocat.c
-	RGBLIGHT_ENABLE = yes
-	SRC += rgb-light.c
+	OPT_DEFS += -D${CAT}CAT
+#	RGBLIGHT_ENABLE = yes
+#	SRC += rgb-light.c
+	RGB_MATRIX_ENABLE = yes
+	SRC += rgb-matrix.c
+	RGB_MATRIX_CUSTOM_USER = yes
 endif
