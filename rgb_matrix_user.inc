@@ -20,14 +20,9 @@
 //uint16_t tick = scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 5);
 
 
-RGB_MATRIX_EFFECT(PIXEL_RAIN) // 278 bytes
-RGB_MATRIX_EFFECT(PIXEL_FLOW) // 390 bytes
-RGB_MATRIX_EFFECT(PIXEL_FRACTAL) // 522 bytes
 #ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
 RGB_MATRIX_EFFECT(CANDY_TAP)
 RGB_MATRIX_EFFECT(CANDY_WIDE)
-#endif
-
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
@@ -38,6 +33,43 @@ uint8_t jsf8(void) { // Bob Jenkin's fast prng
 	b = c + d; c = d + t;
 	return d = t + a;
 }
+
+HSV hsv_by_time(HSV hsv) {
+	return (HSV){
+		scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 6) & 255,
+		qadd8(scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 4) & 127, 127),
+		hsv.v };
+}
+
+static bool CANDY_TAP(effect_params_t* params) {
+	HSV CANDY_TAP_math(HSV hsv, uint16_t offset) {
+		hsv = hsv_by_time(hsv);
+		hsv.v = scale8(255 - offset, hsv.v);
+		return hsv;
+	}
+	return effect_runner_reactive(params, &CANDY_TAP_math);
+}
+
+static bool CANDY_WIDE(effect_params_t* params) {
+	HSV CANDY_WIDE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
+		uint16_t effect = tick + dist * 5;
+		if (effect > 255) effect = 255;
+		hsv = hsv_by_time(hsv);
+		hsv.v = qadd8(hsv.v, 255 - effect);
+		return hsv;
+	}
+	return effect_runner_reactive_splash(0, params, &CANDY_WIDE_math);
+}
+#endif // RGB_MATRIX_KEYREACTIVE_ENABLED
+#endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+
+
+#ifndef KEYBOARD_crkbd_rev1_common
+RGB_MATRIX_EFFECT(PIXEL_RAIN) // 278 bytesm
+RGB_MATRIX_EFFECT(PIXEL_FLOW) // 390 bytes
+RGB_MATRIX_EFFECT(PIXEL_FRACTAL) // 522 bytes
+
+#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
 RGB random_hsv_to_rgb(void) {
 	return hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
@@ -95,6 +127,7 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 	#define FRACTAL_RATIO 16
 
 	typedef struct PACKED { RGB rgb; bool tag; } fractal_led_t;
+	typedef struct PACKED { uint8_t x; uint8_t y; } fractal_point_t;
 	static fractal_led_t led[FRACTAL_WIDTH][FRACTAL_HEIGHT];
 	static uint32_t wait_timer = 0;
 	if (wait_timer > g_rgb_timer) { return false; }
@@ -102,12 +135,12 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 	inline uint32_t interval(void) { return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
 
 	#define FRACTAL_PIXEL() (jsf8() & 3) ? (RGB){0,0,0} : random_hsv_to_rgb()
-	#define GET_FRACTAL_POINT(k) (point_t){scale8(g_led_config.point[k].x, FRACTAL_RATIO), scale8(g_led_config.point[k].y, FRACTAL_RATIO)}
+	#define GET_FRACTAL_POINT(k) (fractal_point_t){scale8(g_led_config.point[k].x, FRACTAL_RATIO), scale8(g_led_config.point[k].y, FRACTAL_RATIO)}
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	for (uint8_t i = led_min; i < led_max; ++i) {
 		RGB_MATRIX_TEST_LED_FLAGS();
-		point_t map = GET_FRACTAL_POINT(i);
+		fractal_point_t map = GET_FRACTAL_POINT(i);
 		led[map.x][map.y].tag = true;
 		rgb_matrix_set_color(i, led[map.x][map.y].rgb.r, led[map.x][map.y].rgb.g, led[map.x][map.y].rgb.b);
 	}
@@ -127,33 +160,5 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 	return led_max < DRIVER_LED_TOTAL;
 }
 
-#ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
-HSV hsv_by_time(HSV hsv) {
-	return (HSV){
-		scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 6) & 255,
-		qadd8(scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 4) & 127, 127),
-		hsv.v };
-}
-
-static bool CANDY_TAP(effect_params_t* params) {
-	HSV CANDY_TAP_math(HSV hsv, uint16_t offset) {
-		hsv = hsv_by_time(hsv);
-		hsv.v = scale8(255 - offset, hsv.v);
-		return hsv;
-	}
-	return effect_runner_reactive(params, &CANDY_TAP_math);
-}
-
-static bool CANDY_WIDE(effect_params_t* params) {
-	HSV CANDY_WIDE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
-		uint16_t effect = tick + dist * 5;
-		if (effect > 255) effect = 255;
-		hsv = hsv_by_time(hsv);
-		hsv.v = qadd8(hsv.v, 255 - effect);
-		return hsv;
-	}
-	return effect_runner_reactive_splash(0, params, &CANDY_WIDE_math);
-}
-#endif // RGB_MATRIX_KEYREACTIVE_ENABLED
-
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // KEYBOARD_crkbd_rev1_common

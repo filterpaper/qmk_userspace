@@ -64,12 +64,18 @@ void matrix_init_user(void) {
 }
 
 
+void keyboard_post_init_user(void) {
+	rgb_matrix_mode_noeeprom(DEF_MODE);
+}
+
+
 layer_state_t layer_state_set_user(layer_state_t const state) {
 	layer_state_cmp(state, CMK) ? rgb_matrix_mode_noeeprom(CMK_MODE) : rgb_matrix_mode_noeeprom(DEF_MODE);
 	return state;
 }
 
 
+#ifndef KEYBOARD_crkbd_rev1_common
 void rgb_matrix_indicators_user(void) {
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
@@ -109,5 +115,6 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
-#endif
+#endif // defined(KEYBOARD_bm40hsrgb) || defined(KEYBOARD_planck_rev6)
 }
+#endif // KEYBOARD_crkbd_rev1_common

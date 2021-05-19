@@ -63,8 +63,6 @@ else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	OLED_DRIVER_ENABLE = yes
 	SRC += mod-status.c bongocat.c
 	OPT_DEFS += -D${CAT}CAT
-#	RGBLIGHT_ENABLE = yes
-#	SRC += rgb-light.c
 	RGB_MATRIX_ENABLE = yes
 	SRC += rgb-matrix.c
 	RGB_MATRIX_CUSTOM_USER = yes
