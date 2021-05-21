@@ -33,12 +33,12 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 #ifdef CAPSWORD_ENABLE
 // Deactivate caps lock following a word
 static void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
-/*	// Get base key code of mod or layer tap with bitmask
+	// Get base key code of mod or layer tap with bitmask
 	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
 		(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
-		(record->tap.count)) { keycode = keycode & 0xFF; } */
+		(record->tap.count)) { keycode = keycode & 0xFF; }
 	// Toggle caps lock with the following key codes
-	switch (keycode & 0xFF) {
+	switch (keycode) {
 		case KC_TAB:
 		case KC_ESC:
 		case KC_SPC:
