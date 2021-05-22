@@ -22,10 +22,9 @@
 
 #ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
 RGB_MATRIX_EFFECT(CANDY_TAP)
-RGB_MATRIX_EFFECT(CANDY_WIDE)
+RGB_MATRIX_EFFECT(CANDY_SPLASH)
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-
 uint8_t jsf8(void) { // Bob Jenkin's fast prng
 	static uint8_t a = 161, b = 62, c = 21, d = 97, t;
 	t = a - ((b << 1)|(b >> 7));
@@ -43,25 +42,23 @@ HSV hsv_by_time(HSV hsv) {
 
 static bool CANDY_TAP(effect_params_t* params) {
 	HSV CANDY_TAP_math(HSV hsv, uint16_t offset) {
-		hsv = hsv_by_time(hsv);
 		hsv.v = scale8(255 - offset, hsv.v);
-		return hsv;
+		return hsv_by_time(hsv);
 	}
 	return effect_runner_reactive(params, &CANDY_TAP_math);
 }
 
-static bool CANDY_WIDE(effect_params_t* params) {
+static bool CANDY_SPLASH(effect_params_t* params) {
 	HSV CANDY_WIDE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
 		uint16_t effect = tick + dist * 5;
 		if (effect > 255) effect = 255;
-		hsv = hsv_by_time(hsv);
 		hsv.v = qadd8(hsv.v, 255 - effect);
-		return hsv;
+		return hsv_by_time(hsv);
 	}
 	return effect_runner_reactive_splash(0, params, &CANDY_WIDE_math);
 }
-#endif // RGB_MATRIX_KEYREACTIVE_ENABLED
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // RGB_MATRIX_KEYREACTIVE_ENABLED
 
 
 #ifndef KEYBOARD_crkbd_rev1_common
@@ -70,7 +67,6 @@ RGB_MATRIX_EFFECT(PIXEL_FLOW) // 390 bytes
 RGB_MATRIX_EFFECT(PIXEL_FRACTAL) // 522 bytes
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-
 RGB random_hsv_to_rgb(void) {
 	return hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
 }
@@ -159,6 +155,5 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 	}
 	return led_max < DRIVER_LED_TOTAL;
 }
-
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // KEYBOARD_crkbd_rev1_common
