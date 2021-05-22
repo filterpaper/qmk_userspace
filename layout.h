@@ -80,9 +80,9 @@
 	_______, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    _______, KC_N,    KC_E,    KC_I ,   KC_O,    _______, \
 	_______, _______, _______, _______, _______, KC_B,    KC_K,    _______, _______, _______, _______, _______
 #define LOWER \
-	_______, _______, _______, KC_LPRN, KC_RPRN, _______, _______, KC_MINS, KC_EQL,  KC_BSLS, _______, _______, \
+	_______, _______, _______, KC_LPRN, KC_RPRN, _______, _______, KC_UNDS, KC_PLUS, KC_PIPE, _______, _______, \
 	_______, _______, _______, KC_LCBR, KC_RCBR, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______, \
-	KC_CAPS, _______, _______, KC_LBRC, KC_RBRC, _______, _______, _______, _______, _______, _______, _______
+	KC_CAPS, _______, _______, KC_LBRC, KC_RBRC, _______, _______, KC_MINS, KC_EQL,  KC_BSLS, _______, _______
 #define RAISE \
 	KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______, \
 	KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
