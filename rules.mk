@@ -41,8 +41,15 @@ ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1/common))
 endif
 
 # Corne keyboard features
-ifeq ($(KEYBOARD) $(TINY), crkbd/rev1/common yes)
+# Primary tap-driven cat with secondary mod status and RGB
+ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1/common T)
 	MOUSEKEY_ENABLE = yes
+	OLED_DRIVER_ENABLE = yes
+	SRC += mod-status.c bongocat.c
+	OPT_DEFS += -D${CAT}CAT
+	RGB_MATRIX_ENABLE = yes
+	SRC += rgb-matrix.c
+	RGB_MATRIX_CUSTOM_USER = yes
 # Primary status with secondary WPM-driven animation
 else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
@@ -57,13 +64,7 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	else
 		SRC += mod-status.c
 	endif
-# Primary tap-driven animation with secondary mod status
+# Minimal default
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
 	MOUSEKEY_ENABLE = yes
-	OLED_DRIVER_ENABLE = yes
-	SRC += mod-status.c bongocat.c
-	OPT_DEFS += -D${CAT}CAT
-	RGB_MATRIX_ENABLE = yes
-	SRC += rgb-matrix.c
-	RGB_MATRIX_CUSTOM_USER = yes
 endif
