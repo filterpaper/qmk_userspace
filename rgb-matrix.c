@@ -75,11 +75,7 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 }
 
 
-//#ifdef KEYBOARD_crkbd_rev1_common
 void housekeeping_task_user(void) {
-#else
-void rgb_matrix_indicators_user(void) {
-#endif
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
