@@ -37,20 +37,20 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #	define CMK_MODE	RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
 #endif
 
-// Layer and mod tap bitmasks
+// Layer and mod tap mask bits
 // 0xFF00 bitmask
-#define LT0_MASK 0x4000
-#define LT1_MASK 0x4100
-#define LT2_MASK 0x4200
-#define LT3_MASK 0x4300
-#define CTL_T_MASK 0x6100
-#define SFT_T_MASK 0x6200
-#define ALT_T_MASK 0x6400
-#define GUI_T_MASK 0x6800
+#define LT0_BITS 0x4000
+#define LT1_BITS 0x4100
+#define LT2_BITS 0x4200
+#define LT3_BITS 0x4300
+#define CTL_T_BITS 0x6100
+#define SFT_T_BITS 0x6200
+#define ALT_T_BITS 0x6400
+#define GUI_T_BITS 0x6800
 // 0xF000 bitmask
-#define LT_MASK LT0_MASK
-#define LMOD_T_MASK 0x6000
-#define RMOD_T_MASK 0x7000
+#define LT_BITS LT0_BITS
+#define LMOD_T_BITS 0x6000
+#define RMOD_T_BITS 0x7000
 
 /** \brief Key Actions
  * (kc >> 8) & 0x1F) for mod bits

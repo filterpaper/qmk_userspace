@@ -75,7 +75,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #ifdef TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	// Increase for tap hold macros
-	return ((keycode & 0xFF00) == LT0_MASK) ? TAPPING_TERM + 100 : TAPPING_TERM;
+	return ((keycode & 0xFF00) == LT0_BITS) ? TAPPING_TERM + 100 : TAPPING_TERM;
 }
 #endif
 
@@ -83,6 +83,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	// Disable for home row mods and tap hold macros
-	return ((keycode & 0xF000) == LMOD_T_MASK || (keycode & 0xFF00) == LT0_MASK) ? false : true;
+	return ((keycode & 0xF000) == LMOD_T_BITS || (keycode & 0xFF00) == LT0_BITS) ? false : true;
 }
 #endif
