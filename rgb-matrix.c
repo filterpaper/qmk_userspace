@@ -75,8 +75,11 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 }
 
 
-#ifndef KEYBOARD_crkbd_rev1_common
+//#ifdef KEYBOARD_crkbd_rev1_common
+void housekeeping_task_user(void) {
+#else
 void rgb_matrix_indicators_user(void) {
+#endif
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
@@ -93,7 +96,16 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
-#if defined(KEYBOARD_bm40hsrgb) || defined(KEYBOARD_planck_rev6)
+#ifdef KEYBOARD_boardsource_the_mark
+	if (get_highest_layer(layer_state) > CMK) {
+		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
+			if (HAS_ANY_FLAGS(g_led_config.flags[i], LED_FLAG_ALL)) {
+				RGB rgb = hsv_to_rgb((HSV){rgb_matrix_config.hsv.h >> get_highest_layer(layer_state), rgb_matrix_config.hsv.v, rgb_matrix_config.hsv.v});
+				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+			}
+		}
+	}
+#else
 	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
 		uint8_t const layer = get_highest_layer(layer_state);
@@ -106,15 +118,5 @@ void rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
-#else
-	if (get_highest_layer(layer_state) > CMK) {
-		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
-			if (HAS_ANY_FLAGS(g_led_config.flags[i], LED_FLAG_ALL)) {
-				RGB rgb = hsv_to_rgb((HSV){rgb_matrix_config.hsv.h >> get_highest_layer(layer_state), rgb_matrix_config.hsv.v, rgb_matrix_config.hsv.v});
-				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
-			}
-		}
-	}
-#endif // defined(KEYBOARD_bm40hsrgb) || defined(KEYBOARD_planck_rev6)
+#endif // KEYBOARD_boardsource_the_mark
 }
-#endif // KEYBOARD_crkbd_rev1_common

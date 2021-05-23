@@ -83,6 +83,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	// Disable for home row mods
-	return ((keycode & 0xF000) == LMOD_T_MASK) ? false : true;
+	return (LT1_MASK <= (keycode & 0xFF00) && (keycode & 0xFF00) <= LT5_MASK) ? false : true;
 }
 #endif

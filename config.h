@@ -25,7 +25,7 @@
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
-#define TAP_CODE_DELAY 50
+#define TAP_CODE_DELAY 5
 #define LAYER_STATE_8BIT // 8-layer limit, saves ~462 bytes
 #define GRAVE_ESC_SHIFT_OVERRIDE
 
@@ -81,6 +81,7 @@
 #	define RGBLIGHT_SPLIT
 #	define RGBLIGHT_SLEEP
 #	define RGBLIGHT_LIMIT_VAL 150
+#   define RGBLIGHT_SLEEP 180000
 #endif
 
 #ifdef MOUSEKEY_ENABLE
