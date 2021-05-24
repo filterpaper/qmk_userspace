@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Graphical Yoshi animation display, requires WPM_ENABLE.
-   Yoshi is 4x4 on OLED and its frames are oriented for
+/* Graphical Yoshi animation status display.
+   Yoshi is 32x32 pixels and frames are oriented for
    vertical rendering (OLED_ROTATION_270).
 */
 
