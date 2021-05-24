@@ -49,6 +49,10 @@ ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1/common T)
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += mod-status.c bongocat.c rgb-matrix.c
 	OPT_DEFS += -D${CAT}CAT
+else ifeq ($(KEYBOARD) $(YOSHI), crkbd/rev1/common yes)
+	MOUSEKEY_ENABLE = yes
+	OLED_DRIVER_ENABLE = yes
+	SRC += yoshi.c
 # Primary status with secondary WPM-driven animation
 else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes
@@ -58,7 +62,7 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	OPT_DEFS += -D${CAT}CAT
 	# Primary OLED option
 	ifneq ($(DOG),)
-		SRC += luna-status.c
+		SRC += yoshi.c
 		OPT_DEFS += -D${DOG}
 	else
 		SRC += mod-status.c
