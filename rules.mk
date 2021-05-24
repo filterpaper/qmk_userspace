@@ -45,11 +45,10 @@ endif
 ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1/common T)
 	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
-	SRC += mod-status.c bongocat.c
-	OPT_DEFS += -D${CAT}CAT
 	RGB_MATRIX_ENABLE = yes
-	SRC += rgb-matrix.c
 	RGB_MATRIX_CUSTOM_USER = yes
+	SRC += mod-status.c bongocat.c rgb-matrix.c
+	OPT_DEFS += -D${CAT}CAT
 # Primary status with secondary WPM-driven animation
 else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	MOUSEKEY_ENABLE = yes

@@ -156,12 +156,25 @@ static void render_mod_status_ctrl_shift(uint8_t const mods, bool const caps) {
 
 // Primary modifier status display function
 static void render_mod_status(void) {
-	render_logo();
-	oled_set_cursor(0,6);
-	render_layer_state();
-	oled_set_cursor(0,11);
-	render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
-	render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods(),host_keyboard_led_state().caps_lock);
+	static uint8_t prev_layer;
+	static uint8_t prev_mods;
+	static bool prev_caps;
+
+	if (prev_layer != layer_state ||
+		prev_mods != (get_mods()|get_oneshot_mods()) ||
+		prev_caps != host_keyboard_led_state().caps_lock
+	) {
+		prev_layer = layer_state;
+		prev_mods = (get_mods()|get_oneshot_mods());
+		prev_caps = host_keyboard_led_state().caps_lock;
+
+		render_logo();
+		oled_set_cursor(0,6);
+		render_layer_state();
+		oled_set_cursor(0,11);
+		render_mod_status_gui_alt(prev_mods);
+		render_mod_status_ctrl_shift(prev_mods,prev_caps);
+	}
 }
 
 

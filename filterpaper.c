@@ -30,8 +30,7 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 #endif
 
 
-#ifdef CAPSWORD_ENABLE
-// Deactivate caps lock following a word
+#ifdef CAPSWORD_ENABLE // Deactivate caps lock following a word
 static void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
 	// Get base key code of mod or layer tap with bitmask
 	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
@@ -72,17 +71,15 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 }
 
 
-#ifdef TAPPING_TERM_PER_KEY
+#ifdef TAPPING_TERM_PER_KEY // Increase for tap hold macros
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	// Increase for tap hold macros
 	return ((keycode & 0xFF00) == LT0_BITS) ? TAPPING_TERM + 100 : TAPPING_TERM;
 }
 #endif
 
 
-#ifdef PERMISSIVE_HOLD_PER_KEY
+#ifdef PERMISSIVE_HOLD_PER_KEY // Disable for home row mods and tap hold macros
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	// Disable for home row mods and tap hold macros
 	return ((keycode & 0xF000) == LMOD_T_BITS || (keycode & 0xFF00) == LT0_BITS) ? false : true;
 }
 #endif
