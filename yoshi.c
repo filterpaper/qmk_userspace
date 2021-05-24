@@ -21,7 +21,6 @@
 
 #include "filterpaper.h"
 
-#define YOSHI_FRAMES 5
 #define YOSHI_FRAME_DURATION 130 // Number of ms between frames
 #define YOSHI_SIZE 128 // Yoshi is 32 x 32px
 
