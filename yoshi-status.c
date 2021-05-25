@@ -72,15 +72,14 @@ static void render_yoshi_ready(void) {
 		0x00, 0x00, 0x00, 0xe0, 0x9c, 0x85, 0x85, 0x86, 0x86, 0x9e, 0xf6, 0x06, 0x06, 0x05, 0x05, 0x04,
 		0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	} };
-
-	static char const *ready_anim[] = {
+	static char const *anim[] = {
 		ready[0], ready[1], ready[2], ready[3],
 		ready[4], ready[3], ready[2], ready[1]
 	};
 
 	static uint8_t current_frame = 0;
-	current_frame = (current_frame + 1 > 8 - 1) ? 0 : current_frame + 1;
-	oled_write_raw_P(ready_anim[current_frame], YOSHI_SIZE);
+	current_frame = (current_frame + 1 > sizeof(anim)/sizeof(anim[0]) - 1) ? 0 : current_frame + 1;
+	oled_write_raw_P(anim[current_frame], YOSHI_SIZE);
 }
 
 
@@ -113,16 +112,13 @@ static void render_yoshi_fly(void) {
 		0x00, 0x00, 0x1f, 0x20, 0x20, 0x24, 0x1d, 0x0b, 0x16, 0x14, 0x24, 0x22, 0x41, 0x40, 0x40, 0x40,
 		0x20, 0x20, 0x10, 0x10, 0x0c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	} };
-
-	static char const *fly_anim[] = {
-		fly[0], fly[1],
-		fly[2], fly[2],
-		fly[1], fly[0]
+	static char const *anim[] = {
+		fly[0], fly[1], fly[2], fly[1],
 	};
 
 	static uint8_t current_frame = 0;
-	current_frame = (current_frame + 1 > 6 - 1) ? 0 : current_frame + 1;
-	oled_write_raw_P(fly_anim[current_frame], YOSHI_SIZE);
+	current_frame = (current_frame + 1 > sizeof(anim)/sizeof(anim[0]) - 1) ? 0 : current_frame + 1;
+	oled_write_raw_P(anim[current_frame], YOSHI_SIZE);
 }
 
 
@@ -155,16 +151,15 @@ static void render_yoshi_hide(void) {
 		0x00, 0x00, 0x07, 0xf8, 0x9c, 0x85, 0x84, 0x84, 0x84, 0x9f, 0xfc, 0x94, 0xd2, 0xaa, 0xb9, 0xa5,
 		0xc1, 0x41, 0x80, 0x80, 0x80, 0x81, 0x40, 0x41, 0x20, 0x1f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	} };
-
-	static char const *hide_anim[] = {
+	static char const *anim[] = {
 		hide[0], hide[0], hide[1], hide[2],
 		hide[2], hide[2], hide[2], hide[2],
 		hide[2], hide[1], hide[0], hide[0]
 	};
 
 	static uint8_t current_frame = 0;
-	current_frame = (current_frame + 1 > 12 - 1) ? 0 : current_frame + 1;
-	oled_write_raw_P(hide_anim[current_frame], YOSHI_SIZE);
+	current_frame = (current_frame + 1 > sizeof(anim)/sizeof(anim[0]) - 1) ? 0 : current_frame + 1;
+	oled_write_raw_P(anim[current_frame], YOSHI_SIZE);
 }
 
 
@@ -197,16 +192,15 @@ static void render_yoshi_idle(void) {
 		0x00, 0x00, 0x00, 0xe3, 0x9c, 0x85, 0x86, 0x84, 0x84, 0x9c, 0xf4, 0x92, 0x89, 0x98, 0x98, 0x96,
 		0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	} };
-
-	static char const *idle_anim[] = {
+	static char const *anim[] = {
 		idle[0], idle[0], idle[1], idle[2],
 		idle[1], idle[2], idle[1], idle[2],
 		idle[1], idle[0]
 	};
 
 	static uint8_t current_frame = 0;
-	current_frame = (current_frame + 1 > 10 - 1) ? 0 : current_frame + 1;
-	oled_write_raw_P(idle_anim[current_frame], YOSHI_SIZE);
+	current_frame = (current_frame + 1 > sizeof(anim)/sizeof(anim[0]) - 1) ? 0 : current_frame + 1;
+	oled_write_raw_P(anim[current_frame], YOSHI_SIZE);
 }
 
 
@@ -252,13 +246,13 @@ static void render_yoshi_status(void) {
 	void animation_phase(void) {
 		oled_set_cursor(0,6);
 		if (get_mods() & MOD_MASK_SHIFT) { render_yoshi_fly(); }
-		else if (get_mods() & MOD_MASK_CTRL) { render_yoshi_idle(); }
-		else if (get_mods() & MOD_MASK_GUI) { render_yoshi_hide(); }
-		else if (keystroke < YOSHI_FRAME_DURATION*8) { render_yoshi_run(); }
+		else if (get_mods() & MOD_MASK_CAG) { render_yoshi_hide(); }
+		else if (get_highest_layer(layer_state) > DEF) { render_yoshi_idle(); }
+		else if (keystroke < YOSHI_FRAME_DURATION*3) { render_yoshi_run(); }
 		else { render_yoshi_ready(); }
 	}
 
-	if (keystroke > OLED_TIMEOUT*3) { oled_off(); }
+	if (keystroke > OLED_TIMEOUT*2) { oled_off(); }
 	else if (timer_elapsed(anim_timer) > YOSHI_FRAME_DURATION) {
 		anim_timer = timer_read();
 		animation_phase();
