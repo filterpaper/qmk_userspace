@@ -21,7 +21,7 @@
 enum layers { DEF, CMK, LWR, RSE, ADJ };
 
 // Custom dimmer indicator colors and effects
-#define RGB_BSTEEL	60, 90, 128
+#define RGB_BSTEEL	40, 60, 85
 #define RGB_DGRAY	50, 70, 90
 #define RGB_CAPS	60, 0, 127
 #define RGB_MODS	RGB_BSTEEL

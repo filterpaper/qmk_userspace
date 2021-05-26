@@ -24,6 +24,8 @@
 //#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
+#define TAPPING_FORCE_HOLD
+//#define TAPPING_FORCE_HOLD_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAP_CODE_DELAY 5
 #define LAYER_STATE_8BIT // 8-layer limit, saves ~462 bytes

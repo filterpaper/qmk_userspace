@@ -16,9 +16,9 @@
 
 #include "filterpaper.h"
 
+
 // Tap hold macro function for process_record_user()
-// Uses layer tap LT(0,keycode) tapping term delay
-// as a hold shortcut:
+// Uses layer tap LT(0,kc) tapping term delay as hold shortcut:
 #define TAP_HOLD(_tap_, _hold_) \
 	if (record->tap.count) record->event.pressed ? register_code(_tap_) : unregister_code(_tap_); \
 	else if (record->event.pressed) _hold_; \
@@ -78,8 +78,16 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 
-#ifdef PERMISSIVE_HOLD_PER_KEY // Disable for home row mods and tap hold macros
+// Feature disable for tap hold macros and home row mods
+#ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+	return ((keycode & 0xF000) == LMOD_T_BITS || (keycode & 0xFF00) == LT0_BITS) ? false : true;
+}
+#endif
+
+
+#ifdef TAPPING_FORCE_HOLD_PER_KEY
+bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 	return ((keycode & 0xF000) == LMOD_T_BITS || (keycode & 0xFF00) == LT0_BITS) ? false : true;
 }
 #endif
