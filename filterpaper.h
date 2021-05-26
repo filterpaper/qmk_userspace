@@ -20,12 +20,15 @@
 // Layer references
 enum layers { DEF, CMK, LWR, RSE, ADJ };
 
-// Custom dimmer indicator colors and effects
+// Dimmer RGB colors
 #define RGB_BSTEEL	40, 60, 85
 #define RGB_DGRAY	50, 70, 90
-#define RGB_CAPS	60, 0, 127
+#define RGB_DGOLD	90, 90, 30
+#define RGB_DPURPLE	60, 0, 120
+#define RGB_CAPS	RGB_DPURPLE
 #define RGB_MODS	RGB_BSTEEL
-#define RGB_LAYER	RGB_DGRAY
+#define RGB_LAYER	RGB_DGOLD
+// Custom effects
 #if defined(KEYBOARD_crkbd_rev1_common) && defined(RGB_MATRIX_CUSTOM_USER)
 #	define DEF_MODE	RGB_MATRIX_CUSTOM_CANDY_TAP
 #	define CMK_MODE	RGB_MATRIX_CUSTOM_CANDY_SPLASH
