@@ -21,8 +21,9 @@
 
 
 #ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
+
+#ifndef DISABLE_RGB_MATRIX_CANDY_TAP
 RGB_MATRIX_EFFECT(CANDY_TAP)
-RGB_MATRIX_EFFECT(CANDY_SPLASH)
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 uint8_t jsf8(void) { // Bob Jenkin's fast prng
@@ -47,7 +48,14 @@ static bool CANDY_TAP(effect_params_t* params) {
 	}
 	return effect_runner_reactive(params, &CANDY_TAP_math);
 }
+#endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // DISABLE_RGB_MATRIX_CANDY_TAP
 
+
+#ifndef DISABLE_RGB_MATRIX_CANDY_SPLASH
+RGB_MATRIX_EFFECT(CANDY_SPLASH)
+
+#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_SPLASH(effect_params_t* params) {
 	HSV CANDY_WIDE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
 		uint16_t effect = tick + dist * 5;
@@ -58,13 +66,13 @@ static bool CANDY_SPLASH(effect_params_t* params) {
 	return effect_runner_reactive_splash(0, params, &CANDY_WIDE_math);
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // DISABLE_RGB_MATRIX_CANDY_SPLASH
+
 #endif // RGB_MATRIX_KEYREACTIVE_ENABLED
 
 
-#ifndef KEYBOARD_crkbd_rev1_common
-RGB_MATRIX_EFFECT(PIXEL_RAIN) // 278 bytesm
-RGB_MATRIX_EFFECT(PIXEL_FLOW) // 390 bytes
-RGB_MATRIX_EFFECT(PIXEL_FRACTAL) // 522 bytes
+#ifndef DISABLE_RGB_MATRIX_PIXEL_RAIN
+RGB_MATRIX_EFFECT(PIXEL_RAIN) // 278 bytes
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 RGB random_hsv_to_rgb(void) {
@@ -92,7 +100,14 @@ static bool PIXEL_RAIN(effect_params_t* params) {
 //	if (params->init) { random16_set_seed((uint16_t)g_rgb_timer); }
 	return rain_pixel(mod8(jsf8(), DRIVER_LED_TOTAL), params, jsf8() & 3);
 }
+#endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // DISABLE_RGB_MATRIX_PIXEL_RAIN
 
+
+#ifndef DISABLE_RGB_MATRIX_PIXEL_FLOW
+RGB_MATRIX_EFFECT(PIXEL_FLOW) // 390 bytes
+
+#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool PIXEL_FLOW(effect_params_t* params) {
 	static RGB led[DRIVER_LED_TOTAL];
 	static uint32_t wait_timer = 0;
@@ -115,7 +130,14 @@ static bool PIXEL_FLOW(effect_params_t* params) {
 	}
 	return led_max < DRIVER_LED_TOTAL;
 }
+#endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // DISABLE_RGB_MATRIX_PIXEL_FLOW
 
+
+#ifndef DISABLE_RGB_MATRIX_PIXEL_FRACTAL
+RGB_MATRIX_EFFECT(PIXEL_FRACTAL) // 522 bytes
+
+#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool PIXEL_FRACTAL(effect_params_t* params) {
 	#define FRACTAL_WIDTH 15
 	#define FRACTAL_HEIGHT 5
@@ -156,4 +178,4 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 	return led_max < DRIVER_LED_TOTAL;
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#endif // KEYBOARD_crkbd_rev1_common
+#endif // DISABLE_RGB_MATRIX_PIXEL_FRACTAL

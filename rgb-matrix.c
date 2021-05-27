@@ -14,13 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* The random color HSV function relies on two random number generator
-   instead of rand() from C library.
-
-   The 16-bit xorshift RNG is a small pseudo randon number generator from:
-   http://b2d-f9r.blogspot.com/2010/08/16-bit-xorshift-rng-now-with-more.html
- */
-
 #include "filterpaper.h"
 
 
@@ -75,7 +68,7 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 }
 
 
-void housekeeping_task_user(void) {
+void rgb_matrix_indicators_user(void) {
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {

@@ -230,6 +230,7 @@ static void render_yoshi_run(void) {
 	oled_write_raw_P(run[current_frame], YOSHI_SIZE);
 }
 
+
 static void render_yoshi_status(void) {
 #ifdef WPM_ENABLE
 	static uint8_t prev_wpm = 0;
