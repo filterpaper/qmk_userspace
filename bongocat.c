@@ -95,8 +95,10 @@ static void render_cat_idle(void) {
 		left_idle_diff_3
 	};
 #endif
+
 	static uint8_t current_frame = 0;
 	current_frame = (current_frame + 1 > IDLE_FRAMES - 1) ? 0 : current_frame + 1;
+
 #if defined(LEFTCAT)
 	render_frames(left_base, left_idle_diff[current_frame]);
 #elif defined(RIGHTCAT)
@@ -121,6 +123,7 @@ static void render_cat_prep(void) {
 		left_prep_diff_0
 	};
 #endif
+
 #if defined(LEFTCAT)
 	render_frames(left_base, left_prep_diff[0]);
 #elif defined(RIGHTCAT)
@@ -152,6 +155,7 @@ static void render_cat_tap(void) {
 	static uint8_t current_frame = 0;
 //	current_frame = (current_frame + 1 > TAP_FRAMES - 1) ? 0 : current_frame + 1;
 	current_frame = (current_frame + 1) & 1;
+
 #if defined(LEFTCAT)
 	render_frames(left_base, left_tap_diff[current_frame]);
 #elif defined(RIGHTCAT)

@@ -31,7 +31,11 @@
 #define LUNA_FRAME_DURATION 200 // Number of ms between frames
 #define LUNA_SIZE 96 // 96-byte arrays for the little dog
 
+//#define NEXT(_k_) (_k_ + 1 > LUNA_FRAMES - 1) ? 0 : _k_ + 1
+#define NEXT(_k_) (_k_ + 1) & 1
+
 static uint8_t current_frame = 0;
+
 
 
 static void render_logo(void) {
@@ -43,7 +47,7 @@ static void render_logo(void) {
 		0x20, 0xd1, 0xd2, 0xd3, 0x20, 0};
 
 	oled_write_P(corne_logo, false);
-	layer_state_is(CMK) ? oled_write_P(corne, false) : oled_write_P(PSTR("corne"), false);
+	layer_state_is(CMK) ? oled_write_P(PSTR("corne"), false) : oled_write_P(corne, false);
 }
 
 
@@ -80,8 +84,7 @@ static void render_luna_sit(void) {
 #endif
 	} };
 
-//	current_frame = (current_frame + 1 > LUNA_FRAMES - 1) ? 0 : current_frame + 1;
-	current_frame = (current_frame + 1) & 1;
+	current_frame = NEXT(current_frame);
 	oled_write_raw_P(sit[current_frame], LUNA_SIZE);
 }
 
@@ -119,8 +122,7 @@ static void render_luna_walk(void) {
 #endif
 	} };
 
-//	current_frame = (current_frame + 1 > LUNA_FRAMES - 1) ? 0 : current_frame + 1;
-	current_frame = (current_frame + 1) & 1;
+	current_frame = NEXT(current_frame);
 	oled_write_raw_P(walk[current_frame], LUNA_SIZE);
 }
 
@@ -158,8 +160,7 @@ static void render_luna_run(void) {
 #endif
 	} };
 
-//	current_frame = (current_frame + 1 > LUNA_FRAMES - 1) ? 0 : current_frame + 1;
-	current_frame = (current_frame + 1) & 1;
+	current_frame = NEXT(current_frame);
 	oled_write_raw_P(run[current_frame], LUNA_SIZE);
 }
 
@@ -197,8 +198,7 @@ static void render_luna_bark(void) {
 #endif
 	} };
 
-//	current_frame = (current_frame + 1 > LUNA_FRAMES - 1) ? 0 : current_frame + 1;
-	current_frame = (current_frame + 1) & 1;
+	current_frame = NEXT(current_frame);
 	oled_write_raw_P(bark[current_frame], LUNA_SIZE);
 }
 
@@ -236,8 +236,7 @@ static void render_luna_sneak(void) {
 #endif
 	} };
 
-//	current_frame = (current_frame + 1 > LUNA_FRAMES - 1) ? 0 : current_frame + 1;
-	current_frame = (current_frame + 1) & 1;
+	current_frame = NEXT(current_frame);
 	oled_write_raw_P(sneak[current_frame], LUNA_SIZE);
 }
 

@@ -33,8 +33,7 @@ static void render_logo(void) {
 		0x20, 0xd1, 0xd2, 0xd3, 0x20, 0};
 
 	oled_write_P(corne_logo, false);
-	if (layer_state_is(CMK)) { oled_write_P(PSTR("corne"), false); }
-	else { oled_write_P(katakana, false); }
+	layer_state_is(CMK) ? oled_write_P(PSTR("corne"), false) : oled_write_P(katakana, false);
 }
 
 
@@ -182,6 +181,7 @@ static void render_mod_status(void) {
 oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 	return OLED_ROTATION_270;
 }
+
 
 void oled_task_user(void) {
 	extern void render_bongocat(void);
