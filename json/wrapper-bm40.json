@@ -3,14 +3,14 @@
     "documentation": "Wrapper based keymap",
     "keyboard": "bm40hsrgb",
     "keymap": "filterpaper",
-    "layers": [
-        [ "HRM(QWERTY)", "BM40QWERTY" ],
-        [ "HRM(COLEMAK)", "BM40BLANK" ],
-        [ "LOWER", "BM40LOWER" ],
-        [ "RAISE", "BM40RAISE" ],
-        [ "ADJUST", "BM40BLANK" ]
-    ],
     "layout": "BM40_wrapper",
+    "layers": [
+		[ "HRM(_QWER)", "B_QWER" ],
+        [ "HRM(_COLE)", "B_BLNK" ],
+        [ "_NUMB", "B_NUMB" ],
+        [ "_NAVI", "B_NAVI" ],
+        [ "_FUNC", "B_BLNK" ]
+    ],
     "notes": "",
     "version": 1
 }

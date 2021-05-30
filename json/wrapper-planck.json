@@ -3,14 +3,14 @@
     "documentation": "Wrapper based keymap",
     "keyboard": "planck/rev6",
     "keymap": "filterpaper",
-    "layers": [
-        [ "HRM(QWERTY)", "PLANCKQWERTY" ],
-        [ "HRM(COLEMAK)", "PLANCKBLANK" ],
-        [ "LOWER", "PLANCKLOWER" ],
-        [ "RAISE", "PLANCKRAISE" ],
-        [ "ADJUST", "PLANCKBLANK" ]
-    ],
     "layout": "PLANCK_wrapper",
+    "layers": [
+		[ "HRM(_QWER)", "P_QWER" ],
+        [ "HRM(_COLE)", "P_BLNK" ],
+        [ "_NUMB", "P_NUMB" ],
+        [ "_NAVI", "P_NAVI" ],
+        [ "_FUNC", "P_BLNK" ]
+    ],
     "notes": "",
     "version": 1
 }

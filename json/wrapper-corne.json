@@ -3,15 +3,14 @@
     "documentation": "Wrapper based keymap",
     "keyboard": "crkbd/rev1/common",
     "keymap": "filterpaper",
-    "layers": [
-        [ "HRM(QWERTY)", "CORNEQWERTY" ],
-        [ "HRM(COLEMAK)", "CORNEBLANK" ],
-        [ "LOWER", "CORNELOWER" ],
-        [ "RAISE", "CORNERAISE" ],
-        [ "ADJUST", "CORNEBLANK" ],
-        [ "MOUSE", "CORNEBLANK" ]
-    ],
     "layout": "CORNE_wrapper",
+    "layers": [
+        [ "HRM(_QWER)", "C_QWER" ],
+        [ "HRM(_COLE)", "C_BLNK" ],
+        [ "_NUMB", "C_NUMB" ],
+        [ "_NAVI", "C_NAVI" ],
+        [ "_FUNC", "C_BLNK" ]
+    ],
     "notes": "",
     "version": 1
 }
