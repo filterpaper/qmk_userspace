@@ -115,12 +115,18 @@ qmk flash -kb crkbd/rev1/common -km default -bl dfu-split-right
 ```
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
+## Tiny build
+Minimal firmware with no OLED support will be built without preprocessors:
+```
+qmk compile corne.json
+```
+
 ## Compiling with OLED display
 QMK's split common `transport.c` code limits type of data sent the secondary (non-USB) controller. Animation on the secondary display can only be driven by WPM while keyboard status is limited to modifier state. My code can be built with the following `rules.mk` options:
 ### Key press driven Bongocat
-Default Corne keyboard is built with Bongocat animation on primary display driven by key presses with simple modifier state on secondary OLED:
+Corne keyboard can be built with Bongocat animation on primary display driven by key presses with simple modifier state on secondary OLED:
 ```
-qmk compile corne.json
+qmk compile -e CAT=LEFT corne.json
 ```
 Bongocat code uses spacing-saving pixel differences to animate, with left and right-aligned animation arrays to support `EE_HANDS` configuration. Arrays for one of the sides (and its associated `if-else` statements) can be removed to save additional space.
 ### WPM driven Bongocat
@@ -135,17 +141,14 @@ qmk compile -e WPM=yes -e DOG=LUNA corne.json
 ```
 White Felix the dog can be built with `DOG=FELIX`.
 
-## Tiny build
-Minimal firmware with no OLED support can be built with `TINY=yes` preprocessor:
-```
-qmk compile -e TINY=yes corne.json
-```
-
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
 * [QMK Logo Editor](https://joric.github.io/qle/)
 * [image2cpp](https://javl.github.io/image2cpp/)
+
+## Split RGB Matrix
+The [May 29, 2021 breaking change](https://beta.docs.qmk.fm/developing-qmk/breaking-changes/20210529) includes full RGB Matrix support for split keyboard and `rules.mk` compiles that as default for Corne. Firmware size management will be required for OLED and RGB Matrix to co-exist in space-limited AVR controllers.
 
 # Layout wrapper macros
 ## Basic layout
