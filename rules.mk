@@ -34,30 +34,31 @@ ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
 endif
 
+ifneq ($(KEYBOARD),$(filter $(KEYBOARD), boardsource/the_mark))
+	MOUSEKEY_ENABLE = yes
+endif
+
 ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1/common))
 	RGB_MATRIX_ENABLE = yes
-	SRC += rgb-matrix.c
 	RGB_MATRIX_CUSTOM_USER = yes
+	SRC += rgb-matrix.c
 endif
 
 # Corne keyboard features
 # Primary tap-driven cat with secondary mod status and RGB
 ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1/common T)
-	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += mod-status.c bongocat.c rgb-matrix.c
 	OPT_DEFS += -D${CAT}CAT
 else ifeq ($(KEYBOARD) $(YOSHI), crkbd/rev1/common yes)
-	MOUSEKEY_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += yoshi-status.c rgb-matrix.c
 # Primary status with secondary WPM-driven animation
 else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
-	MOUSEKEY_ENABLE = yes
 	WPM_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	SRC += bongocat.c
@@ -71,5 +72,5 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	endif
 # Minimal default
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
-	MOUSEKEY_ENABLE = yes
+
 endif
