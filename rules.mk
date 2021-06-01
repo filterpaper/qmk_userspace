@@ -52,6 +52,10 @@ ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1/common T)
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += mod-status.c bongocat.c rgb-matrix.c
 	OPT_DEFS += -D${CAT}CAT
+else ifeq ($(KEYBOARD) $(OLED), crkbd/rev1/common no)
+	RGB_MATRIX_ENABLE = yes
+	RGB_MATRIX_CUSTOM_USER = yes
+	SRC += rgb-matrix.c
 else ifeq ($(KEYBOARD) $(YOSHI), crkbd/rev1/common yes)
 	OLED_DRIVER_ENABLE = yes
 	RGB_MATRIX_ENABLE = yes
