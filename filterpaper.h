@@ -21,13 +21,14 @@
 enum layers { DEF, CMK, LWR, RSE, ADJ };
 
 // Dimmer RGB colors
-#define RGB_BSTEEL	40, 60, 85
-#define RGB_DGRAY	50, 70, 90
-#define RGB_DGOLD	90, 90, 30
-#define RGB_DPURPLE	60, 0, 120
+#define RGB_BSTEEL	30, 45, 65
+#define RGB_DGOLD	35, 35, 10
+#define RGB_DPURPLE	40, 0, 80
+#define RGB_DPINK	75, 15, 30
+#define RGB_DTEAL	5, 35, 35
 #define RGB_CAPS	RGB_DPURPLE
 #define RGB_MODS	RGB_BSTEEL
-#define RGB_LAYER	RGB_DGOLD
+#define RGB_LAYER	RGB_DTEAL
 // Custom effects
 #ifdef RGB_MATRIX_CUSTOM_USER
 #	define DEF_MODE	RGB_MATRIX_CUSTOM_CANDY_TAP
