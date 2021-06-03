@@ -21,14 +21,14 @@
 enum layers { DEF, CMK, LWR, RSE, ADJ };
 
 // Dimmer RGB colors
-#define RGB_BSTEEL	30, 45, 65
-#define RGB_DGOLD	35, 35, 10
-#define RGB_DPURPLE	40, 0, 80
-#define RGB_DPINK	75, 15, 30
+#define RGB_BSTEEL	55, 80, 115
+#define RGB_DPURPLE	60, 0, 115
+#define RGB_DPINK	115, 20, 45
 #define RGB_DTEAL	5, 35, 35
-#define RGB_CAPS	RGB_DPURPLE
+#define RGB_CAPS	RGB_DPINK
 #define RGB_MODS	RGB_BSTEEL
-#define RGB_LAYER	RGB_DTEAL
+#define RGB_LAYER	RGB_DPURPLE
+
 // Custom effects
 #ifdef RGB_MATRIX_CUSTOM_USER
 #	define DEF_MODE	RGB_MATRIX_CUSTOM_CANDY_TAP
@@ -36,6 +36,15 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #else
 #	define DEF_MODE	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #	define CMK_MODE	RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
+#endif
+
+// Custom indicators
+#ifdef KEYBOARD_crkbd_rev1_common
+#	define MOD_FLAG LED_FLAG_UNDERGLOW
+#	define CAP_FLAG LED_FLAG_UNDERGLOW
+#else
+#	define MOD_FLAG LED_FLAG_MODIFIER
+#	define CAP_FLAG LED_FLAG_KEYLIGHT
 #endif
 
 // Layer and mod tap mask bits

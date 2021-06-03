@@ -19,7 +19,12 @@
 
 // Tap hold macro function for process_record_user()
 // Uses layer tap LT(0,kc) tapping term delay as hold shortcut:
-#define TAP_HOLD(_tap_, _hold_) \
+#define TAP_HOLD(_hold_) \
+	if (record->tap.count) return true; \
+	else if (record->event.pressed) _hold_; \
+	return false
+// Original macro with redundant tap code
+#define PRESS_HOLD(_tap_, _hold_) \
 	if (record->tap.count) record->event.pressed ? register_code(_tap_) : unregister_code(_tap_); \
 	else if (record->event.pressed) _hold_; \
 	return false
@@ -60,12 +65,12 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #endif
 	switch (keycode) {
 		// VIM commands
-		case Q_TH: TAP_HOLD(KC_Q, SEND_STRING(":q!"));
-		case W_TH: TAP_HOLD(KC_W, SEND_STRING(":wq"));
+		case Q_TH: TAP_HOLD(SEND_STRING(":q!"));
+		case W_TH: TAP_HOLD(SEND_STRING(":wq"));
 		// Right hand cut copy paste
-		case DOT_TH: TAP_HOLD(KC_DOT, tap_code16(G(KC_X)));
-		case COMM_TH: TAP_HOLD(KC_COMM, tap_code16(G(KC_C)));
-		case M_TH: TAP_HOLD(KC_M, tap_code16(G(KC_V)));
+		case DOT_TH:  TAP_HOLD(tap_code16(G(KC_X)));
+		case COMM_TH: TAP_HOLD(tap_code16(G(KC_C)));
+		case M_TH:    TAP_HOLD(tap_code16(G(KC_V)));
 	}
 	return true; // Continue with unmatched keycodes
 }
@@ -81,12 +86,5 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for tap hold macros and home row mods
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return ((keycode & 0xF000) == LMOD_T_BITS || (keycode & 0xFF00) == LT0_BITS) ? false : true;
-}
-#endif
-
-
-#ifdef RETRO_TAPPING_PER_KEY // Explicitly disable for all
-bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {
-	return false;
 }
 #endif

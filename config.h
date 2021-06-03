@@ -24,12 +24,11 @@
 //#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
-#define RETRO_TAPPING
-#define RETRO_TAPPING_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAP_CODE_DELAY 5
 #define LAYER_STATE_8BIT // 8-layer limit, saves ~462 bytes
 #define GRAVE_ESC_SHIFT_OVERRIDE
+
 
 #ifdef RGB_MATRIX_ENABLE
 #	define RGB_MATRIX_KEYPRESSES
@@ -108,6 +107,8 @@
 #	define EE_HANDS
 #	define BOOTMAGIC_LITE_ROW_RIGHT 4 // Top right corner
 #	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
+#	undef DEBOUNCE
+#	define DEBOUNCE 8
 #	if !defined(OLED_DRIVER_ENABLE) && defined(RGB_MATRIX_ENABLE)
 #	define SPLIT_MODS_ENABLE
 #	define SPLIT_LED_STATE_ENABLE
