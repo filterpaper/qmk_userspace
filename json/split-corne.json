@@ -5,12 +5,12 @@
     "keymap": "filterpaper",
     "layout": "CORNE_wrapper",
     "layers": [
-        [ "HRM(_QWRT)", "C_QWRT" ],
-        [ "HRM(_CLMK)", "C_NONE" ],
-        [ "_NUML", "C_NUML" ],
-        [ "_SYML", "C_NONE" ],
-        [ "_NAVR", "C_NONE" ],
-        [ "_MSER", "C_NONE" ]
+        [ "SHRM(_QWRT)" ],
+        [ "SHRM(_CLMK)" ],
+        [ "_NUML" ],
+        [ "_SYML" ],
+        [ "_NAVR" ],
+        [ "_MSER" ]
     ],
     "notes": "",
     "version": 1

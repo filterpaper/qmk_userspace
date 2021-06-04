@@ -21,12 +21,12 @@
 // Uses layer tap LT(0,kc) tapping term delay as hold shortcut:
 #define TAP_HOLD(_hold_) \
 	if (record->tap.count) return true; \
-	else if (record->event.pressed) _hold_; \
+	else if (record->event.pressed) (_hold_); \
 	return false
 // Original macro with redundant tap code
 #define PRESS_HOLD(_tap_, _hold_) \
 	if (record->tap.count) record->event.pressed ? register_code(_tap_) : unregister_code(_tap_); \
-	else if (record->event.pressed) _hold_; \
+	else if (record->event.pressed) (_hold_); \
 	return false
 
 
@@ -64,9 +64,10 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
 #endif
 	switch (keycode) {
-		// VIM commands
+		// VIM commands and undo
 		case Q_TH: TAP_HOLD(SEND_STRING(":q!"));
 		case W_TH: TAP_HOLD(SEND_STRING(":wq"));
+		case Z_TH: TAP_HOLD(tap_code16(G(KC_Z)));
 		// Right hand cut copy paste
 		case DOT_TH:  TAP_HOLD(tap_code16(G(KC_X)));
 		case COMM_TH: TAP_HOLD(tap_code16(G(KC_C)));

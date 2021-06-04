@@ -34,10 +34,6 @@ ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
 endif
 
-ifneq ($(KEYBOARD),$(filter $(KEYBOARD), boardsource/the_mark))
-	MOUSEKEY_ENABLE = yes
-endif
-
 ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1/common))
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
