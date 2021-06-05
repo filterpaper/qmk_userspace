@@ -108,7 +108,7 @@
 #	define BOOTMAGIC_LITE_ROW_RIGHT 4 // Top right corner
 #	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
 #	undef DEBOUNCE
-#	define DEBOUNCE 8
+#	define DEBOUNCE 10
 #	if !defined(OLED_DRIVER_ENABLE) && defined(RGB_MATRIX_ENABLE)
 #	define SPLIT_MODS_ENABLE
 #	define SPLIT_LED_STATE_ENABLE

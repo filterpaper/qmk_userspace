@@ -25,6 +25,7 @@ EXTRAKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
 OPT_DEFS += -DCAPSWORD_ENABLE
+OPT_DEFS += -DONESHOT_MODTAP_ENABLE
 
 # Main source file
 SRC += filterpaper.c

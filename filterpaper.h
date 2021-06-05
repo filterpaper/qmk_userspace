@@ -59,11 +59,11 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #define GUI_T_BITS 0x6800
 // 0xF000 bitmask
 #define LT_BITS LT0_BITS
-#define LMOD_T_BITS 0x6000
-#define RMOD_T_BITS 0x7000
+#define LMT_BITS 0x6000
+#define RMT_BITS 0x7000
 
 /** \brief Key Actions
- * (kc >> 8) & 0x1F) for mod bits
+ * (kc >> 8) & 0x1F for mod bits
  *
  * Mod bits:    43210
  *   bit 0      ||||+- Control

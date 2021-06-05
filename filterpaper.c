@@ -23,8 +23,8 @@
 	if (record->tap.count) return true; \
 	else if (record->event.pressed) (_hold_); \
 	return false
-// Original macro with redundant tap code
-#define PRESS_HOLD(_tap_, _hold_) \
+
+#define TAP_AND_HOLD(_tap_, _hold_) \
 	if (record->tap.count) record->event.pressed ? register_code(_tap_) : unregister_code(_tap_); \
 	else if (record->event.pressed) (_hold_); \
 	return false
@@ -63,16 +63,37 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #ifdef CAPSWORD_ENABLE // Monitor key codes to toggle caps lock
 	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
 #endif
+
 	switch (keycode) {
-		// VIM commands and undo
+		// VIM commands, undo redo
 		case Q_TH: TAP_HOLD(SEND_STRING(":q!"));
 		case W_TH: TAP_HOLD(SEND_STRING(":wq"));
-		case Z_TH: TAP_HOLD(tap_code16(G(KC_Z)));
-		// Right hand cut copy paste
-		case DOT_TH:  TAP_HOLD(tap_code16(G(KC_X)));
-		case COMM_TH: TAP_HOLD(tap_code16(G(KC_C)));
-		case M_TH:    TAP_HOLD(tap_code16(G(KC_V)));
+		case Z_TH: TAP_HOLD(tap_code16(Z_UND));
+		case Y_TH: TAP_HOLD(tap_code16(Z_RDO));
+		// Right side cut copy paste
+		case DOT_TH:  TAP_HOLD(tap_code16(Z_CUT));
+		case COMM_TH: TAP_HOLD(tap_code16(Z_CPY));
+		case M_TH:    TAP_HOLD(tap_code16(Z_PST));
 	}
+
+#ifdef ONESHOT_MODTAP_ENABLE
+	#define MT_BIT(k) (k >> 8) & 0x1F
+	static bool mod_tapped = false;
+	if (record->event.pressed && get_mods()) { mod_tapped = true; }
+
+	if ((keycode & 0xF000) == LMT_BITS) {
+		if (record->tap.count) { return true; }
+		else if (record->event.pressed) {
+			register_mods(MT_BIT(keycode));
+			mod_tapped = false;
+		} else {
+			unregister_mods(MT_BIT(keycode));
+			if (!mod_tapped) { set_oneshot_mods(MT_BIT(keycode)); }
+		}
+		return false;
+	}
+#endif
+
 	return true; // Continue with unmatched keycodes
 }
 
@@ -86,6 +107,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for tap hold macros and home row mods
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xF000) == LMOD_T_BITS || (keycode & 0xFF00) == LT0_BITS) ? false : true;
+	return ((keycode & 0xF000) == LMT_BITS || (keycode & 0xFF00) == LT0_BITS) ? false : true;
 }
 #endif

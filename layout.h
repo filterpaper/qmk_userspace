@@ -23,22 +23,30 @@
 #define Q_TH	LT(0,KC_Q)
 #define W_TH	LT(0,KC_W)
 #define Z_TH	LT(0,KC_Z)
+#define Y_TH	LT(0,KC_Y)
 #define DOT_TH	LT(0,KC_DOT)
 #define COMM_TH	LT(0,KC_COMM)
 #define M_TH	LT(0,KC_M)
 
 // OS X shortcuts
+#define Z_CUT G(KC_X)
+#define Z_CPY G(KC_C)
+#define Z_PST G(KC_V)
+#define Z_UND G(KC_Z)
+#define Z_RDO G(KC_Y)
 #define Z_PASTE	S(G(A(KC_V)))
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_LOCK	C(G(KC_Q))
+#define RAG_T(kc) MT(MOD_RGUI | MOD_RALT, kc)
+#define RSG_T(kc) MT(MOD_RGUI | MOD_RSFT, kc)
 
-// One shot macros
+// One shot mods
 #define OSM_SFT	OSM(MOD_LSFT)
 #define OSM_CTL	OSM(MOD_LCTL)
 #define OSM_ALT	OSM(MOD_LALT)
 #define OSM_GUI	OSM(MOD_LGUI)
 #define OSS_LT2	LT(2,KC_NO) // OSM shift layer tap
-#define OSS_LT() if (record->tap.count) { if (record->event.pressed) add_oneshot_mods(MOD_LSFT); } return false
+#define OSS_LT() if (record->tap.count) { if (record->event.pressed) add_oneshot_mods(MOD_LSFT); return false }
 
 // Home row mod wrapper
 #define HRM(k) HRM_SACG(k)
@@ -83,7 +91,7 @@
 #define FUNC 4
 
 #define _QWER \
-	KC_TAB,  Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
+	KC_TAB,  Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,    Y_TH,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
 	OSM_SFT, Z_TH,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    M_TH,    COMM_TH, DOT_TH,  KC_SLSH, KC_ENT
 #define _COLE \
@@ -104,9 +112,9 @@
 	_______, Z_SLEEP, _______, _______, Z_PASTE, _______, _______, _______, _______, _______, Z_LOCK,  _______
 
 // Bottom row
-#define C_QWER                                          KC_DEL, LT(NAVI,KC_BSPC), RSFT_T(KC_ENT), RSFT_T(KC_SPC), LT(NUMB,KC_SPC), KC_ESC
-#define P_QWER KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(NAVI,KC_BSPC), RSFT_T(KC_ENT), RSFT_T(KC_SPC), LT(NUMB,KC_SPC), KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
-#define B_QWER KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(NAVI,KC_BSPC),         RSFT_T(KC_SPC),         LT(NUMB,KC_SPC), KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
+#define C_QWER                                   RAG_T(KC_DEL), LT(NAVI,KC_BSPC), RSG_T(KC_ENT), RSFT_T(KC_SPC), LT(NUMB,KC_SPC), RSA_T(KC_ESC)
+#define P_QWER KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(NAVI,KC_BSPC), RSG_T(KC_ENT), RSFT_T(KC_SPC), LT(NUMB,KC_SPC), RSA_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
+#define B_QWER KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(NAVI,KC_BSPC),         RSFT_T(KC_SPC),        LT(NUMB,KC_SPC), RSA_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
 
 #define C_NUMB                            _______, MO(FUNC), _______, _______, _______, _______
 #define P_NUMB _______, _______, _______, _______, MO(FUNC), _______, _______, _______, _______, _______, _______, _______
@@ -189,8 +197,8 @@
 	                           KC_DOT,  KC_0,    _______, _______, _______, _______
 #define _SYML \
 	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, _______, _______, _______, _______, _______, _______, \
-	_______, KC_TILD, KC_CIRC, KC_AMPR, KC_ASTR, _______, _______, KC_RGUI, KC_RCTL, KC_RALT, KC_RSFT, _______, \
-	KC_CAPS, KC_GRV,  KC_BSLS, KC_PIPE, KC_UNDS, _______, _______, _______, _______, _______, _______, _______, \
+	_______, KC_GRV,  KC_TILD, KC_CIRC, KC_AMPR, KC_ASTR, _______, KC_RGUI, KC_RCTL, KC_RALT, KC_RSFT, _______, \
+	KC_CAPS, _______, KC_BSLS, KC_PIPE, KC_UNDS, _______, _______, _______, _______, _______, _______, _______, \
 	                           _______, _______, _______, _______, _______, _______
 #define _NAVR \
 	_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \

@@ -62,12 +62,10 @@ Code loops through every row and column on a per-key RGB board, scanning for con
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case W_TH:
-        // Send W on single tap
-        if (record->tap.count) {
-            if (record->event.pressed) { register_code(KC_W); }
-            else { unregister_code(KC_W); }
+        // Unmatched return on tap
+        if (record->tap.count) { return true; }
         // Send macro string on hold
-        } else if (record->event.pressed) { SEND_STRING(":wq"); }
+        else if (record->event.pressed) { SEND_STRING(":wq"); }
         return false;
     }
     return true; // continue with unmatched keycodes
