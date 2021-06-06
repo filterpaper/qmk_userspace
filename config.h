@@ -20,7 +20,7 @@
 #include "layout.h"
 
 // Common QMK settings
-#define TAPPING_TERM 220
+#define TAPPING_TERM 200
 //#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
@@ -28,7 +28,7 @@
 #define TAP_CODE_DELAY 5
 #define LAYER_STATE_8BIT // 8-layer limit, saves ~462 bytes
 #define GRAVE_ESC_SHIFT_OVERRIDE
-
+#define ONESHOT_TIMEOUT 3000
 
 #ifdef RGB_MATRIX_ENABLE
 #	define RGB_MATRIX_KEYPRESSES
@@ -94,13 +94,19 @@
 #endif
 
 #ifdef MOUSEKEY_ENABLE
-#	define MOUSEKEY_DELAY 0
-#	define MOUSEKEY_INTERVAL 16
-#	define MOUSEKEY_MAX_SPEED 7
-#	define MOUSEKEY_TIME_TO_MAX 40
-#	define MOUSEKEY_WHEEL_DELAY 0
+#	define MOUSEKEY_DELAY 16		// Delay between pressing a movement key and cursor movement
+#	define MOUSEKEY_INTERVAL 6		// Time between cursor movements in milliseconds
+#	define MOUSEKEY_MAX_SPEED 6
+#	define MOUSEKEY_TIME_TO_MAX 100
+#	define MOUSEKEY_WHEEL_DELAY 16
 #	define MOUSEKEY_WHEEL_INTERVAL 50
 #	define MOUSEKEY_WHEEL_TIME_TO_MAX 100
+#define MK_KINETIC_SPEED
+#	define MOUSEKEY_INITIAL_SPEED 2	// Initial speed of the cursor in pixel per second
+#	define MOUSEKEY_MOVE_DELTA 7	// Step size for accelerating from initial to base speed
+#	define MOUSEKEY_BASE_SPEED 10	// Maximum cursor speed at which acceleration stops
+#	define MOUSEKEY_DECELERATED_SPEED 30
+#	define MOUSEKEY_ACCELERATED_SPEED 200
 #endif
 
 #ifdef SPLIT_KEYBOARD

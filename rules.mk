@@ -35,6 +35,10 @@ ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
 endif
 
+ifneq ($(KEYBOARD),$(filter $(KEYBOARD), boardsource/the_mark))
+	MOUSEKEY_ENABLE = yes
+endif
+
 ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1/common))
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
@@ -53,11 +57,6 @@ else ifeq ($(KEYBOARD) $(OLED), crkbd/rev1/common no)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
-else ifeq ($(KEYBOARD) $(YOSHI), crkbd/rev1/common yes)
-	OLED_DRIVER_ENABLE = yes
-	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += yoshi-status.c rgb-matrix.c
 # Primary status with secondary WPM-driven animation
 else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	WPM_ENABLE = yes

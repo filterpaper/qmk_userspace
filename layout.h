@@ -37,8 +37,8 @@
 #define Z_PASTE	S(G(A(KC_V)))
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_LOCK	C(G(KC_Q))
-#define RAG_T(kc) MT(MOD_RGUI | MOD_RALT, kc)
-#define RSG_T(kc) MT(MOD_RGUI | MOD_RSFT, kc)
+#define RAG_T(kc) MT(MOD_RALT | MOD_RGUI, kc)
+#define RSG_T(kc) MT(MOD_RSFT | MOD_RGUI, kc)
 
 // One shot mods
 #define OSM_SFT	OSM(MOD_LSFT)
@@ -103,13 +103,13 @@
 	_______, _______, KC_4,    KC_5,    KC_6,    _______, KC_LBRC, KC_LCBR, KC_RCBR, KC_RBRC, _______, _______, \
 	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,    _______, _______, _______, _______, _______, _______
 #define _NAVI \
-	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, _______, KC_MINS, KC_EQL,  KC_BSLS, _______, _______, \
+	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_PGUP, KC_MINS, KC_EQL,  KC_BSLS, _______, _______, \
 	_______, KC_GRV,  KC_TILD, KC_CIRC, KC_AMPR, KC_ASTR, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, KC_VOLU, \
-	KC_CAPS, _______, _______, _______, _______, _______, _______, KC_UNDS, KC_PLUS, KC_PIPE, _______, KC_VOLD
+	KC_CAPS, _______, _______, _______, _______, _______, KC_PGDN, KC_UNDS, KC_PLUS, KC_PIPE, _______, KC_VOLD
 #define _FUNC \
-	RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______, _______, _______, _______, _______, TG(COLE),\
-	_______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_INS,  _______, \
-	_______, Z_SLEEP, _______, _______, Z_PASTE, _______, _______, _______, _______, _______, Z_LOCK,  _______
+	RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_HOME, KC_WH_U, KC_WH_D, _______, _______, TG(COLE),\
+	_______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_INS,  _______, \
+	_______, Z_SLEEP, _______, _______, Z_PASTE, _______, KC_END,  KC_BTN2, KC_BTN1, _______, Z_LOCK,  _______
 
 // Bottom row
 #define C_QWER                                   RAG_T(KC_DEL), LT(NAVI,KC_BSPC), RSG_T(KC_ENT), RSFT_T(KC_SPC), LT(NUMB,KC_SPC), RSA_T(KC_ESC)

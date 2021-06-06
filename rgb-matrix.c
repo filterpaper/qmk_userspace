@@ -78,7 +78,7 @@ void rgb_matrix_indicators_user(void) {
 		}
 	}
 	// Modifier keys indicator
-	if (get_mods() & MOD_MASK_CSAG) {
+	if ((get_mods()|get_oneshot_mods()) & MOD_MASK_CSAG) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
 			if (HAS_FLAGS(g_led_config.flags[i], MOD_FLAG)) {
 				rgb_matrix_set_color(i, RGB_MODS);

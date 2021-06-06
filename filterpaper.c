@@ -77,20 +77,13 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	}
 
 #ifdef ONESHOT_MODTAP_ENABLE
-	#define MT_BIT(k) (k >> 8) & 0x1F
-	static bool mod_tapped = false;
+	static bool mod_tapped;
 	if (record->event.pressed && get_mods()) { mod_tapped = true; }
 
 	if ((keycode & 0xF000) == LMT_BITS) {
 		if (record->tap.count) { return true; }
-		else if (record->event.pressed) {
-			register_mods(MT_BIT(keycode));
-			mod_tapped = false;
-		} else {
-			unregister_mods(MT_BIT(keycode));
-			if (!mod_tapped) { set_oneshot_mods(MT_BIT(keycode)); }
-		}
-		return false;
+		else if (record->event.pressed) { mod_tapped = false; }
+		else if (!mod_tapped) { set_oneshot_mods((keycode >> 8) & 0x1F); }
 	}
 #endif
 
