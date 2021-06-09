@@ -34,9 +34,9 @@
 #	define RGB_MATRIX_KEYPRESSES
 #	define RGB_MATRIX_MAXIMUM_BRIGHTNESS 200
 #	define RGB_DISABLE_WHEN_USB_SUSPENDED true
-#	ifndef SPLIT_KEYBOARD
+#ifndef SPLIT_KEYBOARD
 #	define RGB_DISABLE_TIMEOUT 180000
-#	endif
+#endif
 #	define RGB_MATRIX_STARTUP_HUE 208
 #	define RGB_MATRIX_STARTUP_SAT 135
 #	define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_SOLID_REACTIVE_SIMPLE
@@ -86,7 +86,6 @@
 #ifdef RGBLIGHT_ENABLE
 #	undef RGBLED_NUM
 #	define RGBLED_NUM 27
-//#	define RGBLED_SPLIT {27, 27}
 #	define RGBLIGHT_SPLIT
 #	define RGBLIGHT_SLEEP
 #	define RGBLIGHT_LIMIT_VAL 150
@@ -94,19 +93,15 @@
 #endif
 
 #ifdef MOUSEKEY_ENABLE
-#	define MOUSEKEY_DELAY 16		// Delay between pressing a movement key and cursor movement
-#	define MOUSEKEY_INTERVAL 6		// Time between cursor movements in milliseconds
-#	define MOUSEKEY_MAX_SPEED 6
-#	define MOUSEKEY_TIME_TO_MAX 100
+#	define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
+#	define MOUSEKEY_INTERVAL 16		// Time between cursor movements in milliseconds
+#	define MOUSEKEY_MOVE_DELTA 12	// Step size for acceleration
+#	define MOUSEKEY_MAX_SPEED 16
+#	define MOUSEKEY_TIME_TO_MAX 85
 #	define MOUSEKEY_WHEEL_DELAY 16
-#	define MOUSEKEY_WHEEL_INTERVAL 50
-#	define MOUSEKEY_WHEEL_TIME_TO_MAX 100
-#define MK_KINETIC_SPEED
-#	define MOUSEKEY_INITIAL_SPEED 2	// Initial speed of the cursor in pixel per second
-#	define MOUSEKEY_MOVE_DELTA 7	// Step size for accelerating from initial to base speed
-#	define MOUSEKEY_BASE_SPEED 10	// Maximum cursor speed at which acceleration stops
-#	define MOUSEKEY_DECELERATED_SPEED 30
-#	define MOUSEKEY_ACCELERATED_SPEED 200
+#	define MOUSEKEY_WHEEL_INTERVAL 30
+#	define MOUSEKEY_WHEEL_MAX_SPEED 10
+#	define MOUSEKEY_WHEEL_TIME_TO_MAX 95
 #endif
 
 #ifdef SPLIT_KEYBOARD
@@ -114,12 +109,12 @@
 #	define BOOTMAGIC_LITE_ROW_RIGHT 4 // Top right corner
 #	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
 #	undef DEBOUNCE
-#	define DEBOUNCE 10
-#	if !defined(OLED_DRIVER_ENABLE) && defined(RGB_MATRIX_ENABLE)
+//#	define DEBOUNCE 10
+#if !defined(OLED_DRIVER_ENABLE) && defined(RGB_MATRIX_ENABLE)
 #	define SPLIT_MODS_ENABLE
 #	define SPLIT_LED_STATE_ENABLE
 #	define SPLIT_LAYER_STATE_ENABLE
-#	endif
+#endif
 #endif
 
 #ifdef OLED_DRIVER_ENABLE

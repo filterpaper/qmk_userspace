@@ -30,7 +30,7 @@
 	return false
 
 
-#ifdef SPLIT_MODS_ENABLE
+#ifdef OLED_DRIVER_ENABLE
 uint32_t tap_timer = 0; // Timer for OLED animation
 #endif
 
@@ -57,7 +57,7 @@ static void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
 
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
-#ifdef SPLIT_MODS_ENABLE // Reset typing timer for OLED animation
+#ifdef OLED_DRIVER_ENABLE // Reset typing timer for OLED animation
 	if (record->event.pressed) { tap_timer = timer_read32(); }
 #endif
 #ifdef CAPSWORD_ENABLE // Monitor key codes to toggle caps lock
@@ -100,6 +100,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for tap hold macros and home row mods
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xF000) == LMT_BITS || (keycode & 0xFF00) == LT0_BITS) ? false : true;
+	return ((keycode & 0xFF00) == LT0_BITS || (keycode & 0xF000) == LMT_BITS) ? false : true;
 }
 #endif
