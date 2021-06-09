@@ -24,6 +24,7 @@ SPACE_CADET_ENABLE = no
 EXTRAKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
+MOUSEKEY_ENABLE = yes
 OPT_DEFS += -DCAPSWORD_ENABLE
 # OPT_DEFS += -DONESHOT_MODTAP_ENABLE
 
@@ -33,10 +34,6 @@ SRC += filterpaper.c
 # Exclude LTO for Planck
 ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
-endif
-
-ifneq ($(KEYBOARD),$(filter $(KEYBOARD), boardsource/the_mark))
-	MOUSEKEY_ENABLE = yes
 endif
 
 ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1/common))
