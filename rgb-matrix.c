@@ -59,6 +59,8 @@ void matrix_init_user(void) {
 
 void keyboard_post_init_user(void) {
 	rgb_matrix_mode_noeeprom(DEF_MODE);
+//	rgb_matrix_mode_noeeprom(RGB_MATRIX_BREATHING);
+//	rgb_matrix_sethsv_noeeprom(240, 220, 120);
 }
 
 
@@ -72,17 +74,13 @@ void rgb_matrix_indicators_user(void) {
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
-			if (HAS_FLAGS(g_led_config.flags[i], CAP_FLAG)) {
-				rgb_matrix_set_color(i, RGB_CAPS);
-			}
+			if (g_led_config.flags[i] & CAP_FLAG) { rgb_matrix_set_color(i, RGB_CAPS); }
 		}
 	}
 	// Modifier keys indicator
 	if ((get_mods()|get_oneshot_mods()) & MOD_MASK_CSAG) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
-			if (HAS_FLAGS(g_led_config.flags[i], MOD_FLAG)) {
-				rgb_matrix_set_color(i, RGB_MODS);
-			}
+			if (g_led_config.flags[i] & MOD_FLAG) { rgb_matrix_set_color(i, RGB_MODS); }
 		}
 	}
 

@@ -39,12 +39,12 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #endif
 
 // Custom indicators
-#ifdef KEYBOARD_crkbd_rev1_common
+#if defined(KEYBOARD_crkbd_rev1_common) && defined(OLED_DRIVER_ENABLE)
 #	define MOD_FLAG LED_FLAG_UNDERGLOW
 #	define CAP_FLAG LED_FLAG_UNDERGLOW
 #else
-#	define MOD_FLAG LED_FLAG_MODIFIER
-#	define CAP_FLAG LED_FLAG_KEYLIGHT
+#	define MOD_FLAG (LED_FLAG_MODIFIER|LED_FLAG_UNDERGLOW)
+#	define CAP_FLAG (LED_FLAG_KEYLIGHT|LED_FLAG_UNDERGLOW)
 #endif
 
 // Layer and mod tap mask bits
