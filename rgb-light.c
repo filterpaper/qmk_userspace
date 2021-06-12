@@ -26,7 +26,7 @@ void matrix_scan_user(void) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-	switch(get_highest_layer(state)) {
+	switch(get_highest_layer(layer_state|default_layer_state)) {
 	case ADJ:
 		rgblight_sethsv_noeeprom(HSV_AZURE);
 		break;
