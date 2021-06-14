@@ -110,11 +110,9 @@
 #	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
 //#	undef DEBOUNCE
 //#	define DEBOUNCE 10
-#if !defined(OLED_DRIVER_ENABLE) && defined(RGB_MATRIX_ENABLE)
 #	define SPLIT_MODS_ENABLE
 #	define SPLIT_LED_STATE_ENABLE
 #	define SPLIT_LAYER_STATE_ENABLE
-#endif
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
@@ -123,9 +121,6 @@
 #	define OLED_UPDATE_INTERVAL 50
 #	define OLED_BRIGHTNESS 180
 #	define OLED_FONT_H "users/filterpaper/oledfont.c"
-#	define SPLIT_MODS_ENABLE
-#	define SPLIT_LED_STATE_ENABLE
-#	define SPLIT_LAYER_STATE_ENABLE
 #endif
 
 #ifdef COMBO_ENABLE

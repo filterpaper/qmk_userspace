@@ -98,7 +98,7 @@ static bool PIXEL_RAIN(effect_params_t* params) {
 	}
 
 //	if (params->init) { random16_set_seed((uint16_t)g_rgb_timer); }
-	return rain_pixel(mod8(jsf8(), DRIVER_LED_TOTAL), params, jsf8() & 3);
+	return rain_pixel(mod8(jsf8(), DRIVER_LED_TOTAL), params, jsf8() & 2);
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // DISABLE_RGB_MATRIX_PIXEL_RAIN

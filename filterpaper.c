@@ -77,6 +77,8 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	}
 
 #ifdef ONESHOT_MODTAP_ENABLE
+	// Enables oneshot for home row mods (mod-taps) when HRM is
+	// activated and released without applying mod on another key
 	static bool mod_tapped;
 	if (record->event.pressed && get_mods()) { mod_tapped = true; }
 
