@@ -33,9 +33,7 @@
 
 //#define NEXT(_k_) (_k_ + 1 > LUNA_FRAMES - 1) ? 0 : _k_ + 1
 #define NEXT(_k_) (_k_ + 1) & 1
-
 static uint8_t current_frame = 0;
-
 
 
 static void render_logo(void) {

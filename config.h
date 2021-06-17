@@ -21,7 +21,6 @@
 
 // Common QMK settings
 #define TAPPING_TERM 200
-//#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
@@ -95,9 +94,9 @@
 #ifdef MOUSEKEY_ENABLE
 #	define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
 #	define MOUSEKEY_INTERVAL 16		// Time between cursor movements in milliseconds
-#	define MOUSEKEY_MOVE_DELTA 12	// Step size for acceleration
-#	define MOUSEKEY_MAX_SPEED 16
-#	define MOUSEKEY_TIME_TO_MAX 85
+#	define MOUSEKEY_MOVE_DELTA 10	// Step size for acceleration
+#	define MOUSEKEY_MAX_SPEED 12
+#	define MOUSEKEY_TIME_TO_MAX 70
 #	define MOUSEKEY_WHEEL_DELAY 16
 #	define MOUSEKEY_WHEEL_INTERVAL 30
 #	define MOUSEKEY_WHEEL_MAX_SPEED 10

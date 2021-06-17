@@ -50,6 +50,13 @@ ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1/common T)
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += mod-status.c bongocat.c rgb-matrix.c
 	OPT_DEFS += -D${CAT}CAT
+# RGB only without OLED support
+else ifeq ($(KEYBOARD) $(RGB), crkbd/rev1/common no)
+	RGB_MATRIX_ENABLE = yes
+	RGB_MATRIX_CUSTOM_USER = yes
+	SRC += rgb-matrix.c
+#	COMBO_ENABLE = yes
+#	SRC += combos.c
 # Primary status with secondary WPM-driven animation
 else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	WPM_ENABLE = yes
@@ -65,9 +72,5 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 	endif
 # Minimal default
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
-	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += rgb-matrix.c
-#	COMBO_ENABLE = yes
-#	SRC += combos.c
+
 endif
