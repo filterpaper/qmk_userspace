@@ -65,12 +65,11 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #endif
 
 	switch (keycode) {
-		// VIM commands, undo redo
+		// VIM commands, undo
 		case Q_TH: TAP_HOLD(SEND_STRING(":q!"));
 		case W_TH: TAP_HOLD(SEND_STRING(":wq"));
-		case Z_TH: TAP_HOLD(tap_code16(Z_UND));
-		case Y_TH: TAP_HOLD(tap_code16(Z_RDO));
-		// Right side cut copy paste
+		// Right side undo cut copy paste
+		case SLSH_TH: TAP_HOLD(tap_code16(Z_UND));
 		case DOT_TH:  TAP_HOLD(tap_code16(Z_CUT));
 		case COMM_TH: TAP_HOLD(tap_code16(Z_CPY));
 		case M_TH:    TAP_HOLD(tap_code16(Z_PST));

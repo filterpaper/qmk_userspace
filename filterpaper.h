@@ -62,8 +62,7 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #define LMT_BITS 0x6000
 #define RMT_BITS 0x7000
 
-/** \brief Key Actions
- * (kc >> 8) & 0x1F for mod bits
+/* (kc >> 8) & 0x1F for mod bits
  *
  * Mod bits:    43210
  *   bit 0      ||||+- Control
