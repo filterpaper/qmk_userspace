@@ -35,8 +35,6 @@
 #define Z_PASTE	S(G(A(KC_V)))
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_LOCK	C(G(KC_Q))
-#define RAG_T(kc) MT(MOD_RALT | MOD_RGUI, kc)
-#define RSG_T(kc) MT(MOD_RSFT | MOD_RGUI, kc)
 
 // One shot mods
 #define OSM_SFT	OSM(MOD_LSFT)

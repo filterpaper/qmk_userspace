@@ -36,7 +36,7 @@ ifneq ($(PLATFORM), CHIBIOS)
 	LTO_ENABLE = yes
 endif
 
-ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1/common))
+ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1))
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
@@ -44,21 +44,21 @@ endif
 
 # Corne keyboard features
 # Primary tap-driven cat with secondary mod status and RGB
-ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1/common T)
+ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1 T)
 	OLED_DRIVER_ENABLE = yes
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += mod-status.c bongocat.c rgb-matrix.c
 	OPT_DEFS += -D${CAT}CAT
 # RGB only without OLED support
-else ifeq ($(KEYBOARD) $(RGB), crkbd/rev1/common no)
+else ifeq ($(KEYBOARD) $(RGB), crkbd/rev1 yes)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
 #	COMBO_ENABLE = yes
 #	SRC += combos.c
 # Primary status with secondary WPM-driven animation
-else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
+else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1 yes)
 	WPM_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
 	SRC += bongocat.c
@@ -71,6 +71,6 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1/common yes)
 		SRC += mod-status.c
 	endif
 # Minimal default
-else ifeq ($(strip $(KEYBOARD)), crkbd/rev1/common)
+else ifeq ($(strip $(KEYBOARD)), crkbd/rev1)
 
 endif

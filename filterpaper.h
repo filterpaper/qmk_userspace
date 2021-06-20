@@ -39,7 +39,7 @@ enum layers { DEF, CMK, LWR, RSE, ADJ };
 #endif
 
 // Custom indicators
-#if defined(KEYBOARD_crkbd_rev1_common) && defined(OLED_DRIVER_ENABLE)
+#if defined(KEYBOARD_crkbd_rev1) && defined(OLED_DRIVER_ENABLE)
 #	define MOD_FLAG LED_FLAG_UNDERGLOW
 #	define CAP_FLAG LED_FLAG_UNDERGLOW
 #else
