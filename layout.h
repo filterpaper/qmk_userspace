@@ -83,8 +83,8 @@
 	_______, _______, KC_4,    KC_5,    KC_6,    _______,     _______, KC_LCBR, KC_RCBR, _______, KC_QUOT, _______, \
 	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        _______, KC_LBRC, KC_RBRC, _______, _______, _______
 #define _NAVI \
-	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_PGUP, KC_MINS, KC_EQL,  KC_BSLS, KC_TILD, _______, \
-	_______, _______, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_GRV,  KC_VOLU, \
+	_______, _______, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_PGUP, KC_MINS, KC_EQL,  KC_BSLS, KC_TILD, _______, \
+	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_GRV,  KC_VOLU, \
 	KC_CAPS, _______, _______, _______, _______, _______,     KC_PGDN, KC_UNDS, KC_PLUS, KC_PIPE, _______, KC_VOLD
 #define _FUNC \
 	RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       KC_HOME, KC_WH_U, KC_WH_D, KC_INS,  _______, TG(COLE),\
@@ -140,8 +140,8 @@
 	KC_VOLD, KC_7,    KC_8,    KC_9,    KC_0,        _______, KC_LBRC, KC_RBRC, _______, _______, \
 	                 _______, MO(FUNC), _______,     _______, _______, _______
 #define G_NAVI \
-	KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_PGUP, KC_MINS, KC_EQL,  KC_BSLS, KC_TILD, \
-	_______, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_GRV,  \
+	_______, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_PGUP, KC_MINS, KC_EQL,  KC_BSLS, KC_TILD, \
+	KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_GRV,  \
 	KC_CAPS, _______, _______, _______, _______,     KC_PGDN, KC_UNDS, KC_PLUS, KC_PIPE, _______, \
 		              _______, _______, _______,     _______, MO(FUNC), _______
 #define G_FUNC \
@@ -190,8 +190,8 @@
 	KC_LBRC, KC_RBRC, KC_7,    KC_8,    KC_9,    KC_EQL,      _______, _______, _______, _______, _______, _______, \
 	                           KC_DOT,  KC_0,    _______,     _______, _______, _______
 #define _SYML \
-	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     _______, _______, _______, _______, _______, _______, \
-	_______, _______, KC_CIRC, KC_AMPR, KC_ASTR, _______,     _______, KC_RGUI, KC_RCTL, KC_RALT, KC_RSFT, _______, \
+	_______, _______, KC_CIRC, KC_AMPR, KC_ASTR, _______,     _______, _______, _______, _______, _______, _______, \
+	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     _______, KC_RGUI, KC_RCTL, KC_RALT, KC_RSFT, _______, \
 	KC_CAPS, _______, _______, _______, _______, _______,     _______, _______, _______, _______, _______, _______, \
 	                           _______, _______, _______,     _______, _______, _______
 #define _NAVR \
