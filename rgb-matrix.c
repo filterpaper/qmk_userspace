@@ -46,26 +46,16 @@ void matrix_init_user(void) {
 		255, 255, 255, 4, 4, 4, 4, 4, 4, 255, 255, 255
 	} };
 #endif
-	// Disable underglow LEDs
-#ifdef KEYBOARD_bm40hsrgb
-	for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
-		if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_UNDERGLOW)) {
-			g_led_config.flags[i] = LED_FLAG_NONE;
-		}
-	}
-#endif
 }
 
 
 void keyboard_post_init_user(void) {
 	rgb_matrix_mode_noeeprom(DEF_MODE);
-//	rgb_matrix_mode_noeeprom(RGB_MATRIX_BREATHING);
-//	rgb_matrix_sethsv_noeeprom(240, 220, 120);
 }
 
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
-	layer_state_cmp(state, CMK) ? rgb_matrix_mode_noeeprom(CMK_MODE) : rgb_matrix_mode_noeeprom(DEF_MODE);
+	layer_state_is(CMK) ? rgb_matrix_mode_noeeprom(CMK_MODE) : rgb_matrix_mode_noeeprom(DEF_MODE);
 	return state;
 }
 

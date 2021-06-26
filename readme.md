@@ -16,7 +16,6 @@ git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filter
 # Supported Keyboards
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
-* [BM40 HS RGB](../../keyboards/bm40hsrgb) — Per-key RGB matrix indicators.
 * [Planck rev6](../../keyboards/planck) — RGB underglow layer and modifier indicators.
 * [Corne Keyboard (CRKBD)](../../keyboards/crkbd) — Typing animation and graphical indicators on OLEDs.
 * [The Mark: 65](../../keyboards/boardsource/the_mark) — RGB underglow layer and modifier indicators.
@@ -111,7 +110,6 @@ if ((keycode & 0xF000) == LMT_BITS) {
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
 ```sh
-qmk flash ~/qmk_firmware/users/filterpaper/json/bm40.json
 qmk flash ~/qmk_firmware/users/filterpaper/json/planck.json
 qmk flash ~/qmk_firmware/users/filterpaper/json/corne.json
 qmk flash ~/qmk_firmware/users/filterpaper/json/mark65.json

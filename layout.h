@@ -34,6 +34,7 @@
 #define Z_UND G(KC_Z)
 #define Z_PASTE	S(G(A(KC_V)))
 #define Z_SLEEP	A(G(KC_PWR))
+#define Z_SHUT	C(A(G(KC_PWR)))
 #define Z_LOCK	C(G(KC_Q))
 
 // One shot mods
@@ -59,7 +60,6 @@
 // Base layout wrapper macros
 #define CORNE_wrapper(...)  LAYOUT_split_3x6_3(__VA_ARGS__)
 #define PLANCK_wrapper(...) LAYOUT_ortho_4x12(__VA_ARGS__)
-#define BM40_wrapper(...)   LAYOUT_planck_mit(__VA_ARGS__)
 
 
 
@@ -89,24 +89,20 @@
 #define _FUNC \
 	RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       KC_HOME, KC_WH_U, KC_WH_D, KC_INS,  _______, TG(COLE),\
 	_______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______, \
-	_______, Z_SLEEP, _______, _______, Z_PASTE, _______,     KC_END,  KC_BTN2, KC_BTN1, KC_DEL,  Z_LOCK,  _______
+	_______, Z_SLEEP, _______, _______, Z_PASTE, _______,     KC_END,  KC_BTN2, KC_BTN1, KC_DEL,  Z_SHUT,  _______
 
 // Bottom row
 #define C_QWER                                   RAG_T(KC_TAB), LT(NAVI,KC_BSPC), RSG_T(KC_ENT), RSFT_T(KC_SPC), LT(NUMB,KC_SPC), RSA_T(KC_ESC)
 #define P_QWER KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(NAVI,KC_BSPC), RSG_T(KC_ENT), RSFT_T(KC_SPC), LT(NUMB,KC_SPC), RSA_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
-#define B_QWER KC_DEL, ALT_T(KC_VOLD), CTL_T(KC_VOLU), KC_LGUI, LT(NAVI,KC_BSPC),         RSFT_T(KC_SPC),        LT(NUMB,KC_SPC), RSA_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
 
 #define C_NUMB                            _______, MO(FUNC), _______, _______, _______, _______
 #define P_NUMB _______, _______, _______, _______, MO(FUNC), _______, _______, _______, _______, _______, _______, _______
-#define B_NUMB _______, _______, _______, _______, MO(FUNC),     _______,      _______, _______, _______, _______, _______
 
 #define C_NAVI                            _______, _______, _______, _______, MO(FUNC), _______
 #define P_NAVI _______, _______, _______, _______, _______, _______, _______, MO(FUNC), _______, _______, _______, _______
-#define B_NAVI _______, _______, _______, _______, _______,     _______,      MO(FUNC), _______, _______, _______, _______
 
 #define C_BLNK                            _______, _______, _______, _______, _______, _______
 #define P_BLNK _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-#define B_BLNK _______, _______, _______, _______, _______,     _______,      _______, _______, _______, _______, _______
 
 /* Number row version
 #define _NUMB \
@@ -227,7 +223,7 @@
 
 #define MARK_QWERTY \
 	KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  KC_VOLU, \
-	KC_TAB,           Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,    Y_TH,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC, KC_VOLD, \
+	KC_TAB,           Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC, KC_VOLD, \
 	KC_CAPS,          KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_ENT,           KC_MUTE, \
 	OSM_SFT, _______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, KC_RSFT,          KC_UP,            \
 	OSM_ALT, OSM_CTL,          OSM_GUI, LT(2,KC_BSPC),    KC_ENT,           RSFT_T(KC_SPC),   KC_RCTL, KC_RALT, KC_RALT, KC_LEFT, KC_DOWN, KC_RGHT
