@@ -21,6 +21,7 @@ RGB_MATRIX_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
+LTO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
@@ -31,9 +32,10 @@ OPT_DEFS += -DCAPSWORD_ENABLE
 # Main source file
 SRC += filterpaper.c
 
-# Exclude LTO for Planck
-ifneq ($(PLATFORM), CHIBIOS)
-	LTO_ENABLE = yes
+# Settings for Planck
+ifeq ($(PLATFORM), CHIBIOS)
+	LTO_ENABLE = no
+	BOOTLOADER = stm32-dfu
 endif
 
 ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1))
