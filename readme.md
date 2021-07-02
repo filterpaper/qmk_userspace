@@ -217,3 +217,6 @@ Next, the layer macro that requires the home row mod can be wrapped inside `HRM(
 ],
 ```
 During the compile process, the preprocessor will expand `HRM(QWERTY)` and wrap the right key code inside `QWERTY` with the mod-tap define inside `HRM_SACG`. These will then be passed on `CORNE_wrapper()`, the alias macro of the structure used by the keyboard.
+
+## Combos with helper
+The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/). New combos can be appended in `combos.def`.

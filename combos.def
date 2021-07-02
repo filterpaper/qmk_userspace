@@ -1,0 +1,17 @@
+// Shortcuts
+COMB(UI_UP,		KC_UP,		KC_U, KC_I)
+COMB(JK_DOWN,	KC_DOWN,	HM_J, HM_K)
+COMB(HJ_LEFT,	KC_LEFT,	KC_H, HM_J)
+COMB(KL_RIGHT,	KC_RIGHT,	HM_K, HM_L)
+
+// Dictionary words
+SUBS(AN_AND,		"and ",		HM_A, KC_N)
+SUBS(BC_BECAUSE,	"because ",	KC_B, KC_C)
+SUBS(HV_HAVE,	"have ",	KC_H, KC_V)
+SUBS(IO_TION,	"tion ",	KC_I, KC_O)
+SUBS(TH_THE,	"the ",		KC_T, KC_H)
+SUBS(WA_WHAT,	"what ",	W_TH, HM_A)
+SUBS(WC_WHICH,	"which ",	W_TH, KC_C)
+SUBS(WI_WITH,	"with ",	W_TH, KC_I)
+SUBS(YR_YOUR,	"your ",	KC_Y, KC_R)
+SUBS(YU_YOU,	"you ",		KC_Y, KC_U)
