@@ -17,9 +17,6 @@
 #pragma once
 #include QMK_KEYBOARD_H
 
-// Layer references
-enum layers { DEF, CMK, LWR, RSE, ADJ };
-
 // Dimmer RGB colors
 #define RGB_BSTEEL	55, 80, 115
 #define RGB_DPURPLE	60, 0, 115

@@ -117,8 +117,8 @@
 
 
 
-// GergoPlex
-#define GERGOPLEX_wrapper(...) LAYOUT_split_3x5_3(__VA_ARGS__)
+// Five-column layout
+#define FIVECOL_wrapper(...) LAYOUT_split_3x5_3(__VA_ARGS__)
 
 #define G_QWER \
 	Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,        Y_TH,    KC_U,    KC_I,    KC_O,    KC_P,    \
@@ -174,7 +174,7 @@
 	KC_TAB,  Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
 	OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, KC_ENT,  \
-	   RSFT_T(KC_DEL), LT(NAVR,KC_BSPC), LT(MSER,KC_ENT),     LT(SYML,KC_SPC), LT(NUML,KC_SPC), RSFT_T(KC_ESC)
+	    RSA_T(KC_DEL), LT(NAVR,KC_BSPC), LT(MSER,KC_ENT),     LT(SYML,KC_SPC), LT(NUML,KC_SPC), RSG_T(KC_ESC)
 #define _CLMK \
 	_______, _______, _______, KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, \
 	_______, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,        _______, KC_N,    KC_E,    KC_I ,   KC_O,    _______, \
