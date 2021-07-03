@@ -22,9 +22,10 @@
 #define RGB_DPURPLE	60, 0, 115
 #define RGB_DPINK	115, 20, 45
 #define RGB_DTEAL	5, 35, 35
-#define RGB_CAPS	RGB_DPINK
+#define RGB_FLUOR	75, 122, 22
+#define RGB_CAPS	RGB_DPURPLE
 #define RGB_MODS	RGB_BSTEEL
-#define RGB_LAYER	RGB_DPURPLE
+#define RGB_LAYER	RGB_FLUOR
 
 // Custom effects
 #ifdef RGB_MATRIX_CUSTOM_USER
@@ -80,7 +81,6 @@ enum mods_bit {
 	MOD_RGUI = 0x18,
 }; */
 
-// git pull https://github.com/sevanteri/qmk_firmware.git early_combo
 #ifdef COMBO_ENABLE
 #	include "combos.h"
 #endif

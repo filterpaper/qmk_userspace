@@ -14,22 +14,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Modified combo helper file from Germ (http://combos.gboards.ca/)
+/* Modified combo helper file from Germ (http://combos.gboards.ca/)
+ * that generates combo source codes at preprocessor stage with
+ * "combos.def" data file. See: http://combos.gboards.ca/docs/combos/
+ *
+ * Merge early_combo patch to work with mod tap:
+ * git pull https://github.com/sevanteri/qmk_firmware.git early_combo
+ */
 
-// HRM mod taps
-#define HM_A	SFT_T(KC_A)
-#define HM_S	ALT_T(KC_S)
-#define HM_D	CTL_T(KC_D)
-#define HM_F	GUI_T(KC_F)
-#define HM_J	GUI_T(KC_J)
-#define HM_K	CTL_T(KC_K)
-#define HM_L	ALT_T(KC_L)
+#pragma once
+
+// Home row mod taps
+#define HM_A SFT_T(KC_A)
+#define HM_S ALT_T(KC_S)
+#define HM_D CTL_T(KC_D)
+#define HM_F GUI_T(KC_F)
+#define HM_J GUI_T(KC_J)
+#define HM_K CTL_T(KC_K)
+#define HM_L ALT_T(KC_L)
 
 // Combo helper macros
 #define K_ENUM(name, key, ...) name,
 #define K_DATA(name, key, ...) const uint16_t PROGMEM cmb_##name[] = {__VA_ARGS__, COMBO_END};
 #define K_COMB(name, key, ...) [name] = COMBO(cmb_##name, key),
-
+#define BLANK(...)
 #define A_ENUM(name, string, ...) name,
 #define A_DATA(name, string, ...) const uint16_t PROGMEM cmb_##name[] = {__VA_ARGS__, COMBO_END};
 #define A_COMB(name, string, ...) [name] = COMBO_ACTION(cmb_##name),
@@ -41,8 +49,6 @@
 	case name:                            \
 		if (pressed) layer_invert(layer); \
 		break;
-
-#define BLANK(...)
 
 // Create enumeration list
 #undef COMB

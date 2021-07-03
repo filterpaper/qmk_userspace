@@ -74,5 +74,5 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1 yes)
 	endif
 # Minimal default
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1)
-	COMBO_ENABLE = yes
+#	COMBO_ENABLE = yes
 endif
