@@ -24,12 +24,12 @@
 
 #pragma once
 
-// Combo helper macros
+// Combo code macros
 #define C_ENUM(name, val, ...) name,
 #define C_DATA(name, val, ...) const uint16_t PROGMEM cmb_##name[] = {__VA_ARGS__, COMBO_END};
 #define C_COMB(name, val, ...) [name] = COMBO(cmb_##name, val),
 #define A_COMB(name, val, ...) [name] = COMBO_ACTION(cmb_##name),
-#define A_SUBS(name, string, ...) case name: if (pressed) SEND_STRING(string); break;
+#define A_SUBS(name, val, ...) case name: if (pressed) SEND_STRING(val); break;
 #define BLANK(...)
 
 // Enumerate name list
@@ -62,15 +62,10 @@ combo_t key_combos[] = {
 // Fill action function
 #undef COMB
 #undef SUBS
-#undef TOGG
 #define COMB BLANK
 #define SUBS A_SUBS
 void process_combo_event(uint16_t combo_index, bool pressed) {
 	switch (combo_index) {
 		#include "combos.def"
 	}
-	// User overwrites
-	#if __has_include("inject.h")
-		#include "inject.h"
-	#endif
 }

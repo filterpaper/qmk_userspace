@@ -14,7 +14,12 @@
 #define HM_K CTL_T(KC_K)
 #define HM_L ALT_T(KC_L)
 
-// Dictionary words
+// Shortcuts
+COMB(qw_tab, 	KC_TAB, Q_TH, W_TH)
+COMB(as_esc, 	KC_ESC, HM_A, HM_S)
+
+/*
+// Common words
 SUBS(txt_f31a7f,            "his ", KC_H, KC_I)
 SUBS(txt_b12f3c,            "the ", KC_T, KC_H)
 SUBS(txt_4607a4,            "for ", HM_F, KC_O)
@@ -89,3 +94,4 @@ SUBS(txt_88072c,        "service ", HM_S, KC_V)
 SUBS(txt_3454a2,        "because ", KC_B, KC_C)
 SUBS(txt_3454a1,       "business ", KC_B, HM_S)
 SUBS(txt_6a635a,    "information ", KC_I, KC_R)
+*/
