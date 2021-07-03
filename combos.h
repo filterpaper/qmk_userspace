@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Modified combo helper file from Germ (http://combos.gboards.ca/)
+/* Simplified combo helper file from Jane Bernhardt (http://gboards.ca/)
  * that generates combo source codes at preprocessor stage with
  * "combos.def" data file. See: http://combos.gboards.ca/docs/combos/
  *
@@ -24,77 +24,52 @@
 
 #pragma once
 
-// Home row mod taps
-#define HM_A SFT_T(KC_A)
-#define HM_S ALT_T(KC_S)
-#define HM_D CTL_T(KC_D)
-#define HM_F GUI_T(KC_F)
-#define HM_J GUI_T(KC_J)
-#define HM_K CTL_T(KC_K)
-#define HM_L ALT_T(KC_L)
-
 // Combo helper macros
-#define K_ENUM(name, key, ...) name,
-#define K_DATA(name, key, ...) const uint16_t PROGMEM cmb_##name[] = {__VA_ARGS__, COMBO_END};
-#define K_COMB(name, key, ...) [name] = COMBO(cmb_##name, key),
+#define C_ENUM(name, val, ...) name,
+#define C_DATA(name, val, ...) const uint16_t PROGMEM cmb_##name[] = {__VA_ARGS__, COMBO_END};
+#define C_COMB(name, val, ...) [name] = COMBO(cmb_##name, val),
+#define A_COMB(name, val, ...) [name] = COMBO_ACTION(cmb_##name),
+#define A_SUBS(name, string, ...) case name: if (pressed) SEND_STRING(string); break;
 #define BLANK(...)
-#define A_ENUM(name, string, ...) name,
-#define A_DATA(name, string, ...) const uint16_t PROGMEM cmb_##name[] = {__VA_ARGS__, COMBO_END};
-#define A_COMB(name, string, ...) [name] = COMBO_ACTION(cmb_##name),
-#define A_ACTI(name, string, ...)         \
-	case name:                            \
-		if (pressed) SEND_STRING(string); \
-		break;
-#define A_TOGG(name, layer, ...)          \
-	case name:                            \
-		if (pressed) layer_invert(layer); \
-		break;
 
-// Create enumeration list
+// Enumerate name list
 #undef COMB
 #undef SUBS
-#undef TOGG
-#define COMB K_ENUM
-#define SUBS A_ENUM
-#define TOGG A_ENUM
+#define COMB C_ENUM
+#define SUBS C_ENUM
 enum combos {
 	#include "combos.def"
 	COMBO_LENGTH
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
-// Add combos into PROGMEM
+// Store combos in PROGMEM
 #undef COMB
 #undef SUBS
-#undef TOGG
-#define COMB K_DATA
-#define SUBS A_DATA
-#define TOGG A_DATA
+#define COMB C_DATA
+#define SUBS C_DATA
 #include "combos.def"
 
-// Fill key combo array
+// Fill key array
 #undef COMB
 #undef SUBS
-#undef TOGG
-#define COMB K_COMB
+#define COMB C_COMB
 #define SUBS A_COMB
-#define TOGG A_COMB
 combo_t key_combos[] = {
 	#include "combos.def"
 };
 
-// Fill QMK combo function
+// Fill action function
 #undef COMB
 #undef SUBS
 #undef TOGG
 #define COMB BLANK
-#define SUBS A_ACTI
-#define TOGG A_TOGG
+#define SUBS A_SUBS
 void process_combo_event(uint16_t combo_index, bool pressed) {
 	switch (combo_index) {
 		#include "combos.def"
 	}
-	// Allow user overrides per keymap
+	// User overwrites
 	#if __has_include("inject.h")
 		#include "inject.h"
 	#endif

@@ -1,8 +1,18 @@
-/* Combo macro format (http://combos.gboards.ca/docs/combos/):
- * COMB(ident, keycodeToEmit, keySequence...) - Single keycode output
- * SUBS(ident, sendStringArg, keySequence...) - Send string output
- * TOGG(ident, layer, keySequence...) - Layer toggle
+/* Combo macro format:
+ * COMB(ident, keycode_shortcut, combo_sequence...)
+ * SUBS(ident, "string to send", combo_sequence...)
+ *
+ * http://combos.gboards.ca/docs/combos/
  */
+
+// Home row mod tap keys
+#define HM_A SFT_T(KC_A)
+#define HM_S ALT_T(KC_S)
+#define HM_D CTL_T(KC_D)
+#define HM_F GUI_T(KC_F)
+#define HM_J GUI_T(KC_J)
+#define HM_K CTL_T(KC_K)
+#define HM_L ALT_T(KC_L)
 
 // Dictionary words
 SUBS(txt_f31a7f,            "his ", KC_H, KC_I)
