@@ -14,10 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Tap hold shortcuts and layout wrapper macros.
-// Ortholinears and split Corne share the top 3x12 layout
-
-#pragma once
+// Key and layout macro helpers
 
 // Tap hold macros
 #define Q_TH	LT(0,KC_Q)
@@ -39,9 +36,6 @@
 
 // One shot mods
 #define OSM_SFT	OSM(MOD_LSFT)
-#define OSM_CTL	OSM(MOD_LCTL)
-#define OSM_ALT	OSM(MOD_LALT)
-#define OSM_GUI	OSM(MOD_LGUI)
 #define OSS_LT2	LT(2,KC_NO) // OSM shift layer tap
 #define OSS_LT() if (record->tap.count) { if (record->event.pressed) add_oneshot_mods(MOD_LSFT); return false }
 
@@ -128,7 +122,7 @@
 	Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,        Y_TH,    KC_U,    KC_I,    KC_O,    KC_P,    \
 	KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, \
 	KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, \
-	RAG_T(KC_TAB), LT(NAVI,KC_BSPC), RSG_T(KC_ENT),  RSFT_T(KC_SPC), LT(NUMB,KC_SPC), RSA_T(KC_ESC)
+	RSA_T(KC_TAB), LT(NAVI,KC_BSPC), RSG_T(KC_ENT),  RSFT_T(KC_SPC), LT(NUMB,KC_SPC), RAG_T(KC_ESC)
 #define G_COLE \
 	_______, _______, KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, \
 	KC_A,    KC_R,    KC_S,    KC_T,    KC_D,        _______, KC_N,    KC_E,    KC_I ,   KC_O,    \

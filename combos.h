@@ -15,14 +15,12 @@
  */
 
 /* Simplified combo helper file from Jane Bernhardt (http://gboards.ca/)
- * that generates combo source codes at preprocessor stage with
- * "combos.def" data file. See: http://combos.gboards.ca/docs/combos/
- *
- * Merge early_combo patch to work with mod tap:
- * git pull https://github.com/sevanteri/qmk_firmware.git early_combo
- */
+   that generates combo source codes at preprocessor stage with
+   "combos.def" data file. See: http://combos.gboards.ca/docs/combos/
 
-#pragma once
+   Merge early_combo patch to work with mod tap:
+   git pull https://github.com/sevanteri/qmk_firmware.git early_combo
+*/
 
 // Combo code macros
 #define C_ENUM(name, val, ...) name,

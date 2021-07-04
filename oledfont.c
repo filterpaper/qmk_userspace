@@ -14,9 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- // 5x3 Corne logo and コルネ katakana name
- // with modifier and layer icons from @soundmonster.
- // Online editor: https://helixfonteditor.netlify.com/
+/* 5x3 Corne logo and コルネ katakana name
+   with modifier and layer icons from @soundmonster.
+   Online editor: https://helixfonteditor.netlify.com/
+*/
 
 #include "progmem.h"
 

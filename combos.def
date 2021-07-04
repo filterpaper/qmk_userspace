@@ -15,8 +15,10 @@
 #define HM_L ALT_T(KC_L)
 
 // Shortcuts
-COMB(qw_tab, 	KC_TAB, Q_TH, W_TH)
-COMB(as_esc, 	KC_ESC, HM_A, HM_S)
+COMB(er_lprn, 	KC_LPRN, KC_E, KC_R)
+COMB(iu_rprn, 	KC_RPRN, KC_I, KC_U)
+COMB(rt_lcbr, 	KC_LCBR, KC_R, KC_T)
+COMB(uy_rcbr, 	KC_RCBR, KC_U, KC_Y)
 
 /*
 // Common words
