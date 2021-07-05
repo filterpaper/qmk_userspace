@@ -5,11 +5,11 @@
 	"keymap": "filterpaper",
 	"layout": "CORNE_wrapper",
 	"layers": [
-		[ "HRM(_QWER)", "C_QWER" ],
-		[ "HRM(_COLE)", "C_BLNK" ],
-		[ "_NUMB", "C_NUMB" ],
-		[ "_NAVI", "C_NAVI" ],
-		[ "_FUNC", "C_BLNK" ]
+		[ "HRM(_QWER)" ],
+		[ "HRM(_COLE)" ],
+		[ "_NUMB" ],
+		[ "_NAVI" ],
+		[ "_FUNC" ]
 	],
 	"notes": "",
 	"version": 1

@@ -43,12 +43,12 @@
       "ANY(DOT_TH)",
       "KC_SLSH",
       "KC_ENT",
-      "ANY(RAG_T(KC_DEL))",
+      "ANY(RSA_T(KC_DEL))",
       "LT(3,KC_BSPC)",
       "ANY(RSG_T(KC_ENT))",
       "RSFT_T(KC_SPC)",
       "LT(2,KC_SPC)",
-      "ANY(RSA_T(KC_ESC))"
+      "ANY(RAG_T(KC_ESC))"
     ],
     [
       "KC_TRNS",
