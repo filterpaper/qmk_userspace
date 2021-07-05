@@ -50,27 +50,25 @@ ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1 T)
 	OLED_DRIVER_ENABLE = yes
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += mod-status.c bongocat.c rgb-matrix.c
+	SRC += oled-icons.c oled-bongocat.c rgb-matrix.c
 	OPT_DEFS += -D${CAT}CAT
 # RGB only without OLED support
 else ifeq ($(KEYBOARD) $(RGB), crkbd/rev1 yes)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
-#	COMBO_ENABLE = yes
-#	SRC += combos.c
 # Primary status with secondary WPM-driven animation
 else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1 yes)
 	WPM_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
-	SRC += bongocat.c
+	SRC += oled-bongocat.c
 	OPT_DEFS += -D${CAT}CAT
 	# Primary OLED option
 	ifneq ($(DOG),)
-		SRC += luna-status.c
+		SRC += oled-luna.c
 		OPT_DEFS += -D${DOG}
 	else
-		SRC += mod-status.c
+		SRC += oled-icons.c
 	endif
 # Minimal default
 else ifeq ($(strip $(KEYBOARD)), crkbd/rev1)

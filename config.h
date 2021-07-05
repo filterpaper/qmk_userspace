@@ -17,7 +17,7 @@
 #pragma once
 
 // Key and layout wrapper macros
-#include "layout.h"
+#include "keymap-layout.h"
 
 // Common QMK settings
 #define TAPPING_TERM 230

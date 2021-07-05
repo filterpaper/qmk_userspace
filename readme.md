@@ -25,14 +25,17 @@ File | Description
 ---- | -----------
 rules.mk | QMK compile rules and hardware feature selection
 config.h | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
+combos.h | Wrapper macros for building combo source codes from `combos.def`
 filterpaper.h | User specific variables and options
 filterpaper.c | Mainj source with macro functions, see [custom quantum functions](../../docs/custom_quantum_functions.md)
-rgb-matrix.c | RGB matrix effect and custom codes, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md)
-mod-status.c | Graphical layer and modifier status indicators (adds ~4018 bytes)
-luna-status.c | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
-bongocat.c | Bongocat animation using differential pixels
+keymap-layout.h | Key map macro wrapper for shared ortholinear and Corne layouts
+
+oled-icons.c | Graphical layer and modifier status indicators (adds ~4018 bytes)
+oled-luna.c | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
+oled-bongocat.c | Bongocat animation using differential pixels
 oledfont.c | Corne logo, コルネ katakana name, fonts and icon images
-layout.h | Key map macro wrapper for shared ortholinear and Corne layouts
+rgb-matrix.c | RGB matrix effect and custom codes, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md)
+
 json/ | Folder of supported keyboard layouts
 animation_frames/ | Folder of Bongocat animation images
 archive/ | Archived files of original codes and layouts
@@ -106,6 +109,9 @@ if ((keycode & 0xF000) == LMT_BITS) {
     else if (!mod_tapped) { set_oneshot_mods((keycode >> 8) & 0x1F); }
 }
 ```
+
+## Combo helper macros
+The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New combos can be appended to `combos.def` and the wrapper macros in `combos.h` will read that file to create the appropriate arrays and codes.
 
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
@@ -217,6 +223,3 @@ Next, the layer macro that requires the home row mod can be wrapped inside `HRM(
 ],
 ```
 During the compile process, the preprocessor will expand `HRM(QWERTY)` and wrap the right key code inside `QWERTY` with the mod-tap define inside `HRM_SACG`. These will then be passed on `CORNE_wrapper()`, the alias macro of the structure used by the keyboard.
-
-## Combos with helper
-The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/). New combos can be appended in `combos.def`.
