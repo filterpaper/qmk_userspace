@@ -5,7 +5,7 @@
 	"keymap": "filterpaper",
 	"layout": "PLANCK4x12_wrapper",
 	"layers": [
-		[ "C_TP(HRM(_QWER))", "P_QWER" ],
+		[ "C_TP(HRM(_BASE))", "P_BASE" ],
 		[ "C_TP(HRM(_COLE))", "P_BLNK" ],
 		[ "C_TP(_NUMB)", "P_NUMB" ],
 		[ "C_TP(_NAVI)", "P_NAVI" ],

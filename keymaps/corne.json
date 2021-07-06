@@ -5,7 +5,7 @@
 	"keymap": "filterpaper",
 	"layout": "CORNE_wrapper",
 	"layers": [
-		[ "HRM(_QWER)" ],
+		[ "HRM(_BASE)" ],
 		[ "HRM(_COLE)" ],
 		[ "_NUMB" ],
 		[ "_NAVI" ],

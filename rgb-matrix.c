@@ -55,7 +55,7 @@ void keyboard_post_init_user(void) {
 
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
-	layer_state_is(COLE) ? rgb_matrix_mode_noeeprom(CMK_MODE) : rgb_matrix_mode_noeeprom(DEF_MODE);
+	layer_state_is(CMK) ? rgb_matrix_mode_noeeprom(CMK_MODE) : rgb_matrix_mode_noeeprom(DEF_MODE);
 	return state;
 }
 
@@ -74,7 +74,7 @@ void rgb_matrix_indicators_user(void) {
 		}
 	}
 
-	if (get_highest_layer(layer_state) > COLE) {
+	if (get_highest_layer(layer_state) > CMK) {
 	#ifdef KEYBOARD_boardsource_the_mark
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
 			if (HAS_ANY_FLAGS(g_led_config.flags[i], LED_FLAG_ALL)) {

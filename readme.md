@@ -34,7 +34,7 @@ oled-luna.c       | Luna and Felix the dog WPM animation and modifier indicators
 oled-bongocat.c   | Bongocat animation using differential pixels
 oledfont.c        | Corne logo, コルネ katakana name, fonts and icon images
 rgb-matrix.c      | RGB matrix effect and custom codes, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md)
-json/             | Folder of supported keyboard layouts
+keymaps/          | Folder of supported keyboard keymaps
 animation_frames/ | Folder of Bongocat animation images
 archive/          | Archived files of original codes and layouts
 
@@ -114,9 +114,9 @@ The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `comb
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
 ```sh
-qmk flash ~/qmk_firmware/users/filterpaper/json/planck.json
-qmk flash ~/qmk_firmware/users/filterpaper/json/corne.json
-qmk flash ~/qmk_firmware/users/filterpaper/json/mark65.json
+qmk flash ~/qmk_firmware/users/filterpaper/keymaps/planck.json
+qmk flash ~/qmk_firmware/users/filterpaper/keymaps/corne.json
+qmk flash ~/qmk_firmware/users/filterpaper/keymaps/mark65.json
 ```
 
 # Building Corne Keyboard (CRKBD)

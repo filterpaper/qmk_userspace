@@ -27,16 +27,16 @@ void matrix_scan_user(void) {
 
 layer_state_t layer_state_set_user(layer_state_t state) {
 	switch(get_highest_layer(layer_state|default_layer_state)) {
-	case FUNC:
+	case FNC:
 		rgblight_sethsv_noeeprom(HSV_AZURE);
 		break;
-	case NAVI:
+	case NAV:
 		rgblight_sethsv_noeeprom(HSV_YELLOW);
 		break;
-	case NUMB:
+	case NUM:
 		rgblight_sethsv_noeeprom(HSV_CYAN);
 		break;
-	case COLE:
+	case CMK:
 		rgblight_sethsv_noeeprom(HSV_PINK);
 		break;
 	default:

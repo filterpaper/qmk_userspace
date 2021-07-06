@@ -5,7 +5,7 @@
 	"keymap": "filterpaper",
 	"layout": "MARK65_wrapper",
 	"layers": [
-		[ "HRM65(MARK_QWERTY)" ],
+		[ "HRM65(MARK_DEFAULT)" ],
 		[ "HRM65(MARK_COLEMAK)" ],
 		[ "MARK_LAYER2" ],
 		[ "MARK_LAYER3" ]
