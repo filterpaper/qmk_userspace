@@ -28,7 +28,7 @@ config.h          | QMK configuration variables and options, see [configuring QM
 combos.h          | Wrapper macros for building combo source codes from `combos.def`
 filterpaper.h     | User specific variables and options
 filterpaper.c     | Main source with macro functions, see [custom quantum functions](../../docs/custom_quantum_functions.md)
-keymap-layout.h   | Key map macro wrapper for shared ortholinear and Corne layouts
+layout.h          | Key map macro wrapper for shared ortholinear and Corne layouts
 oled-icons.c      | Graphical layer and modifier status indicators (adds ~4018 bytes)
 oled-luna.c       | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
 oled-bongocat.c   | Bongocat animation using differential pixels
