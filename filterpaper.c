@@ -29,7 +29,6 @@
 	else if (record->event.pressed) (_hold_); \
 	return false
 
-
 #ifdef OLED_DRIVER_ENABLE
 uint32_t tap_timer = 0; // Timer for OLED animation
 #endif
@@ -40,7 +39,9 @@ static void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
 	// Get base key code from mod and layer taps
 	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
 		(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
-		(record->tap.count)) { keycode = keycode & 0xFF; }
+		(record->tap.count)) {
+			keycode = keycode & 0xFF;
+		}
 	// Toggle caps lock with the following key codes
 	switch (keycode) {
 		case KC_TAB:
@@ -65,7 +66,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #endif
 
 	switch (keycode) {
-		// VIM commands, undo
+		// VIM commands
 		case Q_TH: TAP_HOLD(SEND_STRING(":q!"));
 		case W_TH: TAP_HOLD(SEND_STRING(":wq"));
 		// Right side undo cut copy paste
@@ -84,7 +85,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if ((keycode & 0xF000) == LMT_BITS) {
 		if (record->tap.count) { return true; }
 		else if (record->event.pressed) { mod_tapped = false; }
-		else if (!mod_tapped) { set_oneshot_mods((keycode >> 8) & 0x1F); }
+		else if (!mod_tapped) { add_oneshot_mods((keycode >> 8) & 0x1F); }
 	}
 #endif
 

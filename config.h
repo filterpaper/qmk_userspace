@@ -96,15 +96,31 @@
 #endif
 
 #ifdef MOUSEKEY_ENABLE
+#	define MK_KINETIC_SPEED
+#ifdef MK_KINETIC_SPEED
+#	define MOUSEKEY_DELAY 0
+#	define MOUSEKEY_INTERVAL 16
+#	define MOUSEKEY_MOVE_DELTA 5
+#	define MOUSEKEY_INITIAL_SPEED 50 // Initial speed of the cursor in pixel per second
+#	define MOUSEKEY_BASE_SPEED 1000  // Maximum cursor speed at which acceleration stops
+#	define MOUSEKEY_DECELERATED_SPEED 400
+#	define MOUSEKEY_ACCELERATED_SPEED 3000
+#else
 #	define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
 #	define MOUSEKEY_INTERVAL 16		// Time between cursor movements in milliseconds
 #	define MOUSEKEY_MOVE_DELTA 10	// Step size for acceleration
 #	define MOUSEKEY_MAX_SPEED 12
 #	define MOUSEKEY_TIME_TO_MAX 70
+#endif
 #	define MOUSEKEY_WHEEL_DELAY 16
 #	define MOUSEKEY_WHEEL_INTERVAL 30
 #	define MOUSEKEY_WHEEL_MAX_SPEED 10
 #	define MOUSEKEY_WHEEL_TIME_TO_MAX 95
+// Kinetic Mode
+#	define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 500
+#	define MOUSEKEY_WHEEL_BASE_MOVEMENTS 1000
+#	define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS 400
+#	define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 3000
 #endif
 
 #ifdef SPLIT_KEYBOARD
