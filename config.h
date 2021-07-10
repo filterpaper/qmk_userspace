@@ -100,11 +100,11 @@
 #ifdef MK_KINETIC_SPEED
 #	define MOUSEKEY_DELAY 0
 #	define MOUSEKEY_INTERVAL 16
-#	define MOUSEKEY_MOVE_DELTA 5
+#	define MOUSEKEY_MOVE_DELTA 4
 #	define MOUSEKEY_INITIAL_SPEED 50 // Initial speed of the cursor in pixel per second
 #	define MOUSEKEY_BASE_SPEED 1000  // Maximum cursor speed at which acceleration stops
 #	define MOUSEKEY_DECELERATED_SPEED 400
-#	define MOUSEKEY_ACCELERATED_SPEED 3000
+#	define MOUSEKEY_ACCELERATED_SPEED 2000
 #else
 #	define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
 #	define MOUSEKEY_INTERVAL 16		// Time between cursor movements in milliseconds

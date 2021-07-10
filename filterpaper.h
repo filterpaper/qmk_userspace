@@ -80,7 +80,3 @@ enum mods_bit {
 	MOD_RALT = 0x14,
 	MOD_RGUI = 0x18,
 }; */
-
-#ifdef COMBO_ENABLE
-#	include "combos.h"
-#endif

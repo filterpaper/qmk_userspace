@@ -16,6 +16,9 @@
 
 #include "filterpaper.h"
 
+#ifdef COMBO_ENABLE
+#include "combos.h"
+#endif
 
 // Tap hold macro function for process_record_user()
 // Uses layer tap LT(0,kc) tapping term delay as hold shortcut:

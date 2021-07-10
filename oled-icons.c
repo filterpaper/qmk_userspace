@@ -56,9 +56,9 @@ static void render_layer_state(void) {
 		0x20, 0xbd, 0xbe, 0xbf, 0x20,
 		0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
 
-	if (layer_state_is(FUNC)) { oled_write_P(adjust_layer, false); }
-	else if (layer_state_is(NAVI)) { oled_write_P(raise_layer, false); }
-	else if (layer_state_is(NUMB)) { oled_write_P(lower_layer, false); }
+	if (layer_state_is(FNC)) { oled_write_P(adjust_layer, false); }
+	else if (layer_state_is(NAV)) { oled_write_P(raise_layer, false); }
+	else if (layer_state_is(NUM)) { oled_write_P(lower_layer, false); }
 	else { oled_write_P(default_layer, false); }
 }
 
