@@ -28,13 +28,16 @@
 #define C_COMB(name, val, ...) [name] = COMBO(cmb_##name, val),
 #define A_COMB(name, val, ...) [name] = COMBO_ACTION(cmb_##name),
 #define A_SUBS(name, val, ...) case name: if (pressed) SEND_STRING(val); break;
+#define A_ACTI(name, val, ...) case name: if (pressed) val; break;
 #define BLANK(...)
 
 // Enumerate name list
 #undef COMB
 #undef SUBS
+#undef ACTI
 #define COMB C_ENUM
 #define SUBS C_ENUM
+#define ACTI C_ENUM
 enum combos {
 	#include "combos.def"
 	COMBO_LENGTH
@@ -44,15 +47,19 @@ uint16_t COMBO_LEN = COMBO_LENGTH;
 // Store combos in PROGMEM
 #undef COMB
 #undef SUBS
+#undef ACTI
 #define COMB C_DATA
 #define SUBS C_DATA
+#define ACTI C_DATA
 #include "combos.def"
 
 // Fill key array
 #undef COMB
 #undef SUBS
+#undef ACTI
 #define COMB C_COMB
 #define SUBS A_COMB
+#define ACTI A_COMB
 combo_t key_combos[] = {
 	#include "combos.def"
 };
@@ -60,8 +67,10 @@ combo_t key_combos[] = {
 // Fill action function
 #undef COMB
 #undef SUBS
+#undef ACTI
 #define COMB BLANK
 #define SUBS A_SUBS
+#define ACTI A_ACTI
 void process_combo_event(uint16_t combo_index, bool pressed) {
 	switch (combo_index) {
 		#include "combos.def"

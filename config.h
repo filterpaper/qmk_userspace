@@ -96,7 +96,7 @@
 #endif
 
 #ifdef MOUSEKEY_ENABLE
-#	define MK_KINETIC_SPEED
+//#	define MK_KINETIC_SPEED
 #ifdef MK_KINETIC_SPEED
 #	define MOUSEKEY_DELAY 0
 #	define MOUSEKEY_INTERVAL 16
@@ -144,6 +144,7 @@
 
 #ifdef COMBO_ENABLE
 #	define COMBO_VARIABLE_LEN
+#	define COMBO_TERM TAPPING_TERM
 #endif
 
 #ifdef AUTO_SHIFT_ENABLE

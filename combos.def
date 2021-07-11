@@ -1,6 +1,7 @@
 /* Combo macro format:
  * COMB(ident, keycode_shortcut, combo_sequence...)
  * SUBS(ident, "string to send", combo_sequence...)
+ * ACTI(ident, actionfunction(), combo_sequence...)
  *
  * http://combos.gboards.ca/docs/combos/
  */
@@ -13,12 +14,40 @@
 #define HM_J GUI_T(KC_J)
 #define HM_K CTL_T(KC_K)
 #define HM_L ALT_T(KC_L)
+#define HM_SCLN SFT_T(KC_SCLN)
+/*
+// Right symbols
+COMB(ui_lprn, 	KC_LPRN, KC_U, KC_I)
+COMB(io_rprn, 	KC_RPRN, KC_I, KC_O)
+COMB(jk_lcbr, 	KC_LCBR, HM_J, HM_K)
+COMB(kl_rcbr, 	KC_RCBR, HM_K, HM_L)
+COMB(mcomm_lbrc, KC_LBRC, M_TH, COMM_TH)
+COMB(commdot_rbrc, KC_RBRC, COMM_TH, DOT_TH)
 
-// Shortcuts
-COMB(er_lprn, 	KC_LPRN, KC_E, KC_R)
-COMB(iu_rprn, 	KC_RPRN, KC_I, KC_U)
-COMB(rt_lcbr, 	KC_LCBR, KC_R, KC_T)
-COMB(uy_rcbr, 	KC_RCBR, KC_U, KC_Y)
+COMB(uj_mins, 	KC_MINS, KC_U, HM_J)
+COMB(ik_eql, 	KC_EQL,  KC_I, HM_K)
+COMB(ol_bsls, 	KC_BSLS, KC_O, HM_L)
+COMB(jm_unds, 	KC_UNDS, HM_J, M_TH)
+COMB(kcomm_plus, KC_PLUS, HM_K, COMM_TH)
+COMB(ldot_pipe, KC_PIPE, HM_L, DOT_TH)
+
+COMB(pscln_tild, 	KC_TILD, KC_P, HM_SCLN)
+COMB(sclnslsh_grv, 	KC_GRV,  HM_SCLN, SLSH_TH)
+
+// Left symbols
+COMB(ws_circ, 	KC_CIRC, W_TH, HM_S)
+COMB(ed_ampr, 	KC_AMPR, KC_E, HM_D)
+COMB(rf_astr, 	KC_ASTR, KC_R, HM_F)
+
+COMB(az_exlm, 	KC_EXLM, HM_A, KC_Z)
+COMB(sx_at, 	KC_AT,   HM_S, KC_X)
+COMB(dc_hash, 	KC_HASH, HM_D, KC_C)
+COMB(fv_dlr, 	KC_DLR,  HM_F, KC_V)
+COMB(gb_perc, 	KC_PERC, KC_G, KC_B)
+*/
+// Volume control
+COMB(sclnquot_volu, KC_VOLU, HM_SCLN, KC_QUOT)
+COMB(slshent_vold, 	KC_VOLD, SLSH_TH, KC_ENT)
 
 /*
 // Common words
