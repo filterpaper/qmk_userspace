@@ -16,8 +16,8 @@
 
 /* Modification of Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
 
-   This helper file will build all four sections of QMK's combo source codes
-   from user's "combos.def" file with combo data in the following format:
+   This helper file will build all four parts of QMK's combo source codes
+   from user's "combos.def" file with shortcuts in the following format:
 
    COMB(name, keycode_shortcut, combo_sequence...)
    SUBS(name, "string to send", combo_sequence...)
