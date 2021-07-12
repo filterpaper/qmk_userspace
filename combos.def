@@ -1,9 +1,7 @@
-/* Combo macro format:
+/* Combo format:
  * COMB(name, keycode_shortcut, combo_sequence...)
  * SUBS(name, "string to send", combo_sequence...)
  * ACTN(name, actionfunction(), combo_sequence...)
- *
- * http://combos.gboards.ca/docs/combos/
  */
 
 // Home row mod tap keys

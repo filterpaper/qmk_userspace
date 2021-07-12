@@ -14,11 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Simplified combo helper file from Jane Bernhardt (http://gboards.ca/)
-   that generates combo source codes with preprocessor from
-   "combos.def" data file. See: http://combos.gboards.ca/docs/combos/
+/* Modification of Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
 
-   Data file format:
+   This helper file will build all four sections of QMK's combo source codes
+   from user's "combos.def" file with combo data in the following format:
+
    COMB(name, keycode_shortcut, combo_sequence...)
    SUBS(name, "string to send", combo_sequence...)
    ACTN(name, actionfunction(), combo_sequence...)
@@ -34,7 +34,7 @@
 #define A_COMB(name, val, ...) [combo_ ## name] = COMBO_ACTION(cmb_ ## name),
 #define P_SUBS(name, val, ...) case combo_ ## name: if (pressed) SEND_STRING(val); break;
 #define P_ACTN(name, val, ...) case combo_ ## name: if (pressed) val; break;
-#define BLANK(...)
+#define UNUSED(...)
 
 // Enumerate name list
 #undef COMB
@@ -73,7 +73,7 @@ combo_t key_combos[] = {
 #undef COMB
 #undef SUBS
 #undef ACTN
-#define COMB BLANK
+#define COMB UNUSED
 #define SUBS P_SUBS
 #define ACTN P_ACTN
 void process_combo_event(uint16_t combo_index, bool pressed) {

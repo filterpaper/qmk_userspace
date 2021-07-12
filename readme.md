@@ -109,7 +109,7 @@ if ((keycode & 0xF000) == LMT_BITS) {
 ```
 
 ## Combo helper macros
-The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New combos can be appended to `combos.def` and the wrapper macros in `combos.h` will read that file to create the appropriate arrays and codes.
+The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New shortcuts can be appended to `combos.def` and the preprocessor macros in `combos.h` will generate required QMK combo source codes at compile time.
 
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
