@@ -144,7 +144,7 @@
 
 #ifdef COMBO_ENABLE
 #	define COMBO_VARIABLE_LEN
-#	define COMBO_TERM TAPPING_TERM
+#	define COMBO_TERM 80
 #endif
 
 #ifdef AUTO_SHIFT_ENABLE

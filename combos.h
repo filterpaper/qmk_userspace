@@ -23,12 +23,12 @@
 */
 
 // Combo code macros
-#define C_ENUM(name, val, ...) name,
-#define C_DATA(name, val, ...) const uint16_t PROGMEM cmb_##name[] = {__VA_ARGS__, COMBO_END};
-#define C_COMB(name, val, ...) [name] = COMBO(cmb_##name, val),
-#define A_COMB(name, val, ...) [name] = COMBO_ACTION(cmb_##name),
-#define A_SUBS(name, val, ...) case name: if (pressed) SEND_STRING(val); break;
-#define A_ACTI(name, val, ...) case name: if (pressed) val; break;
+#define C_ENUM(name, val, ...) combo_##name,
+#define C_DATA(name, val, ...) uint16_t const cmb_##name[] PROGMEM = {__VA_ARGS__, COMBO_END};
+#define C_COMB(name, val, ...) [combo_##name] = COMBO(cmb_##name, val),
+#define A_COMB(name, val, ...) [combo_##name] = COMBO_ACTION(cmb_##name),
+#define P_SUBS(name, val, ...) case combo_##name: if (pressed) SEND_STRING(val); break;
+#define P_ACTI(name, val, ...) case combo_##name: if (pressed) val; break;
 #define BLANK(...)
 
 // Enumerate name list
@@ -64,13 +64,13 @@ combo_t key_combos[] = {
 	#include "combos.def"
 };
 
-// Fill action function
+// Fill event function
 #undef COMB
 #undef SUBS
 #undef ACTI
 #define COMB BLANK
-#define SUBS A_SUBS
-#define ACTI A_ACTI
+#define SUBS P_SUBS
+#define ACTI P_ACTI
 void process_combo_event(uint16_t combo_index, bool pressed) {
 	switch (combo_index) {
 		#include "combos.def"
