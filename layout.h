@@ -91,19 +91,6 @@
 	_______, Z_SLEEP, _______, _______, Z_PASTE, _______,     KC_END,  KC_BTN2, KC_BTN1, KC_DEL,  Z_SHUT,  _______, \
 	                           _______, _______, _______,     _______, _______, _______
 
-/* Alternate layers
-#define _NUMB \
-	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______, \
-	_______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
-	_______, _______, _______, _______, _______, _______,      _______, _______, _______, _______, _______, _______, \
-	                           _______, MO(FNC), _______,      _______, _______, _______
-#define _NAVI \
-	_______, _______, _______, KC_LPRN, KC_RPRN, _______,     KC_PGUP, KC_MINS, KC_EQL,  KC_BSLS, _______, _______, \
-	_______, _______, _______, KC_LCBR, KC_RCBR, _______,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_GRV,  KC_VOLU, \
-	KC_CAPS, _______, _______, KC_LBRC, KC_RBRC, _______,     KC_PGDN, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, KC_VOLD, \
-	                           _______, _______, _______,     _______, MO(FNC), _______
-*/
-
 
 
 // Planck 4x12
