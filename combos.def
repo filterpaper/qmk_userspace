@@ -1,7 +1,7 @@
 /* Combo macro format:
- * COMB(ident, keycode_shortcut, combo_sequence...)
- * SUBS(ident, "string to send", combo_sequence...)
- * ACTI(ident, actionfunction(), combo_sequence...)
+ * COMB(name, keycode_shortcut, combo_sequence...)
+ * SUBS(name, "string to send", combo_sequence...)
+ * ACTN(name, actionfunction(), combo_sequence...)
  *
  * http://combos.gboards.ca/docs/combos/
  */
