@@ -109,7 +109,7 @@
 
 // Bottom row keys
 #define P_BASE 	KC_DEL, KC_VOLD, KC_VOLU, RSA_T(KC_TAB), LT(NAV,KC_BSPC), RSG_T(KC_ENT), \
-				RSFT_T(KC_TAB), LT(NUM,KC_SPC), RAG_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
+				RSFT_T(KC_SPC), LT(NUM,KC_SPC), RAG_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
 #define P_NUMB _______, _______, _______, _______, MO(FNC), _______, _______, _______, _______, _______, _______, _______
 #define P_NAVI _______, _______, _______, _______, _______, _______, _______, MO(FNC), _______, _______, _______, _______
 #define P_BLNK _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
