@@ -37,7 +37,7 @@
 #endif
 
 // Custom indicators
-#if defined(KEYBOARD_crkbd_rev1) && defined(OLED_DRIVER_ENABLE)
+#ifdef IMKCORNE
 #	define MOD_FLAG LED_FLAG_UNDERGLOW
 #	define CAP_FLAG LED_FLAG_UNDERGLOW
 #else

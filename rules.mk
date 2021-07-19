@@ -57,6 +57,7 @@ else ifeq ($(KEYBOARD) $(RGB), crkbd/rev1 yes)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
+	OPT_DEFS += -D${IMK}CORNE
 # Primary status with secondary WPM-driven animation
 else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1 yes)
 	WPM_ENABLE = yes
