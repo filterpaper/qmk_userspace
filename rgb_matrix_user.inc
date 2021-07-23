@@ -26,13 +26,16 @@
 RGB_MATRIX_EFFECT(CANDY_TAP)
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+/*
 uint8_t jsf8(void) { // Bob Jenkin's fast prng
 	static uint8_t a = 161, b = 62, c = 21, d = 97, t;
 	t = a - ((b << 1)|(b >> 7));
 	a = b ^ ((c << 4)|(c >> 4));
 	b = c + d; c = d + t;
 	return d = t + a;
-}
+}*/
+// alias prng to lib8tion's random function
+#define jsf8() random8()
 
 HSV hsv_by_time(HSV hsv) {
 	return (HSV){
