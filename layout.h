@@ -110,7 +110,7 @@
 	k31, k32, k33, k34, k35, k36
 
 #define W_QWER \
-	Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,        Y_TH,    KC_U,    KC_I,    KC_O,    KC_P,    \
+	Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
 	KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, \
 	KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, \
 	RSA_T(KC_DEL), LT(NAV,KC_BSPC), RSG_T(KC_ENT),   RSFT_T(KC_SPC), LT(NUM,KC_TAB), RAG_T(KC_ESC)
