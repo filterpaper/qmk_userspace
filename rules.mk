@@ -38,7 +38,7 @@ ifeq ($(PLATFORM), CHIBIOS)
 	BOOTLOADER = stm32-dfu
 endif
 
-ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1))
+ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1 3w6))
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
