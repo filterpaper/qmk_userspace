@@ -1,0 +1,16 @@
+{
+	"author": "",
+	"documentation": "Wrapper based keymap",
+	"keyboard": "3w6",
+	"keymap": "filterpaper",
+	"layout": "FIVECOL_wrapper",
+	"layers": [
+		[ "HRM36(W_QWER)" ],
+		[ "HRM36(W_COLE)" ],
+		[ "W_NUMB" ],
+		[ "W_NAVI" ],
+		[ "W_FUNC" ]
+	],
+	"notes": "",
+	"version": 1
+}
