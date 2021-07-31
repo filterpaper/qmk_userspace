@@ -22,7 +22,7 @@
 
 #ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
 
-#ifndef DISABLE_RGB_MATRIX_CANDY_TAP
+#ifdef ENABLE_RGB_MATRIX_CANDY_TAP
 RGB_MATRIX_EFFECT(CANDY_TAP)
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
@@ -52,10 +52,10 @@ static bool CANDY_TAP(effect_params_t* params) {
 	return effect_runner_reactive(params, &CANDY_TAP_math);
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#endif // DISABLE_RGB_MATRIX_CANDY_TAP
+#endif // ENABLE_RGB_MATRIX_CANDY_TAP
 
 
-#ifndef DISABLE_RGB_MATRIX_CANDY_SPLASH
+#ifdef ENABLE_RGB_MATRIX_CANDY_SPLASH
 RGB_MATRIX_EFFECT(CANDY_SPLASH)
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
@@ -69,20 +69,20 @@ static bool CANDY_SPLASH(effect_params_t* params) {
 	return effect_runner_reactive_splash(0, params, &CANDY_WIDE_math);
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#endif // DISABLE_RGB_MATRIX_CANDY_SPLASH
+#endif // ENABLE_RGB_MATRIX_CANDY_SPLASH
 
 #endif // RGB_MATRIX_KEYREACTIVE_ENABLED
 
 
-#ifndef DISABLE_RGB_MATRIX_PIXEL_RAIN
-RGB_MATRIX_EFFECT(PIXEL_RAIN) // 278 bytes
+#ifdef ENABLE_RGB_MATRIX_CANDY_RAIN
+RGB_MATRIX_EFFECT(CANDY_RAIN) // 278 bytes
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 RGB random_hsv_to_rgb(void) {
 	return hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
 }
 
-static bool PIXEL_RAIN(effect_params_t* params) {
+static bool CANDY_RAIN(effect_params_t* params) {
 	static uint32_t wait_timer = 0;
 	if (wait_timer > g_rgb_timer) { return false; }
 
@@ -104,14 +104,14 @@ static bool PIXEL_RAIN(effect_params_t* params) {
 	return rain_pixel(mod8(jsf8(), DRIVER_LED_TOTAL), params, jsf8() & 2);
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#endif // DISABLE_RGB_MATRIX_PIXEL_RAIN
+#endif // ENABLE_RGB_MATRIX_CANDY_RAIN
 
 
-#ifndef DISABLE_RGB_MATRIX_PIXEL_FLOW
-RGB_MATRIX_EFFECT(PIXEL_FLOW) // 390 bytes
+#ifdef ENABLE_RGB_MATRIX_CANDY_FLOW
+RGB_MATRIX_EFFECT(CANDY_FLOW) // 390 bytes
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-static bool PIXEL_FLOW(effect_params_t* params) {
+static bool CANDY_FLOW(effect_params_t* params) {
 	static RGB led[DRIVER_LED_TOTAL];
 	static uint32_t wait_timer = 0;
 	if (wait_timer > g_rgb_timer) { return false; }
@@ -134,14 +134,14 @@ static bool PIXEL_FLOW(effect_params_t* params) {
 	return led_max < DRIVER_LED_TOTAL;
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#endif // DISABLE_RGB_MATRIX_PIXEL_FLOW
+#endif // ENABLE_RGB_MATRIX_CANDY_FLOW
 
 
-#ifndef DISABLE_RGB_MATRIX_PIXEL_FRACTAL
-RGB_MATRIX_EFFECT(PIXEL_FRACTAL) // 522 bytes
+#ifdef DISABLE_RGB_MATRIX_CANDY_FRACTAL
+RGB_MATRIX_EFFECT(CANDY_FRACTAL) // 522 bytes
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-static bool PIXEL_FRACTAL(effect_params_t* params) {
+static bool CANDY_FRACTAL(effect_params_t* params) {
 	#define FRACTAL_WIDTH 15
 	#define FRACTAL_HEIGHT 5
 	#define FRACTAL_MIDDLE 7
@@ -181,4 +181,4 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
 	return led_max < DRIVER_LED_TOTAL;
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#endif // DISABLE_RGB_MATRIX_PIXEL_FRACTAL
+#endif // DISABLE_RGB_MATRIX_CANDY_FRACTAL
