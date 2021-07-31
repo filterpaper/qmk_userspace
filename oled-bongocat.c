@@ -25,16 +25,32 @@
 
    Cat images courtesy of @plandevida
 
-   Modified from @Dake's Modular Bongo Cat
+   Differential code is modified from @Dake's Modular Bongo Cat
    (https://github.com/Dakes/kyria/blob/main/keymaps/dakes/)
-*/
 
-#include "filterpaper.h"
+
+   Usage guide
+   1 Place this file next to keymap.c or in userspace
+   2 Add 'SRC += oled-bongocat.c' to rules.mark
+   3 Left and right aligned Bongocat is default. To save space:
+      * Add 'OPT_DEFS += -DLEFTCAT' to rules.mark
+      * Or 'OPT_DEFS += -DRIGHTCAT' to rules.mark
+   4 To animate with WPM on secondary OLED, add 'WPM_ENABLE = yes' to to rules.mark.
+     To animate with keystrokes on primary OLED, add this line to 'process_record_user()' in keymap.c:
+        if (record->event.pressed) { tap_timer = timer_read32(); }
+   5 Add 'return OLED_ROTATION_270;' to 'oled_init_user()' for the host OLED side in keymap.c.
+   6 Lastly, add the following lines to 'oled_task_user()' in keymap.c:
+        extern void render_bongocat(void);
+        render_bongocat();
+ */
+
+
+#include QMK_KEYBOARD_H
 
 #define IDLE_FRAMES 5
 #define TAP_FRAMES 2
 #define FRAME_DURATION 200 // Number of ms between frames
-#define WIDTH OLED_DISPLAY_HEIGHT // 32 px when OLED is vertical
+#define WIDTH OLED_DISPLAY_HEIGHT // 32 px for OLED_ROTATION_270
 
 
 // Base animation frame that all subsequent ones will differ by pixels
@@ -48,7 +64,7 @@ static uint16_t const left_base[] PROGMEM = {192, 33343, 33375, 33407, 33439, 33
 
 // Loop array to render pixels on OLED
 static void render_array(uint16_t const *frame) {
-	// First array element is the size
+	// First array element is its size
 	uint16_t const size = pgm_read_word(&(frame[0]));
 	for (uint16_t i = size; i > 0; --i) {
 		uint16_t cur_px = pgm_read_word(&(frame[i]));
@@ -154,7 +170,7 @@ static void render_cat_tap(void) {
 #endif
 	static uint8_t current_frame = 0;
 //	current_frame = (current_frame + 1 > TAP_FRAMES - 1) ? 0 : current_frame + 1;
-	current_frame = (current_frame + 1) & 1;
+	current_frame = (current_frame + 1) & 1; // Quicker maths for just two frames
 
 #if defined(LEFTCAT)
 	render_frames(left_base, left_tap_diff[current_frame]);
@@ -167,19 +183,24 @@ static void render_cat_tap(void) {
 
 
 void render_bongocat(void) {
+	// Animation frame timer
+	static uint16_t anim_timer = 0;
+
 #ifdef WPM_ENABLE
 	static uint8_t prev_wpm = 0;
-	static uint32_t tap_timer = 0; // WPM triggered
+	static uint32_t tap_timer = 0;
+	// Reset tap timer on sustained WPM key press
 	if (get_current_wpm() > prev_wpm) { tap_timer = timer_read32(); }
 	prev_wpm = get_current_wpm();
 #else
-	extern uint32_t tap_timer; // process_record_user() triggered
+	// Reset tap timer on process_record_user() triggered key press
+	extern uint32_t tap_timer;
 #endif
+
 	// Elapsed time between key presses
 	uint32_t keystroke = timer_elapsed32(tap_timer);
-	static uint16_t anim_timer = 0;
 
-	void animation_phase(void) {
+	void draw_frame(void) {
 		oled_clear();
 		if (keystroke < FRAME_DURATION*2) { render_cat_tap(); }
 		else if (keystroke < FRAME_DURATION*8) { render_cat_prep(); }
@@ -189,6 +210,6 @@ void render_bongocat(void) {
 	if (keystroke > OLED_TIMEOUT) { oled_off(); }
 	else if (timer_elapsed(anim_timer) > FRAME_DURATION) {
 		anim_timer = timer_read();
-		animation_phase();
+		draw_frame();
 	}
 }
