@@ -31,11 +31,11 @@
 
    Usage guide
    1 Place this file next to keymap.c or in userspace
-   2 Add 'SRC += oled-bongocat.c' to rules.mark
+   2 Add 'SRC += oled-bongocat.c' to rules.mk
    3 Left and right aligned Bongocat is default. To save space:
-      * Add 'OPT_DEFS += -DLEFTCAT' to rules.mark
-      * Or 'OPT_DEFS += -DRIGHTCAT' to rules.mark
-   4 To animate with WPM on secondary OLED, add 'WPM_ENABLE = yes' to to rules.mark.
+      * Add 'OPT_DEFS += -DLEFTCAT' to rules.mk
+      * Or 'OPT_DEFS += -DRIGHTCAT' to rules.mk
+   4 To animate with WPM on secondary OLED, add 'WPM_ENABLE = yes' to to rules.mk
      To animate with keystrokes on primary OLED, add this line to 'process_record_user()' in keymap.c:
         if (record->event.pressed) { tap_timer = timer_read32(); }
    5 Add 'return OLED_ROTATION_270;' to 'oled_init_user()' for the host OLED side in keymap.c.
