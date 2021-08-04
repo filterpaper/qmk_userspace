@@ -5,11 +5,11 @@
 	"keymap": "filterpaper",
 	"layout": "FIVECOL_wrapper",
 	"layers": [
-		[ "C_T3W6(HRM(_BASE))" ],
-		[ "C_T3W6(HRM(_COLE))" ],
-		[ "C_T3W6(_NUMB)" ],
-		[ "C_T3W6(_NAVI)" ],
-		[ "C_T3W6(_FUNC)" ]
+		[ "C_3W6(HRM(_BASE))" ],
+		[ "C_3W6(HRM(_COLE))" ],
+		[ "C_3W6(_NUMB)" ],
+		[ "C_3W6(_NAVI)" ],
+		[ "C_3W6(_FUNC)" ]
 	],
 	"notes": "",
 	"version": 1

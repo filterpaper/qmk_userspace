@@ -69,7 +69,7 @@
 	KC_TAB,  Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
 	OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, KC_ENT,  \
-	        RSA_T(KC_ESC), LT(NAV,KC_TAB), RSG_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
+	       RSA_T(KC_DEL), LT(NAV,KC_BSPC), RSG_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_TAB), RAG_T(KC_ESC)
 #define _COLE \
 	_______, _______, _______, KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, \
 	_______, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,        _______, KC_N,    KC_E,    KC_I,    KC_O,    _______, \
@@ -93,22 +93,22 @@
 
 
 
-// 3w6 3x5_3
-//#define FIVECOL_wrapper(...) LAYOUT_split_3x5_3(__VA_ARGS__)
+// 3w6 (git pull https://github.com/weteor/qmk_firmware.git 3w6_rev_2)
 #define FIVECOL_wrapper(...) LAYOUT(__VA_ARGS__)
-// git pull https://github.com/weteor/qmk_firmware.git 3w6_rev_2
-#define C_T3W6(k) SPLIT_3x6_3_TO_3x5_3_(k)
+// Corne to 3w6 layout conversion
+#define C_3W6(k) SPLIT_3x6_3_TO_3x5_3_(k)
 #define SPLIT_3x6_3_TO_3x5_3_( \
 	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
 	k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
 	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
 	               k37, k38, k39, k40, k41, k42 \
 ) \
-	k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, \
-	k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, \
-	k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
-	          k37, k38, k39, k40, k41, k42
+	     k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, \
+	     k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, \
+	     k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
+	               k37, k38, k39, k40, k41, k42
 
+// 3w6 3x5_3
 #define HRM36(k) HRM36_SACG(k)
 #define HRM36_SACG( \
 	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, \
@@ -126,7 +126,7 @@
 	Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
 	KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, \
 	KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, \
-    RSA_T(KC_ESC), LT(NAV,KC_TAB), RSG_T(KC_ENT),    RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
+    RSA_T(KC_DEL), LT(NAV,KC_BSPC), RSG_T(KC_ENT),   RSFT_T(KC_SPC), LT(NUM,KC_TAB), RAG_T(KC_ESC)
 #define W_COLE \
 	_______, _______, KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, \
 	KC_A,    KC_R,    KC_S,    KC_T,    KC_D,        _______, KC_N,    KC_E,    KC_I ,   KC_O,    \
@@ -153,8 +153,8 @@
 // Planck 4x12
 #define PLANCK4x12_wrapper(...) LAYOUT_ortho_4x12(__VA_ARGS__)
 
-// Extract top 3x12 layout from Corne's 42-key
-#define C_TP(k) SPLIT_3x6_3_TO_3x12(k)
+// // Corne to Planck layout conversion with top 3x12 keys
+#define C_P(k) SPLIT_3x6_3_TO_3x12(k)
 #define SPLIT_3x6_3_TO_3x12( \
 	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
 	k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \

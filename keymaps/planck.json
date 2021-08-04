@@ -5,11 +5,11 @@
 	"keymap": "filterpaper",
 	"layout": "PLANCK4x12_wrapper",
 	"layers": [
-		[ "C_TP(HRM(_BASE))", "P_BASE" ],
-		[ "C_TP(HRM(_COLE))", "P_BLNK" ],
-		[ "C_TP(_NUMB)", "P_NUMB" ],
-		[ "C_TP(_NAVI)", "P_NAVI" ],
-		[ "C_TP(_FUNC)", "P_BLNK" ]
+		[ "C_P(HRM(_BASE))", "P_BASE" ],
+		[ "C_P(HRM(_COLE))", "P_BLNK" ],
+		[ "C_P(_NUMB)", "P_NUMB" ],
+		[ "C_P(_NAVI)", "P_NAVI" ],
+		[ "C_P(_FUNC)", "P_BLNK" ]
 	],
 	"notes": "",
 	"version": 1
