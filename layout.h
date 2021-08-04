@@ -75,14 +75,14 @@
 	_______, _______, _______, _______, _______, _______,     KC_K,    _______, _______, _______, _______, _______, \
 	                           _______, _______, _______,     _______, _______, _______
 #define _NUMB \
-	_______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_VOLU, KC_LPRN, KC_RPRN, KC_RBRC, KC_DQUO, _______, \
+	_______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_VOLU, KC_RCBR, KC_RPRN, KC_RBRC, KC_DQUO, _______, \
 	_______, _______, KC_4,    KC_5,    KC_6,    _______,     KC_VOLD, KC_LCBR, KC_LPRN, KC_LBRC, KC_QUOT, _______, \
-	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        _______, _______, _______, _______, _______, _______, \
+	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_MUTE, _______, _______, _______, _______, _______, \
 	                           _______, MO(FNC), _______,     _______, _______, _______
 #define _NAVI \
 	_______, _______, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_PGUP, KC_MINS, KC_EQL,  KC_BSLS, KC_TILD, _______, \
 	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_GRV,  _______, \
-	KC_CAPS, _______, _______, _______, _______, _______,     KC_PGDN, KC_UNDS, KC_PLUS, KC_PIPE, _______, _______, \
+	_______, KC_CAPS, _______, _______, _______, _______,     KC_PGDN, KC_UNDS, KC_PLUS, KC_PIPE, _______, _______, \
 	                           _______, _______, _______,     _______, MO(FNC), _______
 #define _FUNC \
 	_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       KC_HOME, KC_WH_U, KC_WH_D, KC_INS,  _______, _______, \
