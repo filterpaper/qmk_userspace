@@ -38,10 +38,8 @@ ifeq ($(PLATFORM), CHIBIOS)
 	BOOTLOADER = stm32-dfu
 endif
 
-ifneq ($(KEYBOARD),$(filter $(KEYBOARD), crkbd/rev1 3w6/rev2))
-	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += rgb-matrix.c
+ifeq ($(KEYBOARD),$(filter $(KEYBOARD), 3w6/rev2))
+	LTO_ENABLE = no
 endif
 
 # Corne keyboard features
@@ -52,17 +50,13 @@ ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1 T)
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += oled-icons.c oled-bongocat.c rgb-matrix.c
 	OPT_DEFS += -D${CAT}CAT
-# RGB only without OLED support
-else ifeq ($(KEYBOARD) $(RGB), crkbd/rev1 yes)
-	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += rgb-matrix.c
-	OPT_DEFS += -D${IMK}CORNE
 # Primary status with secondary WPM-driven animation
 else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1 yes)
 	WPM_ENABLE = yes
 	OLED_DRIVER_ENABLE = yes
-	SRC += oled-bongocat.c
+	RGB_MATRIX_ENABLE = yes
+	RGB_MATRIX_CUSTOM_USER = yes
+	SRC += oled-bongocat.c rgb-matrix.c
 	OPT_DEFS += -D${CAT}CAT
 	# Primary OLED option
 	ifneq ($(DOG),)
@@ -72,6 +66,11 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1 yes)
 		SRC += oled-icons.c
 	endif
 # Minimal default
-else ifeq ($(strip $(KEYBOARD)), crkbd/rev1)
-#	COMBO_ENABLE = yes
+else ifeq ($(strip $(KEYBOARD) $(origin KB)), crkbd/rev1 undefined)
+# RGB for IMK and Corne LP
+else ifeq ($(KEYBOARD), crkbd/rev1)
+	RGB_MATRIX_ENABLE = yes
+	RGB_MATRIX_CUSTOM_USER = yes
+	SRC += rgb-matrix.c
+	OPT_DEFS += -D${KB}
 endif

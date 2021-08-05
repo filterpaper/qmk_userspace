@@ -40,7 +40,7 @@
 #endif
 
 // Custom indicators
-#ifdef IMKCORNE
+#ifdef IMK
 #	define MOD_FLAG LED_FLAG_UNDERGLOW
 #	define CAP_FLAG LED_FLAG_UNDERGLOW
 #else
