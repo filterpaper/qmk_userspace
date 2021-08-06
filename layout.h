@@ -21,13 +21,14 @@
 #define DOT_TH	LT(0,KC_DOT)
 #define COMM_TH	LT(0,KC_COMM)
 #define M_TH	LT(0,KC_M)
+#define V_TH	LT(0,KC_V)
 
 // OS X shortcuts
 #define Z_CUT G(KC_X)
 #define Z_CPY G(KC_C)
 #define Z_PST G(KC_V)
 #define Z_UND G(KC_Z)
-#define Z_PASTE	S(G(A(KC_V)))
+#define Z_PASTE	S(G(KC_V))
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_SHUT	C(A(G(KC_PWR)))
 #define Z_LOCK	C(G(KC_Q))
@@ -67,7 +68,7 @@
 #define _BASE \
 	KC_TAB,  Q_TH,    W_TH,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
-	OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, KC_ENT,  \
+	OSM_SFT, KC_Z,    KC_X,    KC_C,    V_TH,    KC_B,        KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, KC_ENT,  \
 	        RSA_T(KC_ESC), LT(NAV,KC_TAB), RSG_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
 #define _COLE \
 	_______, _______, _______, KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, \
@@ -87,7 +88,7 @@
 #define _FUNC \
 	_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       KC_HOME, KC_WH_U, KC_WH_D, KC_INS,  _______, _______, \
 	_______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______, \
-	_______, Z_SLEEP, _______, _______, Z_PASTE, _______,     KC_END,  KC_BTN2, KC_BTN1, KC_DEL,  Z_SHUT,  _______, \
+	_______, Z_SLEEP, _______, _______, KC_F11,  KC_F12,      KC_END,  KC_BTN2, KC_BTN1, KC_DEL,  Z_SHUT,  _______, \
 	                             RESET, _______, _______,     _______, _______, TG(CMK)
 
 

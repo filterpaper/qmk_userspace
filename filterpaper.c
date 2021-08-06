@@ -20,8 +20,9 @@
 #include "combos.h"
 #endif
 
-// Tap hold macro function for process_record_user()
-// Uses layer tap LT(0,kc) tapping term delay as hold shortcut:
+// Tap hold macro using LT(0,kc) delay for process_record_user()
+// Returns true on tap for normal handling of kc
+// Intercept hold event for custom keycode
 #define TAP_HOLD(_hold_) \
 	if (record->tap.count) return true; \
 	else if (record->event.pressed) (_hold_); \
@@ -77,6 +78,8 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		case DOT_TH:  TAP_HOLD(tap_code16(Z_CUT));
 		case COMM_TH: TAP_HOLD(tap_code16(Z_CPY));
 		case M_TH:    TAP_HOLD(tap_code16(Z_PST));
+		// Unformatted paste
+		case V_TH: TAP_HOLD(tap_code16(Z_PASTE));
 	}
 
 #ifdef ONESHOT_MODTAP_ENABLE
