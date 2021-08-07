@@ -40,6 +40,7 @@ endif
 
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), 3w6/rev2))
 	LTO_ENABLE = no
+	COMBO_ENABLE = yes
 endif
 
 # Corne keyboard features

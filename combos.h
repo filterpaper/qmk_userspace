@@ -14,17 +14,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Modification of Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
+/* Adapted from Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
 
-   This helper file will build all four parts of QMK's combo source codes
-   from user's "combos.def" file with shortcuts in the following format:
+   These macros will build all four parts of QMK's combo source codes
+   using "combos.def" file shortcuts in the following format:
 
    COMB(name, keycode_shortcut, combo_sequence...)
    SUBS(name, "string to send", combo_sequence...)
    ACTN(name, actionfunction(), combo_sequence...)
 
-   Merge early_combo patch to work with mod tap:
-   git pull https://github.com/sevanteri/qmk_firmware.git early_combo
+   COMB are simple keycode shortcuts. This example will increase volume
+   with Y+U: COMB(KC_VOLU, KC_VOLU, KC_Y, KC_U)
+   Actual keycode can be used as names, macros will prefix them to avoid
+   conflict.
+
+   SUBS are string substitution combos. This example will send the string
+   with W+H: SUBS(which, "which ", KC_W, KC_H)
+   It can be used as "steno-light" for frequently used words.
+
+   ACTN are action trigger combos. This example will call the layer
+   function with Z+X: ACTN(layer2, layer_on(2), KC_Z, KC_X)
  */
 
 // Combo code macros
