@@ -5,11 +5,11 @@
 	"keymap": "filterpaper",
 	"layout": "ORTHO_wrapper",
 	"layers": [
-		[ "C_O(HRM(_BASE))", "P_BASE" ],
-		[ "C_O(HRM(_COLE))", "P_BLNK" ],
-		[ "C_O(_NUMB)", "P_NUMB" ],
-		[ "C_O(_NAVI)", "P_NAVI" ],
-		[ "C_O(_FUNC)", "P_BLNK" ]
+		[ "C_O(HRM(_BASE))", "O_BASE" ],
+		[ "C_O(HRM(_COLE))", "O_BLNK" ],
+		[ "C_O(_NUMB)", "O_NUMB" ],
+		[ "C_O(_NAVI)", "O_NAVI" ],
+		[ "C_O(_FUNC)", "O_BLNK" ]
 	],
 	"notes": "",
 	"version": 1

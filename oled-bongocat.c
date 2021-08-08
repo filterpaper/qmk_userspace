@@ -36,12 +36,16 @@
       * Add 'OPT_DEFS += -DLEFTCAT' into rules.mk
       * Or 'OPT_DEFS += -DRIGHTCAT' into rules.mk
    4 To animate with WPM on secondary OLED, add 'WPM_ENABLE = yes' into rules.mk
-     To animate with keystrokes on primary OLED, add this line to 'process_record_user()' in keymap.c:
-        if (record->event.pressed) { tap_timer = timer_read32(); }
+     To animate with keystrokes on primary OLED, add the following before and inside
+     'process_record_user()' in keymap.c:
+        uint32_t tap_timer = 0;
+        bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
+            if (record->event.pressed) { tap_timer = timer_read32(); }
+        }
    5 Add 'return OLED_ROTATION_270;' to 'oled_init_user()' for the host OLED side in keymap.c.
    6 Lastly, add the following lines to 'oled_task_user()' in keymap.c:
         extern void render_bongocat(void);
-        render_bongocat();
+        if is_keyboard_master() { render_bongocat(); }
  */
 
 
@@ -168,9 +172,10 @@ static void render_cat_tap(void) {
 		left_tap_diff_1
 	};
 #endif
+
 	static uint8_t current_frame = 0;
 //	current_frame = (current_frame + 1 > TAP_FRAMES - 1) ? 0 : current_frame + 1;
-	current_frame = (current_frame + 1) & 1; // Quicker maths for just two frames
+	current_frame = (current_frame + 1) & 1; // Quicker maths cycle two frames
 
 #if defined(LEFTCAT)
 	render_frames(left_base, left_tap_diff[current_frame]);
@@ -189,15 +194,15 @@ void render_bongocat(void) {
 #ifdef WPM_ENABLE
 	static uint8_t prev_wpm = 0;
 	static uint32_t tap_timer = 0;
-	// Reset tap timer on sustained WPM key press
+	// tap_timer updated by sustained WPM
 	if (get_current_wpm() > prev_wpm) { tap_timer = timer_read32(); }
 	prev_wpm = get_current_wpm();
 #else
-	// Reset tap timer on process_record_user() triggered key press
+	// tap_timer updated by key presses in process_record_user()
 	extern uint32_t tap_timer;
 #endif
 
-	// Elapsed time between key presses
+	// Time gap between tap_timer updates
 	uint32_t keystroke = timer_elapsed32(tap_timer);
 
 	void draw_frame(void) {

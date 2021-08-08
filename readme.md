@@ -16,7 +16,7 @@ git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filter
 # Supported Keyboards
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
-* [Planck rev6](../../keyboards/planck) — RGB underglow layer and modifier indicators.
+* [Technik](../../keyboards/boardsource/technik_o) — RGB Matrix and modifier indicators.
 * [Corne Keyboard (CRKBD)](../../keyboards/crkbd) — Typing animation and graphical indicators on OLEDs.
 * [The Mark: 65](../../keyboards/boardsource/the_mark) — RGB underglow layer and modifier indicators.
 
@@ -114,7 +114,7 @@ The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `comb
 # Build Commands
 QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
 ```sh
-qmk flash ~/qmk_firmware/users/filterpaper/keymaps/planck.json
+qmk flash ~/qmk_firmware/users/filterpaper/keymaps/technik.json
 qmk flash ~/qmk_firmware/users/filterpaper/keymaps/corne.json
 qmk flash ~/qmk_firmware/users/filterpaper/keymaps/mark65.json
 ```
