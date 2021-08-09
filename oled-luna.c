@@ -26,18 +26,20 @@
 
 
    Usage guide
-   1 Place this file next to keymap.c or in userspace
+   1 Place this file next to keymap.c or in userspace.
    2 Add the following lines into rules.mk:
         WPM_ENABLE = yes
         OLED_DRIVER_ENABLE = yes
         SRC += oled-luna.c
-   3 Add 'OPT_DEFS += -DFELIX' into rules.mk for "filled" version
+   3 Add 'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.
    4 Luna must be rendered on primary OLED and oled_task_user()
      below calls 'render_bongocat()' for secondary. You can replace
-     it with your desired function
+     it with your desired function.
+   5 render_logo() function has a "CMK" layer indicator condition
+     at the end of it. Remove that line or change accordingly.
 */
 
-#include "filterpaper.h"
+#include QMK_KEYBOARD_H
 
 #define LUNA_FRAMES 2
 #define LUNA_FRAME_DURATION 200 // Number of ms between frames
