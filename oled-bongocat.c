@@ -31,13 +31,15 @@
 
    Usage guide
    1 Place this file next to keymap.c or in userspace
-   2 Add 'SRC += oled-bongocat.c' into rules.mk
+   2 Add the following lines into rules.mk:
+        OLED_DRIVER_ENABLE = yes
+        SRC += oled-bongo.c
    3 Left and right aligned Bongocat is default. To save space:
       * Add 'OPT_DEFS += -DLEFTCAT' into rules.mk
       * Or 'OPT_DEFS += -DRIGHTCAT' into rules.mk
    4 To animate with WPM on secondary OLED, add 'WPM_ENABLE = yes' into rules.mk
-     To animate with keystrokes on primary OLED, add the following before and inside
-     'process_record_user()' in keymap.c:
+     To animate with keystrokes on primary OLED, add the following code before and
+     inside 'process_record_user()' in keymap.c:
         uint32_t tap_timer = 0;
         bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
             if (record->event.pressed) { tap_timer = timer_read32(); }
