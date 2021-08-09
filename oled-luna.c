@@ -36,7 +36,8 @@
      below calls 'render_bongocat()' for secondary. You can replace
      it with your desired function.
    5 render_logo() function has a "CMK" layer indicator condition
-     at the end of it. Remove that line or change accordingly.
+     at the end of it. Replace that line with just:
+        oled_write_P(PSTR("corne"), false);
 */
 
 #include QMK_KEYBOARD_H
