@@ -36,7 +36,7 @@
    function with Z+X: ACTN(layer2, layer_on(2), KC_Z, KC_X)
    Multiple functions are supported with ; delimiter.
 
-   Usage: '#include "combos.h"' this file in keymap.c or user source.
+   Usage: add '#include "combos.h"' to keymap.c or user source.
  */
 
 // Combo code macros
