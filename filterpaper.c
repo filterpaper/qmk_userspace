@@ -111,3 +111,10 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return ((keycode & 0xFF00) == LT0_BITS || (keycode & 0xF000) == LMT_BITS) ? false : true;
 }
 #endif
+
+
+#ifdef TAPPING_FORCE_HOLD_PER_KEY
+bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
+	return (keycode == RSFT_T(KC_SPC)) ? true : false;
+}
+#endif
