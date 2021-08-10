@@ -16,8 +16,8 @@
 
 /* Adapted from Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
 
-   These macros will build all four parts of QMK's combo source codes
-   using "combos.def" file shortcuts in the following format:
+   These macros will build all four parts of QMK's combo source codes with macro
+   substitution using "combos.def" file shortcuts in the following format:
 
    COMB(name, keycode_shortcut, combo_sequence...)
    SUBS(name, "string to send", combo_sequence...)
@@ -39,16 +39,16 @@
    Usage: add '#include "combos.h"' to keymap.c or user source.
  */
 
-// Combo code macros
+// Combo code building macros
 #define C_ENUM(name, val, ...) combo_##name,
 #define C_DATA(name, val, ...) uint16_t const cmb_##name[] PROGMEM = {__VA_ARGS__, COMBO_END};
-#define C_COMB(name, val, ...) [combo_##name] = COMBO(cmb_##name, val),
-#define A_COMB(name, val, ...) [combo_##name] = COMBO_ACTION(cmb_##name),
+#define C_TYPE(name, val, ...) [combo_##name] = COMBO(cmb_##name, val),
+#define A_TYPE(name, val, ...) [combo_##name] = COMBO_ACTION(cmb_##name),
 #define P_SSTR(name, val, ...) case combo_##name: if (pressed) SEND_STRING(val); break;
 #define P_ACTN(name, val, ...) case combo_##name: if (pressed) { val; } break;
 #define UNUSED(...)
 
-// Enumerate name list
+// Enumerate combo list with prefixed names
 #undef COMB
 #undef SUBS
 #undef ACTN
@@ -61,7 +61,7 @@ enum combos {
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
-// Store combos in PROGMEM
+// Create combo name array in PROGMEM with combo key sequences
 #undef COMB
 #undef SUBS
 #undef ACTN
@@ -70,18 +70,18 @@ uint16_t COMBO_LEN = COMBO_LENGTH;
 #define ACTN C_DATA
 #include "combos.def"
 
-// Fill key array
+// Fill array with combo type names and shortcuts
 #undef COMB
 #undef SUBS
 #undef ACTN
-#define COMB C_COMB
-#define SUBS A_COMB
-#define ACTN A_COMB
+#define COMB C_TYPE
+#define SUBS A_TYPE
+#define ACTN A_TYPE
 combo_t key_combos[] = {
 	#include "combos.def"
 };
 
-// Fill event function
+// Fill combo event function with send string or action calls
 #undef COMB
 #undef SUBS
 #undef ACTN

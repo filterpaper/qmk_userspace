@@ -93,7 +93,7 @@
 
 
 
-// 3w6 (git pull https://github.com/weteor/qmk_firmware.git 3w6_rev_2)
+// 3w6 3x5_3
 #define FIVECOL_wrapper(...) LAYOUT(__VA_ARGS__)
 // Corne to 3w6 layout conversion
 #define C_3W6(k) SPLIT_3x6_3_TO_3x5_3(k)
@@ -126,9 +126,10 @@
 // Bottom row keys
 #define O_BASE 	KC_DEL, KC_VOLD, KC_VOLU, RSA_T(KC_TAB), LT(NAV,KC_BSPC), RSG_T(KC_ENT), \
 				RSFT_T(KC_SPC), LT(NUM,KC_SPC), RAG_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
+#define O_BLNK _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 #define O_NUMB _______, _______, _______, _______, MO(FNC), _______, _______, _______, _______, _______, _______, _______
 #define O_NAVI _______, _______, _______, _______, _______, _______, _______, MO(FNC), _______, _______, _______, _______
-#define O_BLNK _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+#define O_FUNC _______, _______, _______, RESET,   _______, _______, _______, _______, TG(CMK), _______, _______, _______
 
 
 
