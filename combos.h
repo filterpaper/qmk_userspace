@@ -34,15 +34,18 @@
 
    ACTN are action trigger combos. This example will call the layer
    function with Z+X: ACTN(layer2, layer_on(2), KC_Z, KC_X)
+   Multiple functions are supported with ; delimiter.
+
+   Usage: '#include "combos.h"' this file in keymap.c or user source.
  */
 
 // Combo code macros
-#define C_ENUM(name, val, ...) combo_ ## name,
-#define C_DATA(name, val, ...) uint16_t const cmb_ ## name[] PROGMEM = {__VA_ARGS__, COMBO_END};
-#define C_COMB(name, val, ...) [combo_ ## name] = COMBO(cmb_ ## name, val),
-#define A_COMB(name, val, ...) [combo_ ## name] = COMBO_ACTION(cmb_ ## name),
-#define P_SUBS(name, val, ...) case combo_ ## name: if (pressed) SEND_STRING(val); break;
-#define P_ACTN(name, val, ...) case combo_ ## name: if (pressed) val; break;
+#define C_ENUM(name, val, ...) combo_##name,
+#define C_DATA(name, val, ...) uint16_t const cmb_##name[] PROGMEM = {__VA_ARGS__, COMBO_END};
+#define C_COMB(name, val, ...) [combo_##name] = COMBO(cmb_##name, val),
+#define A_COMB(name, val, ...) [combo_##name] = COMBO_ACTION(cmb_##name),
+#define P_SSTR(name, val, ...) case combo_##name: if (pressed) SEND_STRING(val); break;
+#define P_ACTN(name, val, ...) case combo_##name: if (pressed) { val; } break;
 #define UNUSED(...)
 
 // Enumerate name list
@@ -83,7 +86,7 @@ combo_t key_combos[] = {
 #undef SUBS
 #undef ACTN
 #define COMB UNUSED
-#define SUBS P_SUBS
+#define SUBS P_SSTR
 #define ACTN P_ACTN
 void process_combo_event(uint16_t combo_index, bool pressed) {
 	switch (combo_index) {
