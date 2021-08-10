@@ -34,10 +34,7 @@
    3 Add 'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.
    4 Luna must be rendered on primary OLED and oled_task_user()
      below calls 'render_bongocat()' for secondary. You can replace
-     it with your desired function.
-   5 render_logo() function has a "CMK" layer indicator condition
-     at the end of it. Replace that line with just:
-        oled_write_P(PSTR("corne"), false);
+     that with your desired function.
 */
 
 #include QMK_KEYBOARD_H
@@ -60,7 +57,7 @@ static void render_logo(void) {
 		0x20, 0xd1, 0xd2, 0xd3, 0x20, 0};
 
 	oled_write_P(corne_logo, false);
-	layer_state_is(CMK) ? oled_write_P(PSTR("corne"), false) : oled_write_P(corne, false);
+	oled_write_P(PSTR("corne"), false)
 }
 
 

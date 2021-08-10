@@ -16,8 +16,8 @@
 
 /* Adapted from Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
 
-   These macros will build all four parts of QMK's combo source codes with macro
-   substitution using "combos.def" file shortcuts in the following format:
+   This file will build QMK's combo source with preprocessor substitution
+   using "combos.def" macros in the following format:
 
    COMB(name, keycode_shortcut, combo_sequence...)
    SUBS(name, "string to send", combo_sequence...)
@@ -25,15 +25,14 @@
 
    COMB are simple keycode shortcuts. This example will increase volume
    with Y+U: COMB(KC_VOLU, KC_VOLU, KC_Y, KC_U)
-   Actual keycode can be used as names, macros will prefix them to avoid
+   Keycodes can be used as names, they will be prefixed to avoid
    conflict.
 
    SUBS are string substitution combos. This example will send the string
    with W+H: SUBS(which, "which ", KC_W, KC_H)
-   It can be used as "steno-light" for frequently used words.
 
-   ACTN are action trigger combos. This example will call the layer
-   function with Z+X: ACTN(layer2, layer_on(2), KC_Z, KC_X)
+   ACTN are function triggers. This example will call the layer function
+   with Z+X: ACTN(layer2, layer_on(2), KC_Z, KC_X)
    Multiple functions are supported with ; delimiter.
 
    Usage: add '#include "combos.h"' to keymap.c or user source.
