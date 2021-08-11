@@ -40,10 +40,9 @@
 #include QMK_KEYBOARD_H
 
 #define LUNA_FRAMES 2
-#define LUNA_FRAME_DURATION 200 // Number of ms between frames
-#define LUNA_SIZE 96 // 96-byte arrays for the little dog
+#define LUNA_FRAME_DURATION 200 // Milliseconds per frames
+#define LUNA_SIZE 96
 
-//#define NEXT(_k_) (_k_ + 1 > LUNA_FRAMES - 1) ? 0 : _k_ + 1
 #define NEXT(_k_) (_k_ + 1) & 1
 static uint8_t current_frame = 0;
 

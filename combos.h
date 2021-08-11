@@ -39,12 +39,12 @@
  */
 
 // Combo code building macros
-#define C_ENUM(name, val, ...) combo_##name,
-#define C_DATA(name, val, ...) uint16_t const cmb_##name[] PROGMEM = {__VA_ARGS__, COMBO_END};
-#define C_TYPE(name, val, ...) [combo_##name] = COMBO(cmb_##name, val),
-#define A_TYPE(name, val, ...) [combo_##name] = COMBO_ACTION(cmb_##name),
-#define P_SSTR(name, val, ...) case combo_##name: if (pressed) SEND_STRING(val); break;
-#define P_ACTN(name, val, ...) case combo_##name: if (pressed) { val; } break;
+#define C_ENUM(name, val, ...) cmb_##name,
+#define C_DATA(name, val, ...) uint16_t const name##_combo[] PROGMEM = {__VA_ARGS__, COMBO_END};
+#define C_TYPE(name, val, ...) [cmb_##name] = COMBO(name##_combo, val),
+#define A_TYPE(name, val, ...) [cmb_##name] = COMBO_ACTION(name##_combo),
+#define P_SSTR(name, val, ...) case cmb_##name: if (pressed) SEND_STRING(val); break;
+#define P_ACTN(name, val, ...) case cmb_##name: if (pressed) { val; } break;
 #define UNUSED(...)
 
 // Enumerate combo list with prefixed names

@@ -50,7 +50,6 @@
         if is_keyboard_master() { render_bongocat(); }
  */
 
-
 #include QMK_KEYBOARD_H
 
 #define IDLE_FRAMES 5

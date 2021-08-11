@@ -140,8 +140,6 @@
 #	define SPLIT_LAYER_STATE_ENABLE
 #	define BOOTMAGIC_LITE_ROW_RIGHT 4
 #	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
-//#	undef DEBOUNCE
-//#	define DEBOUNCE 10
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
@@ -153,8 +151,8 @@
 #endif
 
 #ifdef COMBO_ENABLE
-#	define COMBO_VARIABLE_LEN
 #	define COMBO_TERM 20
+#	define COMBO_VARIABLE_LEN
 #endif
 
 #ifdef AUTO_SHIFT_ENABLE

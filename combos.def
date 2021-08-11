@@ -1,9 +1,3 @@
-// Format:
-// COMB(name, keycode_shortcut, combo_sequence...)
-// SUBS(name, "string to send", combo_sequence...)
-// ACTN(name, actionfunction(), combo_sequence...)
-
-
 // Home row mod tap keys
 #define HM_A SFT_T(KC_A)
 #define HM_S ALT_T(KC_S)
