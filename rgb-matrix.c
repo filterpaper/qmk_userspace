@@ -19,18 +19,6 @@
 
 void matrix_init_user(void) {
 	// Remap under glow LEDs to nearby keys
-#ifdef KEYBOARD_planck_rev6
-	g_led_config = (led_config_t){ {
-		{ 6, 6, 6, 5, 5, 5 }, { 6, 6, 6, 5, 5, 5 },
-		{ 7, 7, 8, 8, 8, 8 }, { 7, 7, 8, 1, 2, 2 },
-		{ 4, 4, 4, 3, 3, 3 }, { 4, 4, 4, 3, 3, 3 },
-		{ 1, 1, 1, 1, 2, 2 }, { 1, 1, 1, 8, 8, 8 },
-	}, {
-		{112, 39}, {148, 60}, {206, 53}, {206, 3}, {150, 3}, {74, 3}, {18, 3}, {18, 54}, {77, 60}
-	}, {
-		2, 255, 2, 255, 4, 4, 255, 2, 255
-	} };
-#endif
 #ifdef KEYBOARD_boardsource_the_mark
 	g_led_config = (led_config_t){ {
 		{ 10, 10, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 5 , 4 , 3 , 3 , 2 , 1 , 1  },

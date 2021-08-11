@@ -43,6 +43,12 @@ ifeq ($(KEYBOARD),$(filter $(KEYBOARD), 3w6/rev2))
 	COMBO_ENABLE = yes
 endif
 
+ifeq ($(KEYBOARD),$(filter $(KEYBOARD), boardsource/the_mark))
+	RGB_MATRIX_ENABLE = yes
+	RGB_MATRIX_CUSTOM_USER = yes
+	SRC += rgb-matrix.c
+endif
+
 # Corne keyboard features
 # Primary tap-driven cat with secondary mod status and RGB
 ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1 T)
