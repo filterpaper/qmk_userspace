@@ -34,6 +34,14 @@ void matrix_init_user(void) {
 		255, 255, 255, 4, 4, 4, 4, 4, 4, 255, 255, 255
 	} };
 #endif
+	// Disable underglow LEDs
+#if defined(KEYBOARD_crkbd_rev1) && defined(LP)
+	for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
+		if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_UNDERGLOW)) {
+			g_led_config.flags[i] = LED_FLAG_NONE;
+		}
+	}
+#endif
 }
 
 

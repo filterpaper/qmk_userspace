@@ -17,7 +17,6 @@ SLEEP_LED_ENABLE = no
 TAP_DANCE_ENABLE = no
 VELOCIKEY_ENABLE = no
 SWAP_HANDS_ENABLE = no
-RGB_MATRIX_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
@@ -31,12 +30,6 @@ OPT_DEFS += -DCAPSWORD_ENABLE
 
 # Main source file
 SRC += filterpaper.c
-
-# Settings for Planck
-ifeq ($(PLATFORM), CHIBIOS)
-	LTO_ENABLE = no
-	BOOTLOADER = stm32-dfu
-endif
 
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), 3w6/rev2))
 	LTO_ENABLE = no
@@ -74,6 +67,7 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1 yes)
 	endif
 # Minimal default
 else ifeq ($(strip $(KEYBOARD) $(origin KB)), crkbd/rev1 undefined)
+	COMBO_ENABLE = yes
 # RGB for IMK and Corne LP
 else ifeq ($(KEYBOARD), crkbd/rev1)
 	RGB_MATRIX_ENABLE = yes

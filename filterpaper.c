@@ -53,6 +53,7 @@ static void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
 		case KC_SPC:
 		case KC_ENT:
 		case KC_DOT:
+		case KC_EQL:
 		case KC_COMM:
 		case KC_GESC:
 			if (record->event.pressed) { tap_code(KC_CAPS); }
