@@ -26,6 +26,7 @@ MOUSEKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
 OPT_DEFS += -DCAPSWORD_ENABLE
+# AUTO_SHIFT_ENABLE = yes
 # OPT_DEFS += -DONESHOT_MODTAP_ENABLE
 
 # Main source file
@@ -34,6 +35,7 @@ SRC += filterpaper.c
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), 3w6/rev2))
 	LTO_ENABLE = no
 	COMBO_ENABLE = yes
+	AUTO_SHIFT_ENABLE = yes
 endif
 
 ifeq ($(KEYBOARD),$(filter $(KEYBOARD), boardsource/the_mark))
@@ -67,7 +69,7 @@ else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1 yes)
 	endif
 # Minimal default
 else ifeq ($(strip $(KEYBOARD) $(origin KB)), crkbd/rev1 undefined)
-	COMBO_ENABLE = yes
+#	COMBO_ENABLE = yes
 # RGB for IMK and Corne LP
 else ifeq ($(KEYBOARD), crkbd/rev1)
 	RGB_MATRIX_ENABLE = yes
