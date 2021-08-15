@@ -94,9 +94,9 @@
 	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_INS,  _______, _______, _______, _______, _______, \
 	                           _______, MO(FNC), _______,     _______, _______, _______
 #define _SYMB \
-	_______, _______, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_VOLU, KC_UNDS, KC_PLUS, KC_PIPE, KC_TILD, _______, \
+	_______, _______, KC_LBRC, KC_LPRN, KC_LCBR, _______,     KC_VOLU, KC_RCBR, KC_RPRN, KC_RBRC, KC_TILD, _______, \
 	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_VOLD, KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  _______, \
-	_______, KC_CAPS, KC_LBRC, KC_LPRN, KC_LCBR, _______,     KC_MUTE, KC_RCBR, KC_RPRN, KC_RBRC, _______, _______, \
+	_______, KC_CAPS, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_MUTE, KC_UNDS, KC_PLUS, KC_PIPE, _______, _______, \
 	                           _______, _______, _______,     _______, MO(FNC), _______
 #define _FUNC \
 	_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       _______, KC_WH_U, KC_WH_D, _______, TG(CMK), _______, \
