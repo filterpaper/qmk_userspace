@@ -20,18 +20,13 @@
 #include "combos.h"
 #endif
 
-// Timer implementation of tap hold
-#define TAP_HOLD(_tap_, _hold_) { \
-	static uint16_t h_timer; \
-	if (record->event.pressed) h_timer = timer_read(); \
-	else (timer_elapsed(h_timer) > TAPPING_TERM) ? tap_code16(_hold_) : tap_code(_tap_); \
-	return false; }
-
-#define TAP_SS(_tap_, _hold_) { \
-	static uint16_t h_timer; \
-	if (record->event.pressed) h_timer = timer_read(); \
-	else (timer_elapsed(h_timer) > TAPPING_TERM) ? SEND_STRING(_hold_) : tap_code(_tap_); \
-	return false; }
+// Tap hold macro using LT(0,kc) for process_record_user()
+// that intercepts mod-tap function, returns true on tap for kc
+// with custom handling for tapping term hold
+#define TAP_HOLD(_hold_) \
+	if (record->tap.count) return true; \
+	else if (record->event.pressed) tap_code16(_hold_); \
+	return false
 
 
 #ifdef OLED_DRIVER_ENABLE
@@ -73,12 +68,12 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 
 	switch (keycode) {
 		// Right side undo cut copy paste
-		case KC_SLSH: TAP_HOLD(keycode, Z_UND);
-		case KC_DOT:  TAP_HOLD(keycode, Z_CUT);
-		case KC_COMM: TAP_HOLD(keycode, Z_CPY);
-		case KC_M:    TAP_HOLD(keycode, Z_PST);
+		case SLSH_TH: TAP_HOLD(Z_UND);
+		case DOT_TH:  TAP_HOLD(Z_CUT);
+		case COMM_TH: TAP_HOLD(Z_CPY);
+		case M_TH:    TAP_HOLD(Z_PST);
 		// Unformatted paste
-		case KC_V: TAP_HOLD(keycode, Z_PASTE);
+		case V_TH: TAP_HOLD(Z_PASTE);
 	}
 
 #ifdef ONESHOT_MODTAP_ENABLE
