@@ -20,18 +20,19 @@
 #include "combos.h"
 #endif
 
-// Tap hold macro using LT(0,kc) delay for process_record_user()
-// Returns true on tap for normal handling of kc
-// Intercept hold event for custom keycode
-#define TAP_HOLD(_hold_) \
-	if (record->tap.count) return true; \
-	else if (record->event.pressed) (_hold_); \
-	return false
+// Timer implementation of tap hold
+#define TAP_HOLD(_tap_, _hold_) { \
+	static uint16_t h_timer; \
+	if (record->event.pressed) h_timer = timer_read(); \
+	else (timer_elapsed(h_timer) > TAPPING_TERM) ? tap_code16(_hold_) : tap_code(_tap_); \
+	return false; }
 
-#define TAP_AND_HOLD(_tap_, _hold_) \
-	if (record->tap.count) record->event.pressed ? register_code(_tap_) : unregister_code(_tap_); \
-	else if (record->event.pressed) (_hold_); \
-	return false
+#define TAP_SS(_tap_, _hold_) { \
+	static uint16_t h_timer; \
+	if (record->event.pressed) h_timer = timer_read(); \
+	else (timer_elapsed(h_timer) > TAPPING_TERM) ? SEND_STRING(_hold_) : tap_code(_tap_); \
+	return false; }
+
 
 #ifdef OLED_DRIVER_ENABLE
 uint32_t tap_timer = 0; // Timer for OLED animation
@@ -71,16 +72,13 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #endif
 
 	switch (keycode) {
-		// VIM commands
-		case Q_TH: TAP_HOLD(SEND_STRING(":q!"));
-		case W_TH: TAP_HOLD(SEND_STRING(":wq"));
 		// Right side undo cut copy paste
-		case SLSH_TH: TAP_HOLD(tap_code16(Z_UND));
-		case DOT_TH:  TAP_HOLD(tap_code16(Z_CUT));
-		case COMM_TH: TAP_HOLD(tap_code16(Z_CPY));
-		case M_TH:    TAP_HOLD(tap_code16(Z_PST));
+		case KC_SLSH: TAP_HOLD(keycode, Z_UND);
+		case KC_DOT:  TAP_HOLD(keycode, Z_CUT);
+		case KC_COMM: TAP_HOLD(keycode, Z_CPY);
+		case KC_M:    TAP_HOLD(keycode, Z_PST);
 		// Unformatted paste
-		case V_TH: TAP_HOLD(tap_code16(Z_PASTE));
+		case KC_V: TAP_HOLD(keycode, Z_PASTE);
 	}
 
 #ifdef ONESHOT_MODTAP_ENABLE

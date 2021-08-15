@@ -48,6 +48,14 @@
 #	define CAP_FLAG LED_FLAG_KEYLIGHT
 #endif
 
+// Tap hold macro using LT(0,kc) for process_record_user()
+// that intercepts mod-tap function, returns true on tap for kc
+// with custom handling for tapping term hold
+#define MT_HOLD(_hold_) \
+	if (record->tap.count) return true; \
+	else if (record->event.pressed) (_hold_); \
+	return false
+
 // Layer and mod tap mask bits
 // 0xFF00 bitmask
 #define LT0_BITS 0x4000
