@@ -37,17 +37,15 @@
    3 Left and right aligned Bongocat is default. To save space:
       * Add 'OPT_DEFS += -DLEFTCAT' into rules.mk
       * Or 'OPT_DEFS += -DRIGHTCAT' into rules.mk
-   4 To animate with WPM on secondary OLED, add 'WPM_ENABLE = yes' into rules.mk.
-     To animate with keystrokes on primary OLED, add the following code before and
-     inside 'process_record_user()' in keymap.c:
+   4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
+     To animate with keystrokes, declare the following integer variable
+     and statement inside 'process_record_user()' in keymap.c:
         uint32_t tap_timer = 0;
         bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
             if (record->event.pressed) { tap_timer = timer_read32(); }
         }
-   5 Add 'return OLED_ROTATION_270;' to 'oled_init_user()' for the host OLED side in keymap.c.
-   6 Lastly, add the following lines to 'oled_task_user()' in keymap.c:
-        extern void render_bongocat(void);
-        if is_keyboard_master() { render_bongocat(); }
+   5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED
+     that can be replaced with your own function.
  */
 
 #include QMK_KEYBOARD_H
@@ -188,7 +186,7 @@ static void render_cat_tap(void) {
 }
 
 
-void render_bongocat(void) {
+static void render_bongocat(void) {
 	// Animation frame timer
 	static uint16_t anim_timer = 0;
 
@@ -218,4 +216,15 @@ void render_bongocat(void) {
 		anim_timer = timer_read();
 		draw_frame();
 	}
+}
+
+
+// Init and rendering calls
+oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
+	return OLED_ROTATION_270;
+}
+
+void oled_task_user(void) {
+	extern void render_mod_status(void);
+	is_keyboard_master() ? render_bongocat() : render_mod_status();
 }

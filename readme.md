@@ -129,39 +129,37 @@ qmk flash -kb crkbd/rev1 -km default -bl dfu-split-right
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
 
 ## Tiny build
-Minimal firmware with no OLED support will be built without preprocessors:
+Minimal firmware with no OLED and RGB support will be built without any options:
 ```
 qmk compile corne.json
 ```
 
-## Compiling with OLED display
-QMK's split common `transport.c` code limits type of data sent the secondary (non-USB) controller. Animation on the secondary display can only be driven by WPM while keyboard status is limited to modifier state. My code can be built with the following `rules.mk` options:
-### Key press driven Bongocat
-Corne keyboard can be built with Bongocat animation on primary display driven by key presses with simple modifier state on secondary OLED:
+## Compiling for OLED display
+The following compile options will build firmwares with RGB matrix, pet animation on primary OLED with status icons on the secondary. Animation are key stroke driven by `tap_timer` as default. To use WPM (at the expense of space), add the `-e WPM_ENABLE=yes` option:
+### Bongocat
+Build and flash each side with the corresponding options for left and right aligned Bongocat:
 ```
-qmk compile -e CAT=LEFT corne.json
+qmk compile -e OLED=LEFTCAT corne.json
+qmk compile -e OLED=RIGHTCAT corne.json
 ```
-Bongocat code uses spacing-saving pixel differences to animate, with left and right-aligned animation arrays to support `EE_HANDS` configuration. Arrays for one of the sides (and its associated `if-else` statements) can be removed to save additional space.
-### WPM driven Bongocat
-Keyboard layer and modifier status on primary OLED with Bongocat animation on secondary, driven by WPM:
+### Felix and Luna
+Build with Luna (outline) or Felix (filled) the dog:
 ```
-qmk compile -e WPM=yes corne.json
+qmk compile -e OLED=LUNA corne.json
+qmk compile -e OLED=FELIX corne.json
 ```
-### Primary dog status
-Luna the dog animation status on primary OLED with Bongocat on secondary, both driven by WPM:
+## Compiling with only RGB matrix:
+Following will build firmware with RGB matrix support and no OLED display. `IMK` option will use under glow LEDs as indicators:
 ```
-qmk compile -e WPM=yes -e DOG=LUNA corne.json
+qmk compile -e KB=LP corne.json
+qmk compile -e KB=IMK corne.json
 ```
-White Felix the dog can be built with `DOG=FELIX`.
 
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
 * [QMK Logo Editor](https://joric.github.io/qle/)
 * [image2cpp](https://javl.github.io/image2cpp/)
-
-## Split RGB Matrix
-The [May 29, 2021 breaking change](https://beta.docs.qmk.fm/developing-qmk/breaking-changes/20210529) includes full RGB Matrix support for split keyboard and `rules.mk` compiles that as default for Corne. Firmware size management will be required for OLED and RGB Matrix to co-exist in space-limited AVR controllers.
 
 # Layout wrapper macros
 ## Basic layout

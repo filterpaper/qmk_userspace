@@ -57,7 +57,7 @@ static void render_layer_state(void) {
 		0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
 
 	if (layer_state_is(FNC)) { oled_write_P(adjust_layer, false); }
-	else if (layer_state_is(NAV)) { oled_write_P(raise_layer, false); }
+	else if (layer_state_is(SYM)) { oled_write_P(raise_layer, false); }
 	else if (layer_state_is(NUM)) { oled_write_P(lower_layer, false); }
 	else { oled_write_P(default_layer, false); }
 }
@@ -154,7 +154,7 @@ static void render_mod_status_ctrl_shift(uint8_t const mods, bool const caps) {
 
 
 // Primary modifier status display function
-static void render_mod_status(void) {
+void render_mod_status(void) {
 	static uint8_t prev_layer;
 	static uint8_t prev_mods;
 	static bool prev_caps;
@@ -174,20 +174,4 @@ static void render_mod_status(void) {
 		render_mod_status_gui_alt(prev_mods);
 		render_mod_status_ctrl_shift(prev_mods,prev_caps);
 	}
-}
-
-
-// Init and rendering calls
-oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
-	return OLED_ROTATION_270;
-}
-
-
-void oled_task_user(void) {
-	extern void render_bongocat(void);
-#ifdef WPM_ENABLE
-	is_keyboard_master() ? render_mod_status() : render_bongocat();
-#else
-	is_keyboard_master() ? render_bongocat() : render_mod_status();
-#endif
 }

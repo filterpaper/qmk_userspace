@@ -45,35 +45,26 @@ ifeq ($(KEYBOARD),$(filter $(KEYBOARD), boardsource/the_mark))
 endif
 
 # Corne keyboard features
-# Primary tap-driven cat with secondary mod status and RGB
-ifeq ($(KEYBOARD) $(findstring T,$(CAT)), crkbd/rev1 T)
-	OLED_DRIVER_ENABLE = yes
-	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += oled-icons.c oled-bongocat.c rgb-matrix.c
-	OPT_DEFS += -D${CAT}CAT
-# Primary status with secondary WPM-driven animation
-else ifeq ($(KEYBOARD) $(WPM), crkbd/rev1 yes)
-	WPM_ENABLE = yes
-	OLED_DRIVER_ENABLE = yes
-	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += oled-bongocat.c rgb-matrix.c
-	OPT_DEFS += -D${CAT}CAT
-	# Primary OLED option
-	ifneq ($(DOG),)
-		SRC += oled-luna.c
-		OPT_DEFS += -D${DOG}
-	else
-		SRC += oled-icons.c
+ifeq ($(KEYBOARD), crkbd/rev1)
+	ifneq ($(strip $(OLED)),)
+		RGB_MATRIX_ENABLE = yes
+		RGB_MATRIX_CUSTOM_USER = yes
+		OLED_DRIVER_ENABLE = yes
+		SRC += rgb-matrix.c oled-icons.c
+		OPT_DEFS += -D${OLED}
+		ifeq ($(OLED),$(filter $(OLED), LEFTCAT RIGHTCAT))
+			SRC += oled-bongocat.c
+		else ifeq ($(OLED),$(filter $(OLED), FELIX LUNA))
+			SRC += oled-luna.c
+		endif
 	endif
-# Minimal default
-else ifeq ($(strip $(KEYBOARD) $(origin KB)), crkbd/rev1 undefined)
-	COMBO_ENABLE = yes
-# RGB for IMK and Corne LP
-else ifeq ($(KEYBOARD), crkbd/rev1)
-	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += rgb-matrix.c
-	OPT_DEFS += -D${KB}
+	ifneq ($(strip $(KB)),)
+		RGB_MATRIX_ENABLE = yes
+		RGB_MATRIX_CUSTOM_USER = yes
+		SRC += rgb-matrix.c
+		OPT_DEFS += -D${KB}
+	endif
+	ifeq ($(strip $(KB)),$(strip $(OLED)))
+		COMBO_ENABLE = yes
+	endif
 endif
