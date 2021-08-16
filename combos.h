@@ -25,7 +25,7 @@
 
    COMB are simple keycode shortcuts. This example will increase volume
    with Y+U: COMB(KC_VOLU, KC_VOLU, KC_Y, KC_U)
-   Keycodes can be used as names, they will be prefixed to avoid
+   Keycodes can be used as names, they will be suffixed to avoid
    conflict.
 
    SUBS are string substitution combos. This example will send the string
@@ -60,7 +60,7 @@ enum combos {
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
-// Create combo name array in PROGMEM with combo key sequences
+// Create combo name array in PROGMEM with key sequences
 #undef COMB
 #undef SUBS
 #undef ACTN
@@ -69,7 +69,7 @@ uint16_t COMBO_LEN = COMBO_LENGTH;
 #define ACTN C_DATA
 #include "combos.def"
 
-// Fill array with combo type names and shortcuts
+// Fill array with combo type and shortcuts
 #undef COMB
 #undef SUBS
 #undef ACTN
@@ -80,7 +80,7 @@ combo_t key_combos[] = {
 	#include "combos.def"
 };
 
-// Fill combo event function with send string or action calls
+// Fill combo event function with send string or function calls
 #undef COMB
 #undef SUBS
 #undef ACTN
