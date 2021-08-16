@@ -210,13 +210,13 @@ The use of [home row mods](https://precondition.github.io/home-row-mods) can als
     k19, GUI_T(k20), CTL_T(k21), ALT_T(k22), SFT_T(k23), k24, \
     k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36
 ```
-Next, the layer macro that requires the home row mod can be wrapped inside `HRM()`:
+Next, the layer that requires the home row mod can be wrapped inside `HRM()`:
 ```c
 "layers": [
-    [ "HRM(QWERTY)", "CORNEQWERTY" ],
-    [ "LOWER", "CORNELOWER" ],
-    [ "RAISE", "CORNERAISE" ],
-    [ "ADJUST", "CORNEBLANK" ],
+    [ "HRM(_BASE)" ],
+    [ "_NUMB" ],
+    [ "_SYMB" ],
+    [ "_FUNC" ]
 ],
 ```
-During the compile process, the preprocessor will expand `HRM(QWERTY)` and wrap the right key code inside `QWERTY` with the mod-tap define inside `HRM_SACG`. These will then be passed on `CORNE_wrapper()`, the alias macro of the structure used by the keyboard.
+During the compile process, the preprocessor will expand `HRM(_BASE)` and wrap the right key code inside `_BASE` with the mod-tap define inside `HRM_SACG`. These will then be passed on `CORNE_wrapper()`, the alias macro of the structure used by the keyboard.
