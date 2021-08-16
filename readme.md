@@ -148,8 +148,8 @@ Build with Luna (outline) or Felix (filled) the dog:
 qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
 ```
-## Compiling with only RGB matrix:
-Following will build firmware with RGB matrix support and no OLED display. `IMK` option will use under glow LEDs as indicators:
+## Compiling with only RGB matrix
+Following will build with RGB matrix support and no OLED display. `IMK` value will use under glow LEDs as indicators:
 ```
 qmk compile -e KB=LP corne.json
 qmk compile -e KB=IMK corne.json
