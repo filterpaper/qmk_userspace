@@ -165,20 +165,19 @@ The [May 29, 2021 breaking change](https://beta.docs.qmk.fm/developing-qmk/break
 
 # Layout wrapper macros
 ## Basic layout
-Text-based key map layout (in `keymap.c` format) is supported with the use of preprocessor wrapper macros. Create each layer as a macro, saved them in `layout.h`, and include this file inside `config.h`. Here is an example of a Corne "raise" layer, in a 3x12 and bottom 6-key macro:
+Text-based key map layout (in `keymap.c` format) is supported with the use of preprocessor wrapper macros. Create each layer as a macro, save them in `layout.h`, and include this file inside `config.h`. Here is an example of a Corne number layer in `layout.h`:
 ```c
-#define RAISE \
-    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,        KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______, \
-    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,          KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
-    _______, _______, _______, _______, S(G(A(KC_V))), _______, _______, _______, _______, _______, _______, _______
-
-#define CORNERAISE                            _______, MO(4),   _______, _______, _______, _______
+#define _NUMB \
+    _______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
+    _______, _______, KC_4,    KC_5,    KC_6,    _______,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_QUOT, _______, \
+    _______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_INS,  _______, _______, _______, _______, _______, \
+                               _______, MO(FNC), _______,     _______, _______, _______
 ```
 Next, create a wrapper name in `layout.h` that points to the actual layout macro used by the keyboard, example:
 ```c
 #define CORNE_wrapper(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 ```
-Finally the keyboard's JSON file content can reference the key code macros of each layer, along with the layout wrapper at the bottom:
+Finally create the keyboard's JSON file and reference the macros of each layer, along with the layout wrapper name:
 ```c
 {
     "author": "",
@@ -186,17 +185,17 @@ Finally the keyboard's JSON file content can reference the key code macros of ea
     "keyboard": "crkbd/rev1",
     "keymap": "filterpaper",
     "layers": [
-        [ "QWERTY", "CORNEQWERTY" ],
-        [ "LOWER", "CORNELOWER" ],
-        [ "RAISE", "CORNERAISE" ],
-        [ "ADJUST", "CORNEBLANK" ],
+        [ "_BASE" ],
+        [ "_NUMB" ],
+        [ "_SYMB" ],
+        [ "_FUNC" ]
     ],
     "layout": "CORNE_wrapper",
     "notes": "",
     "version": 1
 }
 ```
-The build process will construct a transient `keymap.c` from JSON file into the format `[0] = CORNE_wrapper(QWERTY, CORNEQWERTY)`, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure for compilation.
+The build process will construct a transient `keymap.c` from JSON file, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure in the compile process.
 ## Layering home row modifiers
 The use of [home row mods](https://precondition.github.io/home-row-mods) can also be layered over the layout macros. The home row mod macro is defined in here (with the corresponding letter position wrapped by mod-tap):
 ```c

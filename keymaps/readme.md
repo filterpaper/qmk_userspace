@@ -13,6 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# QMK Configurator layout files
+# QMK layout files in JSON format
 
-[QMK Configurator](https://config.qmk.fm/#/) exported and wrapper-based json layout files formatted with `python -mjson.tool`.
+Keyboard, keymap name and layout are defined in each JSON file. They will be used by `qmk compile <keyboard>.json` to build its firmware. Each layer in the JSON content are preprocessor macro references to the actual layout documented in `layout.h`.
