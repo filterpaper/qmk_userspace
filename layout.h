@@ -76,32 +76,31 @@
 	_______, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,        _______, KC_N,    KC_E,    KC_I,    KC_O,    _______, \
 	_______, _______, _______, _______, _______, _______,     KC_K,    _______, _______, _______, _______, _______, \
 	                           _______, _______, _______,     _______, _______, _______
-/*
-#define _NUMB \
-	_______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_VOLU, KC_LPRN, KC_RPRN, _______, KC_DQUO, _______, \
-	_______, _______, KC_4,    KC_5,    KC_6,    _______,     KC_VOLD, KC_LCBR, KC_RCBR, _______, KC_QUOT, _______, \
-	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_MUTE, KC_LBRC, KC_RBRC, _______, _______, _______, \
-	                           _______, MO(FNC), _______,     _______, _______, _______
-#define _SYMB \
-	_______, _______, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_PGUP, KC_MINS, KC_EQL,  KC_BSLS, KC_TILD, _______, \
-	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_GRV,  _______, \
-	_______, KC_CAPS, _______, _______, _______, _______,     KC_PGDN, KC_UNDS, KC_PLUS, KC_PIPE, _______, _______, \
-	                           _______, _______, _______,     _______, MO(FNC), _______
-*/
 #define _NUMB \
 	_______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
 	_______, _______, KC_4,    KC_5,    KC_6,    _______,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_QUOT, _______, \
-	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_INS,  Z_PST,   Z_CPY,   Z_CUT,   Z_UND,   _______, \
+	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_INS,  _______, _______, _______, _______, _______, \
 	                           _______, MO(FNC), _______,     _______, _______, _______
 #define _SYMB \
 	_______, _______, KC_LBRC, KC_LPRN, KC_LCBR, _______,     KC_VOLU, KC_RCBR, KC_RPRN, KC_RBRC, KC_TILD, _______, \
 	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_VOLD, KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  _______, \
 	_______, KC_CAPS, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_MUTE, KC_UNDS, KC_PLUS, KC_PIPE, _______, _______, \
 	                           _______, _______, _______,     _______, MO(FNC), _______
+// Split hand symbol and direction keys
+#define _NUMB3 \
+	_______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_VOLU, KC_UNDS, KC_PLUS, KC_PIPE, KC_DQUO, _______, \
+	_______, _______, KC_4,    KC_5,    KC_6,    _______,     KC_VOLD, KC_MINS, KC_EQL,  KC_BSLS, KC_QUOT, _______, \
+	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_MUTE, _______, _______, _______, _______, _______, \
+	                           _______, MO(FNC), _______,     _______, _______, _______
+#define _SYMB3 \
+	_______, _______, KC_LBRC, KC_LPRN, KC_LCBR, _______,     KC_INS,  KC_RCBR, KC_RPRN, KC_RBRC, KC_TILD, _______, \
+	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_GRV,  _______, \
+	_______, KC_CAPS, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  _______, _______, \
+	                           _______, _______, _______,     _______, MO(FNC), _______
 #define _FUNC \
 	_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       _______, KC_WH_U, KC_WH_D, _______, TG(CMK), _______, \
 	_______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______, \
-	_______, Z_SLEEP, KC_F11,  KC_F12,  Z_PASTE, _______,     _______, KC_BTN2, KC_BTN1, _______, Z_SHUT,  _______, \
+	_______, Z_SLEEP, _______, _______, KC_F11,  KC_F12,      _______, KC_BTN2, KC_BTN1, _______, Z_SHUT,  _______, \
 	                             RESET, _______, _______,     _______, _______, _______
 
 
