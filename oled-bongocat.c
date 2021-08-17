@@ -45,7 +45,7 @@
             if (record->event.pressed) { tap_timer = timer_read32(); }
         }
    5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED
-     that can be replaced with your own function.
+     that can be removed or replaced with your own function.
  */
 
 #include QMK_KEYBOARD_H

@@ -30,7 +30,8 @@
    2 Add the following lines into rules.mk:
         OLED_DRIVER_ENABLE = yes
         SRC += oled-luna.c
-   3 Add 'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.
+   3 Animation defaults to Luna, an outlined dog. Add
+     'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.
    4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
      To animate with keystrokes, declare the following integer variable
       and statement inside 'process_record_user()' in keymap.c:
@@ -39,7 +40,7 @@
              if (record->event.pressed) { tap_timer = timer_read32(); }
          }
    5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED
-     that can be replaced with your own function.
+     that can be removed or replaced with your own function.
 */
 
 #include QMK_KEYBOARD_H
@@ -48,7 +49,7 @@
 #define LUNA_FRAME_DURATION 200 // Milliseconds per frames
 #define LUNA_SIZE 96
 
-#define NEXT(_k_) (_k_ + 1) & 1
+#define NEXT(k) (k + 1) & 1
 static uint8_t current_frame = 0;
 
 
@@ -57,11 +58,11 @@ static void render_logo(void) {
 		0x80, 0x81, 0x82, 0x83, 0x84,
 		0xa0, 0xa1, 0xa2, 0xa3, 0xa4,
 		0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0};
-//	static char const corne[] PROGMEM = {
-//		0x20, 0xd1, 0xd2, 0xd3, 0x20, 0};
+	static char const corne[] PROGMEM = {
+		0x20, 0xd1, 0xd2, 0xd3, 0x20, 0};
 
 	oled_write_P(corne_logo, false);
-	oled_write_P(PSTR("corne"), false);
+	(layer_state) ? oled_write_P(corne, false) : oled_write_P(PSTR("corne"), false);
 }
 
 
@@ -278,14 +279,8 @@ static void render_luna_status(void) {
 
 		render_logo();
 		oled_set_cursor(0,8);
-		if (get_mods() & MOD_MASK_SHIFT || caps) {
-			render_luna_bark();
-			keystroke += LUNA_FRAME_DURATION*8;
-		}
-		else if (get_mods() & MOD_MASK_CAG) {
-			render_luna_sneak();
-			keystroke += LUNA_FRAME_DURATION*8;
-		}
+		if (get_mods() & MOD_MASK_SHIFT || caps) { render_luna_bark(); }
+		else if (get_mods() & MOD_MASK_CAG) { render_luna_sneak(); }
 		else if (keystroke < LUNA_FRAME_DURATION*2) { render_luna_run(); }
 		else if (keystroke < LUNA_FRAME_DURATION*8) { render_luna_walk(); }
 		else { render_luna_sit(); }

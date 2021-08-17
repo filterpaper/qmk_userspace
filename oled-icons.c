@@ -37,7 +37,6 @@ static void render_logo(void) {
 }
 
 
-// Graphical layer display
 static void render_layer_state(void) {
 	static char const default_layer[] PROGMEM = {
 		0x20, 0x94, 0x95, 0x96, 0x20,
@@ -160,9 +159,9 @@ void render_mod_status(void) {
 	static bool prev_caps;
 
 	if (prev_layer != layer_state ||
-		prev_mods != (get_mods()|get_oneshot_mods()) ||
-		prev_caps != host_keyboard_led_state().caps_lock
-	) {
+	prev_mods != (get_mods()|get_oneshot_mods()) ||
+	prev_caps != host_keyboard_led_state().caps_lock) {
+
 		prev_layer = layer_state;
 		prev_mods = (get_mods()|get_oneshot_mods());
 		prev_caps = host_keyboard_led_state().caps_lock;
