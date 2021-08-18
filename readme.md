@@ -95,18 +95,6 @@ void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
 ```
 Function is called inside `process_record_user` when caps lock is enabled to turn it off after completing a word—because caps lock is rarely used beyond capitalising one word. The first `switch` statement performs a bitwise *AND* to filter base key codes (that ranges from 0x00-0xFF) from mod/layer taps to support toggle keys on a different layer. Written by the `#ergonomics` enthusiasts of splitkb.com discord.
 
-## Oneshot home row mod-taps
-[Home row mods](https://precondition.github.io/home-row-mods) is implemented with left-mods while bottom row / thumb cluster mod-taps are using right-mods. This allows simple left-mod bit-masking to disable permissive hold and increase tapping term just for home row mods. They are also extended as one-shot-mods if held and released without any keys being pressed, by extending the hold and release function:
-```c
-static bool mod_tapped;
-if (record->event.pressed && get_mods()) { mod_tapped = true; }
-
-if ((keycode & 0xF000) == LMT_BITS) {
-    if (record->tap.count) { return true; }
-    else if (record->event.pressed) { mod_tapped = false; }
-    else if (!mod_tapped) { set_oneshot_mods((keycode >> 8) & 0x1F); }
-}
-```
 
 ## Combo helper macros
 The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New shortcuts can be appended to `combos.def` and the preprocessor macros in `combos.h` will generate required QMK combo source codes at compile time.

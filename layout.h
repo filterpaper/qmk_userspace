@@ -20,17 +20,15 @@
 #define Z_PST G(KC_V)
 #define Z_UND G(KC_Z)
 #define Z_PASTE	S(G(KC_V))
+#define Z_LOCK	C(G(KC_Q))
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_SHUT	C(A(G(KC_PWR)))
-#define Z_LOCK	C(G(KC_Q))
 
 // One shot mods
 #define OSM_SFT	OSM(MOD_LSFT)
 #define OSM_CTL	OSM(MOD_LCTL)
 #define OSM_ALT	OSM(MOD_LALT)
 #define OSM_GUI	OSM(MOD_LGUI)
-#define OSS_LT2	LT(2,KC_NO) // OSM shift layer tap
-#define OSS_LT() if (record->tap.count) { if (record->event.pressed) add_oneshot_mods(MOD_LSFT); return false }
 
 // Tap hold macros
 #define Q_TH	LT(0,KC_Q)
@@ -66,42 +64,82 @@
 	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
 	k37, k38, k39, k40, k41, k42
 
+
 #define _BASE \
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
 	OSM_SFT, KC_Z,    KC_X,    KC_C,    V_TH,    KC_B,        KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, KC_ENT,  \
 	        RSA_T(KC_ESC), LT(SYM,KC_TAB), RSG_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
+/* ,-----------------------------------------.                ,-----------------------------------------.
+ * | TAB  |  Q   |  W   |  E   |  R   |  T   |                |  Y   |  U   |  I   |  O   |  P   | BSPC |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * | GESC |  A   |  S   |  D   |  F   |  G   |                |  H   |  J   |  K   |  L   | ; :  | ' "  |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * |OSM_SF|  Z   |  X   |  C   |  V   |  B   |                |  N   |  M   | , >  | . <  | / ?  | ENT  |
+ * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------|
+ *                             | ESC  | _SYMB| ENT  |  | SPC  | _NUMB| DEL  |
+ *                             `--------------------'  `--------------------'
+ */
 #define _COLE \
 	_______, _______, _______, KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, \
 	_______, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,        _______, KC_N,    KC_E,    KC_I,    KC_O,    _______, \
 	_______, _______, _______, _______, _______, _______,     KC_K,    _______, _______, _______, _______, _______, \
 	                           _______, _______, _______,     _______, _______, _______
+/* ,-----------------------------------------.                ,-----------------------------------------.
+ * |      |      |      |  F   |  P   |  G   |                |  J   |  L   |  U   |  Y   | ; :  |      |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * |      |  A   |  R   |  S   |  T   |  D   |                |      |  N   |  E   |  I   |  O   |      |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |                |  K   |      |      |      |      |      |
+ * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------|
+ *                             |      |      |      |  |      |      |      |
+ *                             `--------------------'  `--------------------'
+ */
 #define _NUMB \
 	_______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
 	_______, _______, KC_4,    KC_5,    KC_6,    _______,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_QUOT, _______, \
 	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_INS,  _______, _______, _______, _______, _______, \
 	                           _______, MO(FNC), _______,     _______, _______, _______
+/* ,-----------------------------------------.                ,-----------------------------------------.
+ * |      |      |  1   |  2   |  3   |      |                | HOME | PGDN | PGUP | END  |  "   |      |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * |      |      |  4   |  5   |  6   |      |                | LEFT | DOWN |  UP  | RGHT |  '   |      |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * |      |      |  7   |  8   |  9   |  0   |                | INS  |      |      |      |      |      |
+ * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------|
+ *                             |      | _FUNC|      |  |      |      |      |
+ *                             `--------------------'  `--------------------'
+ */
 #define _SYMB \
 	_______, _______, KC_LBRC, KC_LPRN, KC_LCBR, _______,     KC_VOLU, KC_RCBR, KC_RPRN, KC_RBRC, KC_TILD, _______, \
 	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_VOLD, KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  _______, \
 	_______, KC_CAPS, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_MUTE, KC_UNDS, KC_PLUS, KC_PIPE, _______, _______, \
 	                           _______, _______, _______,     _______, MO(FNC), _______
-// Split hand symbol and direction keys
-#define _NUMB3 \
-	_______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_VOLU, KC_UNDS, KC_PLUS, KC_PIPE, KC_DQUO, _______, \
-	_______, _______, KC_4,    KC_5,    KC_6,    _______,     KC_VOLD, KC_MINS, KC_EQL,  KC_BSLS, KC_QUOT, _______, \
-	_______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_MUTE, _______, _______, _______, _______, _______, \
-	                           _______, MO(FNC), _______,     _______, _______, _______
-#define _SYMB3 \
-	_______, _______, KC_LBRC, KC_LPRN, KC_LCBR, _______,     KC_INS,  KC_RCBR, KC_RPRN, KC_RBRC, KC_TILD, _______, \
-	_______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_GRV,  _______, \
-	_______, KC_CAPS, KC_CIRC, KC_AMPR, KC_ASTR, _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  _______, _______, \
-	                           _______, _______, _______,     _______, MO(FNC), _______
+/* ,-----------------------------------------.                ,-----------------------------------------.
+ * |      |      |  [   |  (   |  {   |      |                | VOLU |  }   |  )   |  ]   |  ~   |      |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * |      |  !   |  @   |  #   |  $   |  %   |                | VOLD |  -   |  =   |  \   |  `   |      |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * |      | CAPS |  ^   |  &   |  *   |      |                | MUTE |  _   |  +   |  |   |      |      |
+ * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------|
+ *                             |      |      |      |  |      | _FUNC|      |
+ *                             `--------------------'  `--------------------'
+ */
 #define _FUNC \
 	_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       _______, KC_WH_U, KC_WH_D, _______, TG(CMK), _______, \
 	_______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______, \
-	_______, Z_SLEEP, _______, _______, KC_F11,  KC_F12,      _______, KC_BTN2, KC_BTN1, _______, Z_SHUT,  _______, \
+	_______, Z_SLEEP, KC_F11,  KC_F12,  Z_PASTE, _______,     _______, KC_BTN2, KC_BTN1, _______, Z_SHUT,  _______, \
 	                             RESET, _______, _______,     _______, _______, _______
+/* ,-----------------------------------------.                ,-----------------------------------------.
+ * |      |  F1  |  F2  |  F3  |  F4  |  F5  |                |      | WH_U | WH_D |      |TG(1) |      |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * |      |  F6  |  F7  |  F8  |  F9  | F10  |                | MS_L | MS_D | MS_U | MS_R |      |      |
+ * |------+------+------+------+------+------|                |------+------+------+------+------+------|
+ * |      |SLEEP | F11  | F12  |PASTE |      |                |      | BTN2 | BTN1 |      | SHUT |      |
+ * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------|
+ *                             |RESET |      |      |  |      |      |      |
+ *                             `--------------------'  `--------------------'
+ */
 
 
 
@@ -136,8 +174,8 @@
 	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36
 
 // Bottom row keys
-#define O_BASE 	KC_DEL, KC_VOLD, KC_VOLU, RSA_T(KC_TAB), LT(SYM,KC_BSPC), RSG_T(KC_ENT), \
-				RSFT_T(KC_SPC), LT(NUM,KC_SPC), RAG_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
+#define O_BASE 	KC_DEL, KC_VOLD, KC_VOLU, RSA_T(KC_TAB), LT(SYM,KC_NO), RSG_T(KC_ENT), \
+				RSFT_T(KC_SPC), LT(NUM,KC_NO), RAG_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
 #define O_BLNK _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 #define O_NUMB _______, _______, _______, _______, MO(FNC), _______, _______, _______, _______, _______, _______, _______
 #define O_SYMB _______, _______, _______, _______, _______, _______, _______, MO(FNC), _______, _______, _______, _______
@@ -167,7 +205,7 @@
 	KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  KC_VOLU, \
 	KC_TAB,           KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC, KC_VOLD, \
 	KC_CAPS,          KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_ENT,           KC_MUTE, \
-	OSM_SFT, _______, KC_Z,    KC_X,    KC_C,    V_TH,    KC_B,    KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, KC_RSFT,          KC_UP,            \
+	OSM_SFT, _______, KC_Z,    KC_X,    KC_C,    V_TH,    KC_B,    KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, OSM_SFT,          KC_UP,            \
 	OSM_ALT, OSM_CTL,          OSM_GUI, LT(2,KC_BSPC),    KC_ENT,           RSFT_T(KC_SPC),   KC_RCTL, KC_RALT, KC_RALT, KC_LEFT, KC_DOWN, KC_RGHT
 #define MARK_COLEMAK \
 	_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \

@@ -20,9 +20,8 @@
 #include "combos.h"
 #endif
 
-// Tap hold macro using LT(0,kc) for process_record_user()
-// that intercepts mod-tap function, returns true on tap for kc
-// with custom handling for tapping term hold
+// Macro hack using LT(0,kc) mod tap function, returns kc
+// on tap, sends custom tap code after TAPPING_TERM
 #define TAP_HOLD(_hold_) \
 	if (record->tap.count) return true; \
 	else if (record->event.pressed) tap_code16(_hold_); \
@@ -34,14 +33,14 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 #endif
 
 
-#ifdef CAPSWORD_ENABLE // Deactivate caps lock following a word
+#ifdef CAPSWORD_ENABLE // Deactivate caps lock after selective key codes
 static void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
 	// Get base key code from mod and layer taps
 	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
-		(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
-		(record->tap.count)) {
-			keycode = keycode & 0xFF;
-		}
+	(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
+	(record->tap.count)) {
+		keycode &= 0xFF;
+	}
 	// Toggle caps lock with the following key codes
 	switch (keycode) {
 		case KC_TAB:
@@ -74,28 +73,25 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		case M_TH:    TAP_HOLD(Z_PST);
 		// Unformatted paste
 		case V_TH: TAP_HOLD(Z_PASTE);
-	}
 
-#ifdef ONESHOT_MODTAP_ENABLE
-	// Enables oneshot for home row mods (mod-taps) when HRM is
-	// activated and released without applying mod on another key
-	static bool mod_tapped;
-	if (record->event.pressed && get_mods()) { mod_tapped = true; }
-
-	if ((keycode & 0xF000) == LMT_BITS) {
-		if (record->tap.count) { return true; }
-		else if (record->event.pressed) { mod_tapped = false; }
-		else if (!mod_tapped) { add_oneshot_mods((keycode >> 8) & 0x1F); }
-	}
+#ifdef LT_ONESHOT_ENABLE
+		case LT(SYM,KC_NO):
+		case LT(NUM,KC_NO):
+			if (record->tap.count && record->event.pressed) {
+				add_oneshot_mods(MOD_LSFT);
+				return false;
+			}
 #endif
+
+	}
 
 	return true; // Continue with unmatched keycodes
 }
 
 
-#ifdef TAPPING_TERM_PER_KEY // Increase for tap hold macros
+#ifdef TAPPING_TERM_PER_KEY // Reduce for thumb keys
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xFF00) == LT0_BITS) ? TAPPING_TERM + 100 : TAPPING_TERM;
+	return ((keycode & 0xFF00) == RMT_BITS) ? TAPPING_TERM - 100 : TAPPING_TERM;
 }
 #endif
 

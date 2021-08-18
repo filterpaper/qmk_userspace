@@ -26,19 +26,17 @@ MOUSEKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
 OPT_DEFS += -DCAPSWORD_ENABLE
-# AUTO_SHIFT_ENABLE = yes
-# OPT_DEFS += -DONESHOT_MODTAP_ENABLE
 
 # Main source file
 SRC += filterpaper.c
 
-ifeq ($(KEYBOARD),$(filter $(KEYBOARD), 3w6/rev2))
+ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2))
 	LTO_ENABLE = no
 	COMBO_ENABLE = yes
-	AUTO_SHIFT_ENABLE = yes
 endif
 
-ifeq ($(KEYBOARD),$(filter $(KEYBOARD), boardsource/the_mark))
+# Mark65 and Technik
+ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
@@ -50,12 +48,11 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_DRIVER_ENABLE = yes
-		SRC += rgb-matrix.c oled-icons.c
 		OPT_DEFS += -D${OLED}
-		ifeq ($(OLED),$(filter $(OLED), LEFTCAT RIGHTCAT))
-			SRC += oled-bongocat.c
-		else ifeq ($(OLED),$(filter $(OLED), FELIX LUNA))
-			SRC += oled-luna.c
+		ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT))
+			SRC += rgb-matrix.c oled-icons.c oled-bongocat.c
+		else ifeq ($(OLED), $(filter $(OLED), FELIX LUNA))
+			SRC += rgb-matrix.c oled-icons.c oled-luna.c
 		endif
 	endif
 	ifneq ($(strip $(KB)),)
@@ -64,7 +61,7 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		SRC += rgb-matrix.c
 		OPT_DEFS += -D${KB}
 	endif
-	ifeq ($(strip $(KB)),$(strip $(OLED)))
+	ifeq ($(strip $(KB)), $(strip $(OLED)))
 		COMBO_ENABLE = yes
 	endif
 endif

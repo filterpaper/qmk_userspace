@@ -48,13 +48,6 @@
 #	define CAP_FLAG LED_FLAG_KEYLIGHT
 #endif
 
-// Timer implementation of tap and hold
-#define TIMER_HOLD(_tap_, _hold_) { \
-	static uint16_t h_timer; \
-	if (record->event.pressed) h_timer = timer_read(); \
-	else (timer_elapsed(h_timer) > TAPPING_TERM) ? tap_code16(_hold_) : tap_code(_tap_); \
-	return false; }
-
 // Layer and mod tap mask bits
 // 0xFF00 bitmask
 #define LT0_BITS 0x4000
