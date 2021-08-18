@@ -256,7 +256,7 @@ static void render_luna_sneak(void) {
 }
 
 
-static void render_luna_status(void) {
+void render_luna_status(void) {
 	// Animation frame timer
 	static uint16_t anim_timer = 0;
 
