@@ -20,28 +20,33 @@
 #include "combos.h"
 #endif
 
-// Macro hack using LT(0,kc) mod tap function, returns kc
-// on tap, sends custom tap code after TAPPING_TERM
+// Macro hack using LT(0,kc) mod tap function. Return kc
+// on tap, send custom tap code after TAPPING_TERM
 #define TAP_HOLD(_hold_) \
 	if (record->tap.count) return true; \
 	else if (record->event.pressed) tap_code16(_hold_); \
 	return false
 
+// Macro to send oneshot mod on tap with mod tap keys
+#define MT_OSM(_mod_) \
+	if (record->tap.count && record->event.pressed) { \
+		add_oneshot_mods(_mod_); \
+		return false; }
 
 #ifdef OLED_DRIVER_ENABLE
 uint32_t tap_timer = 0; // Timer for OLED animation
 #endif
 
 
-#ifdef CAPSWORD_ENABLE // Deactivate caps lock after selective key codes
-static void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
-	// Get base key code from mod and layer taps
-	if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
-	(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
-	(record->tap.count)) {
-		keycode &= 0xFF;
+#ifdef CAPSWORD_ENABLE
+static void process_caps_word(uint16_t keycode) {
+	// Get base key code from mod and layer tap
+	switch (keycode) {
+		case QK_MOD_TAP...QK_MOD_TAP_MAX:
+		case QK_LAYER_TAP...QK_LAYER_TAP_MAX:
+			keycode &= 0xFF;
 	}
-	// Toggle caps lock with the following key codes
+	// Deactivate caps lock with the following key codes
 	switch (keycode) {
 		case KC_TAB:
 		case KC_ESC:
@@ -49,20 +54,19 @@ static void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
 		case KC_ENT:
 		case KC_DOT:
 		case KC_EQL:
-		case KC_COMM:
 		case KC_GESC:
-			if (record->event.pressed) { tap_code(KC_CAPS); }
+			tap_code(KC_CAPS);
 	}
 }
 #endif
 
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
-#ifdef OLED_DRIVER_ENABLE // Reset typing timer for OLED animation
+#ifdef OLED_DRIVER_ENABLE // Reset tap timer for OLED animation
 	if (record->event.pressed) { tap_timer = timer_read32(); }
 #endif
-#ifdef CAPSWORD_ENABLE // Monitor key codes to toggle caps lock
-	if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
+#ifdef CAPSWORD_ENABLE // Monitor key codes to deactivate caps lock
+	if (host_keyboard_led_state().caps_lock && record->event.pressed) { process_caps_word(keycode); }
 #endif
 
 	switch (keycode) {
@@ -73,16 +77,6 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		case M_TH:    TAP_HOLD(Z_PST);
 		// Unformatted paste
 		case V_TH: TAP_HOLD(Z_PASTE);
-
-#ifdef LT_ONESHOT_ENABLE
-		case LT(SYM,KC_NO):
-		case LT(NUM,KC_NO):
-			if (record->tap.count && record->event.pressed) {
-				add_oneshot_mods(MOD_LSFT);
-				return false;
-			}
-#endif
-
 	}
 
 	return true; // Continue with unmatched keycodes

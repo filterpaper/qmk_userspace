@@ -75,25 +75,27 @@ Tap hold shortcut can be found in QMK's [tap dance feature](../../docs/feature_t
 
 ## Caps word
 ```c
-void process_caps_word(uint16_t keycode, keyrecord_t const *record) {
+void process_caps_word(uint16_t keycode) {
     // Get base key code of mod or layer tap with bitmask
-    if (((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
-       (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) &&
-       (record->tap.count)) { keycode = keycode & 0xFF; }
+    switch (keycode) {
+        case QK_MOD_TAP...QK_MOD_TAP_MAX:
+        case QK_LAYER_TAP...QK_LAYER_TAP_MAX:
+            keycode &= 0xFF;
+    }
     // Toggle caps lock with the following key codes
     switch (keycode) {
-    case KC_ESC:
-    case KC_SPC:
-    case KC_ENT:
-    case KC_TAB:
-    case KC_DOT:
-    case KC_COMM:
-    case KC_GESC:
-        if (record->event.pressed) { tap_code(KC_CAPS); }
+        case KC_ESC:
+        case KC_SPC:
+        case KC_ENT:
+        case KC_TAB:
+        case KC_DOT:
+        case KC_COMM:
+        case KC_GESC:
+            tap_code(KC_CAPS);
     }
 }
 ```
-Function is called inside `process_record_user` when caps lock is enabled to turn it off after completing a word—because caps lock is rarely used beyond capitalising one word. The first `switch` statement performs a bitwise *AND* to filter base key codes (that ranges from 0x00-0xFF) from mod/layer taps to support toggle keys on a different layer. Written by the `#ergonomics` enthusiasts of splitkb.com discord.
+Function is called inside `process_record_user` when caps lock is enabled to turn it off after completing a word—because caps lock is rarely used beyond capitalising one word. The first `switch` statement performs a bitwise *AND* to filter base key codes (that ranges from 0x00-0xFF) from mod/layer taps to support toggle keys on a different layer. Conceived by the `#ergonomics` enthusiasts of splitkb.com discord.
 
 
 ## Combo helper macros
