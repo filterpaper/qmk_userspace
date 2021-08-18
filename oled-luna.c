@@ -39,8 +39,8 @@
          bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
              if (record->event.pressed) { tap_timer = timer_read32(); }
          }
-   5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED
-     that can be removed or replaced with your own function.
+   5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED.
+     It can be replaced with your own function, or delete that 'else' line.
 */
 
 #include QMK_KEYBOARD_H
@@ -301,5 +301,6 @@ oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 
 void oled_task_user(void) {
 	extern void render_mod_status(void);
-	is_keyboard_master() ? render_luna_status() : render_mod_status();
+	if (is_keyboard_master()) { render_luna_status(); }
+	else { render_mod_status(); }
 }
