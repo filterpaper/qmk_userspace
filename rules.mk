@@ -25,7 +25,6 @@ EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
-OPT_DEFS += -DCAPSWORD_ENABLE
 
 # Main source file
 SRC += filterpaper.c

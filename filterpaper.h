@@ -83,3 +83,16 @@ enum mods_bit {
 	MOD_RALT = 0x14,
 	MOD_RGUI = 0x18,
 }; */
+
+// Macro for LT(0,kc) mod tap. Return true for kc on tap
+// send custom tap code on hold after TAPPING_TERM
+#define TAP_HOLD(_hold_) \
+	if (record->tap.count) return true; \
+	else if (record->event.pressed) tap_code16(_hold_); \
+	return false
+
+// Macro to send oneshot mod on tap with mod tap keys
+// like LT(1,MOD_LSFT)
+#define MT_OSM(_mod_) \
+	if (record->tap.count && record->event.pressed) { \
+	add_oneshot_mods(_mod_); return false; }
