@@ -38,7 +38,7 @@
       * Add 'OPT_DEFS += -DLEFTCAT' into rules.mk
       * Or 'OPT_DEFS += -DRIGHTCAT' into rules.mk
    4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
-     To animate with keystrokes, declare the following integer variable
+     To animate with keystrokes, add the following integer variable
      and statement inside 'process_record_user()' in keymap.c:
         uint32_t tap_timer = 0;
         bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
