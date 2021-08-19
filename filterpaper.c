@@ -27,7 +27,7 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 
 #ifdef TAPPING_TERM_PER_KEY // Reduce for thumb keys
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xFF00) == RMT_BITS) ? TAPPING_TERM - 100 : TAPPING_TERM;
+	return ((keycode & 0xFF00) == RMT_BITS) ? TAPPING_TERM - 150 : TAPPING_TERM;
 }
 #endif
 

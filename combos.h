@@ -38,6 +38,8 @@
    Usage: add '#include "combos.h"' to keymap.c or user source.
  */
 
+#define COMBOS_DEF "combos.def"
+
 // Combo code building macros
 #define C_ENUM(name, val, ...) cmb_##name,
 #define C_DATA(name, val, ...) uint16_t const name##_combo[] PROGMEM = {__VA_ARGS__, COMBO_END};
@@ -55,7 +57,7 @@
 #define SUBS C_ENUM
 #define ACTN C_ENUM
 enum combos {
-	#include "combos.def"
+	#include COMBOS_DEF
 	COMBO_LENGTH
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
@@ -67,7 +69,7 @@ uint16_t COMBO_LEN = COMBO_LENGTH;
 #define COMB C_DATA
 #define SUBS C_DATA
 #define ACTN C_DATA
-#include "combos.def"
+#include COMBOS_DEF
 
 // Fill array with combo type and shortcuts
 #undef COMB
@@ -77,7 +79,7 @@ uint16_t COMBO_LEN = COMBO_LENGTH;
 #define SUBS A_TYPE
 #define ACTN A_TYPE
 combo_t key_combos[] = {
-	#include "combos.def"
+	#include COMBOS_DEF
 };
 
 // Fill combo event function with send string or function calls
@@ -89,6 +91,6 @@ combo_t key_combos[] = {
 #define ACTN P_ACTN
 void process_combo_event(uint16_t combo_index, bool pressed) {
 	switch (combo_index) {
-		#include "combos.def"
+		#include COMBOS_DEF
 	}
 }

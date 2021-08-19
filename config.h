@@ -21,7 +21,7 @@
 
 // Common QMK settings
 #define TAPPING_TERM 230
-//#define TAPPING_TERM_PER_KEY
+#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
 #define TAPPING_FORCE_HOLD
@@ -149,7 +149,7 @@
 #endif
 
 #ifdef COMBO_ENABLE
-#	define COMBO_TERM 20
+#	define COMBO_TERM 25
 #	define COMBO_VARIABLE_LEN
 #	define COMBO_ONLY_FROM_LAYER 0
 #endif
