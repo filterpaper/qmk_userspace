@@ -30,8 +30,7 @@
 // Macro to send oneshot mod on tap with mod tap keys
 #define MT_OSM(_mod_) \
 	if (record->tap.count && record->event.pressed) { \
-		add_oneshot_mods(_mod_); \
-		return false; }
+	add_oneshot_mods(_mod_); return false; }
 
 #ifdef OLED_DRIVER_ENABLE
 uint32_t tap_timer = 0; // Timer for OLED animation
@@ -39,12 +38,14 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 
 
 #ifdef CAPSWORD_ENABLE
-static void process_caps_word(uint16_t keycode) {
-	// Get base key code from mod and layer tap
-	switch (keycode) {
-		case QK_MOD_TAP...QK_MOD_TAP_MAX:
-		case QK_LAYER_TAP...QK_LAYER_TAP_MAX:
-			keycode &= 0xFF;
+static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
+	// Get base key code from mod tap
+	if (record->tap.count) {
+		switch (keycode) {
+			case QK_MOD_TAP...QK_MOD_TAP_MAX:
+			case QK_LAYER_TAP...QK_LAYER_TAP_MAX:
+				keycode &= 0xFF;
+		}
 	}
 	// Deactivate caps lock with the following key codes
 	switch (keycode) {
@@ -66,7 +67,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (record->event.pressed) { tap_timer = timer_read32(); }
 #endif
 #ifdef CAPSWORD_ENABLE // Monitor key codes to deactivate caps lock
-	if (host_keyboard_led_state().caps_lock && record->event.pressed) { process_caps_word(keycode); }
+	if (host_keyboard_led_state().caps_lock && record->event.pressed) { process_caps_word(keycode, record); }
 #endif
 
 	switch (keycode) {
