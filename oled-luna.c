@@ -33,14 +33,14 @@
    3 Animation defaults to Luna, an outlined dog. Add
      'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.
    4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
-     To animate with keystrokes, add the following integer variable
-      and statement inside 'process_record_user()' in keymap.c:
-         uint32_t tap_timer = 0;
-         bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
-             if (record->event.pressed) { tap_timer = timer_read32(); }
-         }
+     Otherwise add the following integer variable and 'if'
+     statement inside 'process_record_user()' in keymap.c:
+          uint32_t tap_timer = 0;
+          bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+              if (record->event.pressed) { tap_timer = timer_read32(); }
+          }
    5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED.
-     It can be replaced with your own function, or delete that 'else' line.
+     It can be replaced with your own function, or delete the 'else' line.
 */
 
 #include QMK_KEYBOARD_H
