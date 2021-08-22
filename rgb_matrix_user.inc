@@ -87,6 +87,7 @@ static bool CANDY_RAIN(effect_params_t* params) {
 	if (wait_timer > g_rgb_timer) { return false; }
 
 	inline uint32_t interval(void) { return 500 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
+//	inline uint32_t interval(void) { return qadd8(rgb_matrix_config.speed, 16) >> 6; }
 
 	bool rain_pixel(uint8_t i, effect_params_t* params, bool off) {
 		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) { return true; }
@@ -100,7 +101,6 @@ static bool CANDY_RAIN(effect_params_t* params) {
 		return false;
 	}
 
-//	if (params->init) { random16_set_seed((uint16_t)g_rgb_timer); }
 	return rain_pixel(mod8(jsf8(), DRIVER_LED_TOTAL), params, jsf8() & 2);
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
@@ -151,12 +151,15 @@ static bool CANDY_FRACTAL(effect_params_t* params) {
 	typedef struct PACKED { uint8_t x; uint8_t y; } fractal_point_t;
 	static fractal_led_t led[FRACTAL_WIDTH][FRACTAL_HEIGHT];
 	static uint32_t wait_timer = 0;
-	if (wait_timer > g_rgb_timer) { return false; }
+	if (wait_timer > sync_timer_read32() >> 8) { return false; }
 
-	inline uint32_t interval(void) { return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
+//	inline uint32_t interval(void) { return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
+	inline uint32_t interval(void) { return qadd8(rgb_matrix_config.speed, 16) >> 6; }
 
 	#define FRACTAL_PIXEL() (jsf8() & 3) ? (RGB){0,0,0} : random_hsv_to_rgb()
 	#define GET_FRACTAL_POINT(k) (fractal_point_t){scale8(g_led_config.point[k].x, FRACTAL_RATIO), scale8(g_led_config.point[k].y, FRACTAL_RATIO)}
+
+	if (params->init) { random16_set_seed((uint16_t)(g_rgb_timer >> 16)); }
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	for (uint8_t i = led_min; i < led_max; ++i) {
@@ -176,7 +179,7 @@ static bool CANDY_FRACTAL(effect_params_t* params) {
 			led[FRACTAL_MIDDLE][h].tag = true;
 			led[FRACTAL_MIDDLE][h].rgb = FRACTAL_PIXEL();
 		}
-		wait_timer = g_rgb_timer + interval();
+		wait_timer = (sync_timer_read32() >> 8) + interval();
 	}
 	return led_max < DRIVER_LED_TOTAL;
 }
