@@ -185,3 +185,68 @@ static bool CANDY_FRACTAL(effect_params_t* params) {
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // ENABLE_RGB_MATRIX_CANDY_FRACTAL
+
+
+#ifdef ENABLE_RGB_MATRIX_MONO_FRACTAL
+RGB_MATRIX_EFFECT(MONO_FRACTAL) // 522 bytes
+
+#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+static bool MONO_FRACTAL(effect_params_t* params) {
+	#define FRACTAL_WIDTH 15 // cols
+	#define FRACTAL_HEIGHT 5 // rows
+	#define FRACTAL_MIDDLE 7 // middle column
+	#define FRACTAL_RATIO 16 // scaling ratio
+
+//	0 1 2  3  4  5  6
+//  7 8 9 10 11 12 13
+//	#define FRACTAL_WIDTH 14 // cols
+//	#define FRACTAL_HEIGHT 5 // rows
+//	#define FRACTAL_MIDDLE 6 // middle column
+//	#define FRACTAL_RATIO 16.2 // scaling ratio
+
+	#define GET_FRACTAL_POINT(k) (fractal_point_t){     \
+		scale8(g_led_config.point[k].x, FRACTAL_RATIO), \
+		scale8(g_led_config.point[k].y, FRACTAL_RATIO)  \
+	} // Scale g_led_config.point 224x64 by ratio to 15x5
+
+	typedef struct PACKED { uint8_t x; uint8_t y; } fractal_point_t;
+	static bool led[FRACTAL_WIDTH][FRACTAL_HEIGHT]; // fractal on/off map
+	static uint32_t wait_timer = 0;
+
+	if (wait_timer > g_rgb_timer >> 8) { return false; } // Interval timer
+
+//	inline uint32_t interval(void) { return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
+	inline uint32_t interval(void) { return qadd8(rgb_matrix_config.speed, 16) >> 6; }
+
+	// Fractal drawing loop
+	RGB_MATRIX_USE_LIMITS(led_min, led_max);
+	for (uint8_t i = led_min; i < led_max; ++i) {
+		RGB_MATRIX_TEST_LED_FLAGS();
+		fractal_point_t map = GET_FRACTAL_POINT(i);
+		if (led[map.x][map.y]) { // light LED if marked true
+			RGB rgb = rgb_matrix_hsv_to_rgb(rgb_matrix_config.hsv);
+			rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+		} else {
+			rgb_matrix_set_color(i, RGB_OFF);
+		}
+	}
+	// Fractal moving loop after drawing last LED
+	if (led_max == DRIVER_LED_TOTAL) {
+		for (uint8_t h = 0; h < FRACTAL_HEIGHT; ++h) {
+			for (uint8_t l = 0; l < FRACTAL_MIDDLE; ++l) {
+				led[l][h] = led[l+1][h]; // move fractal cols left
+			}
+			for (uint8_t r = FRACTAL_WIDTH-1; r > FRACTAL_MIDDLE; --r) {
+				led[r][h] = led[r-1][h]; // move fractal cols right
+			}
+			// refill middle column
+		//	led[FRACTAL_MIDDLE][h] = led[FRACTAL_MIDDLE+1][h] = (random8() & 3) ? false : true;
+			led[FRACTAL_MIDDLE][h] = (random8() & 3) ? false : true;
+		}
+		wait_timer = (g_rgb_timer >> 8) + interval();
+	}
+	// Return false when done
+	return led_max < DRIVER_LED_TOTAL;
+}
+#endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // ENABLE_RGB_MATRIX_CANDY_MONOFRACTAL
