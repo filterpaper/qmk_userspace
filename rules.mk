@@ -36,6 +36,7 @@ endif
 
 # Mark65 and Technik
 ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
+	COMBO_ENABLE = yes
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
@@ -55,6 +56,7 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		endif
 	endif
 	ifneq ($(strip $(KB)),)
+		COMBO_ENABLE = yes
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
 		SRC += rgb-matrix.c
