@@ -23,9 +23,9 @@
 #define RGB_DPINK	115, 20, 45
 #define RGB_DTEAL	5, 35, 35
 #define RGB_FLUOR	75, 122, 22
-#define RGB_CAPS	RGB_DPURPLE
-#define RGB_MODS	RGB_BSTEEL
-#define RGB_LAYER	RGB_FLUOR
+#define RGB_CAPS	RGB_FLUOR
+#define RGB_MODS	RGB_DPURPLE
+#define RGB_LAYER	RGB_DPINK
 
 // Custom effects
 #ifdef ENABLE_RGB_MATRIX_CANDY_TAP
@@ -40,7 +40,7 @@
 #endif
 
 // Custom indicators
-#ifdef IMK
+#if defined(IMK)
 #	define MOD_FLAG LED_FLAG_UNDERGLOW
 #	define CAP_FLAG LED_FLAG_UNDERGLOW
 #else

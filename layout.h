@@ -177,7 +177,7 @@
 
 // Bottom row keys
 #define O_BASE 	KC_DEL, KC_VOLD, KC_VOLU, RSA_T(KC_ESC), LT(SYM,KC_TAB), RSG_T(KC_ENT), \
-				RSFT_T(KC_SPC), LT(NUM,KC_SPC), RAG_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
+				RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_LEFT), KC_DOWN, KC_UP, KC_RGHT
 #define O_BLNK _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 #define O_NUMB _______, _______, _______, _______, MO(FNC), _______, _______, _______, _______, _______, _______, _______
 #define O_SYMB _______, _______, _______, _______, _______, _______, _______, MO(FNC), _______, _______, _______, _______
