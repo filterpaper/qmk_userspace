@@ -274,7 +274,7 @@ void render_luna_status(void) {
 	// Time gap between tap_timer updates
 	uint32_t keystroke = timer_elapsed32(tap_timer);
 
-	void animation_phase(void) {
+	void animate_luna(void) {
 		bool const caps = host_keyboard_led_state().caps_lock;
 
 		render_logo();
@@ -289,7 +289,7 @@ void render_luna_status(void) {
 	if (keystroke > OLED_TIMEOUT) { oled_off(); }
 	else if (timer_elapsed(anim_timer) > LUNA_FRAME_DURATION) {
 		anim_timer = timer_read();
-		animation_phase();
+		animate_luna();
 	}
 }
 
