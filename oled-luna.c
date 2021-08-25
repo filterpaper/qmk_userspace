@@ -28,7 +28,7 @@
    Usage guide
    1 Place this file next to keymap.c or in userspace.
    2 Add the following lines into rules.mk:
-        OLED_DRIVER_ENABLE = yes
+        OLED_ENABLE = yes
         SRC += oled-luna.c
    3 Animation defaults to Luna, an outlined dog. Add
      'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.

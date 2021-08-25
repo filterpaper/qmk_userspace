@@ -32,7 +32,7 @@
    Usage guide
    1 Place this file next to keymap.c or in userspace.
    2 Add the following lines into rules.mk:
-        OLED_DRIVER_ENABLE = yes
+        OLED_ENABLE = yes
         SRC += oled-bongocat.c
    3 Left and right aligned Bongocat is default. To save space:
       * Add 'OPT_DEFS += -DLEFTCAT' into rules.mk

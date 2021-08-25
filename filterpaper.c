@@ -20,7 +20,7 @@
 #include "combos.h"
 #endif
 
-#ifdef OLED_DRIVER_ENABLE
+#ifdef OLED_ENABLE
 uint32_t tap_timer = 0; // Timer for OLED animation
 #endif
 
@@ -79,7 +79,7 @@ static bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
-#ifdef OLED_DRIVER_ENABLE // Reset OLED animation tap timer
+#ifdef OLED_ENABLE // Reset OLED animation tap timer
 	if (record->event.pressed) { tap_timer = timer_read32(); }
 #endif
 
