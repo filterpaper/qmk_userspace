@@ -19,13 +19,6 @@
 //#define RGB_TICK ((g_rgb_timer * (1 + (rgb_matrix_config.speed >> 5))) >> 8)
 //uint16_t tick = scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 5);
 
-
-#ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
-
-#ifdef ENABLE_RGB_MATRIX_CANDY_TAP
-RGB_MATRIX_EFFECT(CANDY_TAP)
-
-#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 /*
 uint8_t jsf8(void) { // Bob Jenkin's fast prng
 	static uint8_t a = 161, b = 62, c = 21, d = 97, t;
@@ -34,8 +27,12 @@ uint8_t jsf8(void) { // Bob Jenkin's fast prng
 	b = c + d; c = d + t;
 	return d = t + a;
 }*/
-// alias prng to lib8tion's random function
-#define jsf8() random8()
+
+#ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
+
+#ifdef ENABLE_RGB_MATRIX_CANDY_TAP
+RGB_MATRIX_EFFECT(CANDY_TAP)
+#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
 HSV hsv_by_time(HSV hsv) {
 	return (HSV){
@@ -57,7 +54,6 @@ static bool CANDY_TAP(effect_params_t* params) {
 
 #ifdef ENABLE_RGB_MATRIX_CANDY_SPLASH
 RGB_MATRIX_EFFECT(CANDY_SPLASH)
-
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_SPLASH(effect_params_t* params) {
 	HSV CANDY_WIDE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
@@ -74,12 +70,13 @@ static bool CANDY_SPLASH(effect_params_t* params) {
 #endif // RGB_MATRIX_KEYREACTIVE_ENABLED
 
 
+
 #ifdef ENABLE_RGB_MATRIX_CANDY_RAIN
 RGB_MATRIX_EFFECT(CANDY_RAIN) // 278 bytes
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 RGB random_hsv_to_rgb(void) {
-	return hsv_to_rgb((HSV){jsf8(), qadd8(jsf8() >> 1, 127), rgb_matrix_config.hsv.v});
+	return hsv_to_rgb((HSV){random8(), qadd8(random8() >> 1, 127), rgb_matrix_config.hsv.v});
 }
 
 static bool CANDY_RAIN(effect_params_t* params) {
@@ -87,7 +84,6 @@ static bool CANDY_RAIN(effect_params_t* params) {
 	if (wait_timer > g_rgb_timer) { return false; }
 
 	inline uint32_t interval(void) { return 500 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
-//	inline uint32_t interval(void) { return qadd8(rgb_matrix_config.speed, 16) >> 6; }
 
 	bool rain_pixel(uint8_t i, effect_params_t* params, bool off) {
 		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) { return true; }
@@ -101,7 +97,7 @@ static bool CANDY_RAIN(effect_params_t* params) {
 		return false;
 	}
 
-	return rain_pixel(mod8(jsf8(), DRIVER_LED_TOTAL), params, jsf8() & 2);
+	return rain_pixel(mod8(random8(), DRIVER_LED_TOTAL), params, random8() & 2);
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // ENABLE_RGB_MATRIX_CANDY_RAIN
@@ -118,7 +114,7 @@ static bool CANDY_FLOW(effect_params_t* params) {
 
 	inline uint32_t interval(void) { return 1500 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
 
-	#define FLOW_PIXEL() (jsf8() & 3) ? (RGB){0,0,0} : random_hsv_to_rgb()
+	#define FLOW_PIXEL() (random8() & 3) ? (RGB){0,0,0} : random_hsv_to_rgb()
 //	if (params->init) { //random16_set_seed((uint16_t)g_rgb_timer); }
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
@@ -156,7 +152,7 @@ static bool CANDY_FRACTAL(effect_params_t* params) {
 //	inline uint32_t interval(void) { return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
 	inline uint32_t interval(void) { return qadd8(rgb_matrix_config.speed, 16) >> 6; }
 
-	#define FRACTAL_PIXEL() (jsf8() & 3) ? (RGB){0,0,0} : random_hsv_to_rgb()
+	#define FRACTAL_PIXEL() (random8() & 3) ? (RGB){0,0,0} : random_hsv_to_rgb()
 	#define GET_FRACTAL_POINT(k) (fractal_point_t){scale8(g_led_config.point[k].x, FRACTAL_RATIO), scale8(g_led_config.point[k].y, FRACTAL_RATIO)}
 
 	if (params->init) { random16_set_seed((uint16_t)(g_rgb_timer >> 16)); }
