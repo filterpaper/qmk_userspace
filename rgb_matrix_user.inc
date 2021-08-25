@@ -188,45 +188,33 @@ RGB_MATRIX_EFFECT(MONO_FRACTAL) // 522 bytes
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool MONO_FRACTAL(effect_params_t* params) {
-	#define FRACTAL_WIDTH 15 // cols
-	#define FRACTAL_HEIGHT 5 // rows
-	#define FRACTAL_MIDDLE 7 // Middle column
-	#define FRACTAL_RATIO 16 // Scaling ratio
-	static bool led[FRACTAL_WIDTH][FRACTAL_HEIGHT]; // Fractal on/off map
+	#define FRACTAL_WIDTH  MATRIX_COLS
+	#define FRACTAL_HEIGHT MATRIX_ROWS
+	#define FRACTAL_MIDDLE MATRIX_COLS / 2
+	static bool led[FRACTAL_WIDTH][FRACTAL_HEIGHT];
 
 	static uint32_t wait_timer = 0;
 	if (wait_timer > g_rgb_timer) { return false; }
-//	if (wait_timer > g_rgb_timer >> 8) { return false; } // Interval timer
 
 	inline uint32_t interval(void) { return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
-//	inline uint32_t interval(void) { return qadd8(rgb_matrix_config.speed, 16) >> 6; }
 
-	// Loop through LED index, scale its 224x64 point down with ratio
-	// to 15x5 fractal map, and light index location if true
-	RGB_MATRIX_USE_LIMITS(led_min, led_max);
-	for (uint8_t i = led_min; i < led_max; ++i) {
-		RGB_MATRIX_TEST_LED_FLAGS();
-		uint8_t x = scale8(g_led_config.point[i].x, FRACTAL_RATIO);
-		uint8_t y = scale8(g_led_config.point[i].y, FRACTAL_RATIO);
-		if (led[x][y]) {
-			RGB rgb = rgb_matrix_hsv_to_rgb(rgb_matrix_config.hsv);
-			rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
-		} else {
-			rgb_matrix_set_color(i, RGB_OFF);
+	RGB rgb = rgb_matrix_hsv_to_rgb(rgb_matrix_config.hsv);
+	for (uint8_t h = 0; h < FRACTAL_HEIGHT; ++h) {
+		for (uint8_t l = 0; l < FRACTAL_MIDDLE-1; ++l) {
+			(led[l][h]) ? rgb_matrix_set_color(g_led_config.matrix_co[h][l], rgb.r, rgb.g, rgb.b) : rgb_matrix_set_color(g_led_config.matrix_co[h][l], RGB_OFF);
+			led[l][h] = led[l+1][h];
 		}
-	}
-	// After lighting final LED, copy middle column outwards left
-	// and right. Fill middle column with new random fractal pattern
-	if (led_max == DRIVER_LED_TOTAL) {
-		for (uint8_t h = 0; h < FRACTAL_HEIGHT; ++h) {
-			for (uint8_t l = 0; l < FRACTAL_MIDDLE; ++l) { led[l][h] = led[l+1][h]; }
-			for (uint8_t r = FRACTAL_WIDTH-1; r > FRACTAL_MIDDLE; --r) { led[r][h] = led[r-1][h]; }
-			led[FRACTAL_MIDDLE][h] = (random8() & 3) ? false : true;
+		for (uint8_t r = FRACTAL_WIDTH-1; r > FRACTAL_MIDDLE; --r) {
+			(led[r][h]) ? rgb_matrix_set_color(g_led_config.matrix_co[h][r], rgb.r, rgb.g, rgb.b) : rgb_matrix_set_color(g_led_config.matrix_co[h][r], RGB_OFF);
+			led[r][h] = led[r-1][h];
 		}
-		wait_timer = g_rgb_timer + interval();
-	//	wait_timer = (g_rgb_timer >> 8) + interval();
+		(led[FRACTAL_MIDDLE][h]) ? rgb_matrix_set_color(g_led_config.matrix_co[h][FRACTAL_MIDDLE], rgb.r, rgb.g, rgb.b) : rgb_matrix_set_color(g_led_config.matrix_co[h][FRACTAL_MIDDLE], RGB_OFF);
+		(led[FRACTAL_MIDDLE-1][h]) ? rgb_matrix_set_color(g_led_config.matrix_co[h][FRACTAL_MIDDLE-1], rgb.r, rgb.g, rgb.b) : rgb_matrix_set_color(g_led_config.matrix_co[h][FRACTAL_MIDDLE-1], RGB_OFF);
+		led[FRACTAL_MIDDLE][h] = led[FRACTAL_MIDDLE-1][h] = (random8() & 3) ? false : true;
 	}
-	return led_max < DRIVER_LED_TOTAL; // Return false when done
+
+	wait_timer = g_rgb_timer + interval();
+	return false;
 }
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // ENABLE_RGB_MATRIX_CANDY_MONOFRACTAL
