@@ -42,6 +42,10 @@ void matrix_init_user(void) {
 		}
 	}
 #endif
+	// Change thumb key flags
+#ifdef KEYBOARD_crkbd_rev1
+	g_led_config.flags[6] = g_led_config.flags[33] = LED_FLAG_KEYLIGHT;
+#endif
 }
 
 
