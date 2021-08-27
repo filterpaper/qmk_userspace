@@ -153,7 +153,7 @@ Images in `glcdfont.c` can be viewed and edited with:
 
 # Layout wrapper macros
 ## Basic layout
-Text-based key map layout (in `keymap.c` format) is supported with the use of preprocessor wrapper macros. Create each layer as a macro, save them in `layout.h`, and include this file inside `config.h`. Here is an example of a Corne number layer in `layout.h`:
+Text-based key map layout (in `keymap.c` format) is supported with the use of preprocessor wrapper macros. Create each layer as a macro, save them in `layout.h`, and `#include` this file in `config.h`. Here is an example of a Corne number layer in:
 ```c
 #define _NUMB \
     _______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
@@ -161,11 +161,11 @@ Text-based key map layout (in `keymap.c` format) is supported with the use of pr
     _______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_INS,  _______, _______, _______, _______, _______, \
                                _______, MO(FNC), _______,     _______, _______, _______
 ```
-Next, create a wrapper name in `layout.h` that points to the actual layout macro used by the keyboard, example:
+Next, create a wrapper name in `layout.h` that points to the actual layout used by the keyboard, example:
 ```c
 #define CORNE_wrapper(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 ```
-Finally create the keyboard's JSON file and reference the macros of each layer, along with the layout wrapper name:
+Finally create the keyboard's JSON file with macro names of each layer, together the layout wrapper name in the following format:
 ```c
 {
     "author": "",
@@ -185,26 +185,28 @@ Finally create the keyboard's JSON file and reference the macros of each layer, 
 ```
 The build process will construct a transient `keymap.c` from JSON file, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure in the compile process.
 ## Layering home row modifiers
-The use of [home row mods](https://precondition.github.io/home-row-mods) can also be layered over the layout macros. The home row mod macro is defined in here (with the corresponding letter position wrapped by mod-tap):
+[Home row mods](https://precondition.github.io/home-row-mods) feature can be placed over the layout macros. A home row mod macro is defined below following the keyboard's matrix layout (crkbd/rev1) with home letters wrapped by a mod-tap:
 ```c
 #define HRM(a) HRM_SACG(a)
 #define HRM_SACG( \
     k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
     k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
     k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36  \
+    k37, k38, k39, k40, k41, k42 \
 ) \
     k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
     k13, SFT_T(k14), ALT_T(k15), CTL_T(k16), GUI_T(k17), k18, \
     k19, GUI_T(k20), CTL_T(k21), ALT_T(k22), SFT_T(k23), k24, \
-    k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36
+    k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
+    k37, k38, k39, k40, k41, k42
 ```
-Next, the layer that requires the home row mod can be wrapped inside `HRM()`:
+Next, the layer that requires the home row mod can be wrapped inside `HRM()`, making it convenient to apply and change mods on multiple layouts:
 ```c
 "layers": [
     [ "HRM(_BASE)" ],
+    [ "HRM(_COLE)" ],
     [ "_NUMB" ],
     [ "_SYMB" ],
     [ "_FUNC" ]
 ],
 ```
-During the compile process, the preprocessor will expand `HRM(_BASE)` and wrap the right key code inside `_BASE` with the mod-tap define inside `HRM_SACG`. These will then be passed on `CORNE_wrapper()`, the alias macro of the structure used by the keyboard.
