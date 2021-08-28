@@ -15,13 +15,3 @@ COMB(KC_BSPC, 	KC_BSPC, KC_O, KC_P)
 
 SUBS(vi_quit,	":q!", KC_Q, KC_W)
 SUBS(vi_save,	":wq!", KC_Z, KC_X)
-
-/*
-// Right brackets
-COMB(KC_LPRN, 	KC_LPRN, KC_U, KC_I)
-COMB(KC_RPRN, 	KC_RPRN, KC_I, KC_O)
-COMB(KC_LCBR, 	KC_LCBR, HM_J, HM_K)
-COMB(KC_RCBR, 	KC_RCBR, HM_K, HM_L)
-COMB(KC_LBRC,	KC_LBRC, M_TH, COMM_TH)
-COMB(KC_RBRC, 	KC_RBRC, COMM_TH, DOT_TH)
-*/

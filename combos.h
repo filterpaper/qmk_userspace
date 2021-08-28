@@ -37,7 +37,7 @@
    Usage: add '#include "combos.h"' to keymap.c or user source.
  */
 
-#define COMBOS_DEF "combos.def"
+#define COMBOS_DEF "combos.c"
 
 // Combo code building macros
 #define C_ENUM(name, val, ...) cmb_##name,

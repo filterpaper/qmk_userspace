@@ -24,12 +24,6 @@
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_SHUT	C(A(G(KC_PWR)))
 
-// One shot mods
-#define OSM_SFT	OSM(MOD_LSFT)
-#define OSM_CTL	OSM(MOD_LCTL)
-#define OSM_ALT	OSM(MOD_LALT)
-#define OSM_GUI	OSM(MOD_LGUI)
-
 // Tap hold macros
 #define TH(k)	LT(0,k)
 #define Q_TH	TH(KC_Q)
@@ -40,7 +34,13 @@
 #define DOT_TH	TH(KC_DOT)
 #define SLSH_TH	TH(KC_SLSH)
 
-// Shared layer numbers
+// One shot mods
+#define OSM_SFT	OSM(MOD_LSFT)
+#define OSM_CTL	OSM(MOD_LCTL)
+#define OSM_ALT	OSM(MOD_LALT)
+#define OSM_GUI	OSM(MOD_LGUI)
+
+// Layers
 #define BSE 0
 #define CMK 1
 #define NUM 2
