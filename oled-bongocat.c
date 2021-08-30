@@ -174,7 +174,7 @@ static void render_cat_tap(void) {
 
 	static uint8_t current_frame = 0;
 //	current_frame = (current_frame + 1 > TAP_FRAMES - 1) ? 0 : current_frame + 1;
-	current_frame = (current_frame + 1) & 1; // Quicker maths cycle two frames
+	current_frame = (current_frame + 1) & 1; // Quicker maths to loop two frames
 
 #if defined(LEFTCAT)
 	render_frames(left_base, left_tap_diff[current_frame]);
