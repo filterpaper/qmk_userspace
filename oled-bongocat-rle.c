@@ -53,9 +53,8 @@
 #include QMK_KEYBOARD_H
 
 #define IDLE_FRAMES 5
-#define TAP_FRAMES 2
-#define FRAME_DURATION 200 // Number of ms between frames
-#define WIDTH OLED_DISPLAY_HEIGHT // 32 px for OLED_ROTATION_270
+#define TAP_FRAMES  2
+#define FRAME_DURATION 200 // Milliseconds per frame
 
 
 static void render_frame(unsigned char const *frame) {
@@ -157,7 +156,7 @@ void render_bongocat(void) {
 	static uint16_t anim_timer = 0;
 
 #ifdef WPM_ENABLE
-	static uint8_t prev_wpm = 0;
+	static uint8_t prev_wpm   = 0;
 	static uint32_t tap_timer = 0;
 	// tap_timer updated by sustained WPM
 	if (get_current_wpm() > prev_wpm) { tap_timer = timer_read32(); }
