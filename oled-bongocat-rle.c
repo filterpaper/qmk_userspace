@@ -59,13 +59,13 @@
 
 static void render_frame(unsigned char const *frame) {
 	uint16_t cursor = 0;
-	uint8_t size    = (unsigned char)pgm_read_byte_near(frame + 0);
+	uint8_t size    = pgm_read_byte_near(frame);
 
 	oled_set_cursor(0, 0);
 	for (uint8_t i = 1; i < size-1; i+=2 ) {
 		// Loop through pairs of byte and count
 		char byte     = pgm_read_byte_near(frame + i);
-		uint8_t count = (unsigned char)pgm_read_byte_near(frame + i + 1);
+		uint8_t count = pgm_read_byte_near(frame + i + 1);
 
 		for (uint8_t j = 0; j < count; ++j) {
 			// Render byte repetition
@@ -236,7 +236,7 @@ static void render_cat_prep(void) {
 #elif defined(RIGHTCAT)
 	render_frame(prep);
 #else
-	is_keyboard_left() ? render_frame(left_prep : render_frame(prep);
+	is_keyboard_left() ? render_frame(left_prep) : render_frame(prep);
 #endif
 }
 
