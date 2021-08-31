@@ -52,8 +52,8 @@
 
 #define IDLE_FRAMES 5
 #define TAP_FRAMES 2
-#define FRAME_DURATION 200 // Number of ms between frames
-#define WIDTH OLED_DISPLAY_HEIGHT // 32 px for OLED_ROTATION_270
+#define FRAME_DURATION 200 // Milliseconds per frame
+#define WIDTH OLED_DISPLAY_HEIGHT // 32px with OLED_ROTATION_270
 
 
 // Base animation frame that all subsequent ones will differ by pixels
@@ -204,7 +204,7 @@ void render_bongocat(void) {
 	// Time gap between tap_timer updates
 	uint32_t keystroke = timer_elapsed32(tap_timer);
 
-	void draw_frame(void) {
+	void animate_cat(void) {
 		oled_clear();
 		if (keystroke < FRAME_DURATION*2) { render_cat_tap(); }
 		else if (keystroke < FRAME_DURATION*8) { render_cat_prep(); }
@@ -214,7 +214,7 @@ void render_bongocat(void) {
 	if (keystroke > OLED_TIMEOUT) { oled_off(); }
 	else if (timer_elapsed(anim_timer) > FRAME_DURATION) {
 		anim_timer = timer_read();
-		draw_frame();
+		animate_cat();
 	}
 }
 
