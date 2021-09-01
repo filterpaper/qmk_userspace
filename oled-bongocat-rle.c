@@ -57,7 +57,7 @@
 #define FRAME_DURATION 200 // Milliseconds per frame
 
 
-static void render_frame(unsigned char const *frame) {
+static void decode_frame(unsigned char const *frame) {
 	uint16_t cursor = 0;
 	uint8_t size    = pgm_read_byte_near(frame);
 
@@ -181,7 +181,7 @@ static void render_cat_idle(void) {
 		0x03,0x01,0x0c,0x01,0x70,0x01,0x80,0x01,0x00,0x6d,0x07,0x01,0x08,0x05,0x04,0x02,
 		0x02,0x02,0x01,0x06,0x02,0x02,0x03,0x01,0x02,0x01,0x04,0x05,0x08,0x05,0x10,0x05,
 		0x20,0x05,0x40,0x05,0x80,0x05,0x00,0x11};
-	static unsigned char const *left_idle_anim[] = {
+	static unsigned char const *left_idle_anim[IDLE_FRAMES] = {
 		left_idle0, left_idle0, left_idle1, left_idle2, left_idle3 };
 #endif
 
@@ -189,11 +189,11 @@ static void render_cat_idle(void) {
 	current_frame = (current_frame + 1 > IDLE_FRAMES - 1) ? 0 : current_frame + 1;
 
 #if defined(LEFTCAT)
-	render_frame(left_idle_anim[current_frame]);
+	decode_frame(left_idle_anim[current_frame]);
 #elif defined(RIGHTCAT)
-	render_frame(idle_anim[current_frame]);
+	decode_frame(idle_anim[current_frame]);
 #else
-	is_keyboard_left() ? render_frame(left_idle_anim[current_frame]) : render_frame(idle_anim[current_frame]);
+	is_keyboard_left() ? decode_frame(left_idle_anim[current_frame]) : decode_frame(idle_anim[current_frame]);
 #endif
 }
 
@@ -232,11 +232,11 @@ static void render_cat_prep(void) {
 #endif
 
 #if defined(LEFTCAT)
-	render_frame(left_prep);
+	decode_frame(left_prep);
 #elif defined(RIGHTCAT)
-	render_frame(prep);
+	decode_frame(prep);
 #else
-	is_keyboard_left() ? render_frame(left_prep) : render_frame(prep);
+	is_keyboard_left() ? decode_frame(left_prep) : decode_frame(prep);
 #endif
 }
 
@@ -310,11 +310,11 @@ static void render_cat_tap(void) {
 	current_frame = (current_frame + 1) & 1;
 
 #if defined(LEFTCAT)
-	render_frame(left_tap_anim[current_frame]);
+	decode_frame(left_tap_anim[current_frame]);
 #elif defined(RIGHTCAT)
-	render_frame(tap_anim[current_frame]);
+	decode_frame(tap_anim[current_frame]);
 #else
-	is_keyboard_left() ? render_frame(left_tap_anim[current_frame]) : render_frame(tap_anim[current_frame]);
+	is_keyboard_left() ? decode_frame(left_tap_anim[current_frame]) : decode_frame(tap_anim[current_frame]);
 #endif
 }
 

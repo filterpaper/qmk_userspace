@@ -83,7 +83,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (record->event.pressed) { tap_timer = timer_read32(); }
 #endif
 
-	if (host_keyboard_led_state().caps_lock && record->event.pressed) { process_caps_word(keycode, record); }
+	if (record->event.pressed && host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
 
 	switch (keycode) {
 		// Right side undo cut copy paste
