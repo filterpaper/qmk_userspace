@@ -186,7 +186,7 @@ static void render_cat_idle(void) {
 #endif
 
 	static uint8_t current_frame = 0;
-	current_frame = (current_frame + 1 > IDLE_FRAMES - 1) ? 0 : current_frame + 1;
+	current_frame = (current_frame < IDLE_FRAMES - 1) ? current_frame + 1 : 0;
 
 #if defined(LEFTCAT)
 	decode_frame(left_idle_anim[current_frame]);
@@ -354,7 +354,7 @@ void render_bongocat(void) {
 
 // Init and rendering calls
 oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
-	if (is_keyboard_master()) { return (is_keyboard_left()) ? rotation : OLED_ROTATION_180; }
+	if (is_keyboard_master()) { return is_keyboard_left() ? rotation : OLED_ROTATION_180; }
 	else { return OLED_ROTATION_270; }
 }
 
