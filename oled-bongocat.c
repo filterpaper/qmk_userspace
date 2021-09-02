@@ -16,8 +16,8 @@
 
 /* Graphical bongocat animation, driven by key press timer or WPM.
    It has left and right aligned cats optimized for both OLEDs.
-   This code uses space-saving pixel differences, by rendering a
-   base frame following by only changed pixels on animation frames.
+   This code saves firmware space by rendering base pixels followed
+   by only changed pixels on subsequent animation frames.
    This should be rendered with OLED_ROTATION_270.
 
    Inspired by @j-inc's bongocat animation code
@@ -25,7 +25,7 @@
 
    Cat images courtesy of @plandevida
 
-   Differential code is modified from @Dake's Modular Bongo Cat
+   Differential code is modified from @Dake's Modular Bongocat
    (https://github.com/Dakes/kyria/blob/main/keymaps/dakes/)
 
 
@@ -56,7 +56,7 @@
 #define WIDTH OLED_DISPLAY_HEIGHT // 32px with OLED_ROTATION_270
 
 
-// Base animation frame that all subsequent ones will differ by pixels
+// Base pixel frame
 #ifndef LEFTCAT
 static uint16_t const base[] PROGMEM = {192,
 	0x8220,0x8240,0x8260,0x8280,0x82a0,0x82c1,0x82e1,0x8301,0x8321,0x8341,0x8362,0x8382,0x83a2,0x83c2,0x83e2,0x8403,
@@ -89,16 +89,17 @@ static uint16_t const left_base[] PROGMEM = {192,
 #endif
 
 
-// Loop array to render pixels on OLED
+// Function that loops through pixel frame array to read
+// and render on or off state bit at pixel coordinates
 static void render_array(uint16_t const *frame) {
-	// First array element is its size
+	// Get size from first array element
 	uint16_t const size = pgm_read_word(frame);
 	for (uint16_t i = size; i > 0; --i) {
 		uint16_t cur_px = pgm_read_word(frame + i);
-		// Get pixel state bit
+		// Get pixel on/off state bit
 		bool const on = (cur_px & ( 1 << 15 )) >> 15;
-		// Remove pixel state bit
-		cur_px &= ~(1UL << 15);
+		// Remove state bit from pixel coordinates
+		cur_px &= ~(1 << 15);
 		oled_write_pixel(cur_px % WIDTH, cur_px / WIDTH, on);
 	}
 }
@@ -111,7 +112,7 @@ static void render_frames(uint16_t const *base, uint16_t const *diff) {
 
 
 static void render_cat_idle(void) {
-	// Idle frames pixel differences
+	// Idle pixel frame differences
 #ifndef LEFTCAT
 	static uint16_t const idle0[] PROGMEM = {0};
 	static uint16_t const idle1[] PROGMEM = {105,
@@ -129,8 +130,7 @@ static void render_cat_idle(void) {
 		0x0636,0x8656,0x0657,0x8677,0x0678,0x8697,0x0698,0x86b6,0x06b7,0x86d6,0x06d7,0x88dc,0x08dd,0x88fd,0x08fe,0x891e,
 		0x091f,0x893e,0x093f,0x097c,0x899c};
 	static uint16_t const *idle_diff[IDLE_FRAMES] = {
-		idle0, idle0, idle1, idle2, idle3
-	};
+		idle0, idle0, idle1, idle2, idle3 };
 #endif
 #ifndef RIGHTCAT
 	static uint16_t const left_idle0[] PROGMEM = {0};
@@ -149,8 +149,7 @@ static void render_cat_idle(void) {
 		0x0629,0x0648,0x8649,0x0667,0x8668,0x0687,0x8688,0x06a8,0x86a9,0x06c8,0x86c9,0x08c2,0x88c3,0x08e1,0x88e2,0x0900,
 		0x8901,0x0920,0x8921,0x0963,0x8983};
 	static uint16_t const *left_idle_diff[IDLE_FRAMES] = {
-		left_idle0, left_idle0, left_idle1, left_idle2, left_idle3
-	};
+		left_idle0, left_idle0, left_idle1, left_idle2, left_idle3 };
 #endif
 
 	static uint8_t current_frame = 0;
@@ -167,7 +166,7 @@ static void render_cat_idle(void) {
 
 
 static void render_cat_prep(void) {
-	// Prep frames pixel differences
+	// Prep pixel frame differences
 #ifndef LEFTCAT
 	static uint16_t const prep0[] PROGMEM = {82,
 		0x86cb,0x86cc,0x86ed,0x86ee,0x870d,0x870f,0x0726,0x8728,0x872b,0x872c,0x8730,0x0746,0x8748,0x874b,0x874c,0x874f,
@@ -198,7 +197,7 @@ static void render_cat_prep(void) {
 
 
 static void render_cat_tap(void) {
-	// Tap frames pixel differences
+	// Tap pixel frame differences
 #ifndef LEFTCAT
 	static uint16_t const tap0[] PROGMEM = {156,
 		0x86cb,0x86cc,0x86ed,0x86ee,0x870d,0x870f,0x0726,0x8728,0x872b,0x872c,0x8730,0x0746,0x8748,0x874b,0x874c,0x874f,
@@ -218,8 +217,7 @@ static void render_cat_tap(void) {
 		0x0a8b,0x8a8e,0x8a92,0x8a97,0x0aab,0x8aae,0x8ab3,0x8ab5,0x8ab7,0x0acb,0x8ace,0x0ad1,0x8ad7,0x0aeb,0x8af4,0x8af6,
 		0x0b0c,0x0b0d,0x0b0e,0x8b11,0x8b12,0x8b13,0x8b14,0x8b15};
 	static uint16_t const *tap_diff[TAP_FRAMES] = {
-		tap0, tap1
-	};
+		tap0, tap1 };
 #endif
 #ifndef RIGHTCAT
 	static uint16_t const left_tap0[] PROGMEM = {156,
@@ -240,8 +238,7 @@ static void render_cat_tap(void) {
 		0x8a88,0x8a8d,0x8a91,0x0a94,0x8aa8,0x8aaa,0x8aac,0x8ab1,0x0ab4,0x8ac8,0x0ace,0x8ad1,0x0ad4,0x8ae9,0x8aeb,0x0af4,
 		0x8b0a,0x8b0b,0x8b0c,0x8b0d,0x8b0e,0x0b11,0x0b12,0x0b13};
 	static uint16_t const *left_tap_diff[TAP_FRAMES] = {
-		left_tap0, left_tap1
-	};
+		left_tap0, left_tap1 };
 #endif
 
 	static uint8_t current_frame = 0;
@@ -258,7 +255,7 @@ static void render_cat_tap(void) {
 
 
 void render_bongocat(void) {
-	// Animation frame timer
+	// Animation timer
 	static uint16_t anim_timer = 0;
 
 #ifdef WPM_ENABLE

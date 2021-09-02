@@ -16,26 +16,23 @@
 
 /* Graphical bongocat animation, driven by key press timer or WPM.
    It has left and right aligned cats optimized for both OLEDs.
-   This code uses space-saving pixel differences, by rendering a
-   base frame following by only changed pixels on animation frames.
-   This should be rendered with OLED_ROTATION_270.
+   This code uses run-length encoded frames that saves space by
+   storing consecutively repeated bytes in "byte,count" format.
 
    Inspired by @j-inc's bongocat animation code
    (keyboards/kyria/keymaps/j-inc)
 
    Cat images courtesy of @plandevida
 
-   Run length encode source is modified from @vectorstorm:
+   RLE code is modified from @vectorstorm's Bongocat:
    (https://github.com/vectorstorm/qmk_firmware/tree/new_vectorstorm_bongo/keyboards/crkbd/keymaps/vectorstorm)
-   Bongocat frames are encoded in pairs of 'byte, count'
-   RLE decode will read each pair and render bytes based on count.
 
 
    Usage guide
    1 Place this file next to keymap.c or in userspace.
    2 Add the following lines into rules.mk:
         OLED_ENABLE = yes
-        SRC += oled-bongocat.c
+        SRC += oled-bongocat-rle.c
    3 Left and right aligned Bongocat is default. To save space:
       * Add 'OPT_DEFS += -DLEFTCAT' into rules.mk
       * Or 'OPT_DEFS += -DRIGHTCAT' into rules.mk
@@ -57,18 +54,20 @@
 #define FRAME_DURATION 200 // Milliseconds per frame
 
 
+// RLE decoding loop that reads byte,count pairs from frame array
+// to render repeated bytes consecutively based on count
 static void decode_frame(unsigned char const *frame) {
 	uint16_t cursor = 0;
-	uint8_t size    = pgm_read_byte_near(frame);
+	uint8_t size    = pgm_read_byte(frame);
 
 	oled_set_cursor(0, 0);
 	for (uint8_t i = 1; i < size-1; i+=2 ) {
-		// Loop through pairs of byte and count
-		char byte     = pgm_read_byte_near(frame + i);
-		uint8_t count = pgm_read_byte_near(frame + i + 1);
+		// Get byte and consecutive count
+		char byte     = pgm_read_byte(frame + i);
+		uint8_t count = pgm_read_byte(frame + i + 1);
 
 		for (uint8_t j = 0; j < count; ++j) {
-			// Render byte repetition
+			// Render bytes consecutively
 			oled_write_raw_byte(byte, cursor);
 			cursor++;
 		}
@@ -272,7 +271,8 @@ static void render_cat_tap(void) {
 		0x40,0x05,0x20,0x05,0x10,0x05,0x08,0x05,0x04,0x05,0x02,0x01,0x03,0x01,0x7a,0x02,
 		0x79,0x04,0x39,0x01,0x31,0x01,0x02,0x02,0x04,0x02,0x08,0x03,0x88,0x02,0x87,0x01,
 		0x80,0x01,0x00,0x3c};
-	static unsigned char const *tap_anim[TAP_FRAMES] = { tap0, tap1 };
+	static unsigned char const *tap_anim[TAP_FRAMES] = {
+		tap0, tap1 };
 #endif
 #ifndef RIGHTCAT
 	static unsigned char const left_tap0[] PROGMEM = {219,
@@ -303,7 +303,8 @@ static void render_cat_tap(void) {
 		0x88,0x02,0x08,0x03,0x04,0x02,0x02,0x02,0x31,0x01,0x39,0x01,0x79,0x04,0x7a,0x02,
 		0x03,0x01,0x02,0x01,0x04,0x05,0x08,0x05,0x10,0x05,0x20,0x05,0x40,0x05,0x80,0x05,
 		0x00,0x11};
-	static unsigned char const *left_tap_anim[TAP_FRAMES] = { left_tap0, left_tap1 };
+	static unsigned char const *left_tap_anim[TAP_FRAMES] = {
+		left_tap0, left_tap1 };
 #endif
 
 	static unsigned char current_frame = 0;
@@ -320,7 +321,7 @@ static void render_cat_tap(void) {
 
 
 void render_bongocat(void) {
-	// Animation frame timer
+	// Animation timer
 	static uint16_t anim_timer = 0;
 
 #ifdef WPM_ENABLE

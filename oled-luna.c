@@ -14,9 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Graphical Luna dog animation display, requires WPM_ENABLE.
-   Luna is 4x3 on OLED and its frames are oriented for
-   vertical rendering (OLED_ROTATION_270).
+/* Graphical Luna / Felix animation, driven by key press timer or WPM.
+   Frames are 4x3 on OLED and oriented for OLED_ROTATION_270.
 
    Modified from @HellSingCoder's Luna dog
    (https://github.com/HellSingCoder/qmk_firmware/tree/master/keyboards/sofle/keymaps/HellSingCoder)
@@ -257,7 +256,7 @@ static void render_luna_sneak(void) {
 
 
 void render_luna_status(void) {
-	// Animation frame timer
+	// Animation timer
 	static uint16_t anim_timer = 0;
 
 #ifdef WPM_ENABLE
