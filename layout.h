@@ -138,7 +138,7 @@
 	_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       _______, _______, _______, _______, TG(CMK), _______, \
 	_______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,      _______, _______, _______, _______, KC_INS,  _______, \
 	_______, Z_SLEEP, _______, _______, KC_F11,  KC_F12,      _______, _______, _______, _______, Z_SHUT,  _______, \
-							   RESET,   _______, _______,     _______, _______, _______
+	                           RESET,   _______, _______,     _______, _______, _______
 #endif
 /* ,-----------------------------------------.                ,-----------------------------------------.
  * |      |  F1  |  F2  |  F3  |  F4  |  F5  |                |      | WH_U | WH_D |      |_COLE |      |
@@ -216,7 +216,7 @@
 	KC_TAB,           KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC, KC_VOLD, \
 	KC_CAPS,          KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_ENT,           KC_MUTE, \
 	OSM_SFT, _______, KC_Z,    KC_X,    KC_C,    V_TH,    KC_B,    KC_N,    M_TH,    COMM_TH, DOT_TH,  SLSH_TH, OSM_SFT,          KC_UP,            \
-	OSM_ALT, OSM_CTL,          OSM_GUI, LT(2,KC_BSPC),    KC_ENT,           RSFT_T(KC_SPC),   KC_RCTL, KC_RALT, KC_RALT, KC_LEFT, KC_DOWN, KC_RGHT
+	OSM_ALT, OSM_CTL,          OSM_GUI, LT(2,KC_SPC),     KC_ENT,           RSFT_T(KC_SPC),   KC_RCTL, KC_RALT, KC_RALT, KC_LEFT, KC_DOWN, KC_RGHT
 #define MARK_COLEMAK \
 	_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
 	_______,          _______, _______, KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, _______, _______, _______, \
