@@ -154,7 +154,7 @@ static void render_cat_idle(void) {
 #endif
 
 	static uint8_t current_frame = 0;
-	current_frame = (current_frame < IDLE_FRAMES - 1) ? current_frame + 1 : 0;
+	current_frame = current_frame < IDLE_FRAMES - 1 ? current_frame + 1 : 0;
 
 #if defined(LEFTCAT)
 	render_frames(left_base, left_idle_diff[current_frame]);

@@ -17,7 +17,8 @@
 /* Graphical bongocat animation, driven by key press timer or WPM.
    It has left and right aligned cats optimized for both OLEDs.
    This code uses run-length encoded frames that saves space by
-   storing consecutively repeated bytes in "byte,count" format.
+   storing frames of consecutively repeated bytes encoded in
+   "byte,count" format.
 
    Inspired by @j-inc's bongocat animation code
    (keyboards/kyria/keymaps/j-inc)
@@ -60,7 +61,7 @@ static void decode_frame(unsigned char const *frame) {
 	uint16_t cursor = 0;
 	uint8_t size    = pgm_read_byte(frame);
 
-	oled_set_cursor(0, 0);
+	oled_set_cursor(0,0);
 	for (uint8_t i = 1; i < size-1; i+=2 ) {
 		// Get byte and consecutive count
 		char byte     = pgm_read_byte(frame + i);
@@ -185,7 +186,7 @@ static void render_cat_idle(void) {
 #endif
 
 	static uint8_t current_frame = 0;
-	current_frame = (current_frame < IDLE_FRAMES - 1) ? current_frame + 1 : 0;
+	current_frame = current_frame < IDLE_FRAMES - 1 ? current_frame + 1 : 0;
 
 #if defined(LEFTCAT)
 	decode_frame(left_idle_anim[current_frame]);
@@ -307,7 +308,7 @@ static void render_cat_tap(void) {
 		left_tap0, left_tap1 };
 #endif
 
-	static unsigned char current_frame = 0;
+	static uint8_t current_frame = 0;
 	current_frame = (current_frame + 1) & 1;
 
 #if defined(LEFTCAT)
@@ -355,7 +356,15 @@ void render_bongocat(void) {
 
 // Init and rendering calls
 oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
-	if (is_keyboard_master()) { return is_keyboard_left() ? rotation : OLED_ROTATION_180; }
+	if (is_keyboard_master()) {
+#if defined(LEFTCAT)
+		return rotation;
+#elif defined(RIGHTCAT)
+		return OLED_ROTATION_180;
+#else
+		return is_keyboard_left() ? rotation : OLED_ROTATION_180;
+#endif
+	}
 	else { return OLED_ROTATION_270; }
 }
 

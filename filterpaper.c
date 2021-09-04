@@ -27,25 +27,26 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 
 #ifdef TAPPING_TERM_PER_KEY // Reduce for thumb keys
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xFF00) == RMT_BITS) ? TAPPING_TERM - 150 : TAPPING_TERM;
+	return (keycode & 0xFF00) == RMT_BITS ? TAPPING_TERM - 150 : TAPPING_TERM;
 }
 #endif
 
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for tap hold macros and home row mods
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return ((keycode & 0xFF00) == LT0_BITS || (keycode & 0xF000) == LMT_BITS) ? false : true;
+	return (keycode & 0xFF00) == LT0_BITS || (keycode & 0xF000) == LMT_BITS ? false : true;
 }
 #endif
 
 
 #ifdef TAPPING_FORCE_HOLD_PER_KEY
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
-	return (keycode == RSFT_T(KC_SPC)) ? true : false;
+	return keycode == RSFT_T(KC_SPC) ? true : false;
 }
 #endif
 
 
+// Deactivate caps lock with following key codes
 static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	// Get base key code from mod tap
 	if (record->tap.count) {
@@ -69,11 +70,10 @@ static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-static bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
-	// Process LT(0,kc) mod tap. Return true for kc on tap
-	// send custom tap code on hold after TAPPING_TERM
+// Handles mod tap by sending custom key code on hold after TAPPING_TERM
+static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 	if (record->tap.count) { return true; }
-	else if (record->event.pressed) { tap_code16(keycode); }
+	else if (record->event.pressed) { tap_code16(hold_keycode); }
 	return false;
 }
 
@@ -86,12 +86,11 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (record->event.pressed && host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
 
 	switch (keycode) {
-		// Right side undo cut copy paste
+		// Undo cut copy paste using LT(0,kc)
 		case SLSH_TH: return process_tap_hold(Z_UND, record);
 		case DOT_TH:  return process_tap_hold(Z_CUT, record);
 		case COMM_TH: return process_tap_hold(Z_CPY, record);
 		case M_TH:    return process_tap_hold(Z_PST, record);
-		// Unformatted paste
 		case V_TH:    return process_tap_hold(Z_PASTE, record);
 	}
 

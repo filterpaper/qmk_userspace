@@ -62,6 +62,25 @@
 #	define RGBLIGHT_SLEEP 180000
 #endif
 
+#ifdef OLED_ENABLE
+#	define OLED_TIMEOUT 10000
+#	define OLED_DISABLE_TIMEOUT // Prevent matrix_changed triggering oled_on()
+#	define OLED_UPDATE_INTERVAL 50
+#	define OLED_BRIGHTNESS 180
+#	define OLED_FONT_H "users/filterpaper/oledfont.c"
+#endif
+
+#ifdef SPLIT_KEYBOARD
+#	define EE_HANDS
+#	define BOOTMAGIC_LITE_ROW_RIGHT 4
+#	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
+#if defined(OLED_ENABLE) || defined(RGB_MATRIX_ENABLE)
+#	define SPLIT_MODS_ENABLE
+#	define SPLIT_LED_STATE_ENABLE
+#	define SPLIT_LAYER_STATE_ENABLE
+#endif
+#endif
+
 #ifdef MOUSEKEY_ENABLE
 //#	define MK_KINETIC_SPEED
 #ifdef MK_KINETIC_SPEED
@@ -88,23 +107,6 @@
 #	define MOUSEKEY_WHEEL_BASE_MOVEMENTS 1000
 #	define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS 400
 #	define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 3000
-#endif
-
-#ifdef SPLIT_KEYBOARD
-#	define EE_HANDS
-#	define SPLIT_MODS_ENABLE
-#	define SPLIT_LED_STATE_ENABLE
-#	define SPLIT_LAYER_STATE_ENABLE
-#	define BOOTMAGIC_LITE_ROW_RIGHT 4
-#	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
-#endif
-
-#ifdef OLED_ENABLE
-#	define OLED_TIMEOUT 10000
-#	define OLED_DISABLE_TIMEOUT // Prevent matrix_changed triggering oled_on()
-#	define OLED_UPDATE_INTERVAL 50
-#	define OLED_BRIGHTNESS 180
-#	define OLED_FONT_H "users/filterpaper/oledfont.c"
 #endif
 
 #ifdef COMBO_ENABLE
