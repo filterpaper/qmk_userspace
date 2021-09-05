@@ -18,7 +18,7 @@
    Frames are 4x3 on OLED and oriented for OLED_ROTATION_270.
 
    Modified from @HellSingCoder's Luna dog
-   (https://github.com/HellSingCoder/qmk_firmware/tree/master/keyboards/sofle/keymaps/HellSingCoder)
+   (https://github.com/HellSingCoder/qmk_firmware/tree/master/keyboards/sofle/keymaps/helltm)
 
    Includes white Felix dog frames from @ItsWaffIe
    (https://github.com/ItsWaffIe/waffle_corne/blob/proton-c/firmware/oled.c)

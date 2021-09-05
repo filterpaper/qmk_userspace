@@ -14,10 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Graphical active layer and modifier status display. Module can be
-   rendered on primary OLED or without layer state on secondary.
-
-   Modified from @soundmonster's graphical status code
+/* Graphical active layer and modifier status display.
+   Modified from @soundmonster's keymap:
    (keyboards/crkbd/keymaps/soundmonster)
 */
 
@@ -38,31 +36,33 @@ static void render_logo(void) {
 
 
 static void render_layer_state(void) {
-	static char const default_layer[] PROGMEM = {
-		0x20, 0x94, 0x95, 0x96, 0x20,
-		0x20, 0xb4, 0xb5, 0xb6, 0x20,
-		0x20, 0xd4, 0xd5, 0xd6, 0x20, 0};
-	static char const lower_layer[] PROGMEM = {
+	static char const base_layer[] PROGMEM = {
 		0x20, 0x9a, 0x9b, 0x9c, 0x20,
 		0x20, 0xba, 0xbb, 0xbc, 0x20,
 		0x20, 0xda, 0xdb, 0xdc, 0x20, 0};
-	static char const raise_layer[] PROGMEM = {
+	static char const numb_layer[] PROGMEM = {
+		0x20, 0x94, 0x95, 0x96, 0x20,
+		0x20, 0xb4, 0xb5, 0xb6, 0x20,
+		0x20, 0xd4, 0xd5, 0xd6, 0x20, 0};
+	static char const symb_layer[] PROGMEM = {
 		0x20, 0x97, 0x98, 0x99, 0x20,
 		0x20, 0xb7, 0xb8, 0xb9, 0x20,
 		0x20, 0xd7, 0xd8, 0xd9, 0x20, 0};
-	static char const adjust_layer[] PROGMEM = {
+	static char const func_layer[] PROGMEM = {
 		0x20, 0x9d, 0x9e, 0x9f, 0x20,
 		0x20, 0xbd, 0xbe, 0xbf, 0x20,
 		0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
 
-	if (layer_state_is(FNC)) { oled_write_P(adjust_layer, false); }
-	else if (layer_state_is(SYM)) { oled_write_P(raise_layer, false); }
-	else if (layer_state_is(NUM)) { oled_write_P(lower_layer, false); }
-	else { oled_write_P(default_layer, false); }
+	switch(get_highest_layer(layer_state|default_layer_state)) {
+		case FNC: oled_write_P(func_layer, false); break;
+		case SYM: oled_write_P(symb_layer, false); break;
+		case NUM: oled_write_P(numb_layer, false); break;
+		default:  oled_write_P(base_layer, false);
+	}
 }
 
 
-static void render_mod_status_gui_alt(uint8_t const mods) {
+static void render_gui_alt(uint8_t const mods) {
 	static char const gui_off_1[] PROGMEM = {0x85, 0x86, 0};
 	static char const gui_off_2[] PROGMEM = {0xa5, 0xa6, 0};
 	static char const gui_on_1[] PROGMEM = {0x8d, 0x8e, 0};
@@ -73,7 +73,7 @@ static void render_mod_status_gui_alt(uint8_t const mods) {
 	static char const alt_on_1[] PROGMEM = {0x8f, 0x90, 0};
 	static char const alt_on_2[] PROGMEM = {0xaf, 0xb0, 0};
 
-	// fillers between the modifier icons bleed into the icon frames
+	// Fillers between icon frames
 	static char const off_off_1[] PROGMEM = {0xc5, 0};
 	static char const off_off_2[] PROGMEM = {0xc6, 0};
 	static char const on_off_1[] PROGMEM = {0xc7, 0};
@@ -83,31 +83,25 @@ static void render_mod_status_gui_alt(uint8_t const mods) {
 	static char const on_on_1[] PROGMEM = {0xcb, 0};
 	static char const on_on_2[] PROGMEM = {0xcc, 0};
 
-	if (mods & MOD_MASK_GUI) { oled_write_P(gui_on_1, false); }
-	else { oled_write_P(gui_off_1, false); }
-
+	// Top half with in between fillers
+	oled_write_P(mods & MOD_MASK_GUI ? gui_on_1 : gui_off_1, false);
 	if (mods & MOD_MASK_GUI && mods & MOD_MASK_ALT) { oled_write_P(on_on_1, false); }
 	else if (mods & MOD_MASK_GUI) { oled_write_P(on_off_1, false); }
 	else if (mods & MOD_MASK_ALT) { oled_write_P(off_on_1, false); }
 	else { oled_write_P(off_off_1, false); }
+	oled_write_P(mods & MOD_MASK_ALT ? alt_on_1 : alt_off_1, false);
 
-	if (mods & MOD_MASK_ALT) { oled_write_P(alt_on_1, false); }
-	else { oled_write_P(alt_off_1, false); }
-
-	if (mods & MOD_MASK_GUI) { oled_write_P(gui_on_2, false); }
-	else { oled_write_P(gui_off_2, false); }
-
+	// Bottom half with in between fillers
+	oled_write_P(mods & MOD_MASK_GUI ? gui_on_2 : gui_off_2, false);
 	if (mods & MOD_MASK_GUI & MOD_MASK_ALT) { oled_write_P(on_on_2, false); }
 	else if (mods & MOD_MASK_GUI) { oled_write_P(on_off_2, false); }
 	else if (mods & MOD_MASK_ALT) { oled_write_P(off_on_2, false); }
 	else { oled_write_P(off_off_2, false); }
-
-	if (mods & MOD_MASK_ALT) { oled_write_P(alt_on_2, false); }
-	else { oled_write_P(alt_off_2, false); }
+	oled_write_P(mods & MOD_MASK_ALT ? alt_on_2 : alt_off_2, false);
 }
 
 
-static void render_mod_status_ctrl_shift(uint8_t const mods, bool const caps) {
+static void render_ctrl_shift(uint8_t const mods, bool const caps) {
 	static char const ctrl_off_1[] PROGMEM = {0x89, 0x8a, 0};
 	static char const ctrl_off_2[] PROGMEM = {0xa9, 0xaa, 0};
 	static char const ctrl_on_1[] PROGMEM = {0x91, 0x92, 0};
@@ -118,7 +112,7 @@ static void render_mod_status_ctrl_shift(uint8_t const mods, bool const caps) {
 	static char const shift_on_1[] PROGMEM = {0xcd, 0xce, 0};
 	static char const shift_on_2[] PROGMEM = {0xcf, 0xd0, 0};
 
-	// fillers between the modifier icons bleed into the icon frames
+	// Fillers between icon frames
 	static char const off_off_1[] PROGMEM = {0xc5, 0};
 	static char const off_off_2[] PROGMEM = {0xc6, 0};
 	static char const on_off_1[] PROGMEM = {0xc7, 0};
@@ -128,38 +122,30 @@ static void render_mod_status_ctrl_shift(uint8_t const mods, bool const caps) {
 	static char const on_on_1[] PROGMEM = {0xcb, 0};
 	static char const on_on_2[] PROGMEM = {0xcc, 0};
 
-	if (mods & MOD_MASK_CTRL) { oled_write_P(ctrl_on_1, false); }
-	else { oled_write_P(ctrl_off_1, false); }
-
+	// Top half with in between fillers
+	oled_write_P(mods & MOD_MASK_CTRL ? ctrl_on_1 : ctrl_off_1, false);
 	if (mods & MOD_MASK_CTRL && (mods & MOD_MASK_SHIFT || caps)) { oled_write_P(on_on_1, false); }
 	else if (mods & MOD_MASK_CTRL) { oled_write_P(on_off_1, false); }
 	else if (mods & MOD_MASK_SHIFT || caps) { oled_write_P(off_on_1, false); }
 	else { oled_write_P(off_off_1, false); }
+	oled_write_P(mods & MOD_MASK_SHIFT || caps ? shift_on_1 : shift_off_1, false);
 
-	if (mods & MOD_MASK_SHIFT || caps) { oled_write_P(shift_on_1, false); }
-	else { oled_write_P(shift_off_1, false); }
-
-	if (mods & MOD_MASK_CTRL) { oled_write_P(ctrl_on_2, false); }
-	else { oled_write_P(ctrl_off_2, false); }
-
+	// Bottom half with in between fillers
+	oled_write_P(mods & MOD_MASK_CTRL ? ctrl_on_2 : ctrl_off_2, false);
 	if (mods & MOD_MASK_CTRL && (mods & MOD_MASK_SHIFT || caps)) { oled_write_P(on_on_2, false); }
 	else if (mods & MOD_MASK_CTRL) { oled_write_P(on_off_2, false); }
 	else if (mods & MOD_MASK_SHIFT || caps) { oled_write_P(off_on_2, false); }
 	else { oled_write_P(off_off_2, false); }
-
-	if (mods & MOD_MASK_SHIFT || caps) { oled_write_P(shift_on_2, false); }
-	else { oled_write_P(shift_off_2, false); }
+	oled_write_P(mods & MOD_MASK_SHIFT || caps ? shift_on_2 : shift_off_2, false);
 }
 
 
 // Primary modifier status display function
 void render_mod_status(void) {
 		render_logo();
-
 		oled_set_cursor(0,6);
 		render_layer_state();
-
 		oled_set_cursor(0,11);
-		render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
-		render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods(), host_keyboard_led_state().caps_lock);
+		render_gui_alt(get_mods()|get_oneshot_mods());
+		render_ctrl_shift(get_mods()|get_oneshot_mods(), host_keyboard_led_state().caps_lock);
 }
