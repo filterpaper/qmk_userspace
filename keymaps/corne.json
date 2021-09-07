@@ -6,7 +6,7 @@
 	"layout": "CORNE_wrapper",
 	"layers": [
 		[ "HRM(_BASE)" ],
-		[ "_COLE" ],
+		[ "HRM(_COLE)" ],
 		[ "_NUMB" ],
 		[ "_SYMB" ],
 		[ "_FUNC" ]

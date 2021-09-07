@@ -6,7 +6,7 @@
 	"layout": "FIVECOL_wrapper",
 	"layers": [
 		[ "C_3W6(HRM(_BASE))" ],
-		[ "C_3W6(_COLE)" ],
+		[ "C_3W6(HRM(_COLE))" ],
 		[ "C_3W6(_NUMB)" ],
 		[ "C_3W6(_SYMB)" ],
 		[ "C_3W6(_FUNC)" ]
