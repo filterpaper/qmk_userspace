@@ -6,7 +6,7 @@
 	"layout": "ORTHO_wrapper",
 	"layers": [
 		[ "C_O(HRM(_BASE))", "O_BASE" ],
-		[ "C_O(HRM(_COLE))", "O_BLNK" ],
+		[ "C_O(_COLE)", "O_BLNK" ],
 		[ "C_O(_NUMB)", "O_NUMB" ],
 		[ "C_O(_SYMB)", "O_SYMB" ],
 		[ "C_O(_FUNC)", "O_FUNC" ]
