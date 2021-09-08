@@ -48,16 +48,16 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 
 // Deactivate caps lock with following key codes
 static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
-	// Get base key code from mod tap
+/*	// Get base key code from mod tap
 	if (record->tap.count) {
 		switch (keycode) {
 			case QK_MOD_TAP...QK_MOD_TAP_MAX:
 			case QK_LAYER_TAP...QK_LAYER_TAP_MAX:
 				keycode &= 0x00FF;
 		}
-	}
+	} */
 	// Deactivate caps lock with listed key codes
-	switch (keycode) {
+	switch (keycode & 0xFF) {
 		case KC_TAB:
 		case KC_ESC:
 		case KC_SPC:
@@ -79,11 +79,12 @@ static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
+	if (record->event.pressed) {
 #ifdef OLED_ENABLE // Reset OLED animation tap timer
-	if (record->event.pressed) { tap_timer = timer_read32(); }
+		tap_timer = timer_read32();
 #endif
-
-	if (record->event.pressed && host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
+		if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
+	}
 
 	switch (keycode) {
 		// Undo cut copy paste using LT(0,kc)
