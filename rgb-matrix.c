@@ -88,7 +88,7 @@ void rgb_matrix_indicators_user(void) {
 		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
 			for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
 				if (g_led_config.matrix_co[row][col] != NO_LED &&
-					keymap_key_to_keycode(layer, (keypos_t){col,row}) != KC_TRNS) {
+					keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
 					rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_LAYER);
 				}
 			}
