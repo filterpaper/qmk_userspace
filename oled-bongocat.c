@@ -335,7 +335,6 @@ void render_bongocat(void) {
 	uint32_t keystroke = timer_elapsed32(tap_timer);
 
 	void animate_cat(void) {
-		oled_clear();
 		if (keystroke < FRAME_DURATION*2) { render_cat_tap(); }
 		else if (keystroke < FRAME_DURATION*8) { render_cat_prep(); }
 		else { render_cat_idle(); }
