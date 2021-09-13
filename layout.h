@@ -74,7 +74,6 @@
 	k25, k26,        k27,        k28,        TH(k29),    k30, k31, TH(k32),    TH(k33),    TH(k34),    TH(k35),    k36, \
 	k37, k38, k39, k40, k41, k42
 
-
 #define _BASE \
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
@@ -163,7 +162,7 @@
 
 
 // 3w6 3x5_3
-#define FIVECOL_wrapper(...) LAYOUT(__VA_ARGS__)
+#define _3W6_wrapper(...) LAYOUT(__VA_ARGS__)
 // Corne to 3w6 layout conversion
 #define C_3W6(k) SPLIT_3x6_3_TO_3x5_3(k)
 #define SPLIT_3x6_3_TO_3x5_3( \
@@ -240,6 +239,7 @@
  *                             |      |RESET |  | SHUT |      |
  *                             `-------------'  `-------------'
  */
+
 
 
 // Ortho 4x12
