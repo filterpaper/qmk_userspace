@@ -30,7 +30,7 @@ BOOTMAGIC_ENABLE = lite
 # Main source file
 SRC += filterpaper.c
 
-ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 ferris/0_2/compact))
+ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 ferris/sweep))
 	LTO_ENABLE = no
 endif
 

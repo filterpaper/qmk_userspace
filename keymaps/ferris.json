@@ -1,7 +1,7 @@
 {
 	"author": "",
 	"documentation": "Wrapper based keymap",
-	"keyboard": "ferris/0_2/compact",
+	"keyboard": "ferris/sweep",
 	"keymap": "filterpaper",
 	"layout": "FERRIS_wrapper",
 	"layers": [
