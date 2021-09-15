@@ -43,8 +43,8 @@
 #define HM_K	CTL_T(KC_K)
 #define HM_L	ALT_T(KC_L)
 #define HM_SCLN	SFT_T(KC_SCLN)
-#define HM_SACG(k1, k2, k3, k4) SFT_T(k1), ALT_T(k2), CTL_T(k3), GUI_T(k4)
-#define HM_GCAS(k1, k2, k3, k4) GUI_T(k1), CTL_T(k2), ALT_T(k3), SFT_T(k4)
+#define SACG(k1,k2,k3,k4) SFT_T(k1),ALT_T(k2),CTL_T(k3),GUI_T(k4)
+#define GCAS(k1,k2,k3,k4) GUI_T(k1),CTL_T(k2),ALT_T(k3),SFT_T(k4)
 
 // One shot mods
 #define OSM_SFT OSM(MOD_LSFT)
@@ -71,9 +71,9 @@
 	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
 	k37, k38, k39, k40, k41, k42 \
 ) \
-	k01,         k02, k03, k04,   k05,  k06, k07,         k08,    k09,    k10,    k11,  k12, \
-	k13, HM_SACG(k14, k15, k16,   k17), k18, k19, HM_GCAS(k20,    k21,    k22,    k23), k24, \
-	k25,         k26, k27, k28,TH(k29), k30, k31,      TH(k32),TH(k33),TH(k34),TH(k35), k36, \
+	k01,     k02, k03, k04,   k05,  k06, k07,     k08,    k09,    k10,    k11,  k12, \
+	k13,SACG(k14, k15, k16,   k17), k18, k19,GCAS(k20,    k21,    k22,    k23), k24, \
+	k25,     k26, k27, k28,TH(k29), k30, k31,  TH(k32),TH(k33),TH(k34),TH(k35), k36, \
 	k37, k38, k39, k40, k41, k42
 
 #define _BASE \
@@ -272,11 +272,11 @@
 	k300, k301, k302, k303, k304, k305, k306, k307, k308, k309, k310, k311,       k313, k314,       \
 	k400, k401,       k403, k404,       k406,       k408,       k410, k411, k412, k413, k414, k415  \
 ) \
-	k000, k001, k002,        k003,        k004,        k005,        k006, k007, k008,        k009,        k010,        k011,        k012, k013, k014, k015,\
-	k100,       k102,        k103,        k104,        k105,        k106, k107, k108,        k109,        k110,        k111,        k112, k113, k114, k115,\
-	k200,       SFT_T(k202), ALT_T(k203), CTL_T(k204), GUI_T(k205), k206, k207, GUI_T(k208), CTL_T(k209), ALT_T(k210), SFT_T(k211), k212, k213,       k215,\
-	k300, k301, k302,        k303,        k304,        TH(k305),    k306, k307, TH(k308),    TH(k309),    TH(k310),    TH(k311),          k313, k314,      \
-	k400, k401,              k403,        k404,                     k406,       k408,                     k410,        k411,        k412, k413, k414, k415
+	k000, k001, k002, k003, k004,   k005,  k006, k007,     k008,    k009,    k010,    k011,  k012, k013, k014, k015,\
+	k100,       k102, k103, k104,   k105,  k106, k107,     k108,    k109,    k110,    k111,  k112, k113, k114, k115,\
+	k200,  SACG(k202, k203, k204,   k205), k206, k207,GCAS(k208,    k209,    k210,    k211), k212, k213,       k215,\
+	k300, k301, k302, k303, k304,TH(k305), k306, k307,  TH(k308),TH(k309),TH(k310),TH(k311),       k313, k314,      \
+	k400, k401,       k403, k404,          k406,           k408,             k410,    k411,  k412, k413, k414, k415
 
 #define MARK_DEFAULT \
 	KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  KC_VOLU, \
