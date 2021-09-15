@@ -43,6 +43,8 @@
 #define HM_K	CTL_T(KC_K)
 #define HM_L	ALT_T(KC_L)
 #define HM_SCLN	SFT_T(KC_SCLN)
+#define HM_SACG(k1, k2, k3, k4) SFT_T(k1), ALT_T(k2), CTL_T(k3), GUI_T(k4)
+#define HM_GCAS(k1, k2, k3, k4) GUI_T(k1), CTL_T(k2), ALT_T(k3), SFT_T(k4)
 
 // One shot mods
 #define OSM_SFT OSM(MOD_LSFT)
@@ -69,9 +71,9 @@
 	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
 	k37, k38, k39, k40, k41, k42 \
 ) \
-	k01, k02,        k03,        k04,        k05,        k06, k07, k08,        k09,        k10,        k11,        k12, \
-	k13, SFT_T(k14), ALT_T(k15), CTL_T(k16), GUI_T(k17), k18, k19, GUI_T(k20), CTL_T(k21), ALT_T(k22), SFT_T(k23), k24, \
-	k25, k26,        k27,        k28,        TH(k29),    k30, k31, TH(k32),    TH(k33),    TH(k34),    TH(k35),    k36, \
+	k01,         k02, k03, k04,   k05,  k06, k07,         k08,    k09,    k10,    k11,  k12, \
+	k13, HM_SACG(k14, k15, k16,   k17), k18, k19, HM_GCAS(k20,    k21,    k22,    k23), k24, \
+	k25,         k26, k27, k28,TH(k29), k30, k31,      TH(k32),TH(k33),TH(k34),TH(k35), k36, \
 	k37, k38, k39, k40, k41, k42
 
 #define _BASE \
