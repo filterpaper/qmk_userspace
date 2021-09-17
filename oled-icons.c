@@ -150,17 +150,18 @@ static void render_ctrl_shift(uint8_t const ctrl, uint8_t const shift) {
 
 // Primary modifier status display function
 void render_mod_status(void) {
-		render_logo();
-		oled_set_cursor(0,6);
-		render_layer_state(get_highest_layer(layer_state|default_layer_state));
-		oled_set_cursor(0,11);
-		render_gui_alt(
-			(get_mods()|get_oneshot_mods()) & MOD_MASK_GUI,
-			(get_mods()|get_oneshot_mods()) & MOD_MASK_ALT
-		);
-		render_ctrl_shift(
-			(get_mods()|get_oneshot_mods()) & MOD_MASK_CTRL,
-			(get_mods()|get_oneshot_mods()) & MOD_MASK_SHIFT ||
-			host_keyboard_led_state().caps_lock
-		);
+	render_logo();
+
+	oled_set_cursor(0,6);
+	render_layer_state(get_highest_layer(layer_state|default_layer_state));
+
+	oled_set_cursor(0,11);
+	render_gui_alt(
+		(get_mods()|get_oneshot_mods()) & MOD_MASK_GUI,
+		(get_mods()|get_oneshot_mods()) & MOD_MASK_ALT
+	);
+	render_ctrl_shift(
+		(get_mods()|get_oneshot_mods()) & MOD_MASK_CTRL,
+		(get_mods()|get_oneshot_mods()) & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock
+	);
 }
