@@ -7,8 +7,7 @@
 	"layers": [
 		[ "HRM65(MARK_DEFAULT)" ],
 		[ "HRM65(MARK_COLEMAK)" ],
-		[ "MARK_LAYER2" ],
-		[ "MARK_LAYER3" ]
+		[ "MARK_LAYER2" ]
 	],
 	"notes": "",
 	"version": 1
