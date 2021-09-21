@@ -19,7 +19,7 @@
    (keyboards/crkbd/keymaps/soundmonster)
 */
 
-#include "filterpaper.h"
+#include QMK_KEYBOARD_H
 
 
 static void render_logo(void) {

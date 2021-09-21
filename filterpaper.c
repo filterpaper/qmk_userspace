@@ -16,9 +16,6 @@
 
 #include "filterpaper.h"
 
-#ifdef COMBO_ENABLE
-#include "combos.h"
-#endif
 
 #ifdef OLED_ENABLE
 uint32_t tap_timer = 0; // Timer for OLED animation

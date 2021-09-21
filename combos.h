@@ -34,10 +34,11 @@
    like layer trigger with Z+X: ACTN(layer2, layer_on(2), KC_Z, KC_X)
    Multiple functions are supported with ; delimiter.
 
-   Usage: add '#include "combos.h"' to keymap.c or user source.
+   Usage: add '#include "combos.h"' to keymap.c / user source, or
+   'SRC += combos.c' to rules.mk
  */
 
-#define COMBOS_DEF "combos.c"
+#define COMBOS_DEF "combos.def"
 
 // Combo code building macros
 #define C_ENUM(name, val, ...) cmb_##name,

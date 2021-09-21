@@ -21,7 +21,6 @@ SPACE_CADET_ENABLE = no
 
 # Common features
 LTO_ENABLE = yes
-COMBO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
@@ -32,13 +31,16 @@ SRC += filterpaper.c
 
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 ferris/sweep))
 	LTO_ENABLE = no
+	COMBO_ENABLE = yes
+	SRC += combos.c
 endif
 
 # Mark65 and Technik
 ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
+	COMBO_ENABLE = yes
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += rgb-matrix.c
+	SRC += rgb-matrix.c combos.c
 endif
 
 # Corne keyboard features
@@ -56,12 +58,14 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		endif
 	endif
 	ifneq ($(strip $(KB)),)
+		COMBO_ENABLE = yes
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
-		SRC += rgb-matrix.c
+		SRC += rgb-matrix.c combos.c
 		OPT_DEFS += -D${KB}
 	endif
-#	ifeq ($(strip $(KB)), $(strip $(OLED)))
-#	Minimal
-#	endif
+	ifeq ($(strip $(KB)), $(strip $(OLED)))
+		COMBO_ENABLE = yes
+		SRC += combos.c
+	endif
 endif

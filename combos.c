@@ -1,14 +1,19 @@
+/* Copyright (C) 2021 @filterpaper
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-#if defined(KEYBOARD_3w6_rev2) || defined(KEYBOARD_ferris_sweep)
-// Vertical combos for choc spaced
-COMB(KC_VOLU,	KC_VOLU, KC_Y, KC_H)
-COMB(KC_VOLD,	KC_VOLD, KC_H, KC_N)
-#else
-// Horizontal combos for MX spaced
-COMB(KC_VOLU,	KC_VOLU, KC_Y, KC_U)
-COMB(KC_VOLD,	KC_VOLD, KC_H, HM_J)
-COMB(KC_MUTE,	KC_MUTE, KC_N, M_TH)
-#endif
+#include QMK_KEYBOARD_H
 
-SUBS(vi_quit,	":q!", KC_Q, KC_W)
-SUBS(vi_save,	":wq!", KC_Z, KC_X)
+#include "combos.h"
