@@ -46,7 +46,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 
-// Deactivate caps lock with following key codes
+// Toggle caps lock following a word
 static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	// Get base key code from mod tap
 	if (record->tap.count) {
@@ -56,7 +56,7 @@ static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 				keycode &= 0x00FF;
 		}
 	}
-	// Deactivate caps lock with listed key codes
+	// Deactivate caps lock with listed keycodes
 	switch (keycode) {
 		case KC_TAB:
 		case KC_ESC:
@@ -70,11 +70,14 @@ static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// Handles mod tap by sending custom key code on hold after TAPPING_TERM
+// Send custom keycode on hold for mod tap key
 static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
-	if (record->tap.count) { return true; }
-	else if (record->event.pressed) { tap_code16(hold_keycode); }
-	return false;
+	if (!record->tap.count && record->event.pressed) {
+		tap_code16(hold_keycode);
+		return false;
+	} else {
+		return true;
+	}
 }
 
 
@@ -96,7 +99,6 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #ifdef GRAVE_ESC_ENABLE
 		case RSG_T(KC_ESC):
 			if (record->tap.count) { return process_grave_esc(KC_GESC, record); }
-			break;
 #endif
 	}
 
