@@ -27,12 +27,13 @@ File              | Description
 rules.mk          | QMK compile rules and hardware feature selection
 config.h          | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
 combos.h          | Wrapper macros for building combo source codes from `combos.def`
+combos.c          | Place holder C file for `combos.h` macros
 filterpaper.h     | User specific variables and options
 filterpaper.c     | Main source with macro functions, see [custom quantum functions](../../docs/custom_quantum_functions.md)
-layout.h          | Key map macro wrapper for shared ortholinear and Corne layouts
+layout.h          | Key map macro wrapper for shared ortholinear and split layouts
 oled-icons.c      | Graphical layer and modifier status indicators (adds ~4018 bytes)
 oled-luna.c       | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
-oled-bongocat.c   | Bongocat animation using differential pixels
+oled-bongocat.c   | Bongocat animation using run-length encoded bytes
 oledfont.c        | Corne logo, コルネ katakana name, fonts and icon images
 rgb-matrix.c      | RGB matrix effect and custom codes, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md)
 keymaps/          | Folder of supported keyboard keymaps
