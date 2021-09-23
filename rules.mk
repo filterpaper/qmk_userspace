@@ -46,7 +46,8 @@ endif
 # Corne keyboard features
 ifeq ($(KEYBOARD), crkbd/rev1)
 	ifneq ($(strip $(OLED)),)
-		COMBO_ENABLE = no
+		COMBO_ENABLE = yes
+		SRC += combos.c
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_ENABLE = yes
