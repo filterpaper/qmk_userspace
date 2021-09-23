@@ -21,7 +21,7 @@
 
 // Common QMK settings
 #define TAPPING_TERM 230
-#define TAPPING_TERM_PER_KEY
+//#define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
 #define TAPPING_FORCE_HOLD
@@ -33,7 +33,7 @@
 #define BOOTMAGIC_LITE_COLUMN 0
 #define GRAVE_ESC_SHIFT_OVERRIDE
 #define USB_SUSPEND_WAKEUP_DELAY 200
-// Space saving option
+// Space saving options
 #define LAYER_STATE_8BIT
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION

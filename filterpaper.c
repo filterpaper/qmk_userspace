@@ -22,21 +22,21 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 #endif
 
 
-#ifdef TAPPING_TERM_PER_KEY // Reduce for thumb keys
+#ifdef TAPPING_TERM_PER_KEY // Reduce for non-alphanumeric mod taps
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xFF00) == RMT_BITS ? TAPPING_TERM - 150 : TAPPING_TERM;
+	return (keycode & 0xFF00) == LT0_BITS || (keycode & 0xF000) == LMT_BITS ? TAPPING_TERM : TAPPING_TERM - 50;
 }
 #endif
 
 
-#ifdef PERMISSIVE_HOLD_PER_KEY // Disable for tap hold macros and home row mods
+#ifdef PERMISSIVE_HOLD_PER_KEY // Disable for LT(0,kc) macros and home row left mod taps
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return (keycode & 0xFF00) == LT0_BITS || (keycode & 0xF000) == LMT_BITS ? false : true;
 }
 #endif
 
 
-#ifdef TAPPING_FORCE_HOLD_PER_KEY
+#ifdef TAPPING_FORCE_HOLD_PER_KEY // Disable for Shift and Space biagram
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 	return keycode == RSFT_T(KC_SPC) ? true : false;
 }
@@ -67,7 +67,7 @@ static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// Send custom keycode on hold for mod tap key
+// Send custom keycode on hold for mod tap
 static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 	if (!record->tap.count && record->event.pressed) {
 		tap_code16(hold_keycode);
