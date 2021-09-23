@@ -78,8 +78,13 @@
 
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
-#	define BOOTMAGIC_LITE_ROW_RIGHT 4
-#	define BOOTMAGIC_LITE_COLUMN_RIGHT 0
+#	if defined(KEYBOARD_ferris_sweep) || defined(KEYBOARD_a_dux)
+#		define BOOTMAGIC_LITE_ROW_RIGHT 4
+#		define BOOTMAGIC_LITE_COLUMN_RIGHT 4
+#	else // KEYBOARD_crkbd_rev1
+#		define BOOTMAGIC_LITE_ROW_RIGHT 4
+#		define BOOTMAGIC_LITE_COLUMN_RIGHT 0
+#	endif
 #	if defined(OLED_ENABLE) || defined(RGB_MATRIX_ENABLE)
 #		define SPLIT_MODS_ENABLE
 #		define SPLIT_LED_STATE_ENABLE
@@ -117,7 +122,6 @@
 
 #ifdef COMBO_ENABLE
 #	define COMBO_TERM 20
-#	define COMBO_VARIABLE_LEN
 #	define COMBO_ONLY_FROM_LAYER 0
 #endif
 

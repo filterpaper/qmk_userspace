@@ -5,11 +5,11 @@
 	"keymap": "filterpaper",
 	"layout": "FERRIS_wrapper",
 	"layers": [
-		[ "C_FER(HRM(_BASE))" ],
-		[ "C_FER(HRM(_COLE))" ],
-		[ "C_FER(_NUMB)" ],
-		[ "C_FER(_SYMB)" ],
-		[ "C_FER(_FUNC)" ]
+		[ "C_34(HRM(_BASE))" ],
+		[ "C_34(HRM(_COLE))" ],
+		[ "C_34(_NUMB)" ],
+		[ "C_34(_SYMB)" ],
+		[ "C_34(_FUNC)" ]
 	],
 	"notes": "",
 	"version": 1
