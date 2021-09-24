@@ -28,15 +28,12 @@
 #define TAPPING_FORCE_HOLD_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAP_CODE_DELAY 5
-#define ONESHOT_TIMEOUT 3000
 #define BOOTMAGIC_LITE_ROW 0
 #define BOOTMAGIC_LITE_COLUMN 0
 #define GRAVE_ESC_SHIFT_OVERRIDE
 #define USB_SUSPEND_WAKEUP_DELAY 200
 // Space saving options
 #define LAYER_STATE_8BIT
-#define NO_ACTION_MACRO
-#define NO_ACTION_FUNCTION
 #define NO_ACTION_ONESHOT
 
 #ifdef RGB_MATRIX_ENABLE
@@ -63,11 +60,13 @@
 #endif
 
 #ifdef RGBLIGHT_ENABLE
-#	undef RGBLED_NUM
-#	define RGBLED_NUM 54
-#	undef RGBLED_SPLIT
-#	define RGBLED_SPLIT { 27, 27 }
-#	define RGBLIGHT_SPLIT
+#	ifdef KEYBOARD_crkbd_rev1
+#		undef RGBLED_NUM
+#		define RGBLED_NUM 54
+#		undef RGBLED_SPLIT
+#		define RGBLED_SPLIT { 27, 27 }
+#		define RGBLIGHT_SPLIT
+#	endif
 #	define RGBLIGHT_LIMIT_VAL 150
 #	define RGBLIGHT_SLEEP 180000
 #endif
@@ -109,7 +108,7 @@
 #	else
 #		define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
 #		define MOUSEKEY_INTERVAL 16		// Time between cursor movements in milliseconds
-#		define MOUSEKEY_MOVE_DELTA 10	// Step size for acceleration
+#		define MOUSEKEY_MOVE_DELTA 9	// Step size for acceleration
 #		define MOUSEKEY_MAX_SPEED 12
 #		define MOUSEKEY_TIME_TO_MAX 70
 #	endif
