@@ -29,7 +29,7 @@ BOOTMAGIC_ENABLE = lite
 # Main source file
 SRC += filterpaper.c
 
-ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 ferris/sweep))
+ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux ferris/sweep))
 	LTO_ENABLE = no
 	COMBO_ENABLE = yes
 	SRC += combos.c

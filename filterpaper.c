@@ -46,12 +46,10 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 // Toggle caps lock following a word
 static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	// Get base key code from mod tap
-	if (record->tap.count) {
-		switch (keycode) {
-			case QK_MOD_TAP...QK_MOD_TAP_MAX:
-			case QK_LAYER_TAP...QK_LAYER_TAP_MAX:
-				keycode &= 0x00FF;
-		}
+	if (record->tap.count &&
+	((QK_MOD_TAP < keycode && keycode < QK_MOD_TAP_MAX) ||
+	(QK_LAYER_TAP < keycode && keycode < QK_LAYER_TAP_MAX))) {
+		keycode &= 0x00FF;
 	}
 	// Deactivate caps lock with listed keycodes
 	switch (keycode) {
@@ -96,6 +94,15 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #ifdef GRAVE_ESC_ENABLE
 		case RSG_T(KC_ESC):
 			if (record->tap.count) { return process_grave_esc(KC_GESC, record); }
+			break;
+#endif
+#ifdef RGB_MATRIX_ENABLE
+		case RESET:
+			if (record->event.pressed) {
+				rgb_matrix_set_color_all(RGB_RED);
+				rgb_matrix_driver.flush();
+			}
+			break;
 #endif
 	}
 

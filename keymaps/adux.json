@@ -1,9 +1,9 @@
 {
 	"author": "",
 	"documentation": "Wrapper based keymap",
-	"keyboard": "ferris/sweep",
+	"keyboard": "a_dux",
 	"keymap": "filterpaper",
-	"layout": "FERRIS_wrapper",
+	"layout": "_34key_wrapper",
 	"layers": [
 		[ "C_34(HRM(_BASE))" ],
 		[ "C_34(HRM(_COLE))" ],
