@@ -25,29 +25,30 @@ EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = lite
+COMBO_ENABLE = yes
+SRC += combos.c
 
 # Main source file
 SRC += filterpaper.c
 
+# 36/34 key PCBs
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux ferris/sweep))
-	LTO_ENABLE = no
-	COMBO_ENABLE = yes
-	SRC += combos.c
+	# no-op
 endif
 
 # Mark65 and Technik
 ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
-	COMBO_ENABLE = yes
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
-	SRC += rgb-matrix.c combos.c
+	SRC += rgb-matrix.c
 endif
 
 # Corne keyboard features
 ifeq ($(KEYBOARD), crkbd/rev1)
 	ifneq ($(strip $(OLED)),)
-		COMBO_ENABLE = yes
-		SRC += combos.c
+		COMBO_ENABLE = no
+		TMPSRC := $(SRC)
+		SRC = $(filter-out combos.c, $(TMPSRC))
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_ENABLE = yes
@@ -59,14 +60,12 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		endif
 	endif
 	ifneq ($(strip $(KB)),)
-		COMBO_ENABLE = yes
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
-		SRC += rgb-matrix.c combos.c
+		SRC += rgb-matrix.c
 		OPT_DEFS += -D${KB}
 	endif
 	ifeq ($(strip $(KB)), $(strip $(OLED)))
-		COMBO_ENABLE = yes
-		SRC += combos.c
+		# no-op
 	endif
 endif

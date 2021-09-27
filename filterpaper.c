@@ -70,9 +70,8 @@ static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 	if (!record->tap.count && record->event.pressed) {
 		tap_code16(hold_keycode);
 		return false;
-	} else {
-		return true;
 	}
+	return true;
 }
 
 

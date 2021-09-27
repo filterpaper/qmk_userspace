@@ -1,5 +1,5 @@
 
-#if defined(KEYBOARD_3w6_rev2) || defined(KEYBOARD_ferris_sweep)
+#if defined(KEYBOARD_3w6_rev2) || defined(KEYBOARD_a_dux) || defined(KEYBOARD_ferris_sweep)
 // Vertical combos for choc spaced
 COMB(KC_VOLU,	KC_VOLU, KC_Y, KC_H)
 COMB(KC_VOLD,	KC_VOLD, KC_H, KC_N)
