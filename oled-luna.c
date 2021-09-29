@@ -237,7 +237,7 @@ void render_luna_status(void) {
 #endif
 
 	// Time gap between tap_timer updates
-	uint32_t keystroke = timer_elapsed32(tap_timer);
+	uint32_t tap_interval = timer_elapsed32(tap_timer);
 
 	void animate_luna(void) {
 		bool const caps = host_keyboard_led_state().caps_lock;
@@ -246,12 +246,12 @@ void render_luna_status(void) {
 		oled_set_cursor(0,8);
 		if (get_mods() & MOD_MASK_SHIFT || caps) { luna_action(bark); }
 		else if (get_mods() & MOD_MASK_CAG) { luna_action(sneak); }
-		else if (keystroke < LUNA_FRAME_DURATION*2) { luna_action(run); }
-		else if (keystroke < LUNA_FRAME_DURATION*8) { luna_action(walk); }
+		else if (tap_interval < LUNA_FRAME_DURATION*2) { luna_action(run); }
+		else if (tap_interval < LUNA_FRAME_DURATION*8) { luna_action(walk); }
 		else { luna_action(sit); }
 	}
 
-	if (keystroke > OLED_TIMEOUT) { oled_off(); }
+	if (tap_interval > OLED_TIMEOUT) { oled_off(); }
 	else if (timer_elapsed(anim_timer) > LUNA_FRAME_DURATION) {
 		anim_timer = timer_read();
 		animate_luna();
