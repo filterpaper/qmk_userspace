@@ -29,16 +29,16 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 
-#ifdef PERMISSIVE_HOLD_PER_KEY // Disable for LT(0,kc) macros and home row left mod taps
+#ifdef PERMISSIVE_HOLD_PER_KEY // Disable for LT(0,kc) macros and home row mod using left mods
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return (keycode & 0xFF00) == LT0_BITS || (keycode & 0xF000) == LMT_BITS ? false : true;
 }
 #endif
 
 
-#ifdef TAPPING_FORCE_HOLD_PER_KEY // Disable for Shift and Space biagram
+#ifdef TAPPING_FORCE_HOLD_PER_KEY // Disable thumb keys repeat with force hold
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
-	return keycode == RSFT_T(KC_SPC) ? true : false;
+	return keycode == RSFT_T(KC_SPC) || keycode == LT(SYM,KC_TAB) || keycode == LT(NUM,KC_BSPC) ? true : false;
 }
 #endif
 
