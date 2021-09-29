@@ -155,7 +155,7 @@ Images in `glcdfont.c` can be viewed and edited with:
 
 # Layout wrapper macros
 ## Basic layout
-Text-based key map layout (in `keymap.c` format) is supported with the use of preprocessor wrapper macros. Create each layer as a macro, save them in `layout.h`, and `#include` this file in `config.h`. Here is an example of a Corne number layer in:
+Text-based key map layout (in `keymap.c` format) using JSON file is supported with the use of preprocessor wrapper macros. Create each layer as a C preprocessor macro, in a `layout.h` file. Here is an example of a "number" layer for Corne:
 ```c
 #define _NUMB \
     _______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
@@ -185,8 +185,8 @@ Finally create the keyboard's JSON file with macro names of each layer, together
     "version": 1
 }
 ```
-The build process will construct a transient `keymap.c` from JSON file, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure in the compile process.
-## Layering home row modifiers
+Finally, add `#include layout.h` into `config.h`. The build process will construct a transient `keymap.c` from JSON file that includes `config.h`, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure in the compile process.
+## Wrapping home row modifiers
 [Home row mods](https://precondition.github.io/home-row-mods) feature can be placed over the layout macros. A home row mod macro is defined below following the keyboard's matrix layout (crkbd/rev1) with home letters wrapped by a mod-tap:
 ```c
 #define HRM(a) HRM_SACG(a)
@@ -202,7 +202,7 @@ The build process will construct a transient `keymap.c` from JSON file, and C pr
     k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
     k37, k38, k39, k40, k41, k42
 ```
-Next, the layer that requires the home row mod can be wrapped inside `HRM()`, making it convenient to apply and change mods on multiple layouts:
+Next, wrap the layer that requires home-row mods with `HRM()` in the JSON file, making it convenient to apply and change mods on multiple layouts:
 ```c
 "layers": [
     [ "HRM(_BASE)" ],
@@ -211,4 +211,40 @@ Next, the layer that requires the home row mod can be wrapped inside `HRM()`, ma
     [ "_SYMB" ],
     [ "_FUNC" ]
 ],
+```
+## Adapting layouts
+Depending compatibility, layouts can be adapted with macros. Corne's split 3x6_3 (6-column, 3-thumb) can be reduced to a split 34-key 3x5_2 (5-column, 2-thumb) with a wrapper simple macro:
+```c
+#define _34key_wrapper(...) LAYOUT(__VA_ARGS__)
+// Corne to 34-key layout conversion
+#define C_34(k) SPLIT_3x6_3_TO_3x5_2(k)
+#define SPLIT_3x6_3_TO_3x5_2( \
+    k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
+    k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
+    k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
+                   k37, k38, k39, k40, k41, k42 \
+) \
+         k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, \
+         k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, \
+         k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
+                        k38, k39, k40, k41
+```
+The JSON file layout for the 34-key Sweep keyboard will include wrapper macro above to reduce the size of Corne:
+```c
+{
+    "author": "",
+    "documentation": "Wrapper based keymap",
+    "keyboard": "ferris/sweep",
+    "keymap": "filterpaper",
+    "layers": [
+        [ "C_34(HRM(_BASE))" ],
+        [ "C_34(HRM(_COLE))" ],
+        [ "C_34(_NUMB)" ],
+        [ "C_34(_SYMB)" ],
+        [ "C_34(_FUNC)" ]
+    ],
+    "layout": "_34key_wrapper",
+    "notes": "",
+    "version": 1
+}
 ```
