@@ -47,10 +47,10 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	// Get base key code from mod tap
 	if (record->tap.count &&
-	((QK_MOD_TAP < keycode && keycode < QK_MOD_TAP_MAX) ||
-	(QK_LAYER_TAP < keycode && keycode < QK_LAYER_TAP_MAX))) {
-		keycode &= 0x00FF;
-	}
+		((QK_MOD_TAP < keycode && keycode < QK_MOD_TAP_MAX) ||
+		(QK_LAYER_TAP < keycode && keycode < QK_LAYER_TAP_MAX))
+	) { keycode &= 0x00FF; }
+
 	// Deactivate caps lock with listed keycodes
 	switch (keycode) {
 		case KC_TAB:
