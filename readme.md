@@ -248,3 +248,11 @@ The JSON file layout for the 34-key Sweep keyboard will include wrapper macro ab
     "version": 1
 }
 ```
+
+# Useful Links
+́* [Seniply 34 key layout](https://stevep99.github.io/seniply/)
+* [Callum-style mods](https://github.com/callum-oakley/qmk_firmware/tree/master/users/callum)
+* [Miryoku layout](https://github.com/manna-harbour/miryoku)
+* [Architeuthis dux PCB](https://github.com/tapioki/cephalopoda/tree/main/Architeuthis%20dux)
+* [Sweep PCB](https://github.com/davidphilipbarr/Sweep)
+* [Hypergolic PCBs](https://github.com/davidphilipbarr/hypergolic)
