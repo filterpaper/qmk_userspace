@@ -31,19 +31,19 @@ SRC += combos.c
 # Main source file
 SRC += filterpaper.c
 
-# 36/34 key PCBs
+# 36/34-key PCBs
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux ferris/sweep))
-	# no-op
+	LTO_ENABLE = no
 endif
 
-# Mark65 and Technik
+# Boardsource's Mark65 and Technik
 ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
 endif
 
-# Corne keyboard features
+# Corne CRKBD
 ifeq ($(KEYBOARD), crkbd/rev1)
 	ifneq ($(strip $(OLED)),)
 		COMBO_ENABLE = no
@@ -66,6 +66,6 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		OPT_DEFS += -D${KB}
 	endif
 	ifeq ($(strip $(KB)), $(strip $(OLED)))
-		# no-op
+		LTO_ENABLE = no
 	endif
 endif
