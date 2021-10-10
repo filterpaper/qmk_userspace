@@ -15,14 +15,20 @@
  */
 
 // OS X shortcuts
+#define Z_UND	G(KC_Z)
 #define Z_CUT	G(KC_X)
 #define Z_CPY	G(KC_C)
 #define Z_PST	G(KC_V)
-#define Z_UND	G(KC_Z)
 #define Z_PASTE	S(G(KC_V))
 #define Z_LOCK	C(G(KC_Q))
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_SHUT	C(A(G(KC_PWR)))
+
+// OS X and Windows
+// #define Z_UND	keymap_config.swap_lctl_lgui ? C(KC_Z) : G(KC_Z)
+// #define Z_CUT	keymap_config.swap_lctl_lgui ? C(KC_X) : G(KC_X)
+// #define Z_CPY	keymap_config.swap_lctl_lgui ? C(KC_C) : G(KC_C)
+// #define Z_PST	keymap_config.swap_lctl_lgui ? C(KC_V) : G(KC_V)
 
 // Tap hold macros
 #define TH(k)	LT(0,k)
