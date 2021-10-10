@@ -24,7 +24,7 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 
 #ifdef TAPPING_TERM_PER_KEY // Reduce for non-home row mod taps
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xF000) == LMT_BITS ? TAPPING_TERM : TAPPING_TERM - 50;
+	return (keycode & 0xF000) == LMT_BITS ? TAPPING_TERM : TAPPING_TERM - 30;
 }
 #endif
 
