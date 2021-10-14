@@ -25,17 +25,17 @@ git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filter
 File              | Description
 ----------------- | -----------
 rules.mk          | QMK compile rules and hardware feature selection
-config.h          | QMK configuration variables and options, see [configuring QMK](../../docs/config_options.md)
+config.h          | QMK configuration variables and options, see [configuring QMK](https://github.com/qmk/qmk_firmware/docs/config_options.md)
 combos.h          | Wrapper macros for building combo source codes from `combos.def`
 combos.c          | Place holder C file for `combos.h` macros
 filterpaper.h     | User specific variables and options
-filterpaper.c     | Main source with macro functions, see [custom quantum functions](../../docs/custom_quantum_functions.md)
+filterpaper.c     | Main source with macro functions, see [custom quantum functions](https://github.com/qmk/qmk_firmware/docs/custom_quantum_functions.md)
 layout.h          | Key map macro wrapper for shared ortholinear and split layouts
 oled-icons.c      | Graphical layer and modifier status indicators (adds ~4018 bytes)
 oled-luna.c       | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
 oled-bongocat.c   | Bongocat animation using run-length encoded bytes
 oledfont.c        | Corne logo, コルネ katakana name, fonts and icon images
-rgb-matrix.c      | RGB matrix effect and custom codes, see [RGB matrix lighting](../../docs/feature_rgb_matrix.md)
+rgb-matrix.c      | RGB matrix effect and custom codes, see [RGB matrix lighting](https://github.com/qmk/qmk_firmware/docs/feature_rgb_matrix.md)
 keymaps/          | Folder of supported keyboard keymaps
 animation_frames/ | Folder of Bongocat animation images
 archive/          | Archived files of original codes and layouts
@@ -118,7 +118,7 @@ Corne is configured with EE_HANDS for controllers to read left or right values o
 qmk flash -kb crkbd/rev1 -km default -bl dfu-split-left
 qmk flash -kb crkbd/rev1 -km default -bl dfu-split-right
 ```
-Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](../../docs/feature_split_keyboard.md) for details.
+Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](https://github.com/qmk/qmk_firmware/docs/feature_split_keyboard.md) for details.
 
 ## Tiny build
 Minimal firmware with no OLED and RGB support will be built without any options:
