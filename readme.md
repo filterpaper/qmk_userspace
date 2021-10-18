@@ -256,16 +256,12 @@ The JSON file layout for the 34-key Sweep keyboard will include wrapper macro ab
 * [Jumper wires](https://www.aliexpress.com/item/32996173648.html)
 * [Target controller](https://www.aliexpress.com/item/32840365436.html) and sockets on breadboard
 ## Quick Guide
-See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide?id=isp-flashing-guide)
-Get the [Atmel-DFU bootloader](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex)
-Replace Caterina boot loader with Atmel-DFU with the following command and fuses:
+See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide?id=isp-flashing-guide). Get the [Atmel-DFU bootloader](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) and replace the Caterina boot loader with Atmel-DFU with the following command and fuses:
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 -U flash:w:bootloader_atmega32u4_1.0.0.hex:i -U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xC3:m
 ```
 ## NanoBoot
-Clone [sigprof's nanoBoot](https://github.com/sigprof/nanoBoot)
-Run `make` to build the boot loader
-Repace current boot loader with nanoBoot with the following command and fuses:
+Clone [sigprof's nanoBoot](https://github.com/sigprof/nanoBoot), and run `make` to build the boot loader. Replace current boot loader with nanoBoot with the following command and fuses:
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 -U flash:w:nanoBoot.hex:i -U lfuse:w:0xFF:m -U hfuse:w:0xD6:m -U efuse:w:0xC7:m
 ```
