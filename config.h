@@ -81,10 +81,7 @@
 
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
-#	if defined(KEYBOARD_ferris_sweep) || defined(KEYBOARD_a_dux)
-#		define BOOTMAGIC_LITE_ROW_RIGHT 4
-#		define BOOTMAGIC_LITE_COLUMN_RIGHT 4
-#	else // KEYBOARD_crkbd_rev1
+#	ifdef KEYBOARD_crkbd_rev1
 #		define BOOTMAGIC_LITE_ROW_RIGHT 4
 #		define BOOTMAGIC_LITE_COLUMN_RIGHT 0
 #	endif
