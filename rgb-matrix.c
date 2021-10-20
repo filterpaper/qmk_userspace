@@ -98,6 +98,18 @@ void rgb_matrix_indicators_user(void) {
 }
 
 /*
+static keypos_t led_index_key_position[DRIVER_LED_TOTAL];
+void rgb_matrix_init_user(void) {
+	for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+		for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+			uint8_t led_index = g_led_config.matrix_co[row][col];
+			if (led_index != NO_LED) {
+				led_index_key_position[led_index] = (keypos_t){.row = row, .col = col};
+			}
+		}
+	}
+}
+
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
@@ -123,13 +135,9 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 	#else
 		// Layer keys indicator by @rgoulter
 		uint8_t const layer = get_highest_layer(layer_state);
-		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-			for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-				uint8_t index = g_led_config.matrix_co[row][col];
-				if (index >= led_min && index <= led_max && index != NO_LED &&
-				keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
-					rgb_matrix_set_color(index, RGB_LAYER);
-				}
+		for (uint8_t i = led_min; i <= led_max; ++i) {
+			if (keymap_key_to_keycode(layer, led_index_key_position[i]) > KC_TRNS) {
+				rgb_matrix_set_color(i, RGB_LAYER);
 			}
 		}
 	#endif // KEYBOARD_boardsource_the_mark
