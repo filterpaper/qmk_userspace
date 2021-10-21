@@ -24,7 +24,7 @@
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_SHUT	C(A(G(KC_PWR)))
 
-// OS X and Windows
+// Magic options for OS X and Windows
 // #define Z_UND	keymap_config.swap_lctl_lgui ? C(KC_Z) : G(KC_Z)
 // #define Z_CUT	keymap_config.swap_lctl_lgui ? C(KC_X) : G(KC_X)
 // #define Z_CPY	keymap_config.swap_lctl_lgui ? C(KC_C) : G(KC_C)
@@ -65,23 +65,7 @@
 #define SYM 3
 #define FNC 4
 
-
-
-// Corne 3x6_3
-#define CORNE_wrapper(...) LAYOUT_split_3x6_3(__VA_ARGS__)
-// Home row mod and tap hold wrapper
-#define HRM(k) HRM_TAPHOLD(k)
-#define HRM_TAPHOLD( \
-	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
-	k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
-	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
-	k37, k38, k39, k40, k41, k42 \
-) \
-	k01,      k02, k03, k04,   k05,  k06, k07,      k08,    k09,    k10,    k11,  k12, \
-	k13, SACG(k14, k15, k16,   k17), k18, k19, GCAS(k20,    k21,    k22,    k23), k24, \
-	k25,      k26, k27, k28,TH(k29), k30, k31,   TH(k32),TH(k33),TH(k34),TH(k35), k36, \
-	k37, k38, k39, k40, k41, k42
-
+// Default 3x6_3 layout
 #define _BASE \
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
@@ -167,11 +151,31 @@
 	                           _______, _______, RESET,       Z_SHUT,  _______, _______
 #endif
 
+// 3x6_3 home row mod and tap hold wrapper
+#define HRM(k) HRM_TAPHOLD(k)
+#define HRM_TAPHOLD( \
+	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
+	k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
+	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
+	k37, k38, k39, k40, k41, k42 \
+) \
+	k01,      k02, k03, k04,   k05,  k06, k07,      k08,    k09,    k10,    k11,  k12, \
+	k13, SACG(k14, k15, k16,   k17), k18, k19, GCAS(k20,    k21,    k22,    k23), k24, \
+	k25,      k26, k27, k28,TH(k29), k30, k31,   TH(k32),TH(k33),TH(k34),TH(k35), k36, \
+	k37, k38, k39, k40, k41, k42
 
 
-// 36-key split 3x5_3
+
+// Layout aliases
+#define CORNE_wrapper(...) LAYOUT_split_3x6_3(__VA_ARGS__)
+#define ORTHO_wrapper(...) LAYOUT_ortho_4x12(__VA_ARGS__)
 #define _36key_wrapper(...) LAYOUT(__VA_ARGS__)
-// Corne to 36-key layout conversion
+#define _34key_wrapper(...) LAYOUT(__VA_ARGS__)
+#define MARK65_wrapper(...) LAYOUT_all(__VA_ARGS__)
+
+
+
+// 3x6_3 to 36-key conversion
 #define C_36(k) SPLIT_3x6_3_TO_3x5_3(k)
 #define SPLIT_3x6_3_TO_3x5_3( \
 	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
@@ -184,11 +188,7 @@
 	     k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
 	               k37, k38, k39, k40, k41, k42
 
-
-
-// 34-key split 3x5_2
-#define _34key_wrapper(...) LAYOUT(__VA_ARGS__)
-// Corne to 34-key layout conversion
+// 3x6_3 to 34-key conversion
 #define C_34(k) SPLIT_3x6_3_TO_3x5_2(k)
 #define SPLIT_3x6_3_TO_3x5_2( \
 	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
@@ -201,11 +201,7 @@
 	     k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
 	                    k38, k39, k40, k41
 
-
-
-// Ortho 4x12
-#define ORTHO_wrapper(...) LAYOUT_ortho_4x12(__VA_ARGS__)
-// Corne to Ortho 4x12 layout conversion
+// 3x6_3 to Ortho 4x12 conversion
 #define C_O(k) SPLIT_3x6_3_TO_4x12(k)
 #define SPLIT_3x6_3_TO_4x12( \
 	           k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
@@ -221,22 +217,6 @@
 
 
 // Boardsource The Mark 65
-#define MARK65_wrapper(...) LAYOUT_all(__VA_ARGS__)
-// Home row mod and tap hold wrapper
-#define HRM65(k) HRM65_SACG(k)
-#define HRM65_SACG( \
-	k000, k001, k002, k003, k004, k005, k006, k007, k008, k009, k010, k011, k012, k013, k014, k015, \
-	k100,       k102, k103, k104, k105, k106, k107, k108, k109, k110, k111, k112, k113, k114, k115, \
-	k200,       k202, k203, k204, k205, k206, k207, k208, k209, k210, k211, k212, k213,       k215, \
-	k300, k301, k302, k303, k304, k305, k306, k307, k308, k309, k310, k311,       k313, k314,       \
-	k400, k401,       k403, k404,       k406,       k408,       k410, k411, k412, k413, k414, k415  \
-) \
-	k000, k001, k002, k003, k004,   k005,  k006, k007,      k008,    k009,    k010,    k011,  k012, k013, k014, k015,\
-	k100,       k102, k103, k104,   k105,  k106, k107,      k108,    k109,    k110,    k111,  k112, k113, k114, k115,\
-	k200,  SACG(k202, k203, k204,   k205), k206, k207, GCAS(k208,    k209,    k210,    k211), k212, k213,       k215,\
-	k300, k301, k302, k303, k304,TH(k305), k306, k307,   TH(k308),TH(k309),TH(k310),TH(k311),       k313, k314,      \
-	k400, k401,       k403, k404,          k406,            k408,             k410,    k411,  k412, k413, k414, k415
-
 #define MARK_DEFAULT \
 	KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  KC_VOLU, \
 	KC_TAB,           KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC, KC_VOLD, \
@@ -255,3 +235,18 @@
 	_______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          KC_END,  \
 	_______, _______, Z_SLEEP, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______,          \
 	_______, _______,          _______, _______,          _______,          _______,          _______, _______, _______, _______, _______, _______
+
+// Mark 65 home row mod and tap hold wrapper
+#define HRM65(k) HRM65_SACG(k)
+#define HRM65_SACG( \
+	k000, k001, k002, k003, k004, k005, k006, k007, k008, k009, k010, k011, k012, k013, k014, k015, \
+	k100,       k102, k103, k104, k105, k106, k107, k108, k109, k110, k111, k112, k113, k114, k115, \
+	k200,       k202, k203, k204, k205, k206, k207, k208, k209, k210, k211, k212, k213,       k215, \
+	k300, k301, k302, k303, k304, k305, k306, k307, k308, k309, k310, k311,       k313, k314,       \
+	k400, k401,       k403, k404,       k406,       k408,       k410, k411, k412, k413, k414, k415  \
+) \
+	k000, k001, k002, k003, k004,   k005,  k006, k007,      k008,    k009,    k010,    k011,  k012, k013, k014, k015,\
+	k100,       k102, k103, k104,   k105,  k106, k107,      k108,    k109,    k110,    k111,  k112, k113, k114, k115,\
+	k200,  SACG(k202, k203, k204,   k205), k206, k207, GCAS(k208,    k209,    k210,    k211), k212, k213,       k215,\
+	k300, k301, k302, k303, k304,TH(k305), k306, k307,   TH(k308),TH(k309),TH(k310),TH(k311),       k313, k314,      \
+	k400, k401,       k403, k404,          k406,            k408,             k410,    k411,  k412, k413, k414, k415
