@@ -90,9 +90,6 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		case COMM_TH: return process_tap_hold(Z_CPY, record);
 		case M_TH:    return process_tap_hold(Z_PST, record);
 		case V_TH:    return process_tap_hold(Z_PASTE, record);
-		case RSG_T(KC_ESC):
-			if (record->tap.count) { return process_grave_esc(KC_GESC, record); }
-			break;
 #ifdef RGB_MATRIX_ENABLE
 		case RESET:
 			if (record->event.pressed) {

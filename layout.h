@@ -24,12 +24,6 @@
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_SHUT	C(A(G(KC_PWR)))
 
-// Magic options for OS X and Windows
-// #define Z_UND	keymap_config.swap_lctl_lgui ? C(KC_Z) : G(KC_Z)
-// #define Z_CUT	keymap_config.swap_lctl_lgui ? C(KC_X) : G(KC_X)
-// #define Z_CPY	keymap_config.swap_lctl_lgui ? C(KC_C) : G(KC_C)
-// #define Z_PST	keymap_config.swap_lctl_lgui ? C(KC_V) : G(KC_V)
-
 // Tap hold macros
 #define TH(k)	LT(0,k)
 #define Q_TH	TH(KC_Q)
@@ -68,13 +62,13 @@
 // Default 3x6_3 layout
 #define _BASE \
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
-	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, KC_SCLN, \
+	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
 	OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,  \
 	        RSG_T(KC_ESC), LT(SYM,KC_TAB), RSA_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
 /* ,-----------------------------------------.                ,-----------------------------------------.
  * | TAB  |  Q   |  W   |  E   |  R   |  T   |                |  Y   |  U   |  I   |  O   |  P   | BSPC |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * | GESC |  A   |  S   |  D   |  F   |  G   |                |  H   |  J   |  K   |  L   | ' "  | ; :  |
+ * | GESC |  A   |  S   |  D   |  F   |  G   |                |  H   |  J   |  K   |  L   | ; :  | ' "  |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * |OS_SFT|  Z   |  X   |  C   |  V   |  B   |                |  N   |  M   | , <  | . >  | / ?  | ENT  |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
@@ -83,12 +77,12 @@
  *                             `--------------------'  `--------------------'
  */
 #define _COLE \
-	_______, KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, _______, \
+	_______, KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, \
 	_______, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,        KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    _______, \
 	_______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, _______, \
 	                           _______, _______, _______,     _______, _______, _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
- * |      |  Q   |  W   |  F   |  P   |  G   |                |  J   |  L   |  U   |  Y   | ' "  |      |
+ * |      |  Q   |  W   |  F   |  P   |  G   |                |  J   |  L   |  U   |  Y   | ; :  |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * |      |  A   |  R   |  S   |  T   |  D   |                |  H   |  N   |  E   |  I   |  O   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
@@ -98,14 +92,14 @@
  *                             `--------------------'  `--------------------'
  */
 #define _NUMB \
-	_______, _______, KC_1,    KC_2,    KC_3,    KC_VOLU,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_COLN, _______, \
-	_______, _______, KC_4,    KC_5,    KC_6,    KC_VOLD,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_SCLN, _______, \
+	_______, _______, KC_1,    KC_2,    KC_3,    KC_VOLU,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
+	_______, _______, KC_4,    KC_5,    KC_6,    KC_VOLD,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_QUOT, _______, \
 	_______, KC_CAPS, KC_7,    KC_8,    KC_9,    KC_0,        _______, _______, _______, _______, _______, _______, \
 	                           _______, MO(FNC), KC_GESC,     _______, _______, _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
- * |      |      |  1   |  2   |  3   | VOLU |                | HOME | PGDN | PGUP | END  |  :   |      |
+ * |      |      |  1   |  2   |  3   | VOLU |                | HOME | PGDN | PGUP | END  |  "   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      |      |  4   |  5   |  6   | VOLD |                | LEFT | DOWN |  UP  | RGHT |  ;   |      |
+ * |      |      |  4   |  5   |  6   | VOLD |                | LEFT | DOWN |  UP  | RGHT |  '   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * |      | CAPS |  7   |  8   |  9   |  0   |                |      |      |      |      |      |      |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
@@ -127,7 +121,6 @@
  *                             |      |      |      |  | SPC  |_FUNC |      |
  *                             `--------------------'  `--------------------'
  */
-#ifdef MOUSEKEY_ENABLE
 #define _FUNC \
 	_______, _______, KC_F1,   KC_F2,   KC_F3,   KC_F10,      _______, KC_WH_U, KC_WH_D, _______, TG(CMK), _______, \
 	_______, _______, KC_F4,   KC_F5,   KC_F6,   KC_F11,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_INS,  _______, \
@@ -143,13 +136,6 @@
  *                             |      |      |RESET |  | SHUT |      |      |
  *                             `--------------------'  `--------------------'
  */
-#else
-#define _FUNC \
-	_______, _______, KC_F1,   KC_F2,   KC_F3,   KC_F10,      _______, _______, _______, _______, TG(CMK), _______, \
-	_______, _______, KC_F4,   KC_F5,   KC_F6,   KC_F11,      _______, _______, _______, _______, KC_INS,  _______, \
-	_______, Z_SLEEP, KC_F7,   KC_F8,   KC_F9,   KC_F12,      _______, _______, _______, _______, KC_DEL,  _______, \
-	                           _______, _______, RESET,       Z_SHUT,  _______, _______
-#endif
 
 // 3x6_3 home row mod and tap hold wrapper
 #define HRM(k) HRM_TAPHOLD(k)
@@ -204,15 +190,15 @@
 // 3x6_3 to Ortho 4x12 conversion
 #define C_O(k) SPLIT_3x6_3_TO_4x12(k)
 #define SPLIT_3x6_3_TO_4x12( \
-	           k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
-	           k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
-	           k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
-	                          k37, k38, k39, k40, k41, k42 \
+           k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
+           k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
+           k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
+                          k37, k38, k39, k40, k41, k42 \
 ) \
-	           k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
-	           k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
-	           k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
-	KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
+           k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
+           k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
+           k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
+KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
 
 
 
