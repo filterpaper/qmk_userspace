@@ -36,49 +36,6 @@
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 
-#ifdef RGB_MATRIX_ENABLE
-#	ifndef SPLIT_KEYBOARD
-#		define RGB_DISABLE_TIMEOUT 180000
-#	endif
-#	undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
-#	define RGB_MATRIX_MAXIMUM_BRIGHTNESS 150
-#	undef RGB_DISABLE_WHEN_USB_SUSPENDED
-#	define RGB_DISABLE_WHEN_USB_SUSPENDED true
-#	define RGB_MATRIX_STARTUP_HUE 208
-#	define RGB_MATRIX_STARTUP_SAT 135
-#	include "rgb_matrix_disable.h" // Legacy disable options
-#	define RGB_MATRIX_KEYPRESSES
-#	ifdef RGB_MATRIX_CUSTOM_USER
-#		define ENABLE_RGB_MATRIX_CANDY_TAP
-#		define ENABLE_RGB_MATRIX_CANDY_RAIN
-#	else
-#		undef DISABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
-#		define ENABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
-#		undef DISABLE_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
-#		define ENABLE_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
-#	endif
-#endif
-
-#ifdef RGBLIGHT_ENABLE
-#	ifdef KEYBOARD_crkbd_rev1
-#		undef RGBLED_NUM
-#		define RGBLED_NUM 54
-#		undef RGBLED_SPLIT
-#		define RGBLED_SPLIT { 27, 27 }
-#		define RGBLIGHT_SPLIT
-#	endif
-#	define RGBLIGHT_LIMIT_VAL 150
-#	define RGBLIGHT_SLEEP 180000
-#endif
-
-#ifdef OLED_ENABLE
-#	define OLED_TIMEOUT 10000
-#	define OLED_DISABLE_TIMEOUT // Prevent matrix_changed triggering oled_on()
-#	define OLED_UPDATE_INTERVAL 50
-#	define OLED_BRIGHTNESS 180
-#	define OLED_FONT_H "users/filterpaper/oledfont.c"
-#endif
-
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
 #	ifdef KEYBOARD_crkbd_rev1
@@ -123,6 +80,49 @@
 #ifdef COMBO_ENABLE
 #	define COMBO_TERM 20
 #	define COMBO_ONLY_FROM_LAYER 0
+#endif
+
+#ifdef RGB_MATRIX_ENABLE
+#	ifndef SPLIT_KEYBOARD
+#		define RGB_DISABLE_TIMEOUT 180000
+#	endif
+#	undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
+#	define RGB_MATRIX_MAXIMUM_BRIGHTNESS 150
+#	undef RGB_DISABLE_WHEN_USB_SUSPENDED
+#	define RGB_DISABLE_WHEN_USB_SUSPENDED true
+#	define RGB_MATRIX_STARTUP_HUE 208
+#	define RGB_MATRIX_STARTUP_SAT 135
+#	include "rgb_matrix_disable.h" // Legacy disable options
+#	define RGB_MATRIX_KEYPRESSES
+#	ifdef RGB_MATRIX_CUSTOM_USER
+#		define ENABLE_RGB_MATRIX_CANDY_TAP
+#		define ENABLE_RGB_MATRIX_CANDY_RAIN
+#	else
+#		undef DISABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
+#		define ENABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
+#		undef DISABLE_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
+#		define ENABLE_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
+#	endif
+#endif
+
+#ifdef RGBLIGHT_ENABLE
+#	ifdef KEYBOARD_crkbd_rev1
+#		undef RGBLED_NUM
+#		define RGBLED_NUM 54
+#		undef RGBLED_SPLIT
+#		define RGBLED_SPLIT { 27, 27 }
+#		define RGBLIGHT_SPLIT
+#	endif
+#	define RGBLIGHT_LIMIT_VAL 150
+#	define RGBLIGHT_SLEEP 180000
+#endif
+
+#ifdef OLED_ENABLE
+#	define OLED_TIMEOUT 10000
+#	define OLED_DISABLE_TIMEOUT // Prevent matrix_changed triggering oled_on()
+#	define OLED_UPDATE_INTERVAL 50
+#	define OLED_BRIGHTNESS 180
+#	define OLED_FONT_H "users/filterpaper/oledfont.c"
 #endif
 
 #ifdef AUTO_SHIFT_ENABLE
