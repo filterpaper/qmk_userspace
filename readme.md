@@ -256,7 +256,7 @@ The JSON file layout for the 34-key Cradio keyboard will include wrapper macro a
 * [Jumper wires](https://www.aliexpress.com/item/32996173648.html)
 * [Target controller](https://www.aliexpress.com/item/32840365436.html) and sockets on breadboard
 ## Atmel DFU
-See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide?id=isp-flashing-guide). Get the [Atmel-DFU bootloader](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) and replace the Caterina boot loader with Atmel-DFU using the following command and fuses:
+See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide?id=isp-flashing-guide). Replace Pro-Micro Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command and fuses argument:
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 -U flash:w:bootloader_atmega32u4_1.0.0.hex:i -U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xC3:m
 ```
