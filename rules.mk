@@ -32,7 +32,7 @@ SRC += combos.c
 SRC += filterpaper.c
 
 # 36/34-key PCBs
-ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux ferris/sweep))
+ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
 	LTO_ENABLE = no
 endif
 

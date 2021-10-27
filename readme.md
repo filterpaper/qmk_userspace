@@ -229,12 +229,12 @@ Depending compatibility, layouts can be adapted with macros. Corne's split 3x6_3
          k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
                         k38, k39, k40, k41
 ```
-The JSON file layout for the 34-key Sweep keyboard will include wrapper macro above to reduce the size of Corne:
+The JSON file layout for the 34-key Cradio keyboard will include wrapper macro above to reduce the size of Corne:
 ```c
 {
     "author": "",
     "documentation": "Wrapper based keymap",
-    "keyboard": "ferris/sweep",
+    "keyboard": "Cradio",
     "keymap": "filterpaper",
     "layers": [
         [ "C_34(HRM(_BASE))" ],
