@@ -213,7 +213,7 @@ Next, wrap the layer that requires home-row mods with `HRM()` in the JSON file, 
 ],
 ```
 ## Adapting layouts
-Depending compatibility, layouts can be adapted with macros. Corne's split 3x6_3 (6-column, 3-thumb) can be reduced to a split 34-key 3x5_2 (5-column, 2-thumb) with a wrapper simple macro:
+Depending compatibility, layouts can be adapted with macros. Corne's split 3x6_3 (6-column, 3-thumb) can be reduced to a split 34-key 3x5_2 (5-column, 2-thumb) with a simple wrapper macro to exclude the outer column and thumb keys:
 ```c
 #define _34key_wrapper(...) LAYOUT(__VA_ARGS__)
 // Corne to 34-key layout conversion
@@ -229,7 +229,7 @@ Depending compatibility, layouts can be adapted with macros. Corne's split 3x6_3
          k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
                         k38, k39, k40, k41
 ```
-The JSON file layout for the 34-key Cradio keyboard will include wrapper macro above to reduce the size of Corne:
+The JSON layout for 34-key Cradio keyboard uses the macro above to adapt 3x6_3 for 3x5_2:
 ```c
 {
     "author": "",
@@ -265,7 +265,7 @@ Clone [@sigprof](https://github.com/sigprof)'s [nanoBoot fork](https://github.co
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 -U flash:w:nanoBoot.hex:i -U lfuse:w:0xFF:m -U hfuse:w:0xD6:m -U efuse:w:0xC7:m
 ```
-Use the following `rules.mk` options:
+Use the following `rules.mk` options for nanoBoot:
 ```c
 BOOTLOADER = qmk-hid
 BOOTLOADER_SIZE = 512
