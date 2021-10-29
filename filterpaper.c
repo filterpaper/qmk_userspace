@@ -68,6 +68,7 @@ static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
 // Send custom keycode on hold for mod tap
 static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 	if (!record->tap.count && record->event.pressed) {
+	//	tap_code16(keymap_config.swap_lctl_lgui ? C(hold_keycode) : hold_keycode);
 		tap_code16(hold_keycode);
 		return false;
 	}
