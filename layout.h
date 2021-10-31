@@ -19,20 +19,17 @@
 #define Z_CUT	G(KC_X)
 #define Z_CPY	G(KC_C)
 #define Z_PST	G(KC_V)
-#define Z_PASTE	S(G(KC_V))
 #define Z_LOCK	C(G(KC_Q))
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_SHUT	C(A(G(KC_PWR)))
 
 // Tap hold macros
 #define TH(k)	LT(0,k)
-#define Q_TH	TH(KC_Q)
-#define W_TH	TH(KC_W)
-#define V_TH	TH(KC_V)
 #define M_TH	TH(KC_M)
 #define COMM_TH	TH(KC_COMM)
 #define DOT_TH	TH(KC_DOT)
 #define SLSH_TH	TH(KC_SLSH)
+#define TH4(k1,k2,k3,k4) TH(k1),TH(k2),TH(k3),TH(k4)
 
 // Home row mod tap macros
 #define HM_A	SFT_T(KC_A)
@@ -145,9 +142,9 @@
 	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
 	k37, k38, k39, k40, k41, k42 \
 ) \
-	k01,      k02, k03, k04,   k05,  k06, k07,      k08,    k09,    k10,    k11,  k12, \
-	k13, SACG(k14, k15, k16,   k17), k18, k19, GCAS(k20,    k21,    k22,    k23), k24, \
-	k25,      k26, k27, k28,TH(k29), k30, k31,   TH(k32),TH(k33),TH(k34),TH(k35), k36, \
+	k01,      k02, k03, k04, k05,  k06, k07,      k08,  k09, k10, k11,  k12, \
+	k13, SACG(k14, k15, k16, k17), k18, k19, GCAS(k20,  k21, k22, k23), k24, \
+	k25,      k26, k27, k28, k29,  k30, k31,   TH4(k32, k33, k34, k35), k36, \
 	k37, k38, k39, k40, k41, k42
 
 
@@ -231,8 +228,8 @@ KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_R
 	k300, k301, k302, k303, k304, k305, k306, k307, k308, k309, k310, k311,       k313, k314,       \
 	k400, k401,       k403, k404,       k406,       k408,       k410, k411, k412, k413, k414, k415  \
 ) \
-	k000, k001, k002, k003, k004,   k005,  k006, k007,      k008,    k009,    k010,    k011,  k012, k013, k014, k015,\
-	k100,       k102, k103, k104,   k105,  k106, k107,      k108,    k109,    k110,    k111,  k112, k113, k114, k115,\
-	k200,  SACG(k202, k203, k204,   k205), k206, k207, GCAS(k208,    k209,    k210,    k211), k212, k213,       k215,\
-	k300, k301, k302, k303, k304,TH(k305), k306, k307,   TH(k308),TH(k309),TH(k310),TH(k311),       k313, k314,      \
-	k400, k401,       k403, k404,          k406,            k408,             k410,    k411,  k412, k413, k414, k415
+	k000, k001, k002, k003, k004, k005,  k006, k007,      k008, k009, k010, k011,  k012, k013, k014, k015,\
+	k100,       k102, k103, k104, k105,  k106, k107,      k108, k109, k110, k111,  k112, k113, k114, k115,\
+	k200,  SACG(k202, k203, k204, k205), k206, k207, GCAS(k208, k209, k210, k211), k212, k213,       k215,\
+	k300, k301, k302, k303, k304, k305,  k306, k307,  TH4(k308, k309, k310, k311),       k313, k314,      \
+	k400, k401,       k403, k404,        k406,            k408,       k410, k411,  k412, k413, k414, k415
