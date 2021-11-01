@@ -255,6 +255,15 @@ The JSON layout for 34-key Cradio keyboard uses the macro above to adapt 3x6_3 f
 * [Breadboard](https://www.aliexpress.com/item/1742546890.html)
 * [Jumper wires](https://www.aliexpress.com/item/32996173648.html)
 * [Target controller](https://www.aliexpress.com/item/32840365436.html) and sockets on breadboard
+## USBasp wiring
+```
+USBasp RST  <-> RST Promicro RST
+USBasp SCLK <-> 15  Promicro B1 (SCLK)
+USBasp MOSI <-> 16  Promicro B2 (MOSI)
+USBasp MISO <-> 14  Promicro B3 (MISO)
+USBasp VCC  <-> VCC Promicro VCC
+USBasp GND  <-> GND Promicro GND
+```
 ## Atmel DFU
 See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide?id=isp-flashing-guide). Replace Pro-Micro Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command and fuses argument:
 ```c
