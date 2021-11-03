@@ -283,7 +283,7 @@ BOOTLOADER_SIZE = 512
 # Useful Links
 * [Seniply 34 key layout](https://stevep99.github.io/seniply/)
 * [Callum-style mods](https://github.com/callum-oakley/qmk_firmware/tree/master/users/callum)
-* [Miryoku layout](https://github.com/manna-harbour/miryoku)
+* [Sockets](https://github.com/joric/nrfmicro/wiki/Sockets)
 * [Architeuthis dux PCB](https://github.com/tapioki/cephalopoda/tree/main/Architeuthis%20dux)
 * [Sweep PCB](https://github.com/davidphilipbarr/Sweep)
 * [Hypergolic PCBs](https://github.com/davidphilipbarr/hypergolic)
