@@ -283,7 +283,15 @@ BOOTLOADER_SIZE = 512
 # Useful Links
 * [Seniply 34 key layout](https://stevep99.github.io/seniply/)
 * [Callum-style mods](https://github.com/callum-oakley/qmk_firmware/tree/master/users/callum)
-* [Sockets](https://github.com/joric/nrfmicro/wiki/Sockets)
 * [Architeuthis dux PCB](https://github.com/tapioki/cephalopoda/tree/main/Architeuthis%20dux)
 * [Sweep PCB](https://github.com/davidphilipbarr/Sweep)
 * [Hypergolic PCBs](https://github.com/davidphilipbarr/hypergolic)
+* [Sockets](https://github.com/joric/nrfmicro/wiki/Sockets)
+## Hardware Parts
+* [Pro-Micro C](https://www.aliexpress.com/item/1005003230811462.html)
+* Mill-Max [Low profile sockets](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232)
+* Mill-Max [socket pins](https://www.digikey.com/product-detail/en/3320-0-00-15-00-00-03-0/ED1134-ND/4147392)
+* [PJ320A audio jack](https://www.aliexpress.com/item/1005001928651798.html)
+* [TRRS cable](https://www.aliexpress.com/item/32961128759.html)
+* [Silicone feet](https://www.aliexpress.com/item/32912066603.html)
+* Kailh [gchoc v1 switches](https://www.aliexpress.com/item/4000907409650.html)
