@@ -16,10 +16,10 @@ git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filter
 # Supported Keyboards
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
-* [3w6](https://github.com/qmk/qmk_firmware/tree/master/keyboards/3w6/rev2) — Choc-spaced 5-column minimalist.
-* [Corne (CRKBD)](https://github.com/qmk/qmk_firmware/tree/master/keyboards/crkbd/rev1) — Typing animation and graphical indicators on OLEDs.
+* [3w6](https://github.com/qmk/qmk_firmware/tree/master/keyboards/3w6/rev2), [Architeuthis Dux](https://github.com/qmk/qmk_firmware/tree/master/keyboards/a_dux), [Cradio](https://github.com/qmk/qmk_firmware/tree/master/keyboards/cradio)  — Minimalist choc split-keyboards.
+* [Corne (CRKBD)](https://github.com/qmk/qmk_firmware/tree/master/keyboards/crkbd/rev1) — OLED animation and graphical indicators.
 * [Technik](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/technik_o) — RGB Matrix and modifier indicators.
-* [The Mark: 65](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/the_mark) — RGB underglow layer and modifier indicators.
+* [The Mark: 65](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/the_mark) — RGB under glow layer and modifier indicators.
 
 # File Listing
 File              | Description
