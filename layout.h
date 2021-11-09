@@ -40,8 +40,8 @@
 #define HM_K	CTL_T(KC_K)
 #define HM_L	ALT_T(KC_L)
 #define HM_SCLN	SFT_T(KC_SCLN)
-#define SACG(k1,k2,k3,k4) SFT_T(k1),ALT_T(k2),CTL_T(k3),GUI_T(k4)
-#define GCAS(k1,k2,k3,k4) GUI_T(k1),CTL_T(k2),ALT_T(k3),SFT_T(k4)
+#define HRML(k1,k2,k3,k4) SFT_T(k1),ALT_T(k2),CTL_T(k3),GUI_T(k4)
+#define HRMR(k1,k2,k3,k4) GUI_T(k1),CTL_T(k2),ALT_T(k3),SFT_T(k4)
 
 // One shot mods
 #define OSM_SFT OSM(MOD_LSFT)
@@ -143,7 +143,7 @@
 	k37, k38, k39, k40, k41, k42 \
 ) \
 	k01,      k02, k03, k04, k05,  k06, k07,      k08,  k09, k10, k11,  k12, \
-	k13, SACG(k14, k15, k16, k17), k18, k19, GCAS(k20,  k21, k22, k23), k24, \
+	k13, HRML(k14, k15, k16, k17), k18, k19, HRMR(k20,  k21, k22, k23), k24, \
 	k25,      k26, k27, k28, k29,  k30, k31,   TH4(k32, k33, k34, k35), k36, \
 	k37, k38, k39, k40, k41, k42
 
@@ -230,6 +230,6 @@ KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_R
 ) \
 	k000, k001, k002, k003, k004, k005,  k006, k007,      k008, k009, k010, k011,  k012, k013, k014, k015,\
 	k100,       k102, k103, k104, k105,  k106, k107,      k108, k109, k110, k111,  k112, k113, k114, k115,\
-	k200,  SACG(k202, k203, k204, k205), k206, k207, GCAS(k208, k209, k210, k211), k212, k213,       k215,\
+	k200,  HRML(k202, k203, k204, k205), k206, k207, HRMR(k208, k209, k210, k211), k212, k213,       k215,\
 	k300, k301, k302, k303, k304, k305,  k306, k307,  TH4(k308, k309, k310, k311),       k313, k314,      \
 	k400, k401,       k403, k404,        k406,            k408,       k410, k411,  k412, k413, k414, k415
