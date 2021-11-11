@@ -23,12 +23,6 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 
 
 // Tap hold customization
-#ifdef TAPPING_TERM_PER_KEY // Reduce for non-home row mod taps
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xF000) == LMT_BITS ? TAPPING_TERM : TAPPING_TERM - 30;
-}
-#endif
-
 #ifdef TAPPING_FORCE_HOLD_PER_KEY // Enable for shift space bigram
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 	return keycode == RSFT_T(KC_SPC) ? true : false;
