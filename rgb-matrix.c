@@ -76,12 +76,7 @@ void rgb_matrix_indicators_user(void) {
 
 	if (get_highest_layer(layer_state) > CMK) {
 	#ifdef KEYBOARD_boardsource_the_mark
-		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
-			if (HAS_ANY_FLAGS(g_led_config.flags[i], LED_FLAG_ALL)) {
-				RGB rgb = hsv_to_rgb((HSV){rgb_matrix_config.hsv.h >> get_highest_layer(layer_state), rgb_matrix_config.hsv.v, rgb_matrix_config.hsv.v});
-				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
-			}
-		}
+		rgb_matrix_set_color_all(RGB_LAYER);
 	#else
 		// Layer keys indicator by @rgoulter
 		uint8_t const layer = get_highest_layer(layer_state);

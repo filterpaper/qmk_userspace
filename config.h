@@ -31,6 +31,9 @@
 #define BOOTMAGIC_LITE_COLUMN 0
 #define GRAVE_ESC_SHIFT_OVERRIDE
 #define USB_SUSPEND_WAKEUP_DELAY 200
+// Increase polling
+#define QMK_KEYS_PER_SCAN 12
+#define USB_POLLING_INTERVAL_MS 1
 // Space saving options
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
