@@ -21,18 +21,16 @@
 
    COMB(name, keycode_shortcut, combo_sequence...)
    SUBS(name, "string to send", combo_sequence...)
-   ACTN(name, actionfunction(), combo_sequence...)
 
-   COMB are simple keycode shortcuts. This combination will increase volume
-   with Y+U: COMB(KC_VOLU, KC_VOLU, KC_Y, KC_U)
+   COMB are simple keycode shortcuts. Use two or more combo keys to activate
+   a keycode, like volume up using Y+U: COMB(KC_VOLU, KC_VOLU, KC_Y, KC_U)
    Keycodes can be used as names, they are prefixed to avoid conflict.
 
    SUBS are string substitution combos. It can be used to send strings like
-   this example with W+H: SUBS(which, "which ", KC_W, KC_H)
+   this W+H to send a string: SUBS(which, "which ", KC_W, KC_H)
 
-   ACTN are function triggers that can be used to for QMK internal functions
-   like layer trigger with Z+X: ACTN(layer2, layer_on(2), KC_Z, KC_X)
-   Multiple functions are supported with ; delimiter.
+   For custom functions, use COMB with custom keycodes that can be matched
+   in process_record_user()
 
    Usage: add '#include "combos.h"' to keymap.c / user source, or
    'SRC += combos.c' to rules.mk
@@ -46,16 +44,13 @@
 #define C_TYPE(name, val, ...) [cmb_##name] = COMBO(name##_combo, val),
 #define A_TYPE(name, val, ...) [cmb_##name] = COMBO_ACTION(name##_combo),
 #define P_SSTR(name, val, ...) case cmb_##name: if (pressed) { SEND_STRING(val); } break;
-#define P_ACTN(name, val, ...) case cmb_##name: if (pressed) { val; } break;
 #define UNUSED(...)
 
 // Enumerate combo list with prefixed names
 #undef COMB
 #undef SUBS
-#undef ACTN
 #define COMB C_ENUM
 #define SUBS C_ENUM
-#define ACTN C_ENUM
 enum combos {
 	#include COMBOS_DEF
 	COMBO_LENGTH
@@ -65,19 +60,15 @@ uint16_t COMBO_LEN = COMBO_LENGTH;
 // Create combo name array in PROGMEM with key sequences
 #undef COMB
 #undef SUBS
-#undef ACTN
 #define COMB C_DATA
 #define SUBS C_DATA
-#define ACTN C_DATA
 #include COMBOS_DEF
 
 // Fill array with combo type and shortcuts
 #undef COMB
 #undef SUBS
-#undef ACTN
 #define COMB C_TYPE
 #define SUBS A_TYPE
-#define ACTN A_TYPE
 combo_t key_combos[] = {
 	#include COMBOS_DEF
 };
@@ -85,10 +76,8 @@ combo_t key_combos[] = {
 // Fill combo event function with send string or function calls
 #undef COMB
 #undef SUBS
-#undef ACTN
 #define COMB UNUSED
 #define SUBS P_SSTR
-#define ACTN P_ACTN
 void process_combo_event(uint16_t combo_index, bool pressed) {
 	switch (combo_index) {
 		#include COMBOS_DEF
