@@ -23,9 +23,9 @@ uint32_t tap_timer = 0; // Timer for OLED animation
 
 
 // Tap hold customization
-#ifdef TAPPING_FORCE_HOLD_PER_KEY // Enable for shift space bigram
+#ifdef TAPPING_FORCE_HOLD_PER_KEY // Enable for right thumb keys
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
-	return keycode == RSFT_T(KC_SPC) ? true : false;
+	return keycode == RSFT_T(KC_SPC) || keycode == LT(NUM,KC_BSPC) ? true : false;
 }
 #endif
 
