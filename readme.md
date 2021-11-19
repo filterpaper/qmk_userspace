@@ -292,6 +292,7 @@ BOOTLOADER_SIZE = 512
 * [Architeuthis dux](https://github.com/tapioki/cephalopoda/tree/main/Architeuthis%20dux) PCB
 * [Hypergolic](https://github.com/davidphilipbarr/hypergolic) PCB
 * [Sockets](https://github.com/joric/nrfmicro/wiki/Sockets)
+* [Git Purr](https://girliemac.com/blog/2017/12/26/git-purr/)
 ## Hardware Parts
 * [Pro-Micro C](https://www.aliexpress.com/item/1005003230811462.html)
 * Mill-Max [low profile sockets](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232)
