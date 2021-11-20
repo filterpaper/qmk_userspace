@@ -31,9 +31,9 @@ SRC += combos.c
 # Main source file
 SRC += filterpaper.c
 
-# 36/34-key PCBs
-ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
-	LTO_ENABLE = no
+# Split keyboards
+ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio crkbd/rev1))
+	SWAP_HANDS_ENABLE = yes
 endif
 
 # Boardsource's Mark65 and Technik

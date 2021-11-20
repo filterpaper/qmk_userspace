@@ -27,12 +27,13 @@
 #define PERMISSIVE_HOLD_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAP_CODE_DELAY 5
+#define TAPPING_TOGGLE 1
 #define BOOTMAGIC_LITE_ROW 0
 #define BOOTMAGIC_LITE_COLUMN 0
 #define GRAVE_ESC_SHIFT_OVERRIDE
 #define USB_SUSPEND_WAKEUP_DELAY 200
 // Increase polling
-#define QMK_KEYS_PER_SCAN 12
+#define QMK_KEYS_PER_SCAN 4
 #define USB_POLLING_INTERVAL_MS 1
 // Space saving options
 #define LAYER_STATE_8BIT
@@ -79,11 +80,6 @@
 #	define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 3000
 #endif
 
-#ifdef COMBO_ENABLE
-#	define COMBO_TERM 20
-#	define COMBO_ONLY_FROM_LAYER 0
-#endif
-
 #ifdef RGB_MATRIX_ENABLE
 #	ifndef SPLIT_KEYBOARD
 #		define RGB_DISABLE_TIMEOUT 180000
@@ -122,6 +118,11 @@
 #	define OLED_UPDATE_INTERVAL 50
 #	define OLED_BRIGHTNESS 180
 #	define OLED_FONT_H "users/filterpaper/oledfont.c"
+#endif
+
+#ifdef COMBO_ENABLE
+#	define COMBO_TERM 20
+#	define COMBO_ONLY_FROM_LAYER 0
 #endif
 
 #ifdef AUTO_SHIFT_ENABLE
