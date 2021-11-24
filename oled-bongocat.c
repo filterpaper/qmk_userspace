@@ -4,11 +4,7 @@
 /* Graphical bongocat animation, driven by key press timer or WPM.
    It has left and right aligned cats optimized for both OLEDs.
    This code uses run-length encoded frames that saves space by
-   storing frames of consecutively repeated bytes encoded in
-   "count,byte" format.
-
-   count < 0x80: subsequent bytes are repeated
-   count & 0x80: subsequent bitwise ~0x80 are unique
+   encoding frames into repeated or unique byte count.
 
    RLE code is modified from @vectorstorm's Bongocat:
    (https://github.com/vectorstorm/qmk_firmware/tree/bongo_rle/keyboards/crkbd/keymaps/vectorstorm)
@@ -34,7 +30,7 @@
             if (record->event.pressed) { tap_timer = timer_read32(); }
         }
    5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED.
-     It can be replaced with your own function, or delete the 'else' line.
+     It can be replaced with your own function, or delete that function.
  */
 
 #include QMK_KEYBOARD_H
@@ -217,20 +213,24 @@ static unsigned char const *left_tap_anim[TAP_FRAMES] = {
 #endif // #ifndef RIGHTCAT
 
 
-// RLE decoding loop that reads byte,count pairs from frame array
-// to render repeated bytes consecutively based on count
+// RLE decoding loop that reads count from frame index
+// if count < 0x80, next byte is repeated by count
+// if count & 0x80: sequential bitwise ~0x80 count of bytes are unique
 static void decode_frame(unsigned char const *frame) {
 	uint16_t cursor = 0;
-	uint8_t bytes   = pgm_read_byte(frame);
+	uint8_t size    = pgm_read_byte(frame);
 	uint8_t i       = 1;
 
 	oled_set_cursor(0,0);
 
-	while (i < bytes) {
-		// Read count value
+	while (i < size) {
+
 		uint8_t count = pgm_read_byte(frame + i);
 		i++;
-		if (count & 0x80) { // If count >= 0x80, subsequent byte count are unique
+
+		if (count & 0x80) {
+
+			// Sequential count of bytes are unique
 			count &= ~(0x80);
 			for (uint8_t uniqs = 0; uniqs < count; ++uniqs) {
 				uint8_t byte = pgm_read_byte(frame + i);
@@ -238,13 +238,17 @@ static void decode_frame(unsigned char const *frame) {
 				oled_write_raw_byte(byte, cursor);
 				cursor++;
 			}
-		} else { // If count < 0x80, current byte is repeated by count
+
+		} else {
+
+			// Current byte is repeated by count
 			uint8_t byte = pgm_read_byte(frame + i);
 			i++;
 			for (uint8_t reps = 0; reps < count; ++reps) {
 				oled_write_raw_byte(byte, cursor);
 				cursor++;
 			}
+
 		}
 	}
 }
@@ -337,7 +341,6 @@ oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 
 bool oled_task_user(void) {
 	extern void render_mod_status(void);
-	if (is_keyboard_master()) { render_bongocat(); }
-	else { render_mod_status(); }
+	is_keyboard_master() ? render_bongocat() : render_mod_status();
 	return false;
 }
