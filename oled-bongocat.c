@@ -255,15 +255,15 @@ static void decode_frame(unsigned char const *frame) {
 
 
 static void render_cat_idle(void) {
-	static uint8_t current_frame = 0;
-	current_frame = current_frame < IDLE_FRAMES - 1 ? current_frame + 1 : 0;
+	static uint8_t index = 0;
+	index = index < IDLE_FRAMES - 1 ? index + 1 : 0;
 
 #if defined(LEFTCAT)
-	decode_frame(left_idle_anim[current_frame]);
+	decode_frame(left_idle_anim[index]);
 #elif defined(RIGHTCAT)
-	decode_frame(idle_anim[current_frame]);
+	decode_frame(idle_anim[index]);
 #else
-	is_keyboard_left() ? decode_frame(left_idle_anim[current_frame]) : decode_frame(idle_anim[current_frame]);
+	is_keyboard_left() ? decode_frame(left_idle_anim[index]) : decode_frame(idle_anim[index]);
 #endif
 }
 
@@ -280,15 +280,15 @@ static void render_cat_prep(void) {
 
 
 static void render_cat_tap(void) {
-	static uint8_t current_frame = 0;
-	current_frame = (current_frame + 1) & 1;
+	static uint8_t index = 0;
+	index = (index + 1) & 1;
 
 #if defined(LEFTCAT)
-	decode_frame(left_tap_anim[current_frame]);
+	decode_frame(left_tap_anim[index]);
 #elif defined(RIGHTCAT)
-	decode_frame(tap_anim[current_frame]);
+	decode_frame(tap_anim[index]);
 #else
-	is_keyboard_left() ? decode_frame(left_tap_anim[current_frame]) : decode_frame(tap_anim[current_frame]);
+	is_keyboard_left() ? decode_frame(left_tap_anim[index]) : decode_frame(tap_anim[index]);
 #endif
 }
 
