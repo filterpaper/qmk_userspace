@@ -259,22 +259,22 @@ The JSON layout for 34-key Cradio keyboard uses the macro above to adapt 3x6_3 f
 ## USBasp wiring
 Connect the USBasp programmer to the controller in this manner:
 ```
-USBasp RST  <-> RST Promicro RST
-USBasp SCLK <-> 15  Promicro B1 (SCLK)
-USBasp MOSI <-> 16  Promicro B2 (MOSI)
-USBasp MISO <-> 14  Promicro B3 (MISO)
-USBasp VCC  <-> VCC Promicro VCC
-USBasp GND  <-> GND Promicro GND
+USBasp RST  <-> Promicro RST
+USBasp SCLK <-> Promicro 15/B1 (SCLK)
+USBasp MOSI <-> Promicro 16/B2 (MOSI)
+USBasp MISO <-> Promicro 14/B3 (MISO)
+USBasp VCC  <-> Promicro VCC
+USBasp GND  <-> Promicro GND
 ```
 ## Atmel DFU
-See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide?id=isp-flashing-guide). Replace Pro-Micro Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command and fuses argument:
+See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide). Replace the Pro-Micro's default Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command and fuses argument:
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 \
 -U flash:w:bootloader_atmega32u4_1.0.0.hex:i \
 -U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xC3:m
 ```
 ## NanoBoot
-Clone [@sigprof](https://github.com/sigprof)'s [nanoBoot fork](https://github.com/sigprof/nanoBoot), and run `git checkout string-descriptors` followed by `make` to build the boot loader. Replace current boot loader with nanoBoot using the following command and fuses:
+Clone [@sigprof](https://github.com/sigprof)'s [nanoBoot fork](https://github.com/sigprof/nanoBoot), and run `git checkout string-descriptors` followed by `make` to build the updated boot loader. Replace the current boot loader with nanoBoot using the following command and fuses:
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 \
 -U flash:w:nanoBoot.hex:i \
