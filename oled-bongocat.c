@@ -214,8 +214,8 @@ static unsigned char const *left_tap_anim[TAP_FRAMES] = {
 
 
 // RLE decoding loop that reads count from frame index
-// if count < 0x80, next byte is repeated by count
-// if count & 0x80: sequential bitwise ~0x80 count of bytes are unique
+// if count < 0x80, current byte is repeated by count
+// if count & 0x80, sequential (127 - count) bytes are unique
 static void decode_frame(unsigned char const *frame) {
 	uint16_t cursor = 0;
 	uint8_t size    = pgm_read_byte(frame);
