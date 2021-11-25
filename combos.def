@@ -1,4 +1,3 @@
-
 #if defined(KEYBOARD_3w6_rev2) || defined(KEYBOARD_a_dux) || defined(KEYBOARD_cradio)
 	// Vertical for choc spacing
 	COMB(KC_VOLU,	KC_VOLU, KC_Y, KC_H)
@@ -15,8 +14,14 @@
 	COMB(swap_rght,	SH_TT, M_TH, DOT_TH)
 #endif
 
+// vim
 SUBS(vi_quit,	":q!",  KC_Q, KC_W)
 SUBS(vi_save,	":wq!", KC_Z, KC_X)
 
+// layer toggles
 COMB(numb,	TG(NUM), RSFT_T(KC_SPC), LT(NUM,KC_BSPC))
 COMB(func,	TG(FNC), LT(SYM,KC_TAB), RSA_T(KC_ENT))
+
+// vimac
+COMB(vimacf, C(A(S(G(KC_F)))), HM_D, HM_F)
+COMB(vimacj, C(A(S(G(KC_J)))), HM_J, HM_K)
