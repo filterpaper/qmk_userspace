@@ -31,8 +31,8 @@ SRC += combos.c
 # Main source file
 SRC += filterpaper.c
 
-# Split keyboards
-ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio crkbd/rev1))
+# Small split keyboards
+ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
 	SWAP_HANDS_ENABLE = yes
 endif
 
@@ -46,17 +46,12 @@ endif
 # Corne CRKBD
 ifeq ($(KEYBOARD), crkbd/rev1)
 	ifneq ($(strip $(OLED)),)
-		COMBO_ENABLE = no
-		TMPSRC := $(SRC)
-		SRC = $(filter-out combos.c, $(TMPSRC))
-		RGB_MATRIX_ENABLE = yes
-		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_ENABLE = yes
 		OPT_DEFS += -D${OLED}
 		ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT CAT))
-			SRC += rgb-matrix.c oled-icons.c oled-bongocat.c
+			SRC += oled-icons.c oled-bongocat.c
 		else ifeq ($(OLED), $(filter $(OLED), FELIX LUNA))
-			SRC += rgb-matrix.c oled-icons.c oled-luna.c
+			SRC += oled-icons.c oled-luna.c
 		endif
 	endif
 	ifneq ($(strip $(KB)),)

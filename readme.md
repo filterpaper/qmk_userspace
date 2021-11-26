@@ -111,23 +111,24 @@ qmk flash ~/qmk_firmware/users/filterpaper/keymaps/corne.json
 qmk flash ~/qmk_firmware/users/filterpaper/keymaps/mark65.json
 ```
 
-# Building Corne Keyboard (CRKBD)
-## Corne split setup
-Corne is configured with EE_HANDS for controllers to read left or right values off EEPROM, allowing USB-C cable to be used on either side. These are one-time flash commands to write left and right handedness bootloader into Elite-C MCUs:
+
+# Building Split Keyboards
+All split keyboards are configured with `EE_HANDS` for controllers to read left or right handedness from EEPROM, allowing USB-C cable to be used on either side. These are one-time flash suffix commands with `-bl` to write left and right handedness:
 ```sh
-qmk flash -kb crkbd/rev1 -km default -bl dfu-split-left
-qmk flash -kb crkbd/rev1 -km default -bl dfu-split-right
+qmk flash -kb cradio -km default -bl dfu-split-left
+qmk flash -kb cradio -km default -bl dfu-split-right
 ```
 Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](https://github.com/qmk/qmk_firmware/docs/feature_split_keyboard.md) for details.
 
+# Building Corne Keyboard (CRKBD)
+Corne is configured with a few modular build options in `rules.mk`:
 ## Tiny build
-Minimal firmware with no OLED and RGB support will be built without any options:
+Minimal firmware with no OLED and RGB support is the default:
 ```
 qmk compile corne.json
 ```
-
 ## Compiling for OLED display
-The following compile options will build firmwares with RGB matrix, pet animation on primary OLED with status icons on the secondary. Animation are key stroke driven by `tap_timer` as default. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes` to the compile option:
+The `-OLED=` option will build support for pet animation on primary OLED with status icons on the secondary. Animation are key stroke driven by `tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes` to the compile commands:
 ### Bongocat
 Build and flash each side with the corresponding options for left and right aligned Bongocat:
 ```
@@ -135,18 +136,18 @@ qmk compile -e OLED=LEFTCAT corne.json
 qmk compile -e OLED=RIGHTCAT corne.json
 ```
 ### Felix and Luna
-Build with Luna (outline) or Felix (filled) the dog:
+Build for Luna (outline) or Felix (filled) the dog:
 ```
 qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
 ```
-## Compiling with only RGB matrix
-Following will build with RGB matrix support and no OLED display. `IMK` value will use under glow LEDs as indicators:
+## Compiling for RGB matrix
+The `-KB=` option will add support for RGB matrix lighting. `IMK` value will use under glow LEDs as indicators:
 ```
 qmk compile -e KB=LP corne.json
 qmk compile -e KB=IMK corne.json
 ```
-
+Combine `-e OLED=` and `-e KB=` options to support both features.
 ## Corne logo file
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
