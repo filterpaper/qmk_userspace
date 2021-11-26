@@ -281,7 +281,7 @@ static void render_cat_tap(void) {
 }
 
 
-void render_bongocat(void) {
+static void render_bongocat(void) {
 	// Animation timer
 	static uint16_t anim_timer = 0;
 

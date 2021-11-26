@@ -195,9 +195,11 @@ static void render_logo(void) {
 		0x80, 0x81, 0x82, 0x83, 0x84,
 		0xa0, 0xa1, 0xa2, 0xa3, 0xa4,
 		0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0};
+	static char const katakana[] PROGMEM = {
+		0x20, 0xd1, 0xd2, 0xd3, 0x20, 0};
 
 	oled_write_P(corne_logo, false);
-	oled_write_P(PSTR("corne"), false);
+	oled_write_P(layer_state_is(CMK) ? PSTR("corne") : katakana, false);
 }
 
 
@@ -208,7 +210,7 @@ static void luna_action(char const action[][LUNA_SIZE]) {
 }
 
 
-void render_luna_status(void) {
+static void render_luna_status(void) {
 	// Animation timer
 	static uint16_t anim_timer = 0;
 
@@ -253,7 +255,6 @@ oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 
 bool oled_task_user(void) {
 	extern void render_mod_status(void);
-	if (is_keyboard_master()) { render_luna_status(); }
-	else { render_mod_status(); }
+	is_keyboard_master() ? render_luna_status() : render_mod_status();
 	return false;
 }
