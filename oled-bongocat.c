@@ -296,16 +296,13 @@ static void render_bongocat(void) {
 	extern uint32_t tap_timer;
 #endif
 
-	// Time gap between tap_timer updates
-	uint32_t tap_interval = timer_elapsed32(tap_timer);
-
 	void animate_cat(void) {
-		if (tap_interval < FRAME_DURATION*2) { render_cat_tap(); }
-		else if (tap_interval < FRAME_DURATION*8) { render_cat_prep(); }
+		if (timer_elapsed32(tap_timer) < FRAME_DURATION*2) { render_cat_tap(); }
+		else if (timer_elapsed32(tap_timer) < FRAME_DURATION*8) { render_cat_prep(); }
 		else { render_cat_idle(); }
 	}
 
-	if (tap_interval > OLED_TIMEOUT) { oled_off(); }
+	if (timer_elapsed32(tap_timer) > OLED_TIMEOUT) { oled_off(); }
 	else if (timer_elapsed(anim_timer) > FRAME_DURATION) {
 		anim_timer = timer_read();
 		animate_cat();
