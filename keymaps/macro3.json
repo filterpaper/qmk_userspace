@@ -1,0 +1,14 @@
+{
+	"author": "",
+	"documentation": "Wrapper based keymap",
+	"keyboard": "macro3",
+	"keymap": "filterpaper",
+	"layout": "MACRO3_wrapper",
+	"layers": [
+		[ "MACRO_0" ],
+		[ "MACRO_1" ],
+		[ "MACRO_2" ]
+	],
+	"notes": "",
+	"version": 1
+}
