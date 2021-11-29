@@ -220,3 +220,17 @@ KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_R
 	k200,  HRML(k202, k203, k204, k205), k206, k207, HRMR(k208, k209, k210, k211), k212, k213,       k215,\
 	k300, k301, k302, k303, k304, k305,  k306, k307,  TH4(k308, k309, k310, k311),       k313, k314,      \
 	k400, k401,       k403, k404,        k406,            k408,       k410, k411,  k412, k413, k414, k415
+
+
+
+// Macro3
+#define MACRO3_wrapper(...) LAYOUT(__VA_ARGS__)
+#define MACRO3_0 \
+	KC_MUTE, KC_MSTP, KC_MRWD, KC_MFFD, \
+	G(KC_V), G(KC_C), G(KC_X), LT(2,KC_MPLY)
+#define MACRO3_1 \
+	_______, _______, KC_PGDN, KC_PGUP, \
+	KC_LEFT, KC_DOWN, KC_UP,   LT(2,KC_RGHT)
+#define MACRO3_2 \
+	RESET,   _______, KC_SLEP, KC_PWR,  \
+	TG(1),   KC_END,  KC_HOME,  _______

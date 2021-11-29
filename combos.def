@@ -18,8 +18,8 @@ SUBS(vi_quit,  ":q!",   KC_Q, KC_W)
 SUBS(vi_save,  ":wq!",  KC_Z, KC_X)
 
 // layer toggles
-COMB(numb,  TG(NUM),  RSFT_T(KC_SPC), LT(NUM,KC_BSPC))
-COMB(func,  TG(FNC),  LT(SYM,KC_TAB), RSA_T(KC_ENT))
+COMB(func,  TG(FNC),  LT(SYM,KC_TAB), KC_B)
+COMB(numb,  TG(NUM),  LT(NUM,KC_BSPC), KC_N)
 
 // vimac
 COMB(vimacf,  C(A(S(G(KC_F)))),  HM_D, HM_F)
