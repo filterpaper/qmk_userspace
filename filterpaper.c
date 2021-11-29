@@ -50,7 +50,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for alphanumeric tap hold
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xF000) == LMT_BITS || (keycode & 0xFF00) == LT0_BITS ? false : true;
+	return (keycode & 0xF000) == LMT_BITS ? false : true;
 }
 #endif
 
