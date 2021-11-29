@@ -126,3 +126,53 @@ static bool MONO_FRACTAL(effect_params_t* params) {
 }
 #	endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // ENABLE_RGB_MATRIX_RACTAL
+
+
+
+#ifdef ENABLE_RGB_MATRIX_CANDY_FLOW
+RGB_MATRIX_EFFECT(CANDY_FLOW) // 390 bytes
+
+#	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+static bool CANDY_FLOW(effect_params_t* params) {
+	#define FLOW_RND random8() & 3
+	static RGB led[DRIVER_LED_TOTAL];
+
+	uint32_t wait_timer = 0;
+	if (wait_timer > g_rgb_timer) {
+		return false;
+	}
+
+	uint32_t interval(void) {
+		return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16);
+	}
+
+	RGB random_hsv_to_rgb(void) {
+		return hsv_to_rgb((HSV){
+			random8(),
+			qadd8(random8() >> 1, 127),
+			rgb_matrix_config.hsv.v
+		});
+	}
+
+/*	if (params->init) {
+		for (uint8_t k = 0; k < DRIVER_LED_TOTAL; ++k) {
+			led[k] = (FLOW_RND) ? (RGB){0,0,0} : random_hsv_to_rgb();
+		}
+	}
+*/
+	RGB_MATRIX_USE_LIMITS(led_min, led_max);
+	for (uint8_t i = led_min; i < led_max; ++i) {
+		RGB_MATRIX_TEST_LED_FLAGS();
+		rgb_matrix_set_color(i, led[i].r, led[i].g, led[i].b);
+	}
+	if (led_max == DRIVER_LED_TOTAL) {
+		for (uint8_t j = 0; j < led_max-1; ++j) {
+			led[j] = led[j+1];
+		}
+		led[led_max-1] = (FLOW_RND) ? (RGB){0,0,0} : random_hsv_to_rgb();
+		wait_timer = g_rgb_timer + interval();
+	}
+	return led_max < DRIVER_LED_TOTAL;
+}
+#	endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // ENABLE_RGB_MATRIX_CANDY_FLOW
