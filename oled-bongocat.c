@@ -37,7 +37,9 @@
 
 #define IDLE_FRAMES 5
 #define TAP_FRAMES  2
-#define FRAME_DURATION 200 // Milliseconds per frame
+#define FRAME_DURATION 200 // milliseconds
+#define TAP_INTERVAL  FRAME_DURATION*2
+#define PAWS_INTERVAL FRAME_DURATION*8
 
 
 // Run-length encoded animation frames
@@ -87,7 +89,7 @@ static unsigned char const idle3[] PROGMEM = {140,
 static unsigned char const *idle_anim[IDLE_FRAMES] = {
 	idle0, idle0, idle1, idle2, idle3 };
 
-static unsigned char const prep[] PROGMEM = {150,
+static unsigned char const paws[] PROGMEM = {150,
 	0x33,0x00,0x02,0x80,0x05,0x00,0x01,0x80,0x02,0x40,0x04,0x20,0x04,0x10,0x83,0x08,
 	0x04,0x02,0x02,0x01,0x85,0x02,0x0c,0x30,0x40,0x80,0x2e,0x00,0x03,0x80,0x31,0x00,
 	0x82,0x1e,0xe1,0x02,0x00,0x02,0x01,0x02,0x02,0x01,0x81,0x02,0x80,0x02,0x00,0x02,
@@ -172,7 +174,7 @@ static unsigned char const left_idle3[] PROGMEM = {138,
 static unsigned char const *left_idle_anim[IDLE_FRAMES] = {
 	left_idle0, left_idle0, left_idle1, left_idle2, left_idle3 };
 
-static unsigned char const left_prep[] PROGMEM = {148,
+static unsigned char const left_paws[] PROGMEM = {148,
 	0x03,0x80,0x2e,0x00,0x85,0x80,0x40,0x30,0x0c,0x02,0x02,0x01,0x83,0x02,0x04,0x08,
 	0x04,0x10,0x04,0x20,0x02,0x40,0x01,0x80,0x05,0x00,0x02,0x80,0x36,0x00,0x04,0x01,
 	0x04,0x02,0x05,0x04,0x05,0x08,0x04,0x10,0x04,0x20,0x04,0x40,0x04,0x80,0x02,0x00,
@@ -256,13 +258,13 @@ static void render_cat_idle(void) {
 }
 
 
-static void render_cat_prep(void) {
+static void render_cat_paws(void) {
 #if defined(LEFTCAT)
-	decode_frame(left_prep);
+	decode_frame(left_paws);
 #elif defined(RIGHTCAT)
-	decode_frame(prep);
+	decode_frame(paws);
 #else
-	is_keyboard_left() ? decode_frame(left_prep) : decode_frame(prep);
+	is_keyboard_left() ? decode_frame(left_paws) : decode_frame(paws);
 #endif
 }
 
@@ -286,7 +288,7 @@ static void render_bongocat(void) {
 	static uint16_t anim_timer = 0;
 
 #ifdef WPM_ENABLE
-	static uint8_t prev_wpm   = 0;
+	static uint8_t  prev_wpm  = 0;
 	static uint32_t tap_timer = 0;
 	// tap_timer updated by sustained WPM
 	if (get_current_wpm() > prev_wpm) { tap_timer = timer_read32(); }
@@ -297,8 +299,8 @@ static void render_bongocat(void) {
 #endif
 
 	void animate_cat(void) {
-		if (timer_elapsed32(tap_timer) < FRAME_DURATION*2) { render_cat_tap(); }
-		else if (timer_elapsed32(tap_timer) < FRAME_DURATION*8) { render_cat_prep(); }
+		if (timer_elapsed32(tap_timer) < TAP_INTERVAL) { render_cat_tap(); }
+		else if (timer_elapsed32(tap_timer) < PAWS_INTERVAL) { render_cat_paws(); }
 		else { render_cat_idle(); }
 	}
 

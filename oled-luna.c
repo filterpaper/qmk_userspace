@@ -31,8 +31,10 @@
 
 #include QMK_KEYBOARD_H
 
-#define LUNA_FRAME_DURATION 200 // Milliseconds per frames
 #define LUNA_SIZE 96
+#define LUNA_FRAME_DURATION 200 // milliseconds
+#define RUN_INTERVAL  LUNA_FRAME_DURATION*2
+#define WALK_INTERVAL LUNA_FRAME_DURATION*8
 
 
 #ifndef FELIX // Outlined Luna frames
@@ -230,8 +232,8 @@ static void render_luna_status(void) {
 		oled_set_cursor(0,8);
 		if (get_mods() & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock) { luna_action(bark); }
 		else if (get_mods() & MOD_MASK_CAG) { luna_action(sneak); }
-		else if (timer_elapsed32(tap_timer) < LUNA_FRAME_DURATION*2) { luna_action(run); }
-		else if (timer_elapsed32(tap_timer) < LUNA_FRAME_DURATION*8) { luna_action(walk); }
+		else if (timer_elapsed32(tap_timer) < RUN_INTERVAL) { luna_action(run); }
+		else if (timer_elapsed32(tap_timer) < WALK_INTERVAL) { luna_action(walk); }
 		else { luna_action(sit); }
 	}
 
