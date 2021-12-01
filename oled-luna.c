@@ -19,7 +19,8 @@
    3 Animation defaults to Luna, an outlined dog. Add
      'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.
    4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
-     Otherwise add the following code block inside 'process_record_user()' in keymap.c:
+     Otherwise add the following 'process_record_user()' code block into
+     keymap.c to trigger animation tap timer with key presses:
         bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 extern uint32_t tap_timer;
