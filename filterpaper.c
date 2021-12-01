@@ -4,11 +4,6 @@
 #include "filterpaper.h"
 
 
-#ifdef OLED_ENABLE
-uint32_t tap_timer = 0; // Timer for OLED animation
-#endif
-
-
 // Tap hold customization
 #ifdef TAPPING_FORCE_HOLD_PER_KEY // Enable for right thumb keys
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
@@ -58,8 +53,9 @@ static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
-#ifdef OLED_ENABLE // Reset OLED animation tap timer
-		tap_timer = timer_read32();
+#if defined(OLED_ENABLE) && !defined(WPM_ENABLE)
+		extern uint32_t tap_timer;
+		tap_timer = timer_read32();  // Reset OLED animation tap timer
 #endif
 		if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
 	}
@@ -82,6 +78,18 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 
 	return true; // Continue with unmatched keycodes
 }
+
+
+layer_state_t layer_state_set_user(layer_state_t const state) {
+#ifdef COMBO_ENABLE
+	get_highest_layer(state) > CMK ? combo_disable() : combo_enable();
+#endif
+#ifdef RGB_MATRIX_ENABLE
+	get_highest_layer(state) == CMK ? rgb_matrix_mode_noeeprom(CMK_MODE) : rgb_matrix_mode_noeeprom(DEF_MODE);
+#endif
+	return state;
+}
+
 
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {

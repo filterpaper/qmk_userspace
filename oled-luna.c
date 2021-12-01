@@ -19,12 +19,14 @@
    3 Animation defaults to Luna, an outlined dog. Add
      'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.
    4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
-     Otherwise add the following integer variable and 'if'
-     statement inside 'process_record_user()' in keymap.c:
-          uint32_t tap_timer = 0;
-          bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-              if (record->event.pressed) { tap_timer = timer_read32(); }
-          }
+     Otherwise add the following code block inside 'process_record_user()' in keymap.c:
+        bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+            if (record->event.pressed) {
+                extern uint32_t tap_timer;
+                tap_timer = timer_read32();
+            }
+            return true;
+        }
    5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED.
      It can be replaced with your own function, or delete the 'else' line.
 */
@@ -36,6 +38,7 @@
 #define RUN_INTERVAL  LUNA_FRAME_DURATION*2
 #define WALK_INTERVAL LUNA_FRAME_DURATION*8
 
+uint32_t tap_timer = 0;
 
 #ifndef FELIX // Outlined Luna frames
 static char const sit[][LUNA_SIZE] PROGMEM = { {
@@ -218,13 +221,9 @@ static void render_luna_status(void) {
 
 #ifdef WPM_ENABLE
 	static uint8_t prev_wpm = 0;
-	static uint32_t tap_timer = 0;
-	// tap_timer updated by sustained WPM
+	// Update tap_timer with sustained WPM
 	if (get_current_wpm() > prev_wpm || get_mods()) { tap_timer = timer_read32(); }
 	prev_wpm = get_current_wpm();
-#else
-	// tap_timer updated by key presses in process_record_user()
-	extern uint32_t tap_timer;
 #endif
 
 	void animate_luna(void) {

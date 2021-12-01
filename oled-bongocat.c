@@ -23,11 +23,13 @@
       * Add 'OPT_DEFS += -DLEFTCAT' into rules.mk
       * Or 'OPT_DEFS += -DRIGHTCAT' into rules.mk
    4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
-     Otherwise add the following integer variable and 'if'
-     statement inside 'process_record_user()' in keymap.c:
-        uint32_t tap_timer = 0;
+     Otherwise add the following code block inside 'process_record_user()' in keymap.c:
         bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-            if (record->event.pressed) { tap_timer = timer_read32(); }
+            if (record->event.pressed) {
+                extern uint32_t tap_timer;
+                tap_timer = timer_read32();
+            }
+            return true;
         }
    5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED.
      It can be replaced with your own function, or delete that function.
@@ -41,6 +43,7 @@
 #define TAP_INTERVAL  FRAME_DURATION*2
 #define PAWS_INTERVAL FRAME_DURATION*8
 
+uint32_t tap_timer = 0;
 
 // Run-length encoded animation frames
 #ifndef LEFTCAT // Right aligned Bongocat
@@ -289,13 +292,9 @@ static void render_bongocat(void) {
 
 #ifdef WPM_ENABLE
 	static uint8_t  prev_wpm  = 0;
-	static uint32_t tap_timer = 0;
-	// tap_timer updated by sustained WPM
+	// Update tap_timer with sustained WPM
 	if (get_current_wpm() > prev_wpm) { tap_timer = timer_read32(); }
 	prev_wpm = get_current_wpm();
-#else
-	// tap_timer updated by key presses in process_record_user()
-	extern uint32_t tap_timer;
 #endif
 
 	void animate_cat(void) {
