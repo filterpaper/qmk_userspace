@@ -4,9 +4,9 @@
 #include "filterpaper.h"
 
 
+#ifdef KEYBOARD_boardsource_the_mark
 void matrix_init_user(void) {
 	// Remap under glow LEDs to nearby keys
-#ifdef KEYBOARD_boardsource_the_mark
 	g_led_config = (led_config_t){ {
 		{ 10, 10, 9 , 9 , 8 , 7 , 7 , 6 , 5 , 5 , 4 , 3 , 3 , 2 , 1 , 1  },
 		{ 11, 11, 9 , 9 , 9 , 8 , 7 , 7 , 6 , 5 , 4 , 4 , 3 , 2 , 1 , 0  },
@@ -20,20 +20,8 @@ void matrix_init_user(void) {
 		255, 255, 255, 4, 4, 4, 4, 4, 4, 255, 255, 255,
 		255, 255, 255, 4, 4, 4, 4, 4, 4, 255, 255, 255
 	} };
-#endif
-	// Disable underglow LEDs
-#if defined(KEYBOARD_boardsource_technik_o) || defined(LP)
-	for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
-		if (HAS_FLAGS(g_led_config.flags[i], LED_FLAG_UNDERGLOW)) {
-			g_led_config.flags[i] = LED_FLAG_NONE;
-		}
-	}
-#endif
-	// Change thumb key flags
-#ifdef KEYBOARD_crkbd_rev1
-	g_led_config.flags[6] = g_led_config.flags[33] = LED_FLAG_KEYLIGHT;
-#endif
 }
+#endif
 
 
 void keyboard_post_init_user(void) {

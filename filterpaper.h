@@ -27,7 +27,7 @@
 #endif
 
 // Custom indicators
-#if defined(IMK)
+#ifdef KEYBOARD_crkbd_rev1
 #	define MOD_FLAG LED_FLAG_UNDERGLOW
 #	define CAP_FLAG LED_FLAG_UNDERGLOW
 #else
