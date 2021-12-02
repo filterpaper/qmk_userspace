@@ -295,7 +295,7 @@ BOOTLOADER_SIZE = 512
 * [Sockets](https://github.com/joric/nrfmicro/wiki/Sockets)
 * [Git Purr](https://girliemac.com/blog/2017/12/26/git-purr/)
 ## Hardware Parts
-* [Pro-Micro C](https://www.aliexpress.com/item/1005003230811462.html)
+* [Pro-Micro C](https://www.aliexpress.com/item/32887074671.html)
 * Mill-Max [low profile sockets](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232)
 * Mill-Max [pins](https://www.digikey.com/product-detail/en/3320-0-00-15-00-00-03-0/ED1134-ND/4147392)
 * [PJ320A](https://www.aliexpress.com/item/1005001928651798.html) audio jack
