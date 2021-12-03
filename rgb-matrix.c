@@ -29,6 +29,12 @@ void keyboard_post_init_user(void) {
 }
 
 
+layer_state_t layer_state_set_user(layer_state_t const state) {
+	get_highest_layer(state) == CMK ? rgb_matrix_mode_noeeprom(CMK_MODE) : rgb_matrix_mode_noeeprom(DEF_MODE);
+	return state;
+}
+
+
 void rgb_matrix_indicators_user(void) {
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {

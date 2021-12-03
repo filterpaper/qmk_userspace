@@ -80,17 +80,6 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 }
 
 
-layer_state_t layer_state_set_user(layer_state_t const state) {
-#ifdef COMBO_ENABLE
-	get_highest_layer(state) > CMK ? combo_disable() : combo_enable();
-#endif
-#ifdef RGB_MATRIX_ENABLE
-	get_highest_layer(state) == CMK ? rgb_matrix_mode_noeeprom(CMK_MODE) : rgb_matrix_mode_noeeprom(DEF_MODE);
-#endif
-	return state;
-}
-
-
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
 	if (index == 0) {
