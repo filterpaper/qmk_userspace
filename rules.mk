@@ -52,15 +52,15 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		OLED_ENABLE = yes
 		OPT_DEFS += -D${OLED}
 		ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT CAT))
-			SRC += oled-icons.c oled-bongocat.c
+			SRC += oled/oled-icons.c oled/oled-bongocat.c
 		else ifeq ($(OLED), $(filter $(OLED), FELIX LUNA))
-			SRC += oled-icons.c oled-luna.c
+			SRC += oled/oled-icons.c oled/oled-luna.c
 		endif
 	endif
 	ifneq ($(strip $(KB)),)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
-		SRC += rgb-matrix.c
+		SRC += rgb/rgb-matrix.c
 		OPT_DEFS += -D${KB}
 	endif
 	ifeq ($(strip $(KB)), $(strip $(OLED)))

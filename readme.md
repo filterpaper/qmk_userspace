@@ -18,29 +18,29 @@ git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filter
 # Supported Keyboards
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
-* [3w6](https://github.com/qmk/qmk_firmware/tree/master/keyboards/3w6/rev2), [Architeuthis Dux](https://github.com/qmk/qmk_firmware/tree/master/keyboards/a_dux), [Cradio](https://github.com/qmk/qmk_firmware/tree/master/keyboards/cradio)  — Minimalist choc split-keyboards.
+* [3w6](https://github.com/qmk/qmk_firmware/tree/master/keyboards/3w6/rev2), [Architeuthis Dux](https://github.com/qmk/qmk_firmware/tree/master/keyboards/a_dux), [Cradio](https://github.com/qmk/qmk_firmware/tree/master/keyboards/cradio) — Minimalist choc split-keyboards.
 * [Corne (CRKBD)](https://github.com/qmk/qmk_firmware/tree/master/keyboards/crkbd/rev1) — OLED animation and graphical indicators.
 * [Technik](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/technik_o) — RGB Matrix and modifier indicators.
 * [The Mark: 65](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/the_mark) — RGB under glow layer and modifier indicators.
 
 # File Listing
-File              | Description
------------------ | -----------
-rules.mk          | QMK compile rules and hardware feature selection
-config.h          | QMK configuration variables and options, see [configuring QMK](https://github.com/qmk/qmk_firmware/docs/config_options.md)
-combos.h          | Wrapper macros for building combo source codes from `combos.def`
-combos.c          | Place holder C file for `combos.h` macros
-filterpaper.h     | User specific variables and options
-filterpaper.c     | Main source with macro functions, see [custom quantum functions](https://github.com/qmk/qmk_firmware/docs/custom_quantum_functions.md)
-layout.h          | Key map macro wrapper for shared ortholinear and split layouts
-oled-icons.c      | Graphical layer and modifier status indicators (adds ~4018 bytes)
-oled-luna.c       | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
-oled-bongocat.c   | Bongocat animation using run-length encoded bytes
-oledfont.c        | Corne logo, コルネ katakana name, fonts and icon images
-rgb-matrix.c      | RGB matrix effect and custom codes, see [RGB matrix lighting](https://github.com/qmk/qmk_firmware/docs/feature_rgb_matrix.md)
-keymaps/          | Folder of supported keyboard keymaps
-animation_frames/ | Folder of Bongocat animation images
-archive/          | Archived files of original codes and layouts
+File                 | Description
+-------------------- | -----------
+rules.mk             | QMK compile rules and hardware feature selection
+config.h             | QMK configuration variables and options, see [configuring QMK](https://github.com/qmk/qmk_firmware/docs/config_options.md)
+combos.c             | Wrapper macros for building combo source codes from `combos.inc`
+filterpaper.h        | User specific variables and options
+filterpaper.c        | Main source with macro functions, see [custom quantum functions](https://github.com/qmk/qmk_firmware/docs/custom_quantum_functions.md)
+oled/oled-icons.c    | Graphical layer and modifier status indicators (adds ~4018 bytes)
+oled/oled-luna.c     | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
+oled/oled-bongocat.c | Bongocat animation using run-length encoded bytes
+oled/oledfont.c      | Corne logo, コルネ katakana name, fonts and icon images
+rgb/rgb-matrix.c     | RGB matrix effect and custom codes, see [RGB matrix lighting](https://github.com/qmk/qmk_firmware/docs/feature_rgb_matrix.md)
+keymaps/             | Folder of supported keyboard keymaps
+keymaps/layout.h     | Keymap macro wrapper for shared layouts
+features/            | Folder of word handling feature code
+animation_frames/    | Folder of Bongocat animation images
+archive/             | Archived files of original codes and layouts
 
 
 

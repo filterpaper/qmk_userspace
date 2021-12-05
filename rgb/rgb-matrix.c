@@ -1,7 +1,7 @@
 // Copyright 2021 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
-#include "filterpaper.h"
+#include "rgb-matrix.h"
 
 
 #ifdef KEYBOARD_boardsource_the_mark
