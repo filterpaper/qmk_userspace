@@ -183,8 +183,7 @@ void matrix_init_user(void) {
     TXLED_OFF; RXLED_OFF;
 }
 ```
-LED macros can then be used as indicators:
-Caps Lock:
+LED macros can then be used as indicators like Caps Lock:
 ```c
 void matrix_scan_user(void) {
     if (host_keyboard_led_state().caps_lock) {
@@ -194,7 +193,7 @@ void matrix_scan_user(void) {
     }
 }
 ```
-Layer:
+Or as layer indicator:
 ```c
 layer_state_t layer_state_set_user(layer_state_t const state) {
     switch (get_highest_layer(state)) {
