@@ -3,6 +3,10 @@
 
 #include "filterpaper.h"
 
+#ifdef WORD_FEATURES
+#include "features/autocorrection.h"
+#include "features/caps_word.h"
+#endif
 
 // Tap hold customization
 #ifdef TAPPING_FORCE_HOLD_PER_KEY // Enable for right thumb keys
@@ -16,28 +20,6 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return (keycode & 0xF000) == LMT_BITS || (keycode & 0xFF00) == LT0_BITS ? false : true;
 }
 #endif
-
-
-// Toggle caps lock following a word
-static void process_caps_word(uint16_t keycode, keyrecord_t *record) {
-	// Get base key code from mod tap
-	if (record->tap.count &&
-		((QK_MOD_TAP < keycode && keycode < QK_MOD_TAP_MAX) ||
-		(QK_LAYER_TAP < keycode && keycode < QK_LAYER_TAP_MAX))
-	) { keycode &= 0x00FF; }
-
-	// Deactivate caps lock with listed keycodes
-	switch (keycode) {
-		case KC_TAB:
-		case KC_ESC:
-		case KC_SPC:
-		case KC_ENT:
-		case KC_DOT:
-		case KC_EQL:
-		case KC_GESC:
-			tap_code(KC_CAPS);
-	}
-}
 
 
 // Send custom keycode on hold for mod tap
@@ -57,7 +39,10 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		extern uint32_t tap_timer;
 		tap_timer = timer_read32();  // Reset OLED animation tap timer
 #endif
-		if (host_keyboard_led_state().caps_lock) { process_caps_word(keycode, record); }
+#ifdef WORD_FEATURES
+		if (!process_autocorrection(keycode, record)) { return false; }
+		if (!process_caps_word(keycode, record)) { return false; }
+#endif
 	}
 
 	switch (keycode) {

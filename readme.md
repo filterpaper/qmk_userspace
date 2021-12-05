@@ -359,6 +359,7 @@ BOOTLOADER_SIZE = 512
 * [Hypergolic](https://github.com/davidphilipbarr/hypergolic) PCB
 * [Sockets](https://github.com/joric/nrfmicro/wiki/Sockets)
 * [Git Purr](https://girliemac.com/blog/2017/12/26/git-purr/)
+* [Autocorrections with QMK](https://getreuer.info/posts/keyboards/autocorrection/index.html)
 ## Hardware Parts
 * [Elite-C](https://boardsource.xyz/store/5ef67ea66786dc1e65a80708)
 * [Pro Micro C](https://www.aliexpress.com/item/32887074671.html)
