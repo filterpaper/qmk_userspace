@@ -162,34 +162,34 @@ Function is called inside `process_record_user` when caps lock is enabled to tur
 ## Combo helper macros
 The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New shortcuts can be appended to `combos.def` and the preprocessor macros in `combos.h` will generate required QMK combo source codes at compile time.
 
-## Promicro TX/RX LEDs
-Data LEDs on Promicro can be used as indicators with code. They are pins `D5` (TX) and `B0` (RX) for Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pins in `config.h`:
+## Promicro RX/TX LEDs
+Data LEDs on Promicro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) for Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pins in `config.h`:
 ```c
 #define LED_CAPS_LOCK_PIN B0
 ```
 For advance usage, setup the following macros:
 ```c
 // Pro-micro LEDs
-#define TRXLED_INIT DDRD |= (1<<5), DDRB |= (1<<0)
-#define TXLED_OFF   PORTD |= (1<<5)
-#define TXLED_ON    PORTD &= ~(1<<5)
+#define RTXLED_INIT DDRD |= (1<<5), DDRB |= (1<<0)
 #define RXLED_OFF   PORTB |= (1<<0)
 #define RXLED_ON    PORTB &= ~(1<<0)
+#define TXLED_OFF   PORTD |= (1<<5)
+#define TXLED_ON    PORTD &= ~(1<<5)
 ```
 Initiate the LEDs and turn them off by default on initialisation with:
 ```c
 void matrix_init_user(void) {
-    TRXLED_INIT;
-    TXLED_OFF; RXLED_OFF;
+    RTXLED_INIT;
+    RXLED_OFF; TXLED_OFF;
 }
 ```
 LED macros can then be used as indicators like Caps Lock:
 ```c
 void matrix_scan_user(void) {
     if (host_keyboard_led_state().caps_lock) {
-        TXLED_ON; RXLED_ON;
+        RXLED_ON; TXLED_ON;
     } else {
-        TXLED_OFF; RXLED_OFF;
+        RXLED_OFF; TXLED_OFF;
     }
 }
 ```
