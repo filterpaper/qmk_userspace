@@ -13,6 +13,8 @@ git clone https://github.com/qmk/qmk_firmware qmk_firmware
 git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filterpaper
 ```
 
+
+
 # Supported Keyboards
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
@@ -39,6 +41,64 @@ rgb-matrix.c      | RGB matrix effect and custom codes, see [RGB matrix lighting
 keymaps/          | Folder of supported keyboard keymaps
 animation_frames/ | Folder of Bongocat animation images
 archive/          | Archived files of original codes and layouts
+
+
+
+# Build Commands
+QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
+```sh
+qmk flash ~/qmk_firmware/users/filterpaper/keymaps/technik.json
+qmk flash ~/qmk_firmware/users/filterpaper/keymaps/corne.json
+qmk flash ~/qmk_firmware/users/filterpaper/keymaps/mark65.json
+```
+
+
+
+# Building Split Keyboards
+All split keyboards are configured with `EE_HANDS` for controllers to read left or right handedness from EEPROM, allowing USB cable use on either side. They are flashed once with  `-bl` to save left and right handedness:
+```sh
+qmk flash -kb cradio -km default -bl dfu-split-left
+qmk flash -kb cradio -km default -bl dfu-split-right
+```
+Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](https://github.com/qmk/qmk_firmware/docs/feature_split_keyboard.md) for details.
+
+
+
+# Building Corne Keyboard (CRKBD)
+Corne is configured with a few modular build options in `rules.mk`:
+## Tiny build
+Minimal firmware with no OLED and RGB support is the default:
+```
+qmk compile corne.json
+```
+## Compiling for OLED display
+The `-OLED=` option will build support for pet animation on primary OLED with status icons on the secondary. Animation are key stroke driven by `tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes` to the compile commands:
+### Bongocat
+Build and flash each side with the corresponding options for left and right aligned Bongocat:
+```
+qmk compile -e OLED=LEFTCAT corne.json
+qmk compile -e OLED=RIGHTCAT corne.json
+```
+### Felix and Luna
+Build for Luna (outline) or Felix (filled) the dog:
+```
+qmk compile -e OLED=LUNA corne.json
+qmk compile -e OLED=FELIX corne.json
+```
+## Compiling for RGB matrix
+The `-KB=` option will add support for RGB matrix lighting. `IMK` value will use under glow LEDs as indicators:
+```
+qmk compile -e KB=LP corne.json
+qmk compile -e KB=IMK corne.json
+```
+Combine `-e OLED=` and `-e KB=` options to support both features.
+## Logo file
+Images in `glcdfont.c` can be viewed and edited with:
+* [Helix Font Editor](https://helixfonteditor.netlify.app/)
+* [QMK Logo Editor](https://joric.github.io/qle/)
+* [image2cpp](https://javl.github.io/image2cpp/)
+
+
 
 # Code Snippets
 ## Light configured layers keys
@@ -99,60 +159,42 @@ void process_caps_word(uint16_t keycode) {
 ```
 Function is called inside `process_record_user` when caps lock is enabled to turn it off after completing a word—because caps lock is rarely used beyond capitalising one word. The first `switch` statement performs a bitwise *AND* to filter base key codes (that ranges from 0x00-0xFF) from mod/layer taps to support toggle keys on a different layer. Conceived by the `#ergonomics` enthusiasts of splitkb.com discord.
 
-
 ## Combo helper macros
 The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New shortcuts can be appended to `combos.def` and the preprocessor macros in `combos.h` will generate required QMK combo source codes at compile time.
 
-# Build Commands
-QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
-```sh
-qmk flash ~/qmk_firmware/users/filterpaper/keymaps/technik.json
-qmk flash ~/qmk_firmware/users/filterpaper/keymaps/corne.json
-qmk flash ~/qmk_firmware/users/filterpaper/keymaps/mark65.json
+## Promicro TX/RX LEDs
+The TX and RX LEDs on Promicro can be addressed by code as indicators. They are pins `D5` (TX) and `B0` (RX) for Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pins in `config.h`:
+```c
+#define LED_CAPS_LOCK_PIN B0
+```
+For advance usage, setup the following macros:
+```c
+// Pro-micro LEDs
+#define TRXLED_INIT DDRD |= (1<<5), DDRB |= (1<<0)
+#define TXLED_OFF   PORTD |= (1<<5)
+#define TXLED_ON    PORTD &= ~(1<<5)
+#define RXLED_OFF   PORTB |= (1<<0)
+#define RXLED_ON    PORTB &= ~(1<<0)
+```
+Initiate the LEDs and turn them off by default on initialisation with:
+```c
+void matrix_init_user(void) {
+    TX_RX_LED_INIT;
+    TXLED_OFF; RXLED_OFF;
+}
+```
+LED macros can then be used as indicators, like the following example for caps lock:
+```c
+void matrix_scan_user(void) {
+    if (host_keyboard_led_state().caps_lock) {
+        TXLED_ON; RXLED_ON;
+    } else {
+        TXLED_OFF; RXLED_OFF;
+    }
+}
 ```
 
 
-# Building Split Keyboards
-All split keyboards are configured with `EE_HANDS` for controllers to read left or right handedness from EEPROM, allowing USB-C cable to be used on either side. These are one-time flash suffix commands with `-bl` to write left and right handedness:
-```sh
-qmk flash -kb cradio -km default -bl dfu-split-left
-qmk flash -kb cradio -km default -bl dfu-split-right
-```
-Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](https://github.com/qmk/qmk_firmware/docs/feature_split_keyboard.md) for details.
-
-# Building Corne Keyboard (CRKBD)
-Corne is configured with a few modular build options in `rules.mk`:
-## Tiny build
-Minimal firmware with no OLED and RGB support is the default:
-```
-qmk compile corne.json
-```
-## Compiling for OLED display
-The `-OLED=` option will build support for pet animation on primary OLED with status icons on the secondary. Animation are key stroke driven by `tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes` to the compile commands:
-### Bongocat
-Build and flash each side with the corresponding options for left and right aligned Bongocat:
-```
-qmk compile -e OLED=LEFTCAT corne.json
-qmk compile -e OLED=RIGHTCAT corne.json
-```
-### Felix and Luna
-Build for Luna (outline) or Felix (filled) the dog:
-```
-qmk compile -e OLED=LUNA corne.json
-qmk compile -e OLED=FELIX corne.json
-```
-## Compiling for RGB matrix
-The `-KB=` option will add support for RGB matrix lighting. `IMK` value will use under glow LEDs as indicators:
-```
-qmk compile -e KB=LP corne.json
-qmk compile -e KB=IMK corne.json
-```
-Combine `-e OLED=` and `-e KB=` options to support both features.
-## Corne logo file
-Images in `glcdfont.c` can be viewed and edited with:
-* [Helix Font Editor](https://helixfonteditor.netlify.app/)
-* [QMK Logo Editor](https://joric.github.io/qle/)
-* [image2cpp](https://javl.github.io/image2cpp/)
 
 # Layout wrapper macros
 ## Basic layout
@@ -250,6 +292,8 @@ The JSON layout for 34-key Cradio keyboard uses the macro above to adapt 3x6_3 f
 }
 ```
 
+
+
 # ISP Flashing Notes
 ## Hardware
 * [USBasp Programmer](https://www.aliexpress.com/item/1005001658474778.html)
@@ -286,6 +330,8 @@ Use the following `rules.mk` options for nanoBoot:
 BOOTLOADER = qmk-hid
 BOOTLOADER_SIZE = 512
 ```
+
+
 
 # Useful Links
 * [Seniply](https://stevep99.github.io/seniply/) 34 key layout
