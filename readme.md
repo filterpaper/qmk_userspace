@@ -163,7 +163,7 @@ Function is called inside `process_record_user` when caps lock is enabled to tur
 The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New shortcuts can be appended to `combos.def` and the preprocessor macros in `combos.h` will generate required QMK combo source codes at compile time.
 
 ## Promicro TX/RX LEDs
-The TX and RX LEDs on Promicro can be addressed by code as indicators. They are pins `D5` (TX) and `B0` (RX) for Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pins in `config.h`:
+Data LEDs on Promicro can be used as indicators with code. They are pins `D5` (TX) and `B0` (RX) for Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pins in `config.h`:
 ```c
 #define LED_CAPS_LOCK_PIN B0
 ```
@@ -179,11 +179,12 @@ For advance usage, setup the following macros:
 Initiate the LEDs and turn them off by default on initialisation with:
 ```c
 void matrix_init_user(void) {
-    TX_RX_LED_INIT;
+    TRXLED_INIT;
     TXLED_OFF; RXLED_OFF;
 }
 ```
-LED macros can then be used as indicators, like the following example for caps lock:
+LED macros can then be used as indicators:
+Caps Lock:
 ```c
 void matrix_scan_user(void) {
     if (host_keyboard_led_state().caps_lock) {
@@ -191,6 +192,18 @@ void matrix_scan_user(void) {
     } else {
         TXLED_OFF; RXLED_OFF;
     }
+}
+```
+Layer:
+```c
+layer_state_t layer_state_set_user(layer_state_t const state) {
+    switch (get_highest_layer(state)) {
+        case FNC: RXLED_ON;  TXLED_ON;  break;
+        case SYM: RXLED_OFF; TXLED_ON;  break;
+        case NUM: RXLED_ON;  TXLED_OFF; break;
+        default: RXLED_OFF;  TXLED_OFF;
+    }
+    return state;
 }
 ```
 
