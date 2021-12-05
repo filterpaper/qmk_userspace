@@ -163,24 +163,24 @@ Function is called inside `process_record_user` when caps lock is enabled to tur
 The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New shortcuts can be appended to `combos.def` and the preprocessor macros in `combos.h` will generate required QMK combo source codes at compile time.
 
 ## Promicro RX/TX LEDs
-Data LEDs on Promicro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) for Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pins in `config.h`:
+Data LEDs on Promicro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) on Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pin in `config.h`:
 ```c
 #define LED_CAPS_LOCK_PIN B0
 #define LED_PIN_ON_STATE 0
 ```
-For advance usage, setup the following macros for both pins:
+For advance usage, setup the following macros to use both pins with GPIO controls:
 ```c
-// Pro-micro LEDs
+// Pro-micro data LEDs
 #define RXLED B0
 #define TXLED D5
 #define RXLED_INIT setPinOutput(RXLED)
 #define TXLED_INIT setPinOutput(TXLED)
 #define RXLED_ON   writePinLow(RXLED)
-#define RXLED_OFF  writePinHigh(RXLED)
 #define TXLED_ON   writePinLow(TXLED)
+#define RXLED_OFF  writePinHigh(RXLED)
 #define TXLED_OFF  writePinHigh(TXLED)
 ```
-Initiate the LEDs and turn them off using GPIO controls:
+Initiate the LEDs and turn them off with:
 ```c
 void matrix_init_user(void) {
     RXLED_INIT;
