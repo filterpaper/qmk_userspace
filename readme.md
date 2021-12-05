@@ -170,9 +170,10 @@ Data LEDs on Promicro can be used as indicators with code. They are pins `B0` (R
 ```
 For advance usage, setup the following macros to use both pins with GPIO controls:
 ```c
-// Pro-micro data LEDs
+// Pro-micro data LED pins
 #define RXLED B0
 #define TXLED D5
+// GPIO control macros
 #define RXLED_INIT setPinOutput(RXLED)
 #define TXLED_INIT setPinOutput(TXLED)
 #define RXLED_ON   writePinLow(RXLED)
