@@ -13,7 +13,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for alphanumeric tap hold
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xF000) == LMT_BITS ? false : true;
+	return (keycode & 0xF000) == LMT_BITS || (keycode & 0xFF00) == LT0_BITS ? false : true;
 }
 #endif
 
@@ -90,3 +90,30 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 	return false;
 }
 #endif
+
+
+#ifdef KEYBOARD_a_dux
+// Pro-micro data LED pins
+#define RXLED B0
+#define TXLED D5
+// GPIO control macros
+#define RXLED_INIT setPinOutput(RXLED)
+#define TXLED_INIT setPinOutput(TXLED)
+#define RXLED_ON   writePinLow(RXLED)
+#define TXLED_ON   writePinLow(TXLED)
+#define RXLED_OFF  writePinHigh(RXLED)
+#define TXLED_OFF  writePinHigh(TXLED)
+
+void matrix_init_user(void) { RXLED_INIT; TXLED_INIT; }
+
+layer_state_t layer_state_set_user(layer_state_t const state) {
+	switch (get_highest_layer(state)) {
+		case CMK:
+		case FNC: RXLED_ON;  TXLED_ON;  break;
+		case SYM: RXLED_OFF; TXLED_ON;  break;
+		case NUM: RXLED_ON;  TXLED_OFF; break;
+		default:  RXLED_OFF; TXLED_OFF;
+	}
+	return state;
+}
+#endif // KEYBOARD_a_dux
