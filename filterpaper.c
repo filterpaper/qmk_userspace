@@ -93,7 +93,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 
 
 #ifdef KEYBOARD_a_dux
-// Pro-micro data LED pins
+// Pro Micro data LED pins
 #define RXLED B0
 #define TXLED D5
 // GPIO control macros

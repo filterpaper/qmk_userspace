@@ -162,15 +162,15 @@ Function is called inside `process_record_user` when caps lock is enabled to tur
 ## Combo helper macros
 The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `combos.h` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New shortcuts can be appended to `combos.def` and the preprocessor macros in `combos.h` will generate required QMK combo source codes at compile time.
 
-## Promicro RX/TX LEDs
-Data LEDs on Promicro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) on Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pin in `config.h`:
+## Pro Micro RX/TX LEDs
+Data LEDs on Pro Micro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) on Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pin in `config.h`:
 ```c
 #define LED_CAPS_LOCK_PIN B0
 #define LED_PIN_ON_STATE 0
 ```
 For advance usage, setup the following macros to use both pins with GPIO controls:
 ```c
-// Pro-micro data LED pins
+// Pro Micro data LED pins
 #define RXLED B0
 #define TXLED D5
 // GPIO control macros
@@ -319,19 +319,19 @@ The JSON layout for 34-key Cradio keyboard uses the macro above to adapt 3x6_3 f
 * [Breadboard](https://www.aliexpress.com/item/1742546890.html)
 * [Jumper wires](https://www.aliexpress.com/item/32996173648.html)
 * [Sockets](https://www.aliexpress.com/item/32852480645.html) and [breadboard](https://www.aliexpress.com/item/1742546890.html)
-* [Pro-Micro](https://www.aliexpress.com/item/32840365436.html) controller
+* [Pro Micro C](https://www.aliexpress.com/item/32840365436.html) controller
 ## USBasp wiring
 Connect the USBasp programmer to the controller in this manner:
 ```
-USBasp RST  <-> Promicro RST
-USBasp SCLK <-> Promicro 15/B1 (SCLK)
-USBasp MOSI <-> Promicro 16/B2 (MOSI)
-USBasp MISO <-> Promicro 14/B3 (MISO)
-USBasp VCC  <-> Promicro VCC
-USBasp GND  <-> Promicro GND
+USBasp RST  <-> Pro Micro RST
+USBasp SCLK <-> Pro Micro 15/B1 (SCLK)
+USBasp MOSI <-> Pro Micro 16/B2 (MOSI)
+USBasp MISO <-> Pro Micro 14/B3 (MISO)
+USBasp VCC  <-> Pro Micro VCC
+USBasp GND  <-> Pro Micro GND
 ```
 ## Atmel DFU
-See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide). Replace the Pro-Micro's default Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command and fuses argument:
+See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide). Replace the Pro Micro's default Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command and fuses argument:
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 \
 -U flash:w:bootloader_atmega32u4_1.0.0.hex:i \
@@ -360,9 +360,11 @@ BOOTLOADER_SIZE = 512
 * [Sockets](https://github.com/joric/nrfmicro/wiki/Sockets)
 * [Git Purr](https://girliemac.com/blog/2017/12/26/git-purr/)
 ## Hardware Parts
-* [Pro-Micro C](https://www.aliexpress.com/item/32887074671.html)
-* Mill-Max [low profile sockets](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232)
-* Mill-Max [pins](https://www.digikey.com/product-detail/en/3320-0-00-15-00-00-03-0/ED1134-ND/4147392)
+* [Elite-C](https://boardsource.xyz/store/5ef67ea66786dc1e65a80708)
+* [Pro Micro C](https://www.aliexpress.com/item/32887074671.html)
+* Mill-Max 315-43-112-41-003000 [low profile sockets](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) for Elite-C
+* Mill-Max 315-43-164-41-001000 [low profile sockets](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-001000/1212142) for Pro Micro C
+* Mill-Max [connector pins](https://www.digikey.com/product-detail/en/3320-0-00-15-00-00-03-0/ED1134-ND/4147392)
 * [PJ320A](https://www.aliexpress.com/item/1005001928651798.html) audio jack
 * [TRRS](https://www.aliexpress.com/item/32961128759.html) cable
 * [Silicone bumper](https://www.aliexpress.com/item/32912066603.html) feet
