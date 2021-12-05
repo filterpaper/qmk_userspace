@@ -173,23 +173,29 @@ For advance usage, setup the following macros for both pins:
 // Pro-micro LEDs
 #define RXLED B0
 #define TXLED D5
+#define RXLED_INIT setPinOutput(RXLED)
+#define TXLED_INIT setPinOutput(TXLED)
+#define RXLED_ON   writePinLow(RXLED)
+#define RXLED_OFF  writePinHigh(RXLED)
+#define TXLED_ON   writePinLow(TXLED)
+#define TXLED_OFF  writePinHigh(TXLED)
 ```
 Initiate the LEDs and turn them off using GPIO controls:
 ```c
 void matrix_init_user(void) {
-    setPinOutput(RXLED);
-    setPinOutput(TXLED);
-    writePinHigh(RXLED);
-    writePinHigh(TXLED);
+    RXLED_INIT;
+    TXLED_INIT;
+    RXLED_OFF;
+    TXLED_OFF;
 }
 ```
 LED macros can then be used as indicators like Caps Lock:
 ```c
 void matrix_scan_user(void) {
     if (host_keyboard_led_state().caps_lock) {
-        writePinLow(RXLED); writePinLow(TXLED);
+        RXLED_ON; TXLED_ON;
     } else {
-        writePinHigh(RXLED); writePinHigh(TXLED);
+        RXLED_OFF; TXLED_OFF;
     }
 }
 ```
@@ -197,10 +203,10 @@ Or as layer indicator:
 ```c
 layer_state_t layer_state_set_user(layer_state_t const state) {
     switch (get_highest_layer(state)) {
-        case FNC: writePinLow(RXLED);  writePinLow(TXLED);  break;
-        case SYM: writePinHigh(RXLED); writePinLow(TXLED);  break;
-        case NUM: writePinLow(RXLED);  writePinHigh(TXLED); break;
-        default:  writePinHigh(RXLED); writePinHigh(TXLED);
+        case FNC: RXLED_ON;  TXLED_ON;  break;
+        case SYM: RXLED_OFF; TXLED_ON;  break;
+        case NUM: RXLED_ON;  TXLED_OFF; break;
+        default:  RXLED_OFF; TXLED_OFF;
     }
     return state;
 }
