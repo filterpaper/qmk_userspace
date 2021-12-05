@@ -166,30 +166,30 @@ The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) header file `comb
 Data LEDs on Promicro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) for Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pins in `config.h`:
 ```c
 #define LED_CAPS_LOCK_PIN B0
+#define LED_PIN_ON_STATE 0
 ```
-For advance usage, setup the following macros:
+For advance usage, setup the following macros for both pins:
 ```c
 // Pro-micro LEDs
-#define RTXLED_INIT DDRD |= (1<<5), DDRB |= (1<<0)
-#define RXLED_OFF   PORTB |= (1<<0)
-#define RXLED_ON    PORTB &= ~(1<<0)
-#define TXLED_OFF   PORTD |= (1<<5)
-#define TXLED_ON    PORTD &= ~(1<<5)
+#define RXLED B0
+#define TXLED D5
 ```
-Initiate the LEDs and turn them off by default on initialisation with:
+Initiate the LEDs and turn them off using GPIO controls:
 ```c
 void matrix_init_user(void) {
-    RTXLED_INIT;
-    RXLED_OFF; TXLED_OFF;
+    setPinOutput(RXLED);
+    setPinOutput(TXLED);
+    writePinHigh(RXLED);
+    writePinHigh(TXLED);
 }
 ```
 LED macros can then be used as indicators like Caps Lock:
 ```c
 void matrix_scan_user(void) {
     if (host_keyboard_led_state().caps_lock) {
-        RXLED_ON; TXLED_ON;
+        writePinLow(RXLED); writePinLow(TXLED);
     } else {
-        RXLED_OFF; TXLED_OFF;
+        writePinHigh(RXLED); writePinHigh(TXLED);
     }
 }
 ```
@@ -197,10 +197,10 @@ Or as layer indicator:
 ```c
 layer_state_t layer_state_set_user(layer_state_t const state) {
     switch (get_highest_layer(state)) {
-        case FNC: RXLED_ON;  TXLED_ON;  break;
-        case SYM: RXLED_OFF; TXLED_ON;  break;
-        case NUM: RXLED_ON;  TXLED_OFF; break;
-        default: RXLED_OFF;  TXLED_OFF;
+        case FNC: writePinLow(RXLED);  writePinLow(TXLED);  break;
+        case SYM: writePinHigh(RXLED); writePinLow(TXLED);  break;
+        case NUM: writePinLow(RXLED);  writePinHigh(TXLED); break;
+        default:  writePinHigh(RXLED); writePinHigh(TXLED);
     }
     return state;
 }
