@@ -8,7 +8,7 @@
 #include "autocorrection_data.h"
 
 bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
-	static uint8_t typo_buffer[AUTOCORRECTION_MAX_LENGTH] = {0};
+	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t typo_buffer_size = 0;
 
 	// Disable autocorrection while a mod other than shift is active.
@@ -38,17 +38,17 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	}
 
 	// If the buffer is full, rotate it to discard the oldest character.
-	if (typo_buffer_size >= AUTOCORRECTION_MAX_LENGTH) {
-		memmove(typo_buffer, typo_buffer + 1, AUTOCORRECTION_MAX_LENGTH - 1);
-		typo_buffer_size = AUTOCORRECTION_MAX_LENGTH - 1;
+	if (typo_buffer_size >= DICTIONARY_MAX_LENGTH) {
+		memmove(typo_buffer, typo_buffer + 1, DICTIONARY_MAX_LENGTH - 1);
+		typo_buffer_size = DICTIONARY_MAX_LENGTH - 1;
 	}
 
 	// Append `keycode` to the buffer.
 	typo_buffer[typo_buffer_size++] = (uint8_t)keycode;
-	if (typo_buffer_size < AUTOCORRECTION_MAX_LENGTH) {
+	if (typo_buffer_size < DICTIONARY_MAX_LENGTH) {
 		typo_buffer[typo_buffer_size] = 0;
 		// Early return if not many characters have been buffered so far.
-		if (typo_buffer_size < AUTOCORRECTION_MIN_LENGTH) { return true; }
+		if (typo_buffer_size < DICTIONARY_MIN_LENGTH) { return true; }
 	}
 
 	// Check whether the buffer ends in a typo. This is done using a trie

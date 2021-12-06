@@ -232,15 +232,14 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
     '// Copyright 2021 Google LLC\n',
     '// Copyright 2022 @filterpaper\n',
     '// SPDX-License-Identifier: Apache-2.0\n',
-    '// Original source: https://getreuer.info/posts/keyboards/autocorrection\n',
     f'\n/* Generated dictionary code ({len(autocorrections)} entries):\n',
     ''.join(sorted(f'{typo:<{len(max_typo)}} -> {correction}\n'
                    for typo, correction in autocorrections)),
     '*/\n\n',
-    f'#define AUTOCORRECTION_MIN_LENGTH {len(min_typo)}  // "{min_typo}"\n',
-    f'#define AUTOCORRECTION_MAX_LENGTH {len(max_typo)} // "{max_typo}"\n\n',
+    f'#define DICTIONARY_MIN_LENGTH  {len(min_typo)} // "{min_typo}"\n',
+    f'#define DICTIONARY_MAX_LENGTH {len(max_typo)} // "{max_typo}"\n\n',
     textwrap.fill('static uint8_t const dictionary[%d] = {%s};' % (
-      len(data), ', '.join(map(str, data))), width=80, subsequent_indent='  '),
+      len(data), ', '.join(map(str, data))), width=80, subsequent_indent=''),
     '\n\n'])
 
   with open(file_name, 'wt') as f:
