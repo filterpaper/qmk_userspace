@@ -21,7 +21,6 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 // Send custom keycode on hold for mod tap
 static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 	if (!record->tap.count && record->event.pressed) {
-	//	tap_code16(keymap_config.swap_lctl_lgui ? C(hold_keycode) : hold_keycode);
 		tap_code16(hold_keycode);
 		return false;
 	}
@@ -51,14 +50,11 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		case M_TH:    return process_tap_hold(Z_PST, record);
 #ifdef RGB_MATRIX_ENABLE
 		case RESET:
-			if (record->event.pressed) {
-				rgb_matrix_set_color_all(RGB_RED);
-				rgb_matrix_driver.flush();
-			}
+			rgb_matrix_set_color_all(RGB_RED);
+			rgb_matrix_driver.flush();
 			break;
 #endif
 	}
-
 	return true; // Continue with unmatched keycodes
 }
 
