@@ -16,6 +16,7 @@
 
 SUBS(vi_quit,  ":q!",   KC_Q, KC_W)
 SUBS(vi_save,  ":wq!",  KC_Z, KC_X)
+ACTN(dir_up, tap_code(KC_DOT); tap_code(KC_DOT); tap_code(KC_SLSH), DOT_TH, SLSH_TH)
 
 // layer toggles
 COMB(func,  TG(FNC),  LT(SYM,KC_TAB), KC_B)
