@@ -28,7 +28,7 @@ BOOTMAGIC_ENABLE = yes
 
 # Main source file and source paths
 SRC += filterpaper.c
-VPATH += $(USER_PATH)/oled $(USER_PATH)/word $(USER_PATH)/rgb
+VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/word
 
 # Combo support
 COMBO_ENABLE = yes
