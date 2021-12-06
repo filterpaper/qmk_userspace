@@ -56,26 +56,26 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	}
 
 	// Check whether the buffer ends in a typo. This is done using a trie
-	// stored in `autocorrection_data`.
+	// stored in `typo_data`.
 	uint16_t state = 0;
 	for (int i = typo_buffer_size - 1; i >= 0; --i) {
 		const uint8_t keycode = typo_buffer[i];
-		uint8_t code = autocorrection_data[state];
+		uint8_t code = typo_data[state];
 
 		if (code & 128) {  // Check for match in node with multiple children.
 			code &= 127;
-			for (; code != keycode; code = autocorrection_data[state += 3]) {
+			for (; code != keycode; code = typo_data[state += 3]) {
 				if (!code) { return true; }
 			}
 
 			// Follow link to child node.
-			state = (uint16_t)((uint_fast16_t)autocorrection_data[state + 1]
-					| (uint_fast16_t)autocorrection_data[state + 2] << 8);
+			state = (uint16_t)((uint_fast16_t)typo_data[state + 1]
+					| (uint_fast16_t)typo_data[state + 2] << 8);
 			if ((state & 0x8000) != 0) { goto found_typo; }
 			// Otherwise check for match in node with a single child.
 		} else if (code != keycode) {
 			return true;
-		} else if (!autocorrection_data[++state] && !(autocorrection_data[++state] & 128)) {
+		} else if (!typo_data[++state] && !(typo_data[++state] & 128)) {
 			goto found_typo;
 		}
 	}
@@ -83,9 +83,9 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 
 	found_typo:  // A typo was found! Apply autocorrection.
 	state &= 0x7fff;
-	const int backspaces = autocorrection_data[state];
+	const int backspaces = typo_data[state];
 	for (int i = 0; i < backspaces; ++i) { tap_code(KC_BSPC); }
-	send_string((const char*)(autocorrection_data + state + 1));
+	send_string((const char*)(typo_data + state + 1));
 
 	if (keycode == KC_SPC) {
 		typo_buffer[0] = KC_SPC;
