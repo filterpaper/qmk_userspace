@@ -233,7 +233,7 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
     '// Copyright 2022 @filterpaper\n',
     '// SPDX-License-Identifier: Apache-2.0\n',
     '// Original source: https://getreuer.info/posts/keyboards/autocorrection\n',
-    f'\n/* Generated dictionary ({len(autocorrections)} entries):\n',
+    f'\n/* Generated dictionary code ({len(autocorrections)} entries):\n',
     ''.join(sorted(f'{typo:<{len(max_typo)}} -> {correction}\n'
                    for typo, correction in autocorrections)),
     '*/\n\n',

@@ -37,8 +37,8 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #endif
 #ifdef PROSE_FEATURES
 		extern bool process_autocorrection(uint16_t keycode, keyrecord_t* record);
-		if (!process_autocorrection(keycode, record)) { return false; }
 		extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
+		if (!process_autocorrection(keycode, record)) { return false; }
 		if (!process_caps_word(keycode, record)) { return false; }
 #endif
 	}

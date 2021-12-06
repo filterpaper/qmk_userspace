@@ -9,6 +9,7 @@
 :ture         -> true
 accomodate    -> accommodate
 acommodate    -> accommodate
+agian         -> again
 aparent       -> apparent
 aparrent      -> apparent
 apparant      -> apparent
@@ -22,7 +23,6 @@ cieling       -> ceiling
 collegue      -> colleague
 concensus     -> consensus
 contians      -> contains
-cosnt         -> const
 dervied       -> derived
 fales         -> false
 fasle         -> false
@@ -35,12 +35,12 @@ guaratee      -> guarantee
 heigth        -> height
 heirarchy     -> hierarchy
 inclued       -> include
-interator     -> iterator
 intput        -> input
 invliad       -> invalid
 lenght        -> length
 liasion       -> liaison
 libary        -> library
+lieue         -> lieu
 listner       -> listener
 looses:       -> loses
 looup         -> lookup
@@ -72,5 +72,8 @@ swithc        -> switch
 swtich        -> switch
 thresold      -> threshold
 udpate        -> update
+uncessary     -> unnecessary
+unecessary    -> unnecessary
+unescessary   -> unnecessary
 wierd         -> weird
 widht         -> width
