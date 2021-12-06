@@ -104,7 +104,7 @@
 #	define OLED_DISABLE_TIMEOUT // Prevent matrix_changed triggering oled_on()
 #	define OLED_UPDATE_INTERVAL 50
 #	define OLED_BRIGHTNESS 180
-#	define OLED_FONT_H "users/filterpaper/oled/oledfont.c"
+#	define OLED_FONT_H "oled/oledfont.c"
 #endif
 
 #ifdef COMBO_ENABLE
