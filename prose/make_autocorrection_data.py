@@ -1,5 +1,5 @@
 # Copyright 2021 Google LLC
-# @filterpaper
+# Copyright 2022 @filterpaper
 # SPDX-License-Identifier: Apache-2.0
 
 """Python program to make autocorrection_data.h.
@@ -234,7 +234,7 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
     ''.join(sorted(f'{typo:<{len(max_typo)}} -> {correction}\n'
                    for typo, correction in autocorrections)),
     f'*/\n\n#define AUTOCORRECTION_MIN_LENGTH {len(min_typo)}  // "{min_typo}"\n',
-    f'#define AUTOCORRECTION_MAX_LENGTH {len(max_typo)}  // "{max_typo}"\n\n',
+    f'#define AUTOCORRECTION_MAX_LENGTH {len(max_typo)} // "{max_typo}"\n\n',
     textwrap.fill('static uint8_t const typo_data[%d] = {%s};' % (
       len(data), ', '.join(map(str, data))), width=80, subsequent_indent='  '),
     '\n\n'])

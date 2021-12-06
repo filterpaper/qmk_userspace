@@ -74,7 +74,7 @@ widht      -> width
 */
 
 #define AUTOCORRECTION_MIN_LENGTH 5  // ":ture"
-#define AUTOCORRECTION_MAX_LENGTH 10  // "accomodate"
+#define AUTOCORRECTION_MAX_LENGTH 10 // "accomodate"
 
 static uint8_t const typo_data[1104] = {172, 43, 0, 6, 71, 0, 7, 81, 0, 8, 199,
   0, 9, 240, 1, 10, 250, 1, 11, 26, 2, 17, 53, 2, 18, 190, 2, 19, 202, 2, 21,

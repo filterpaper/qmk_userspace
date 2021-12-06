@@ -72,4 +72,5 @@ swithc        -> switch
 swtich        -> switch
 thresold      -> threshold
 udpate        -> update
+wierd         -> weird
 widht         -> width

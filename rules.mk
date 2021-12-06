@@ -25,18 +25,21 @@ EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = yes
+
+# Main source file and source paths
+SRC += filterpaper.c
+VPATH += $(USER_PATH)/oled $(USER_PATH)/prose $(USER_PATH)/rgb 
+
+# Combo support
 COMBO_ENABLE = yes
 SRC += combos.c
-
-# Main source file
-SRC += filterpaper.c
 
 # Small split keyboards
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
 	SWAP_HANDS_ENABLE = yes
 	OPT_DEFS += -DPROSE_FEATURES
-	SRC += prose/autocorrection.c
-	SRC += prose/caps_word.c
+	SRC += autocorrection.c
+	SRC += caps_word.c
 endif
 
 # Boardsource's Mark65 and Technik
@@ -44,6 +47,9 @@ ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
+	OPT_DEFS += -DPROSE_FEATURES
+	SRC += autocorrection.c
+	SRC += caps_word.c
 endif
 
 # Corne CRKBD
@@ -52,15 +58,15 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		OLED_ENABLE = yes
 		OPT_DEFS += -D${OLED}
 		ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT CAT))
-			SRC += oled/oled-icons.c oled/oled-bongocat.c
+			SRC += oled-icons.c oled-bongocat.c
 		else ifeq ($(OLED), $(filter $(OLED), FELIX LUNA))
-			SRC += oled/oled-icons.c oled/oled-luna.c
+			SRC += oled-icons.c oled-luna.c
 		endif
 	endif
 	ifneq ($(strip $(KB)),)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
-		SRC += rgb/rgb-matrix.c
+		SRC += rgb-matrix.c
 		OPT_DEFS += -D${KB}
 	endif
 	ifeq ($(strip $(KB)), $(strip $(OLED)))

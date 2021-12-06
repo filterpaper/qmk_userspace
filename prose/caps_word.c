@@ -25,6 +25,5 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 		case KC_GESC:
 			tap_code(KC_CAPS);
 	}
-
 	return true;
 }

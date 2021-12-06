@@ -17,11 +17,13 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		return true;
 	}
 
-	// Get base key code from mod tap
-	if (record->tap.count &&
+	// Get base key code from mod taps
+/*	if (record->tap.count &&
 		((QK_MOD_TAP < keycode && keycode < QK_MOD_TAP_MAX) ||
 		(QK_LAYER_TAP < keycode && keycode < QK_LAYER_TAP_MAX))
 	) { keycode &= 0x00FF; }
+*/
+	keycode &= 0x00FF; // Get base key code from mod taps
 
 	if (!(KC_A <= keycode && keycode <= KC_Z)) {
 		if (keycode == KC_BSPC) {
@@ -48,7 +50,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	}
 
 	// Append `keycode` to the buffer.
-	typo_buffer[typo_buffer_size++] = (uint8_t) keycode;
+	typo_buffer[typo_buffer_size++] = (uint8_t)keycode;
 	if (typo_buffer_size < AUTOCORRECTION_MAX_LENGTH) {
 		typo_buffer[typo_buffer_size] = 0;
 		// Early return if not many characters have been buffered so far.
@@ -67,10 +69,8 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 			for (; code != keycode; code = typo_data[state += 3]) {
 				if (!code) { return true; }
 			}
-
 			// Follow link to child node.
-			state = (uint16_t)((uint_fast16_t)typo_data[state + 1]
-					| (uint_fast16_t)typo_data[state + 2] << 8);
+			state = (typo_data[state + 1] | typo_data[state + 2] << 8);
 			if ((state & 0x8000) != 0) { goto found_typo; }
 			// Otherwise check for match in node with a single child.
 		} else if (code != keycode) {
@@ -81,10 +81,10 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	}
 	return true;
 
-	found_typo:  // A typo was found! Apply autocorrection.
+found_typo:  // A typo was found! Apply autocorrection.
 	state &= 0x7fff;
-	const int backspaces = typo_data[state];
-	for (int i = 0; i < backspaces; ++i) { tap_code(KC_BSPC); }
+	const uint8_t backspaces = typo_data[state];
+	for (uint8_t i = 0; i < backspaces; ++i) { tap_code(KC_BSPC); }
 	send_string((const char*)(typo_data + state + 1));
 
 	if (keycode == KC_SPC) {
