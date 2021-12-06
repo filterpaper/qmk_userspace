@@ -28,7 +28,7 @@ BOOTMAGIC_ENABLE = yes
 
 # Main source file and source paths
 SRC += filterpaper.c
-VPATH += $(USER_PATH)/oled $(USER_PATH)/prose $(USER_PATH)/rgb
+VPATH += $(USER_PATH)/oled $(USER_PATH)/word $(USER_PATH)/rgb
 
 # Combo support
 COMBO_ENABLE = yes
@@ -37,7 +37,7 @@ SRC += combos.c
 # Small split keyboards
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
 	SWAP_HANDS_ENABLE = yes
-	OPT_DEFS += -DPROSE_FEATURES
+	OPT_DEFS += -DWORD_FEATURES
 	SRC += autocorrection.c caps_word.c
 endif
 
@@ -45,7 +45,7 @@ endif
 ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
-	OPT_DEFS += -DPROSE_FEATURES
+	OPT_DEFS += -DWORD_FEATURES
 	SRC += rgb-matrix.c autocorrection.c caps_word.c
 endif
 

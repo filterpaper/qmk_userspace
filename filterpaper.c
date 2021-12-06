@@ -35,7 +35,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		extern uint32_t tap_timer;
 		tap_timer = timer_read32();  // Reset OLED animation tap timer
 #endif
-#ifdef PROSE_FEATURES
+#ifdef WORD_FEATURES
 		extern bool process_autocorrection(uint16_t keycode, keyrecord_t* record);
 		extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
 		if (!process_autocorrection(keycode, record)) { return false; }
