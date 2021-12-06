@@ -3,9 +3,9 @@
 
 #include "filterpaper.h"
 
-#ifdef WORD_FEATURES
-#include "features/autocorrection.h"
-#include "features/caps_word.h"
+#ifdef PROSE_FEATURES
+#include "prose/autocorrection.h"
+#include "prose/caps_word.h"
 #endif
 
 // Tap hold customization
@@ -39,7 +39,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		extern uint32_t tap_timer;
 		tap_timer = timer_read32();  // Reset OLED animation tap timer
 #endif
-#ifdef WORD_FEATURES
+#ifdef PROSE_FEATURES
 		if (!process_autocorrection(keycode, record)) { return false; }
 		if (!process_caps_word(keycode, record)) { return false; }
 #endif

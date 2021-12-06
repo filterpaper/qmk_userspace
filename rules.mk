@@ -34,9 +34,9 @@ SRC += filterpaper.c
 # Small split keyboards
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
 	SWAP_HANDS_ENABLE = yes
-	OPT_DEFS += -DWORD_FEATURES
-	SRC += features/autocorrection.c
-	SRC += features/caps_word.c
+	OPT_DEFS += -DPROSE_FEATURES
+	SRC += prose/autocorrection.c
+	SRC += prose/caps_word.c
 endif
 
 # Boardsource's Mark65 and Technik

@@ -1,7 +1,7 @@
 // Copyright 2021 Google LLC
-// @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: Apache-2.0
-// https://getreuer.info/posts/keyboards/autocorrection
+// Original source: https://getreuer.info/posts/keyboards/autocorrection
 
 #include <string.h>
 #include "autocorrection.h"

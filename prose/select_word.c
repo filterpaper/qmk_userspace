@@ -1,12 +1,12 @@
 // Copyright 2021 Google LLC
-// @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: Apache-2.0
-// https://getreuer.info/posts/keyboards/select-word
+// Original source: https://getreuer.info/posts/keyboards/select-word
 
 #include "select_word.h"
 
 // Mac users, uncomment this line:
-// #define MAC_HOTKEYS
+#define MAC_HOTKEYS
 
 enum { STATE_NONE, STATE_SELECTED, STATE_WORD, STATE_FIRST_LINE, STATE_LINE };
 

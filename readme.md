@@ -38,7 +38,7 @@ oled/oledfont.c      | Corne logo, コルネ katakana name, fonts and icon image
 rgb/rgb-matrix.c     | RGB matrix effect and custom codes, see [RGB matrix lighting](https://github.com/qmk/qmk_firmware/docs/feature_rgb_matrix.md)
 keymaps/             | Folder of supported keyboard keymaps
 keymaps/layout.h     | Keymap macro wrapper for shared layouts
-features/            | Folder of word handling feature code
+prose/               | Folder of word handling feature code
 animation_frames/    | Folder of Bongocat animation images
 archive/             | Archived files of original codes and layouts
 

@@ -1,5 +1,5 @@
 // Copyright 2021 Google LLC
-// @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: Apache-2.0
 //
 // Select word/line button.
@@ -15,8 +15,7 @@
 // Uncomment the `#define MAC_HOTKEYS` line in select_word.c for Mac hotkeys.
 // The Mac implementation is untested, let me know if it has problems.
 //
-// For full documentation, see
-// https://getreuer.info/posts/keyboards/select-word
+// Original documentation: https://getreuer.info/posts/keyboards/select-word
 
 #pragma once
 #include QMK_KEYBOARD_H
