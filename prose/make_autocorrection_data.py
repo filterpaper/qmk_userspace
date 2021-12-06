@@ -229,13 +229,17 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
   min_typo = min(autocorrections, key=typo_len)[0]
   max_typo = max(autocorrections, key=typo_len)[0]
   generated_code = ''.join([
-    '/* Generated code.\n\n',
-    f'Autocorrection dictionary ({len(autocorrections)} entries):\n',
+    '// Copyright 2021 Google LLC\n',
+    '// Copyright 2022 @filterpaper\n',
+    '// SPDX-License-Identifier: Apache-2.0\n',
+    '// Original source: https://getreuer.info/posts/keyboards/autocorrection\n',
+    f'\n/* Generated dictionary ({len(autocorrections)} entries):\n',
     ''.join(sorted(f'{typo:<{len(max_typo)}} -> {correction}\n'
                    for typo, correction in autocorrections)),
-    f'*/\n\n#define AUTOCORRECTION_MIN_LENGTH {len(min_typo)}  // "{min_typo}"\n',
+    '*/\n\n',
+    f'#define AUTOCORRECTION_MIN_LENGTH {len(min_typo)}  // "{min_typo}"\n',
     f'#define AUTOCORRECTION_MAX_LENGTH {len(max_typo)} // "{max_typo}"\n\n',
-    textwrap.fill('static uint8_t const typo_data[%d] = {%s};' % (
+    textwrap.fill('static uint8_t const dictionary[%d] = {%s};' % (
       len(data), ', '.join(map(str, data))), width=80, subsequent_indent='  '),
     '\n\n'])
 

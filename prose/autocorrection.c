@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // Original source: https://getreuer.info/posts/keyboards/autocorrection
 
+#include QMK_KEYBOARD_H
 #include <string.h>
-#include "autocorrection.h"
 #include "autocorrection_data.h"
 
 bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
@@ -17,13 +17,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		return true;
 	}
 
-	// Get base key code from mod taps
-/*	if (record->tap.count &&
-		((QK_MOD_TAP < keycode && keycode < QK_MOD_TAP_MAX) ||
-		(QK_LAYER_TAP < keycode && keycode < QK_LAYER_TAP_MAX))
-	) { keycode &= 0x00FF; }
-*/
-	keycode &= 0x00FF; // Get base key code from mod taps
+	keycode &= 0x00FF; // Mask for base keycode
 
 	if (!(KC_A <= keycode && keycode <= KC_Z)) {
 		if (keycode == KC_BSPC) {
@@ -58,24 +52,23 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	}
 
 	// Check whether the buffer ends in a typo. This is done using a trie
-	// stored in `typo_data`.
+	// stored in `dictionary`.
 	uint16_t state = 0;
-	for (int i = typo_buffer_size - 1; i >= 0; --i) {
+	for (uint8_t i = typo_buffer_size - 1; i >= 0; --i) {
 		const uint8_t keycode = typo_buffer[i];
-		uint8_t code = typo_data[state];
+		uint8_t code = dictionary[state];
 
 		if (code & 128) {  // Check for match in node with multiple children.
 			code &= 127;
-			for (; code != keycode; code = typo_data[state += 3]) {
+			for (; code != keycode; code = dictionary[state += 3]) {
 				if (!code) { return true; }
 			}
 			// Follow link to child node.
-			state = (typo_data[state + 1] | typo_data[state + 2] << 8);
+			state = (dictionary[state + 1] | dictionary[state + 2] << 8);
 			if ((state & 0x8000) != 0) { goto found_typo; }
-			// Otherwise check for match in node with a single child.
-		} else if (code != keycode) {
+		} else if (code != keycode) { // Check for match in node with single child.
 			return true;
-		} else if (!typo_data[++state] && !(typo_data[++state] & 128)) {
+		} else if (!dictionary[++state] && !(dictionary[++state] & 128)) {
 			goto found_typo;
 		}
 	}
@@ -83,9 +76,9 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 
 found_typo:  // A typo was found! Apply autocorrection.
 	state &= 0x7fff;
-	const uint8_t backspaces = typo_data[state];
+	const uint8_t backspaces = dictionary[state];
 	for (uint8_t i = 0; i < backspaces; ++i) { tap_code(KC_BSPC); }
-	send_string((const char*)(typo_data + state + 1));
+	send_string((const char*)(dictionary + state + 1));
 
 	if (keycode == KC_SPC) {
 		typo_buffer[0] = KC_SPC;

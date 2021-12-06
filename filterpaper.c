@@ -3,10 +3,6 @@
 
 #include "filterpaper.h"
 
-#ifdef PROSE_FEATURES
-#include "prose/autocorrection.h"
-#include "prose/caps_word.h"
-#endif
 
 // Tap hold customization
 #ifdef TAPPING_FORCE_HOLD_PER_KEY // Enable for right thumb keys
@@ -40,7 +36,9 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		tap_timer = timer_read32();  // Reset OLED animation tap timer
 #endif
 #ifdef PROSE_FEATURES
+		extern bool process_autocorrection(uint16_t keycode, keyrecord_t* record);
 		if (!process_autocorrection(keycode, record)) { return false; }
+		extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
 		if (!process_caps_word(keycode, record)) { return false; }
 #endif
 	}
