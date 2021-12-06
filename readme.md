@@ -213,6 +213,12 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 }
 ```
 
+## macOS / Windows Shortcuts
+[Magic Keycodes](https://docs.qmk.fm/#/keycodes_magic?id=magic-keycodes) swap key `MAGIC_TOGGLE_CTL_GUI` can be used as OS toggle, allowing QMK to read its status from the following variable to swap clipboard shortcuts:
+```c
+paste_keycode = keymap_config.swap_lctl_lgui ? C(KC_V) : G(KC_V);
+```
+
 
 
 # Layout wrapper macros
