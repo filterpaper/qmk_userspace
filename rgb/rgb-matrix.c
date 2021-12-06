@@ -48,12 +48,8 @@ void rgb_matrix_indicators_user(void) {
 			if (g_led_config.flags[i] & MOD_FLAG) { rgb_matrix_set_color(i, RGB_MODS); }
 		}
 	}
-
+	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
-	#ifdef KEYBOARD_boardsource_the_mark
-		rgb_matrix_set_color_all(RGB_LAYER);
-	#else
-		// Layer keys indicator by @rgoulter
 		uint8_t layer = get_highest_layer(layer_state);
 		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
 			for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
@@ -63,7 +59,6 @@ void rgb_matrix_indicators_user(void) {
 				}
 			}
 		}
-	#endif // KEYBOARD_boardsource_the_mark
 	}
 }
 
@@ -81,14 +76,8 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 			if (g_led_config.flags[i] & MOD_FLAG) { rgb_matrix_set_color(i, RGB_MODS); }
 		}
 	}
-
+	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
-	#ifdef KEYBOARD_boardsource_the_mark
-		for (uint8_t i = led_min; i <= led_max; ++i) {
-			rgb_matrix_set_color(i, RGB_LAYER);
-		}
-	#else
-		// Layer keys indicator by @rgoulter
 		uint8_t layer = get_highest_layer(layer_state);
 		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
 			for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
@@ -99,6 +88,5 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 				}
 			}
 		}
-	#endif // KEYBOARD_boardsource_the_mark
 	}
 }*/
