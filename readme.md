@@ -1,18 +1,18 @@
 # Summary
 This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` source files deep inside QMK's sub-directories. All customisation required to build firmwares are configured within this space in the following manner:
 
-* Store [QMK Configurator](https://config.qmk.fm/#/) exported layouts or wrapper based macro key map in JSON format.
-* Create `rules.mk`, `config.h` and shared source codes in this folder, with `#ifdef` preprocessors for unique keyboard or feature specific functions.
-* Run `qmk flash` on JSON layout files to build a custom firmware for each board.
+* Store [QMK Configurator](https://config.qmk.fm/#/) exported layouts or wrapper macro keymap in JSON format.
+* Use `rules.mk`, `config.h` and shared source codes in this folder.
+* Build QMK firmware using JSON files instead of `keymap.c`.
 * See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
 ## Setup
-Clone the QMK firmware, followed by this repository into `users/filterpaper`:
+Forking the QMK repo can be avoided in this manner: clone the QMK firmware, followed by this repository into `users/filterpaper`:
 ```sh
 git clone https://github.com/qmk/qmk_firmware qmk_firmware
 git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filterpaper
 ```
-
+Git updates within `users/filterpaper` will be independent from QMK.
 
 
 # Supported Keyboards
@@ -45,7 +45,7 @@ archive/             | Archived files of original codes and layouts
 
 
 # Build Commands
-QMK will read "keyboard" and "keymap" values from the JSON file to build the firmware:
+QMK will read "keyboard" and "keymap" values from each JSON files:
 ```sh
 qmk flash ~/qmk_firmware/users/filterpaper/keymaps/technik.json
 qmk flash ~/qmk_firmware/users/filterpaper/keymaps/corne.json
@@ -65,7 +65,7 @@ Subsequently, the same firmware binary can be flashed normally to both sides. Se
 
 
 # Building Corne Keyboard (CRKBD)
-Corne is configured with a few modular build options in `rules.mk`:
+Corne is configured with a few modular build options in [rules.mk](rules.mk):
 ## Tiny build
 Minimal firmware with no OLED and RGB support is the default:
 ```
@@ -369,10 +369,10 @@ BOOTLOADER_SIZE = 512
 ## Hardware Parts
 * [Elite-C](https://boardsource.xyz/store/5ef67ea66786dc1e65a80708)
 * [Pro Micro C](https://www.aliexpress.com/item/32887074671.html)
-* Mill-Max 315-43-112-41-003000 [low profile sockets](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) for Elite-C
-* Mill-Max 315-43-164-41-001000 [low profile sockets](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-001000/1212142) for Pro Micro C
+* Mill-Max [315-43-112-41-003000 sockets](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) for Elite-C
+* Mill-Max [315-43-164-41-001000 sockets](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-001000/1212142) for Pro Micro C
 * Mill-Max [connector pins](https://www.digikey.com/product-detail/en/3320-0-00-15-00-00-03-0/ED1134-ND/4147392)
-* [PJ320A](https://www.aliexpress.com/item/1005001928651798.html) audio jack
+* [PJ320A](https://www.aliexpress.com/item/1005001928651798.html) jack
 * [TRRS](https://www.aliexpress.com/item/32961128759.html) cable
 * [Silicone bumper](https://www.aliexpress.com/item/32912066603.html) feet
 * Kailh [gchoc v1](https://www.aliexpress.com/item/4000907409650.html) switches
