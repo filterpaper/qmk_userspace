@@ -17,33 +17,28 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		return true;
 	}
 
-	keycode &= 0x00FF; // Mask for base keycode
+	// Mask for base keycode.
+	keycode &= 0x00FF;
 
-	if (!(KC_A <= keycode && keycode <= KC_Z)) {
-		if (keycode == KC_BSPC) {
-			// Remove last character from the buffer.
-			if (typo_buffer_size > 0) { --typo_buffer_size; }
-			return true;
-		} else if (KC_1 <= keycode && keycode <= KC_SLSH && keycode != KC_ESC) {
-			// Set a word boundary if space, period, digit, etc. is pressed.
-			// Behave more conservatively for the enter key. Reset, so that enter
-			// can't be used on a word ending.
-			if (keycode == KC_ENT) { typo_buffer_size = 0; }
-			keycode = KC_SPC;
+	// Handle non-dictionary key.
+	if (!(KC_A <= keycode && keycode <= KC_Z) && keycode != KC_SPC) {
+		if (keycode == KC_BSPC && typo_buffer_size > 0) {
+			// Remove last character from buffer.
+			--typo_buffer_size;
 		} else {
-			// Clear state if some other non-alpha key is pressed.
+			// Clear state for other non-alpha key.
 			typo_buffer_size = 0;
-			return true;
 		}
+		return true;
 	}
 
-	// If the buffer is full, rotate it to discard the oldest character.
+	// If buffer is full, rotate it to discard the oldest character.
 	if (typo_buffer_size >= DICTIONARY_MAX_LENGTH) {
 		memmove(typo_buffer, typo_buffer + 1, DICTIONARY_MAX_LENGTH - 1);
 		typo_buffer_size = DICTIONARY_MAX_LENGTH - 1;
 	}
 
-	// Append `keycode` to the buffer.
+	// Append `keycode` to buffer.
 	typo_buffer[typo_buffer_size++] = (uint8_t)keycode;
 	if (typo_buffer_size < DICTIONARY_MAX_LENGTH) {
 		typo_buffer[typo_buffer_size] = 0;
@@ -51,8 +46,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		if (typo_buffer_size < DICTIONARY_MIN_LENGTH) { return true; }
 	}
 
-	// Check whether the buffer ends in a typo. This is done using a trie
-	// stored in `dictionary`.
+	// Check for typo in buffer using a trie stored in `dictionary`.
 	uint16_t state = 0;
 	for (uint8_t i = typo_buffer_size - 1; i >= 0; --i) {
 		const uint8_t keycode = typo_buffer[i];
@@ -66,7 +60,8 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 			// Follow link to child node.
 			state = (dictionary[state + 1] | dictionary[state + 2] << 8);
 			if ((state & 0x8000) != 0) { goto found_typo; }
-		} else if (code != keycode) { // Check for match in node with single child.
+		// Check for match in node with single child.
+		} else if (code != keycode) {
 			return true;
 		} else if (!dictionary[++state] && !(dictionary[++state] & 128)) {
 			goto found_typo;
