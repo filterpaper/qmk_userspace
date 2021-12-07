@@ -10,8 +10,8 @@
 #endif
 
 #ifdef SWAP_HANDS_ENABLE
-	COMB(swap_left,  SH_TT,  KC_C, KC_V)
-	COMB(swap_rght,  SH_TT,  M_TH, COMM_TH)
+	COMB(swap_left,  SH_TT,  KC_X, KC_V)
+	COMB(swap_rght,  SH_TT,  M_TH, DOT_TH)
 #endif
 
 SUBS(vi_quit,  ":q!",   KC_Q, KC_W)
