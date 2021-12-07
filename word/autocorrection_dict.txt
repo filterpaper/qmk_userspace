@@ -22,7 +22,7 @@ choosen       -> chosen
 cieling       -> ceiling
 collegue      -> colleague
 concensus     -> consensus
-contians      -> contains
+contians      -> contain
 dervied       -> derived
 fales         -> false
 fasle         -> false

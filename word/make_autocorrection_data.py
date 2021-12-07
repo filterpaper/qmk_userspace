@@ -229,7 +229,6 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
   min_typo = min(autocorrections, key=typo_len)[0]
   max_typo = max(autocorrections, key=typo_len)[0]
   generated_code = ''.join([
-    '// Copyright 2021 Google LLC\n',
     '// Copyright 2022 @filterpaper\n',
     '// SPDX-License-Identifier: Apache-2.0\n',
     f'\n/* Generated dictionary code ({len(autocorrections)} entries):\n',

@@ -17,12 +17,10 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		return true;
 	}
 
-	// Mask for base keycode.
-	keycode &= 0x00FF;
-
 	// Handle non-dictionary key.
-	if (!(KC_A <= keycode && keycode <= KC_Z) && keycode != KC_SPC) {
-		if (keycode == KC_BSPC && typo_buffer_size > 0) {
+	uint8_t const basekey = keycode & 0x00FF;
+	if (!(KC_A <= basekey && basekey <= KC_Z) && basekey != KC_SPC) {
+		if (basekey == KC_BSPC && typo_buffer_size > 0) {
 			// Remove last character from buffer.
 			--typo_buffer_size;
 		} else {
@@ -32,7 +30,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		return true;
 	}
 
-	// If buffer is full, rotate it to discard the oldest character.
+	// Rotate oldest character if bufffer is full.
 	if (typo_buffer_size >= DICTIONARY_MAX_LENGTH) {
 		memmove(typo_buffer, typo_buffer + 1, DICTIONARY_MAX_LENGTH - 1);
 		typo_buffer_size = DICTIONARY_MAX_LENGTH - 1;
@@ -49,19 +47,19 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	// Check for typo in buffer using a trie stored in `dictionary`.
 	uint16_t state = 0;
 	for (uint8_t i = typo_buffer_size - 1; i >= 0; --i) {
-		const uint8_t keycode = typo_buffer[i];
+		uint8_t const buffer = typo_buffer[i];
 		uint8_t code = dictionary[state];
 
 		if (code & 128) {  // Check for match in node with multiple children.
 			code &= 127;
-			for (; code != keycode; code = dictionary[state += 3]) {
+			for (; code != buffer; code = dictionary[state += 3]) {
 				if (!code) { return true; }
 			}
 			// Follow link to child node.
 			state = (dictionary[state + 1] | dictionary[state + 2] << 8);
 			if ((state & 0x8000) != 0) { goto found_typo; }
 		// Check for match in node with single child.
-		} else if (code != keycode) {
+		} else if (code != buffer) {
 			return true;
 		} else if (!dictionary[++state] && !(dictionary[++state] & 128)) {
 			goto found_typo;
@@ -71,9 +69,9 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 
 found_typo:  // A typo was found! Apply autocorrection.
 	state &= 0x7fff;
-	const uint8_t backspaces = dictionary[state];
+	uint8_t const backspaces = dictionary[state];
 	for (uint8_t i = 0; i < backspaces; ++i) { tap_code(KC_BSPC); }
-	send_string((const char*)(dictionary + state + 1));
+	send_string((char const *)(dictionary + state + 1));
 
 	if (keycode == KC_SPC) {
 		typo_buffer[0] = KC_SPC;
