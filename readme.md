@@ -35,7 +35,8 @@ qmk compile keymaps/corne.json
 
 # Code Features
 * Shared [layout](keymaps/) wrapper macros
-* Combo wrapper macros
+* Combos simplified with preprocessors
+* Tap-hold clipboard shortcuts
 * [OLED](oled/) indicators and animation
   * Bongocat with compressed RLE frames
   * Luna (and Felix) the dog

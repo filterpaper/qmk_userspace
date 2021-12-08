@@ -86,7 +86,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 void matrix_init_user(void) { RXLED_INIT; TXLED_INIT; }
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
-	switch (get_highest_layer(state)) {
+	switch (get_highest_layer(layer_state|default_layer_state)) {
 		case CMK:
 		case FNC: RXLED_ON;  TXLED_ON;  break;
 		case SYM: RXLED_OFF; TXLED_ON;  break;
