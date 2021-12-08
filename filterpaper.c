@@ -13,7 +13,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for alphanumeric tap hold
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xF000) == LMT_BITS || (keycode & 0xFF00) == LT0_BITS ? false : true;
+	return (keycode & 0xf000) == LMT_BITS || (keycode & 0xff00) == LT0_BITS ? false : true;
 }
 #endif
 
@@ -86,7 +86,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 void matrix_init_user(void) { RXLED_INIT; TXLED_INIT; }
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
-	switch (get_highest_layer(layer_state|default_layer_state)) {
+	switch (get_highest_layer(state|default_layer_state)) {
 		case CMK:
 		case FNC: RXLED_ON;  TXLED_ON;  break;
 		case SYM: RXLED_OFF; TXLED_ON;  break;

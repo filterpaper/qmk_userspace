@@ -205,7 +205,7 @@ void matrix_scan_user(void) {
 Or as layer indicator:
 ```c
 layer_state_t layer_state_set_user(layer_state_t const state) {
-    switch (get_highest_layer(state)) {
+    switch(get_highest_layer(state|default_layer_state)) {
         case FNC: RXLED_ON;  TXLED_ON;  break;
         case SYM: RXLED_OFF; TXLED_ON;  break;
         case NUM: RXLED_ON;  TXLED_OFF; break;

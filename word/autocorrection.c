@@ -17,8 +17,8 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		return true;
 	}
 
-	// Handle non-dictionary key.
-	uint8_t const basekey = keycode & 0x00ff;
+	// Handle non-alpha key.
+	uint8_t const basekey = keycode & 0xff;
 	if (!(KC_A <= basekey && basekey <= KC_Z) && basekey != KC_SPC) {
 		if (basekey == KC_BSPC && typo_buffer_size > 0) {
 			// Remove last character from buffer.
