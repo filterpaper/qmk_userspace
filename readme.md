@@ -19,30 +19,32 @@ Git updates within `users/filterpaper` will be independent from QMK.
 # Supported Keyboards
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
-* [3w6](https://github.com/qmk/qmk_firmware/tree/master/keyboards/3w6/rev2), [Architeuthis Dux](https://github.com/qmk/qmk_firmware/tree/master/keyboards/a_dux), [Cradio](https://github.com/qmk/qmk_firmware/tree/master/keyboards/cradio) — Minimalist choc split-keyboards.
-* [Corne (CRKBD)](https://github.com/qmk/qmk_firmware/tree/master/keyboards/crkbd/rev1) — OLED animation and graphical indicators.
-* [Technik](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/technik_o) — RGB Matrix and modifier indicators.
-* [The Mark: 65](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/the_mark) — RGB under glow layer and modifier indicators.
+* [3w6](https://github.com/qmk/qmk_firmware/tree/master/keyboards/3w6/rev2)
+* [Architeuthis Dux](https://github.com/qmk/qmk_firmware/tree/master/keyboards/a_dux)
+* [Cradio](https://github.com/qmk/qmk_firmware/tree/master/keyboards/cradio)
+* [Corne (CRKBD)](https://github.com/qmk/qmk_firmware/tree/master/keyboards/crkbd/rev1)
+* [Technik](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/technik_o)
+* [The Mark: 65](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/the_mark)
 
-To build, run `qmk compile` for the JSON files in [keymaps](keymaps/) folder. Example:
+To build, run `qmk compile` on the JSON files in [keymaps](keymaps/) folder. Example:
 ```sh
 qmk compile keymaps/corne.json
 ```
 
 
 
-# Features
+# Code Features
 * Shared layout wrapper macros
 * Combo wrapper macros
-* OLED indicator and animation
+* [OLED](oled/) indicators and animation
   * Bongocat with compressed RLE frames
   * Luna (and Felix) the dog
   * Soundmonster indicator icons
   * Katakana コルネ font file
-* RGB matrix lighting and effects
-  * Custom "Candy" matrix effect
+* [RGB](rgb/) matrix lighting and effects
+  * Custom "candy" matrix effect
   * Layer indicators of active keys
-* Word handling
+* [Word](word/) handling functions
   * Turn off caps lock following a word
   * Autocorrection for typos
 
