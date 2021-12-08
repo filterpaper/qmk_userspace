@@ -11,9 +11,10 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t typo_buffer_size = 0;
 
-	// Disable while a mod other than shift is active.
-	if ((get_mods() & ~MOD_MASK_SHIFT) != 0) {
-		typo_buffer_size = 0;
+	// Allow Shift and skip its normal and mod-tap keycodes.
+	if (keycode == KC_LSFT || keycode == KC_RSFT ||
+	(QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX &&
+	((keycode >> 8) & 0x0F) == MOD_LSFT && !record->tap.count)) {
 		return true;
 	}
 
