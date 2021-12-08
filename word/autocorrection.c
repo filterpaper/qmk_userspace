@@ -45,14 +45,14 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		if (code & 128) {  // Check for match in node with multiple children.
 			code &= 127;
 			for (; code != buffer; code = dictionary[state += 3]) {
-				if (!code) { return true; }  // No parent match
+				if (!code) { return true; }
 			}
 			// Follow link to child node.
 			state = (dictionary[state + 1] | dictionary[state + 2] << 8);
 			if ((state & 0x8000) != 0) { goto found_typo; }
 		// Check for match in node with single child.
 		} else if (code != buffer) {
-			return true;  // No child match
+			return true;
 		} else if (!dictionary[++state] && !(dictionary[++state] & 128)) {
 			goto found_typo;
 		}
