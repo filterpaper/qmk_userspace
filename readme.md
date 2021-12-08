@@ -34,7 +34,7 @@ qmk compile keymaps/corne.json
 
 
 # Code Features
-* Shared layout wrapper macros
+* Shared [layout](keymaps/) wrapper macros
 * Combo wrapper macros
 * [OLED](oled/) indicators and animation
   * Bongocat with compressed RLE frames
@@ -67,6 +67,7 @@ Minimal firmware with no OLED and RGB support is the default:
 ```
 qmk compile corne.json
 ```
+
 ## Compiling for OLED display
 The `-OLED=` option will build support for pet animation on primary OLED with status icons on the secondary. Animation are key stroke driven by `tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes` to the compile commands:
 ### Bongocat
@@ -75,12 +76,14 @@ Build and flash each side with the corresponding options for left and right alig
 qmk compile -e OLED=LEFTCAT corne.json
 qmk compile -e OLED=RIGHTCAT corne.json
 ```
+
 ### Felix and Luna
-Build for Luna (outline) or Felix (filled) the dog:
+Build for Luna or Felix the dog:
 ```
 qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
 ```
+
 ## Compiling for RGB matrix
 The `-KB=` option will add support for RGB matrix lighting. `IMK` value will use under glow LEDs as indicators:
 ```
@@ -88,6 +91,7 @@ qmk compile -e KB=LP corne.json
 qmk compile -e KB=IMK corne.json
 ```
 Combine `-e OLED=` and `-e KB=` options to support both features.
+
 ## Logo file
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
@@ -219,6 +223,7 @@ paste_keycode = keymap_config.swap_lctl_lgui ? C(KC_V) : G(KC_V);
 
 
 # Layout wrapper macros
+
 ## Basic layout
 Text-based key map layout (in `keymap.c` format) using JSON file is supported with the use of preprocessor wrapper macros. Create each layer as a C preprocessor macro, in a `layout.h` file. Here is an example of a "number" layer for Corne:
 ```c
@@ -251,6 +256,7 @@ Finally create the keyboard's JSON file with macro names of each layer, together
 }
 ```
 Finally, add `#include layout.h` into `config.h`. The build process will construct a transient `keymap.c` from JSON file that includes `config.h`, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure in the compile process.
+
 ## Wrapping home row modifiers
 [Home row mods](https://precondition.github.io/home-row-mods) feature can be placed over the layout macros. A home row mod macro is defined below following the keyboard's matrix layout (crkbd/rev1) with home letters wrapped by a mod-tap:
 ```c
@@ -277,6 +283,7 @@ Next, wrap the layer that requires home-row mods with `HRM()` in the JSON file, 
     [ "_FUNC" ]
 ],
 ```
+
 ## Adapting layouts
 Depending compatibility, layouts can be adapted with macros. Corne's split 3x6_3 (6-column, 3-thumb) can be reduced to a split 34-key 3x5_2 (5-column, 2-thumb) with a simple wrapper macro to exclude the outer column and thumb keys:
 ```c
@@ -317,12 +324,14 @@ The JSON layout for 34-key Cradio keyboard uses the macro above to adapt 3x6_3 f
 
 
 # ISP Flashing Notes
+
 ## Hardware
 * [USBasp Programmer](https://www.aliexpress.com/item/1005001658474778.html)
 * [Breadboard](https://www.aliexpress.com/item/1742546890.html)
 * [Jumper wires](https://www.aliexpress.com/item/32996173648.html)
 * [Sockets](https://www.aliexpress.com/item/32852480645.html) and [breadboard](https://www.aliexpress.com/item/1742546890.html)
-* [Pro Micro C](https://www.aliexpress.com/item/32840365436.html) controller
+* [Pro Micro C](https://www.aliexpress.com/item/32887074671.html) controller
+
 ## USBasp wiring
 Connect the USBasp programmer to the controller in this manner:
 ```
@@ -333,6 +342,7 @@ USBasp MISO <-> Pro Micro 14/B3 (MISO)
 USBasp VCC  <-> Pro Micro VCC
 USBasp GND  <-> Pro Micro GND
 ```
+
 ## Atmel DFU
 See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide). Replace the Pro Micro's default Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command and fuses argument:
 ```c
@@ -340,6 +350,7 @@ avrdude -c usbasp -P usb -p atmega32u4 \
 -U flash:w:bootloader_atmega32u4_1.0.0.hex:i \
 -U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xC3:m
 ```
+
 ## NanoBoot
 Clone [@sigprof](https://github.com/sigprof)'s [nanoBoot fork](https://github.com/sigprof/nanoBoot), and run `git checkout string-descriptors` followed by `make` to build the updated boot loader. Replace the current boot loader with nanoBoot using the following command and fuses:
 ```c
