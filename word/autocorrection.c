@@ -17,7 +17,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		return true;
 	}
 
-	// Reduce buffer for backspace key, disable for other non-alpha.
+	// Subtract buffer for backspace key, reset for other non-alpha.
 	uint8_t const basekey = keycode & 0xff;
 	if (!(KC_A <= basekey && basekey <= KC_Z) && basekey != KC_SPC) {
 		if (basekey == KC_BSPC && typo_buffer_size > 0) { typo_buffer_size--; }
@@ -25,7 +25,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		return true;
 	}
 
-	// Rotate oldest character if bufffer is full.
+	// Rotate oldest character if buffer is full.
 	if (typo_buffer_size >= DICTIONARY_MAX_LENGTH) {
 		memmove(typo_buffer, typo_buffer + 1, DICTIONARY_MAX_LENGTH - 1);
 		typo_buffer_size = DICTIONARY_MAX_LENGTH - 1;
@@ -33,7 +33,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 
 	// Append `keycode` to buffer.
 	typo_buffer[typo_buffer_size++] = (uint8_t)keycode;
-	// Return if buffer is less than shortest word.
+	// Return if buffer is smaller than the shortest word.
 	if (typo_buffer_size < DICTIONARY_MIN_LENGTH) { return true; }
 
 	// Check for typo in buffer using a trie stored in `dictionary`.
