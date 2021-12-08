@@ -17,9 +17,9 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 }
 #endif
 
-#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY // Enable for layer tap
+#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY // Enable for layer taps
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xf000) == LT_BITS ? true : false;
+	return LT1_BITS <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
 }
 #endif
 
