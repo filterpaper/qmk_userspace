@@ -1,9 +1,9 @@
 # Summary
 This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` source files deep inside QMK's sub-directories. All customisation required to build firmwares are configured within this space in the following manner:
 
-* Store [QMK Configurator](https://config.qmk.fm/#/) exported layouts or wrapper macro keymap in JSON format.
+* Store [QMK Configurator](https://config.qmk.fm/#/) layout or wrapper macro keymap in JSON format.
 * Use `rules.mk`, `config.h` and shared source codes in this folder.
-* Build QMK firmware using JSON files instead of `keymap.c`.
+* Build QMK firmware using JSON files as parameter.
 * See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
 ## Setup
@@ -15,6 +15,7 @@ git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filter
 Git updates within `users/filterpaper` will be independent from QMK.
 
 
+
 # Supported Keyboards
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
@@ -23,39 +24,32 @@ Git updates within `users/filterpaper` will be independent from QMK.
 * [Technik](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/technik_o) — RGB Matrix and modifier indicators.
 * [The Mark: 65](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/the_mark) — RGB under glow layer and modifier indicators.
 
-# File Listing
-File                 | Description
--------------------- | -----------
-rules.mk             | QMK compile rules and hardware feature selection
-config.h             | QMK configuration variables and options, see [configuring QMK](https://github.com/qmk/qmk_firmware/docs/config_options.md)
-combos.c             | Wrapper macros for building combo source codes from `combos.inc`
-filterpaper.h        | User specific variables and options
-filterpaper.c        | Main source with macro functions, see [custom quantum functions](https://github.com/qmk/qmk_firmware/docs/custom_quantum_functions.md)
-oled/oled-icons.c    | Graphical layer and modifier status indicators (adds ~4018 bytes)
-oled/oled-luna.c     | Luna and Felix the dog WPM animation and modifier indicators for primary OLED (adds ~6202 bytes)
-oled/oled-bongocat.c | Bongocat animation using run-length encoded bytes
-oled/oledfont.c      | Corne logo, コルネ katakana name, fonts and icon images
-rgb/rgb-matrix.c     | RGB matrix effect and custom codes, see [RGB matrix lighting](https://github.com/qmk/qmk_firmware/docs/feature_rgb_matrix.md)
-keymaps/             | Folder of supported keyboard keymaps
-keymaps/layout.h     | Keymap macro wrapper for shared layouts
-word/                | Folder of word handling feature code
-animation_frames/    | Folder of Bongocat animation images
-archive/             | Archived files of original codes and layouts
-
-
-
-# Build Commands
-QMK will read "keyboard" and "keymap" values from each JSON files:
+To build, run `qmk compile` for the JSON files in [keymaps](keymaps/) folder. Example:
 ```sh
-qmk flash ~/qmk_firmware/users/filterpaper/keymaps/technik.json
-qmk flash ~/qmk_firmware/users/filterpaper/keymaps/corne.json
-qmk flash ~/qmk_firmware/users/filterpaper/keymaps/mark65.json
+qmk compile keymaps/corne.json
 ```
 
 
 
-# Building Split Keyboards
-All split keyboards are configured with `EE_HANDS` for controllers to read left or right handedness from EEPROM, allowing USB cable use on either side. They are flashed once with  `-bl` to save left and right handedness:
+# Features
+* Shared layout wrapper macros
+* Combo wrapper macros
+* OLED indicator and animation
+  * Bongocat with compressed RLE frames
+  * Luna (and Felix) the dog
+  * Soundmonster indicator icons
+  * Katakana コルネ font file
+* RGB matrix lighting and effects
+  * Custom "Candy" matrix effect
+  * Layer indicators of active keys
+* Word handling
+  * Turn off caps lock following a word
+  * Autocorrection for typos
+
+
+
+# Split Keyboard Handedness
+All split keyboards use `EE_HANDS` with left and right handedness saved in EEPROM, allowing USB cable use on either side. Each side is flashed once with the following commands:
 ```sh
 qmk flash -kb cradio -km default -bl dfu-split-left
 qmk flash -kb cradio -km default -bl dfu-split-right
@@ -64,7 +58,7 @@ Subsequently, the same firmware binary can be flashed normally to both sides. Se
 
 
 
-# Building Corne Keyboard (CRKBD)
+# Modular Corne (CRKBD) Build
 Corne is configured with a few modular build options in [rules.mk](rules.mk):
 ## Tiny build
 Minimal firmware with no OLED and RGB support is the default:
@@ -101,6 +95,7 @@ Images in `glcdfont.c` can be viewed and edited with:
 
 
 # Code Snippets
+
 ## Light configured layers keys
 ```c
 if (get_highest_layer(layer_state); > COLEMAK) {
