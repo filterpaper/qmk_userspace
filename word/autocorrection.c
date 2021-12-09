@@ -11,10 +11,10 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t typo_buffer_size = 0;
 
-	// Allow Shift and skip its normal and mod-tap keycodes.
+	// Exclude Shift press from reseting autocorrection
 	if (keycode == KC_LSFT || keycode == KC_RSFT ||
 	(QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX &&
-	((keycode >> 8) & 0x0F) == MOD_LSFT && !record->tap.count)) {
+	((keycode >> 8) & 0x0f) == MOD_LSFT && !record->tap.count)) {
 		return true;
 	}
 

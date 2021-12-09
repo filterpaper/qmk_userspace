@@ -45,7 +45,7 @@ qmk compile keymaps/corne.json
 * [RGB](rgb/) matrix lighting and effects
   * Custom "candy" matrix effect
   * Layer indicators of active keys
-* [Word](word/) handling functions
+* [Word](word/) processing functions
   * Turn off caps lock following a word
   * Autocorrection for typos
 
