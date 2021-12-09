@@ -15,14 +15,15 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 
 	// Exclude Shift hold from resetting autocorrection.
 	if (keycode == KC_LSFT || keycode == KC_RSFT ||
-	(QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX &&
-	((keycode >> 8) & 0x0f) == MOD_LSFT && !record->tap.count)) {
+		(QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX &&
+		((keycode >> 8) & 0x0f) == MOD_LSFT && !record->tap.count)) {
 		return true;
 	}
 
 	// Subtract buffer for Backspace key, reset for other non-alpha.
-	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z) && (uint8_t)keycode != KC_SPC) {
-		if ((uint8_t)keycode == KC_BSPC && buffer_size) { buffer_size--; }
+	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z) &&
+		(uint8_t)keycode != KC_SPC) {
+		if ((uint8_t)keycode == KC_BSPC && buffer_size) { --buffer_size; }
 		else { buffer_size = 0; }
 		return true;
 	}
@@ -42,7 +43,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	uint16_t state = 0;
 	for (uint8_t i = buffer_size - 1; i >= 0; --i) {
 		uint8_t const buffer = typo_buffer[i];
-		uint8_t code = PGMR(dictionary+state);
+		uint8_t code = PGMR(dictionary + state);
 
 		if (code & 128) {  // Check for match in node with multiple children.
 			code &= 127;
@@ -50,12 +51,14 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 				if (!code) { return true; }
 			}
 			// Follow link to child node.
-			state = (PGMR(dictionary + state + 1) | PGMR(dictionary + state + 2) << 8);
+			state = (PGMR(dictionary + state + 1) |
+					 PGMR(dictionary + state + 2) << 8);
 			if ((state & 0x8000) != 0) { goto found_typo; }
 		// Check for match in node with single child.
 		} else if (code != buffer) {
 			return true;
-		} else if (!PGMR(dictionary + (++state)) && !(PGMR(dictionary + (++state)) & 128)) {
+		} else if (!PGMR(dictionary + (++state)) &&
+				  !(PGMR(dictionary + (++state)) & 128)) {
 			goto found_typo;
 		}
 	}
