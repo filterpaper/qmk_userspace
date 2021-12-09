@@ -135,6 +135,11 @@ void render_mod_status(void) {
 	render_layer_state(get_highest_layer(layer_state|default_layer_state));
 
 	oled_set_cursor(0,11);
-	render_gui_alt(get_mods() & MOD_MASK_GUI, get_mods() & MOD_MASK_ALT);
-	render_ctrl_shift(get_mods() & MOD_MASK_CTRL, get_mods() & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock);
+	render_gui_alt(
+		get_mods() & MOD_MASK_GUI,
+		get_mods() & MOD_MASK_ALT);
+	render_ctrl_shift(
+		get_mods() & MOD_MASK_CTRL,
+		get_mods() & MOD_MASK_SHIFT ||
+		host_keyboard_led_state().caps_lock);
 }

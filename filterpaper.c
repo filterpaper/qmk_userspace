@@ -7,13 +7,15 @@
 // Tap hold customisation
 #ifdef TAPPING_FORCE_HOLD_PER_KEY // Enable for right thumb keys
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
-	return keycode == RSFT_T(KC_SPC) || keycode == LT(NUM,KC_BSPC) ? true : false;
+	return keycode == RSFT_T(KC_SPC) ||
+			keycode == LT(NUM,KC_BSPC) ? true : false;
 }
 #endif
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for alphanumeric tap hold
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xf000) == LMT_BITS || (keycode & 0xff00) == LT0_BITS ? false : true;
+	return (keycode & 0xf000) == LMT_BITS ||
+			(keycode & 0xff00) == LT0_BITS ? false : true;
 }
 #endif
 
