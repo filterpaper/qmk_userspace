@@ -1,4 +1,4 @@
-// Copyright 2021 @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 /* Adapted from Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
