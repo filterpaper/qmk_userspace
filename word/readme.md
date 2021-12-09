@@ -4,9 +4,9 @@
 This is a simple code function that will automatically disable caps lock at the end of a word, after a preset keycode is detected.
 
 ## Autocorrections
-Code is adapted from [Pascal Getreuer](https://getreuer.info/posts/keyboards/autocorrection)`s source, with added support for Mod Tap keys. Dictionary is encoded in a trie data structure and the code will send corrections for typos detected in a buffer as they are being processed by QMK.
+Code is adapted from [Pascal Getreuer](https://getreuer.info/posts/keyboards/autocorrection)'s source, with added support for mod tap shift and dictionary storage in AVR program space.
 
-Typos and corrections can be added into `autocorrection_dict.txt` in the format:
+Dictionary is encoded in a trie data structure and the code will send corrections for typos detected in a buffer as they are being processed by QMK. Typos and corrections can be added into `autocorrection_dict.txt` in the format:
 ```c
 typo   -> correction
 ```
