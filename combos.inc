@@ -32,6 +32,6 @@ COMB(vimacf,  HYPR(KC_F),  HM_D, HM_F)
 COMB(vimacj,  HYPR(KC_J),  HM_J, HM_K)
 
 // Macros
-SUBS(dir_up,   "../",   KC_Z, KC_X)
+SUBS(dir_up,   "../",   DOT_TH, SLSH_TH)
 SUBS(vi_quit,  ":q!",   KC_Q, KC_W)
 SUBS(vi_save,  ":wq!",  KC_Z, KC_X)
