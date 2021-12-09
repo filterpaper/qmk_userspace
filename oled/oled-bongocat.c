@@ -229,19 +229,19 @@ static void decode_frame(unsigned char const *frame) {
 
 	oled_set_cursor(0,0);
 	while (i < size) {
-		uint8_t count = pgm_read_byte(frame + i); ++i;
+		uint8_t count = pgm_read_byte(frame + i); i++;
 		if (count & 0x80) {
 			// Sequential count of bytes are unique
 			count &= ~(0x80);
 			for (uint8_t uniqs = 0; uniqs < count; ++uniqs) {
-				uint8_t byte = pgm_read_byte(frame + i); ++i;
-				oled_write_raw_byte(byte, ++cursor);
+				uint8_t byte = pgm_read_byte(frame + i); i++;
+				oled_write_raw_byte(byte, cursor++);
 			}
 		} else {
 			// Current byte is repeated by count
-			uint8_t byte = pgm_read_byte(frame + i); ++i;
+			uint8_t byte = pgm_read_byte(frame + i); i++;
 			for (uint8_t reps = 0; reps < count; ++reps) {
-				oled_write_raw_byte(byte, ++cursor);
+				oled_write_raw_byte(byte, cursor++);
 			}
 		}
 	}
