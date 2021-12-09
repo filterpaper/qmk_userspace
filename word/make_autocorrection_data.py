@@ -229,9 +229,7 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
   min_typo = min(autocorrections, key=typo_len)[0]
   max_typo = max(autocorrections, key=typo_len)[0]
   generated_code = ''.join([
-    '// Copyright 2022 @filterpaper\n',
-    '// SPDX-License-Identifier: Apache-2.0\n',
-    f'\n/* Generated dictionary code ({len(autocorrections)} entries):\n',
+    f'/* Generated dictionary code ({len(autocorrections)} entries):\n',
     ''.join(sorted(f'{typo:<{len(max_typo)}} -> {correction}\n'
                    for typo, correction in autocorrections)),
     '*/\n\n',
@@ -239,7 +237,7 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
     f'#define DICTIONARY_MAX_LENGTH {len(max_typo)} // "{max_typo}"\n\n',
     textwrap.fill('static uint8_t const dictionary[%d] = {%s};' % (
       len(data), ', '.join(map(str, data))), width=80, subsequent_indent=''),
-    '\n\n'])
+    '\n'])
 
   with open(file_name, 'wt') as f:
     f.write(generated_code)

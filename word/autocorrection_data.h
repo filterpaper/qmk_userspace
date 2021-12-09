@@ -1,6 +1,3 @@
-// Copyright 2022 @filterpaper
-// SPDX-License-Identifier: Apache-2.0
-
 /* Generated dictionary code (82 entries):
 :guage      -> gauge
 :the:the:   -> the
@@ -154,4 +151,3 @@ static uint8_t const dictionary[1308] = {172, 43, 0, 6, 71, 0, 7, 81, 0, 8, 230,
 115, 115, 97, 114, 121, 0, 17, 24, 0, 7, 110, 101, 99, 101, 115, 115, 97, 114,
 121, 0, 24, 0, 6, 110, 101, 99, 101, 115, 115, 97, 114, 121, 0, 8, 17, 24, 0, 8,
 110, 101, 99, 101, 115, 115, 97, 114, 121, 0};
-

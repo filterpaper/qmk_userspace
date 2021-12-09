@@ -83,5 +83,5 @@ udpate        -> update
 uncessary     -> unnecessary
 unecessary    -> unnecessary
 unescessary   -> unnecessary
-wierd         -> weird
 widht         -> width
+wierd         -> weird
