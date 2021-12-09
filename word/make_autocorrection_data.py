@@ -235,7 +235,7 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
     '*/\n\n',
     f'#define DICTIONARY_MIN_LENGTH  {len(min_typo)} // "{min_typo}"\n',
     f'#define DICTIONARY_MAX_LENGTH {len(max_typo)} // "{max_typo}"\n\n',
-    textwrap.fill('static uint8_t const dictionary[%d] = {%s};' % (
+    textwrap.fill('static uint8_t const dictionary[%d] PROGMEM = {%s};' % (
       len(data), ', '.join(map(str, data))), width=80, subsequent_indent=''),
     '\n'])
 
