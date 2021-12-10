@@ -26,10 +26,12 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	}
 
 	// Subtract buffer for Backspace key, reset for other non-alpha.
-	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z) &&
-		(uint8_t)keycode != KC_SPC) {
-		if ((uint8_t)keycode == KC_BSPC && buffer_size) { --buffer_size; }
-		else { buffer_size = 0; }
+	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z) && (uint8_t)keycode != KC_SPC) {
+		if ((uint8_t)keycode == KC_BSPC && buffer_size) {
+			--buffer_size;
+		} else {
+			buffer_size = 0;
+		}
 		return true;
 	}
 
@@ -42,7 +44,9 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	// Append `keycode` to buffer.
 	typo_buffer[buffer_size++] = (uint8_t)keycode;
 	// Return if buffer is smaller than the shortest word.
-	if (buffer_size < DICTIONARY_MIN_LENGTH) { return true; }
+	if (buffer_size < DICTIONARY_MIN_LENGTH) {
+		return true;
+	}
 
 	// Check for typo in buffer using a trie stored in `dictionary`.
 	uint16_t state = 0;
@@ -53,17 +57,19 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		if (code & 128) {  // Check for match in node with multiple children.
 			code &= 127;
 			for (; code != buffer; code = PGMR(dictionary + (state += 3))) {
-				if (!code) { return true; }
+				if (!code) {
+					return true;
+				}
 			}
 			// Follow link to child node.
-			state = (PGMR(dictionary + state + 1) |
-					 PGMR(dictionary + state + 2) << 8);
-			if ((state & 0x8000) != 0) { goto found_typo; }
+			state = (PGMR(dictionary + state + 1) | PGMR(dictionary + state + 2) << 8);
+			if ((state & 0x8000) != 0) {
+				goto found_typo;
+			}
 		// Check for match in node with single child.
 		} else if (code != buffer) {
 			return true;
-		} else if (!PGMR(dictionary + (++state)) &&
-				  !(PGMR(dictionary + (++state)) & 128)) {
+		} else if (!PGMR(dictionary + (++state)) && !(PGMR(dictionary + (++state)) & 128)) {
 			goto found_typo;
 		}
 	}
@@ -72,7 +78,9 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 found_typo:  // A typo was found! Apply autocorrection.
 	state &= 0x7fff;
 	uint8_t const backspaces = PGMR(dictionary + state);
-	for (uint8_t i = 0; i < backspaces; ++i) { tap_code(KC_BSPC); }
+	for (uint8_t i = 0; i < backspaces; ++i) {
+		tap_code(KC_BSPC);
+	}
 	send_string_P((char const *)(dictionary + state + 1));
 
 	if (keycode == KC_SPC) {

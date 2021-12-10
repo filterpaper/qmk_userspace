@@ -30,9 +30,7 @@ void keyboard_post_init_user(void) {
 
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
-	get_highest_layer(state) == CMK ?
-		rgb_matrix_mode_noeeprom(CMK_MODE) :
-		rgb_matrix_mode_noeeprom(DEF_MODE);
+	get_highest_layer(state) == CMK ? rgb_matrix_mode_noeeprom(CMK_MODE) : rgb_matrix_mode_noeeprom(DEF_MODE);
 	return state;
 }
 
@@ -47,7 +45,9 @@ void rgb_matrix_indicators_user(void) {
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
 		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
-			if (g_led_config.flags[i] & MOD_FLAG) { rgb_matrix_set_color(i, RGB_MODS); }
+			if (g_led_config.flags[i] & MOD_FLAG) {
+				rgb_matrix_set_color(i, RGB_MODS);
+			}
 		}
 	}
 	// Layer keys indicator by @rgoulter
@@ -75,7 +75,9 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
 		for (uint8_t i = led_min; i <= led_max; ++i) {
-			if (g_led_config.flags[i] & MOD_FLAG) { rgb_matrix_set_color(i, RGB_MODS); }
+			if (g_led_config.flags[i] & MOD_FLAG) {
+				rgb_matrix_set_color(i, RGB_MODS);
+			}
 		}
 	}
 	// Layer keys indicator by @rgoulter

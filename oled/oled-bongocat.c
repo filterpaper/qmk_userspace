@@ -257,9 +257,7 @@ static void render_cat_idle(void) {
 #elif defined(RIGHTCAT)
 	decode_frame(idle_anim[index]);
 #else
-	is_keyboard_left() ?
-		decode_frame(left_idle_anim[index]) :
-		decode_frame(idle_anim[index]);
+	is_keyboard_left() ? decode_frame(left_idle_anim[index]) : decode_frame(idle_anim[index]);
 #endif
 }
 
@@ -270,9 +268,7 @@ static void render_cat_paws(void) {
 #elif defined(RIGHTCAT)
 	decode_frame(paws);
 #else
-	is_keyboard_left() ?
-		decode_frame(left_paws) :
-		decode_frame(paws);
+	is_keyboard_left() ? decode_frame(left_paws) : decode_frame(paws);
 #endif
 }
 
@@ -286,9 +282,7 @@ static void render_cat_tap(void) {
 #elif defined(RIGHTCAT)
 	decode_frame(tap_anim[index]);
 #else
-	is_keyboard_left() ?
-		decode_frame(left_tap_anim[index]) :
-		decode_frame(tap_anim[index]);
+	is_keyboard_left() ? decode_frame(left_tap_anim[index]) : decode_frame(tap_anim[index]);
 #endif
 }
 
@@ -300,18 +294,25 @@ static void render_bongocat(void) {
 #ifdef WPM_ENABLE
 	static uint8_t  prev_wpm  = 0;
 	// Update tap_timer with sustained WPM
-	if (get_current_wpm() > prev_wpm) { tap_timer = timer_read32(); }
+	if (get_current_wpm() > prev_wpm) {
+		tap_timer = timer_read32();
+	}
 	prev_wpm = get_current_wpm();
 #endif
 
 	void animate_cat(void) {
-		if (timer_elapsed32(tap_timer) < TAP_INTERVAL) { render_cat_tap(); }
-		else if (timer_elapsed32(tap_timer) < PAWS_INTERVAL) { render_cat_paws(); }
-		else { render_cat_idle(); }
+		if (timer_elapsed32(tap_timer) < TAP_INTERVAL) {
+			render_cat_tap();
+		} else if (timer_elapsed32(tap_timer) < PAWS_INTERVAL) {
+			render_cat_paws();
+		} else {
+			render_cat_idle();
+		}
 	}
 
-	if (timer_elapsed32(tap_timer) > OLED_TIMEOUT) { oled_off(); }
-	else if (timer_elapsed(anim_timer) > FRAME_DURATION) {
+	if (timer_elapsed32(tap_timer) > OLED_TIMEOUT) {
+		oled_off();
+	} else if (timer_elapsed(anim_timer) > FRAME_DURATION) {
 		anim_timer = timer_read();
 		animate_cat();
 	}
@@ -328,8 +329,9 @@ oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 #else
 		return is_keyboard_left() ? rotation : OLED_ROTATION_180;
 #endif
+	} else {
+		return OLED_ROTATION_270;
 	}
-	else { return OLED_ROTATION_270; }
 }
 
 bool oled_task_user(void) {

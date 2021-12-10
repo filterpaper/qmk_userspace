@@ -223,23 +223,31 @@ static void render_luna_status(void) {
 #ifdef WPM_ENABLE
 	static uint8_t prev_wpm = 0;
 	// Update tap_timer with sustained WPM
-	if (get_current_wpm() > prev_wpm || get_mods()) { tap_timer = timer_read32(); }
+	if (get_current_wpm() > prev_wpm || get_mods()) {
+		tap_timer = timer_read32();
+	}
 	prev_wpm = get_current_wpm();
 #endif
 
 	void animate_luna(void) {
 		render_logo();
 		oled_set_cursor(0,8);
-		if (get_mods() & MOD_MASK_SHIFT ||
-			host_keyboard_led_state().caps_lock) { luna_action(bark); }
-		else if (get_mods() & MOD_MASK_CAG) { luna_action(sneak); }
-		else if (timer_elapsed32(tap_timer) < RUN_INTERVAL) { luna_action(run); }
-		else if (timer_elapsed32(tap_timer) < WALK_INTERVAL) { luna_action(walk); }
-		else { luna_action(sit); }
+		if (get_mods() & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock) {
+			luna_action(bark);
+		} else if (get_mods() & MOD_MASK_CAG) {
+			luna_action(sneak);
+		} else if (timer_elapsed32(tap_timer) < RUN_INTERVAL) {
+			luna_action(run);
+		} else if (timer_elapsed32(tap_timer) < WALK_INTERVAL) {
+			luna_action(walk);
+		} else {
+			luna_action(sit);
+		}
 	}
 
-	if (timer_elapsed32(tap_timer) > OLED_TIMEOUT) { oled_off(); }
-	else if (timer_elapsed(anim_timer) > LUNA_FRAME_DURATION) {
+	if (timer_elapsed32(tap_timer) > OLED_TIMEOUT) {
+		oled_off();
+	} else if (timer_elapsed(anim_timer) > LUNA_FRAME_DURATION) {
 		anim_timer = timer_read();
 		animate_luna();
 	}
