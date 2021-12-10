@@ -13,13 +13,13 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t buffer_size = 0;
 
-	// Exclude Shift hold from resetting autocorrection.
+	// Exclude Shift from resetting autocorrection.
 	if (keycode == KC_LSFT || keycode == KC_RSFT ||
 		(QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX &&
-		((keycode >> 8) & 0xf) == MOD_LSFT && !record->tap.count)
+		!(((keycode >> 8) & 0x1f) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #ifndef NO_ACTION_ONESHOT
 		|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX
-		&& (keycode & 0xf) == MOD_LSFT)
+		&& !((keycode & 0xff) & ~MOD_MASK_SHIFT))
 #endif
 	) {
 		return true;
