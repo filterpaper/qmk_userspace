@@ -4,13 +4,17 @@
 This is a simple code function that will automatically disable caps lock at the end of a word, after a preset keycode is detected.
 
 ## Autocorrections
-Code is adapted from [Pascal Getreuer](https://getreuer.info/posts/keyboards/autocorrection)'s source, with added support for mod tap shift and dictionary storage in AVR program space.
+Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection)'s source with the following additions:
+* Support for normal and mod-tap shift
+* Support for one-shot-shift (by [@drashna](https://github.com/drashna/))
+* Dictionary storage in AVR program space
+* Command line argument for Python dictionary generator
 
 Dictionary is encoded in a trie data structure and the code will send corrections for typos detected in a buffer as they are being processed by QMK. Typos and corrections can be added into `autocorrection_dict.txt` in the format:
 ```c
 typo   -> correction
 ```
-Run `python3 make_autocorrection_data.py` to generate a trie dictionary in the file `autocorrection_data.h`.
+Run `python3 make_autocorrection_data.py [dictionary.txt]` to generate a trie dictionary array in `autocorrection_data.h`. The script will use `autocorrection_dict.txt` without an input file arguments.
 
 ## QMK Integration
 Add the following line into `rules.mk` to build both files:
