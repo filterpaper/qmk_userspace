@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Original source: https://getreuer.info/posts/keyboards/autocorrection
 
+:alot:         -> a lot
 :comming:      -> coming
 :guage         -> gauge
 :momento:      -> memento
@@ -14,7 +15,6 @@ acceptible     -> acceptable
 accidentaly    -> accidentally
 accomodate     -> accommodate
 acheive        -> achieve
-acknowlege     -> acknowledge
 acommodate     -> accommodate
 acquaintence   -> acquaintance
 adress         -> address
@@ -97,19 +97,25 @@ experiance     -> experience
 extreem        -> extreme
 facinating     -> fascinating
 fales          -> false
+familar        -> familiar
 fasle          -> false
+febuary        -> february
 firey          -> fiery
 fitler         -> filter
 flase          -> false
 flourescent    -> fluorescent
 foriegn        -> foreign
+fourty         -> forty
 foward         -> forward
 freind         -> friend
 frequecy       -> frequency
 fullfil        -> fulfil
+futher         -> further
 garantee       -> guarantee
 garentee       -> guarantee
 gaurantee      -> guarantee
+glamourous     -> glamorous
+goverment      -> government
 gratefull      -> grateful
 greatful       -> grateful
 guaratee       -> guarantee
@@ -139,12 +145,14 @@ intput         -> input
 invliad        -> invalid
 jewelery       -> jewellery
 kernal         -> kernel
+knowlege       -> knowledge
 lenght         -> length
 liasion        -> liaison
 liason         -> liaison
 libary         -> library
 liesure        -> leisure
 lieue          -> lieu
+licence        -> license
 lisence        -> license
 listner        -> listener
 looses:        -> loses
@@ -222,6 +230,7 @@ relevent       -> relevant
 religius       -> religious
 religous       -> religious
 repitition     -> repetition
+reseting       -> resetting
 resistence     -> resistance
 restarant      -> restaurant
 restaraunt     -> restaurant
@@ -236,8 +245,10 @@ saftey         -> safety
 secratary      -> secretary
 secretery      -> secretary
 seperate       -> separate
+seige          -> siege
 sieze          -> seize
 similer        -> similar
+sincerly       -> sincerely
 singed         -> signed
 skilfull       -> skilful
 speach         -> speech
@@ -253,9 +264,12 @@ surprize       -> surprise
 swithc         -> switch
 swtich         -> switch
 thresold       -> threshold
+tatoo          -> tattoo
+tendancy       -> tendency
 tomatos        -> tomatoes
 tommorow       -> tomorrow
 tommorrow      -> tomorrow
+truely         -> truly
 twelth         -> twelfth
 tyrany         -> tyranny
 udpate         -> update
@@ -277,4 +291,5 @@ wierd          -> weird
 wilfull        -> wilful
 withold        -> withhold
 writeing       -> writing
+writen         -> written
 writting       -> writing
