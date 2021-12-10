@@ -4,7 +4,7 @@
 This is a simple code function that will automatically disable caps lock at the end of a word, after a preset keycode is detected.
 
 ## Autocorrections
-Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection)'s source with the following additions:
+Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection) source with the following additions:
 * Support for normal, mod-tap and one-shot-shift
 * Dictionary storage in AVR program space
 * Command line argument for Python dictionary generator
