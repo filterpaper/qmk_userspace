@@ -5,8 +5,7 @@ This is a simple code function that will automatically disable caps lock at the 
 
 ## Autocorrections
 Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection)'s source with the following additions:
-* Support for normal and mod-tap shift
-* Support for one-shot-shift (by [@drashna](https://github.com/drashna/))
+* Support for normal, mod-tap and one-shot-shift
 * Dictionary storage in AVR program space
 * Command line argument for Python dictionary generator
 
@@ -27,8 +26,12 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         extern bool process_autocorrection(uint16_t keycode, keyrecord_t* record);
         extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
-        if (!process_autocorrection(keycode, record)) { return false; }
-        if (!process_caps_word(keycode, record)) { return false; }
+        if (!process_autocorrection(keycode, record)) {
+            return false;
+        }
+        if (!process_caps_word(keycode, record)) {
+            return false; 
+        }
     }
     return true;
 }
