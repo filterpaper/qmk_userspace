@@ -31,10 +31,17 @@
 #define HRMR(k1,k2,k3,k4) GUI_T(k1),CTL_T(k2),ALT_T(k3),SFT_T(k4)
 
 // One shot mods
+#ifndef NO_ACTION_ONESHOT
 #define OSM_SFT OSM(MOD_LSFT)
 #define OSM_CTL OSM(MOD_LCTL)
 #define OSM_ALT OSM(MOD_LALT)
 #define OSM_GUI OSM(MOD_LGUI)
+#else
+#define OSM_SFT KC_LSFT
+#define OSM_CTL KC_LCTL
+#define OSM_ALT KC_LALT
+#define OSM_GUI KC_LGUI
+#endif
 
 // Layers
 #define BSE 0
