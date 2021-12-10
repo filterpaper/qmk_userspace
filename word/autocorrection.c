@@ -19,7 +19,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		!(((keycode >> 8) & 0x1f) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #ifndef NO_ACTION_ONESHOT
 		|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX
-		&& !((keycode & 0xff) & ~MOD_MASK_SHIFT))
+		&& !((keycode & 0x1f) & ~MOD_MASK_SHIFT))
 #endif
 	) {
 		return true;
