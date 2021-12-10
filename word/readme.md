@@ -20,7 +20,7 @@ Add the following line into `rules.mk` to build both files:
 ```c
 SRC += autocorrection.c caps_word.c
 ```
-Add the following code block into `keymaps.c` or userspace source file to process every key press:
+Add the following code block into `keymap.c` or userspace source file to process every key press:
 ```c
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
     if (record->event.pressed) {
