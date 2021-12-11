@@ -13,7 +13,7 @@ Dictionary is encoded in a trie data structure and the code will send correction
 ```c
 typo   -> correction
 ```
-Run `python3 make_autocorrection_data.py [dictionary.txt]` to generate trie dictionary array in `autocorrection_data.h`. The script will read from `autocorrection_dict.txt` as default without an input file arguments.
+Run `python3 make_autocorrection_data.py [dictionary.txt]` to generate trie dictionary array in `autocorrection_data.h`. The script will read from `autocorrection_dict.txt` as default without an input file argument.
 
 ## QMK Integration
 Add the following line into `rules.mk` to build both files:
