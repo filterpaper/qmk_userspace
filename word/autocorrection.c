@@ -7,33 +7,41 @@
 #include <string.h>
 #include "autocorrection_data.h"
 
-// Program space read macro
+// Program space read macro.
 #define PGMR(k) pgm_read_byte(k)
+// Keycode range filter macros.
+#define IS_1LT(k) (0x4100 <= (k) && (k) <= QK_LAYER_TAP_MAX)
+#define IS_MT(k)  (QK_MOD_TAP <= (k) && (k) <= QK_MOD_TAP_MAX)
+#define IS_OSM(k) (QK_ONE_SHOT_MOD <= (k) && (k) <= QK_ONE_SHOT_MOD_MAX)
 
 bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t buffer_size = 0;
 
-	// Exclude Shift from resetting autocorrection.
-	if (keycode == KC_LSFT || keycode == KC_RSFT ||
-		(QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX &&
-		!(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
+	// Exclude Shift and layer tap from resetting autocorrection.
+	if (keycode == KC_LSFT || keycode == KC_RSFT || IS_1LT(keycode)
+		|| (IS_MT(keycode) && !(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #ifndef NO_ACTION_ONESHOT
-		|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX
-		&& !((keycode & 0xf) & ~MOD_MASK_SHIFT))
+		|| (IS_OSM(keycode) && !((keycode & 0xf) & ~MOD_MASK_SHIFT))
 #endif
 	) {
 		return true;
 	}
 
-	// Subtract buffer with Backspace key, reset on other non-alpha.
-	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z) && (uint8_t)keycode != KC_SPC) {
-		if ((uint8_t)keycode == KC_BSPC && buffer_size) {
+	// Exceptions for non-alpha keys.
+	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z)) {
+		// Allow punctuation as word boundary.
+		if (KC_TAB <= (uint8_t)keycode && (uint8_t)keycode <= KC_SLASH) {
+			keycode = KC_SPC;
+		// Subtract buffer with Backspace key.
+		} else if ((uint8_t)keycode == KC_BSPC && buffer_size) {
 			--buffer_size;
+			return true;
+		// Reset on other non-alpha.
 		} else {
 			buffer_size = 0;
+			return true;
 		}
-		return true;
 	}
 
 	// Rotate oldest character if buffer is full.
