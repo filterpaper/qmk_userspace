@@ -5,6 +5,7 @@
 
 :alot:         -> a lot
 :comming:      -> coming
+:grammer       -> grammar
 :guage         -> gauge
 :momento:      -> memento
 :the:the:      -> the

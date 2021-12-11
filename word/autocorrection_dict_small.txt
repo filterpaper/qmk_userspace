@@ -6,7 +6,7 @@
 :comming:     -> coming
 :guage        -> gauge
 :momento:     -> memento
-:the the:     -> the
+:the:the:     -> the
 :thier        -> their
 :ture         -> true
 accomodate    -> accommodate
