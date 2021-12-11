@@ -10,7 +10,7 @@
 // Program space read macro.
 #define PGMR(k) pgm_read_byte(k)
 // Keycode range filter macros.
-#define IS_1LT(k) (0x4100 <= (k) && (k) <= QK_LAYER_TAP_MAX). // Exclude LT0
+#define IS_1LT(k) (0x4100 <= (k) && (k) <= QK_LAYER_TAP_MAX)  // Exclude LT0
 #define IS_MT(k)  (QK_MOD_TAP <= (k) && (k) <= QK_MOD_TAP_MAX)
 #define IS_OSM(k) (QK_ONE_SHOT_MOD <= (k) && (k) <= QK_ONE_SHOT_MOD_MAX)
 
