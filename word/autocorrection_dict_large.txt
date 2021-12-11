@@ -12,15 +12,10 @@
 :guage         -> gauge
 :halp:         -> help
 :hapen         -> happen
-:hten:         -> then
 :hting         -> thing
-:inot:         -> into
 :leage         -> league
 :leran         -> learn
 :loev          -> love
-:lsat          -> last
-:lveo          -> love
-:lvoe          -> love
 :nkow          -> know
 :nkwo          -> know
 :nto:          -> not
@@ -524,7 +519,7 @@ realy:         -> really
 realyl         -> really
 recieve        -> receive
 refered        -> referred
-relevent       -> relevantz
+relevent       -> relevant
 repitition     -> repetition
 restarant      -> restaurant
 restaraunt     -> restaurant
