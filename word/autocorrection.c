@@ -7,6 +7,7 @@
 #include <string.h>
 #include "autocorrection_data.h"
 
+// Program space read macro
 #define PGMR(k) pgm_read_byte(k)
 
 bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
@@ -16,16 +17,16 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	// Exclude Shift from resetting autocorrection.
 	if (keycode == KC_LSFT || keycode == KC_RSFT ||
 		(QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX &&
-		!(((keycode >> 8) & 0x1f) & ~MOD_MASK_SHIFT) && !record->tap.count)
+		!(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #ifndef NO_ACTION_ONESHOT
 		|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX
-		&& !((keycode & 0x1f) & ~MOD_MASK_SHIFT))
+		&& !((keycode & 0xf) & ~MOD_MASK_SHIFT))
 #endif
 	) {
 		return true;
 	}
 
-	// Subtract buffer for Backspace key, reset for other non-alpha.
+	// Subtract buffer with Backspace key, reset on other non-alpha.
 	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z) && (uint8_t)keycode != KC_SPC) {
 		if ((uint8_t)keycode == KC_BSPC && buffer_size) {
 			--buffer_size;

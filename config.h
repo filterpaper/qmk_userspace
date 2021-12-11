@@ -110,7 +110,7 @@
 #endif
 
 #ifdef COMBO_ENABLE
-#	define COMBO_TERM 20
+#	define COMBO_TERM 25
 #	define COMBO_ONLY_FROM_LAYER 0
 #endif
 

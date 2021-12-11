@@ -6,7 +6,9 @@
 
 bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	// Ignore if caps lock is not enabled
-	if (!host_keyboard_led_state().caps_lock) { return true; }
+	if (!host_keyboard_led_state().caps_lock) {
+		return true;
+	}
 
 	// Get base key code from mod tap
 	if (record->tap.count &&

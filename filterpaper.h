@@ -19,8 +19,8 @@
 #define LMT_BITS 0x6000
 #define RMT_BITS 0x7000
 
-/* (kc >> 8) & 0x1F for mod bits
- *
+/* (kc >> 8) & 0x1f for mod-tap bits
+ * (kc & 0x1f) for osm bits
  * Mod bits:    43210
  *   bit 0      ||||+- Control
  *   bit 1      |||+-- Shift
@@ -51,4 +51,5 @@ enum mods_bit {
 // like LT(1,MOD_LSFT)
 #define MT_OSM(_mod_) \
 	if (record->tap.count && record->event.pressed) { \
-	add_oneshot_mods(_mod_); return false; }
+		add_oneshot_mods(_mod_); return false; \
+	}

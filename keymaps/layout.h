@@ -32,15 +32,15 @@
 
 // One shot mods
 #ifndef NO_ACTION_ONESHOT
-#define OSM_SFT OSM(MOD_LSFT)
-#define OSM_CTL OSM(MOD_LCTL)
-#define OSM_ALT OSM(MOD_LALT)
-#define OSM_GUI OSM(MOD_LGUI)
+#	define OSM_SFT OSM(MOD_LSFT)
+#	define OSM_CTL OSM(MOD_LCTL)
+#	define OSM_ALT OSM(MOD_LALT)
+#	define OSM_GUI OSM(MOD_LGUI)
 #else
-#define OSM_SFT KC_LSFT
-#define OSM_CTL KC_LCTL
-#define OSM_ALT KC_LALT
-#define OSM_GUI KC_LGUI
+#	define OSM_SFT KC_LSFT
+#	define OSM_CTL KC_LCTL
+#	define OSM_ALT KC_LALT
+#	define OSM_GUI KC_LGUI
 #endif
 
 // Layers

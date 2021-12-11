@@ -13,24 +13,24 @@ Dictionary is encoded in a trie data structure and the code will send correction
 ```c
 typo   -> correction
 ```
-Run `python3 make_autocorrection_data.py [dictionary.txt]` to generate a trie dictionary array in `autocorrection_data.h`. The script will use `autocorrection_dict.txt` without an input file arguments.
+Run `python3 make_autocorrection_data.py [dictionary.txt]` to generate trie dictionary array in `autocorrection_data.h`. The script will read from `autocorrection_dict.txt` as default without an input file arguments.
 
 ## QMK Integration
 Add the following line into `rules.mk` to build both files:
 ```c
 SRC += autocorrection.c caps_word.c
 ```
-Add the following code block into `keymap.c` or userspace source file to process every key press:
+Add the following `process_record_user` code block into `keymap.c` or userspace source file to process every key press:
 ```c
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         extern bool process_autocorrection(uint16_t keycode, keyrecord_t* record);
-        extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
         if (!process_autocorrection(keycode, record)) {
             return false;
         }
+        extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
         if (!process_caps_word(keycode, record)) {
-            return false; 
+            return false;
         }
     }
     return true;

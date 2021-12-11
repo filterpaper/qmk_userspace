@@ -249,7 +249,6 @@ def main():
     dictionary_file = sys.argv[1]
   else:
     dictionary_file = "autocorrection_dict.txt"
-#  autocorrections = parse_file('autocorrection_dict.txt')
   autocorrections = parse_file(dictionary_file)
   trie = make_trie(autocorrections)
   data = serialize_trie(autocorrections, trie)

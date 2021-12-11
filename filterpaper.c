@@ -42,10 +42,10 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #endif
 #ifdef WORD_FEATURES
 		extern bool process_autocorrection(uint16_t keycode, keyrecord_t* record);
-		extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
 		if (!process_autocorrection(keycode, record)) {
 			return false;
 		}
+		extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
 		if (!process_caps_word(keycode, record)) {
 			return false;
 		}
@@ -93,7 +93,10 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 #define RXLED_OFF  writePinHigh(RXLED)
 #define TXLED_OFF  writePinHigh(TXLED)
 
-void matrix_init_user(void) { RXLED_INIT; TXLED_INIT; }
+void matrix_init_user(void) {
+	RXLED_INIT;
+	TXLED_INIT;
+}
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
 	switch (get_highest_layer(state|default_layer_state)) {
