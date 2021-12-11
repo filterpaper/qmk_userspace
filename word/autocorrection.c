@@ -18,7 +18,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t buffer_size = 0;
 
-	// Exclude Shift and layer tap from resetting autocorrection.
+	// Exclude any Shift-only mod and layer key from the process.
 	if (keycode == KC_LSFT || keycode == KC_RSFT || IS_1LT(keycode)
 		|| (IS_MT(keycode) && !(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #ifndef NO_ACTION_ONESHOT
@@ -28,16 +28,16 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		return true;
 	}
 
-	// Exceptions for non-alpha keys.
+	// Handle non-alpha keys.
 	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z)) {
-		// Use punctuation as word boundary.
+		// Append Space as word boundary for punctuation.
 		if (KC_TAB <= (uint8_t)keycode && (uint8_t)keycode <= KC_SLASH) {
 			keycode = KC_SPC;
-		// Subtract buffer with Backspace key.
+		// Subtract buffer for Backspace.
 		} else if ((uint8_t)keycode == KC_BSPC && buffer_size) {
 			--buffer_size;
 			return true;
-		// Reset on other non-alpha.
+		// Reset for other non-alpha.
 		} else {
 			buffer_size = 0;
 			return true;
