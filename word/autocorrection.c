@@ -8,7 +8,8 @@
 #include "autocorrection_data.h"
 
 // Program space read macro.
-#define PGMR(k) pgm_read_byte(k)
+#define PGMR8(k)  pgm_read_byte(k)
+#define PGMR16(k) pgm_read_word(k)
 // Keycode range filter macros.
 #define IS_1LT(k) (0x4100 <= (k) && (k) <= QK_LAYER_TAP_MAX)  // Exclude LT0
 #define IS_MT(k)  (QK_MOD_TAP <= (k) && (k) <= QK_MOD_TAP_MAX)
@@ -61,24 +62,24 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	uint16_t state = 0;
 	for (uint8_t i = buffer_size - 1; i >= 0; --i) {
 		uint8_t const buffer = typo_buffer[i];
-		uint8_t code = PGMR(dictionary + state);
+		uint8_t code = PGMR8(dictionary + state);
 
 		if (code & 128) {  // Check for match in node with multiple children.
 			code &= 127;
-			for (; code != buffer; code = PGMR(dictionary + (state += 3))) {
+			for (; code != buffer; code = PGMR8(dictionary + (state += 3))) {
 				if (!code) {
 					return true;
 				}
 			}
 			// Follow link to child node.
-			state = (PGMR(dictionary + state + 1) | PGMR(dictionary + state + 2) << 8);
+			state = (PGMR16(dictionary + state + 1) | PGMR16(dictionary + state + 2) << 8);
 			if ((state & 0x8000) != 0) {
 				goto found_typo;
 			}
 		// Check for match in node with single child.
 		} else if (code != buffer) {
 			return true;
-		} else if (!PGMR(dictionary + (++state)) && !(PGMR(dictionary + (++state)) & 128)) {
+		} else if (!PGMR8(dictionary + (++state)) && !(PGMR8(dictionary + (++state)) & 128)) {
 			goto found_typo;
 		}
 	}
@@ -86,7 +87,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 
 found_typo:  // A typo was found! Apply autocorrection.
 	state &= 0x7fff;
-	uint8_t const backspaces = PGMR(dictionary + state);
+	uint8_t const backspaces = PGMR8(dictionary + state);
 	for (uint8_t i = 0; i < backspaces; ++i) {
 		tap_code(KC_BSPC);
 	}
