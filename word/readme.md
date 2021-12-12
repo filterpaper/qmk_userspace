@@ -1,13 +1,13 @@
 # Word Processing Features
 
 ## Caps Word
-This is a simple function that detect and turn off caps lock automatically when a preset list of word boundary is detect, hence caps word. Conceived by the `#ergonomics` enthusiasts of splitkb.com discord.
+This is a simple function that will turn off caps lock when a preset list of word boundary is detect, hence caps word. It is a simple version of the ones conceived by the `#ergonomics` enthusiasts of splitkb.com discord.
 
 ## Autocorrections
 Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection) source with the following additions:
-* Support for normal, mod-tap and one-shot-shift
+* Support for normal, mod-tap and one-shot Shift key
+* Support for layer tap keys
 * Dictionary storage in AVR program space
-* Command line argument for Python dictionary generator
 
 Dictionary is encoded in a trie data structure and the code will send corrections for typos detected in a buffer as they are being processed by QMK. Typos and corrections can be added into `dictionary.txt` in the format:
 ```c
