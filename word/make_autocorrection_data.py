@@ -26,7 +26,6 @@ https://getreuer.info/posts/keyboards/autocorrection
 
 import sys
 import textwrap
-import argparse
 from typing import Any, Dict, List, Tuple
 
 try:
@@ -244,11 +243,8 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
     f.write(generated_code)
 
 
-def main():
-  if len(sys.argv) > 1:
-    dictionary_file = sys.argv[1]
-  else:
-    dictionary_file = "autocorrection_dict.txt"
+def main(argv):
+  dictionary_file = argv[1] if len(argv) > 1 else 'dictionary.txt'
   autocorrections = parse_file(dictionary_file)
   trie = make_trie(autocorrections)
   data = serialize_trie(autocorrections, trie)
@@ -256,4 +252,6 @@ def main():
         % (len(autocorrections), len(data)))
   write_generated_code(autocorrections, data, 'autocorrection_data.h')
 
-main()
+
+if __name__ == '__main__':
+  main(sys.argv)

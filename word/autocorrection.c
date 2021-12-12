@@ -7,7 +7,7 @@
 #include <string.h>
 #include "autocorrection_data.h"
 
-// Program space read macro.
+// Program space read macros.
 #define PGMR8(k)  pgm_read_byte(k)
 #define PGMR16(k) pgm_read_word(k)
 // Keycode range filter macros.
@@ -38,7 +38,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		} else if ((uint8_t)keycode == KC_BSPC && buffer_size) {
 			--buffer_size;
 			return true;
-		// Reset for other non-alpha.
+		// Reset for everything else.
 		} else {
 			buffer_size = 0;
 			return true;
