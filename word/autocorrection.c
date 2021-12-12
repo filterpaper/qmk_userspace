@@ -7,24 +7,24 @@
 #include <string.h>
 #include "autocorrection_data.h"
 
-// Program space read macros.
-#define PGMR8(k)  pgm_read_byte(k)
-#define PGMR16(k) pgm_read_word(k)
-// Keycode range filter macros.
-#define IS_1LT(k) (0x4100 <= (k) && (k) <= QK_LAYER_TAP_MAX)  // Exclude LT0
-#define IS_MT(k)  (QK_MOD_TAP <= (k) && (k) <= QK_MOD_TAP_MAX)
-#define IS_OSM(k) (QK_ONE_SHOT_MOD <= (k) && (k) <= QK_ONE_SHOT_MOD_MAX)
+#define QK_LAYER_TAP_LT1 0x4100
 
 bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t buffer_size = 0;
 
-	// Exclude any Shift-only mod and layer key from the process.
-	if (keycode == KC_LSFT || keycode == KC_RSFT || IS_1LT(keycode)
-		|| (IS_MT(keycode) && !(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
+	// Exclude any Shift-only mod and layer key.
+	if (keycode == KC_LSFT || keycode == KC_RSFT
+		// Mod-tap Shift.
+		|| (QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX
+		&& !(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #ifndef NO_ACTION_ONESHOT
-		|| (IS_OSM(keycode) && !((keycode & 0xf) & ~MOD_MASK_SHIFT))
+		// One-shot Shift.
+		|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX
+		&& !((keycode & 0xf) & ~MOD_MASK_SHIFT))
 #endif
+		// Layer tap except LT0.
+		|| (QK_LAYER_TAP_LT1 <= keycode && keycode <= QK_LAYER_TAP_MAX)
 	) {
 		return true;
 	}
@@ -62,24 +62,24 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	uint16_t state = 0;
 	for (uint8_t i = buffer_size - 1; i >= 0; --i) {
 		uint8_t const buffer = typo_buffer[i];
-		uint8_t code = PGMR8(dictionary + state);
+		uint8_t code = pgm_read_byte(dictionary + state);
 
 		if (code & 128) {  // Check for match in node with multiple children.
 			code &= 127;
-			for (; code != buffer; code = PGMR8(dictionary + (state += 3))) {
+			for (; code != buffer; code = pgm_read_byte(dictionary + (state += 3))) {
 				if (!code) {
 					return true;
 				}
 			}
 			// Follow link to child node.
-			state = (PGMR16(dictionary + state + 1) | PGMR16(dictionary + state + 2) << 8);
+			state = (pgm_read_word(dictionary + state + 1) | pgm_read_word(dictionary + state + 2) << 8);
 			if ((state & 0x8000) != 0) {
 				goto found_typo;
 			}
 		// Check for match in node with single child.
 		} else if (code != buffer) {
 			return true;
-		} else if (!PGMR8(dictionary + (++state)) && !(PGMR8(dictionary + (++state)) & 128)) {
+		} else if (!pgm_read_byte(dictionary + (++state)) && !(pgm_read_byte(dictionary + (++state)) & 128)) {
 			goto found_typo;
 		}
 	}
@@ -87,7 +87,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 
 found_typo:  // A typo was found! Apply autocorrection.
 	state &= 0x7fff;
-	uint8_t const backspaces = PGMR8(dictionary + state);
+	uint8_t const backspaces = pgm_read_byte(dictionary + state);
 	for (uint8_t i = 0; i < backspaces; ++i) {
 		tap_code(KC_BSPC);
 	}

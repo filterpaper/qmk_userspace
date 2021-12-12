@@ -6,7 +6,7 @@
 
 :adn:          -> and
 :alot:         -> a lot
-:comming:     -> coming
+:comming:      -> coming
 :eratic        -> erratic
 :esle          -> else
 :giit:         -> git
