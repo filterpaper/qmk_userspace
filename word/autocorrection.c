@@ -13,7 +13,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t buffer_size = 0;
 
-	// Exclude any Shift-only mod and layer key.
+	// Exclude Shift-only mod or layer key.
 	if (keycode == KC_LSFT || keycode == KC_RSFT
 		// Mod-tap Shift.
 		|| (QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX
