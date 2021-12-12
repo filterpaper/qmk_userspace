@@ -5,6 +5,8 @@
 # Original source: https://getreuer.info/posts/keyboards/autocorrection
 
 :adn:          -> and
+:alot:         -> a lot
+:comming:     -> coming
 :eratic        -> erratic
 :esle          -> else
 :giit:         -> git

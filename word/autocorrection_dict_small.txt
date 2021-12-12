@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Original source: https://getreuer.info/posts/keyboards/autocorrection
 
+:alot:         -> a lot
 :comming:     -> coming
 :guage        -> gauge
 :momento:     -> memento

@@ -1,7 +1,7 @@
 # Word Processing Features
 
 ## Caps Word
-This is a simple code function that will automatically disable caps lock at the end of a word, after a preset keycode is detected.
+This is a simple function that detect and turn off caps lock automatically when a preset list of word boundary is detect, hence caps word. Conceived by the `#ergonomics` enthusiasts of splitkb.com discord.
 
 ## Autocorrections
 Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection) source with the following additions:
