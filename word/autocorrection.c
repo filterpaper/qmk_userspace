@@ -7,8 +7,6 @@
 #include <string.h>
 #include "autocorrection_data.h"
 
-#define QK_LAYER_TAP_LT1 0x4100
-
 bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t buffer_size = 0;
@@ -25,8 +23,8 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		|| (QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX
 		&& !(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #	ifndef NO_ACTION_LAYER
-		// Layer tap except LT0.
-		|| (QK_LAYER_TAP_LT1 <= keycode && keycode <= QK_LAYER_TAP_MAX
+		// Layer key.
+		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX
 		&& !record->tap.count)
 #	endif
 #endif
