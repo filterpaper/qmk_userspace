@@ -15,6 +15,7 @@
 :halp:         -> help
 :hapen         -> happen
 :hting         -> thing
+:layed         -> laid
 :leage         -> league
 :leran         -> learn
 :loev          -> love
@@ -393,7 +394,6 @@ knwo:          -> know
 laguage        -> language
 launhed        -> launched
 lavae          -> larvae
-layed          -> laid
 lazyness       -> laziness
 legitamate     -> legitimate
 legitmate      -> legitimate
@@ -496,6 +496,7 @@ payed          -> paid
 percieve       -> perceive
 personel       -> personnel
 plagerize      -> plagiarize
+poeple         -> people
 posession      -> possession
 possesion      -> possession
 postion        -> position

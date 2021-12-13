@@ -7,6 +7,7 @@
 :comming:      -> coming
 :grammer       -> grammar
 :guage         -> gauge
+:layed         -> laid
 :momento:      -> memento
 :quitted       -> quit
 :soem:         -> some
@@ -196,7 +197,6 @@ knifes         -> knives
 knive:         -> knife
 knowlege       -> knowledge
 lavae          -> larvae
-layed          -> laid
 lenght         -> length
 liasion        -> liaison
 liason         -> liaison
@@ -273,6 +273,7 @@ personel       -> personnel
 plagerize      -> plagiarize
 playright      -> playwright
 playwrite      -> playwright
+poeple         -> people
 posession      -> possession
 possesion      -> possession
 postion        -> position
