@@ -26,7 +26,8 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		&& !(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #	ifndef NO_ACTION_LAYER
 		// Layer tap except LT0.
-		|| (QK_LAYER_TAP_LT1 <= keycode && keycode <= QK_LAYER_TAP_MAX)
+		|| (QK_LAYER_TAP_LT1 <= keycode && keycode <= QK_LAYER_TAP_MAX
+		&& !record->tap.count)
 #	endif
 #endif
 	) {
@@ -39,7 +40,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		if (KC_TAB <= (uint8_t)keycode && (uint8_t)keycode <= KC_SLASH) {
 			keycode = KC_SPC;
 		// Subtract buffer for Backspace.
-		} else if ((uint8_t)keycode == KC_BSPC && buffer_size) {
+		} else if ((uint8_t)keycode == KC_BSPC && buffer_size > 0) {
 			--buffer_size;
 			return true;
 		// Reset for everything else.
@@ -74,7 +75,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 				}
 			}
 			// Follow link to child node.
-			state = (pgm_read_word(dictionary + state + 1) | pgm_read_word(dictionary + state + 2) << 8);
+			state = (pgm_read_byte(dictionary + state + 1) | pgm_read_byte(dictionary + state + 2) << 8);
 		// Otherwise check for match in node with a single child.
 		} else if (code != typo_buffer[i]) {
 			return true;
