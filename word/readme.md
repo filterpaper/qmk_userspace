@@ -1,7 +1,7 @@
 # Word Processing Features
 
 ## Caps Word
-This is a simple function that will turn off caps lock when a preset list of word boundary is detect, hence caps word. It is a simple version of the ones conceived by the `#ergonomics` enthusiasts of splitkb.com discord.
+This is a simple function that will turn off caps lock when a preset list of word boundary is detected, hence caps word. It is a simple version of the ones conceived by the `#ergonomics` enthusiasts of splitkb.com discord.
 
 ## Autocorrections
 Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection) source with the following additions:
