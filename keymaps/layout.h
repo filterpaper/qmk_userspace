@@ -234,10 +234,7 @@ KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_R
 #define MACRO3_wrapper(...) LAYOUT(__VA_ARGS__)
 #define MACRO3_0 \
 	KC_MUTE, KC_MSTP, KC_MRWD, KC_MFFD, \
-	G(KC_V), G(KC_C), G(KC_X), LT(2,KC_MPLY)
+	G(KC_V), G(KC_C), G(KC_X), LT(1,KC_MPLY)
 #define MACRO3_1 \
-	_______, _______, KC_PGDN, KC_PGUP, \
-	KC_LEFT, KC_DOWN, KC_UP,   LT(2,KC_RGHT)
-#define MACRO3_2 \
 	RESET,   _______, KC_SLEP, KC_PWR,  \
-	TG(1),   KC_END,  KC_HOME,  _______
+	TG(1),   _______, _______, _______

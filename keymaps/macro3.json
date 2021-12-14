@@ -5,9 +5,8 @@
 	"keymap": "filterpaper",
 	"layout": "MACRO3_wrapper",
 	"layers": [
-		[ "MACRO_0" ],
-		[ "MACRO_1" ],
-		[ "MACRO_2" ]
+		[ "MACRO3_0" ],
+		[ "MACRO3_1" ]
 	],
 	"notes": "",
 	"version": 1
