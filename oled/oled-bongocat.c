@@ -292,7 +292,7 @@ static void render_bongocat(void) {
 	static uint16_t anim_timer = 0;
 
 #ifdef WPM_ENABLE
-	static uint8_t  prev_wpm  = 0;
+	static uint8_t prev_wpm  = 0;
 	// Update tap_timer with sustained WPM
 	if (get_current_wpm() > prev_wpm) {
 		tap_timer = timer_read32();
