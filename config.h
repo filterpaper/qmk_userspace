@@ -1,4 +1,4 @@
-// Copyright 2021 @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 #pragma once
@@ -7,14 +7,6 @@
 #include "keymaps/layout.h"
 
 // Common QMK settings
-#define TAPPING_TERM 220
-#define TAPPING_FORCE_HOLD
-#define TAPPING_FORCE_HOLD_PER_KEY
-#define PERMISSIVE_HOLD
-#define PERMISSIVE_HOLD_PER_KEY
-//#define HOLD_ON_OTHER_KEY_PRESS
-//#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-#define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_TOGGLE 1
 #define TAP_CODE_DELAY 5
 #define TAP_HOLD_CAPS_DELAY 20
@@ -23,6 +15,15 @@
 // Space saving options
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
+// Tap-hold settings
+#define TAPPING_TERM 220
+#define IGNORE_MOD_TAP_INTERRUPT
+#define TAPPING_FORCE_HOLD
+#define TAPPING_FORCE_HOLD_PER_KEY
+//#define PERMISSIVE_HOLD
+//#define PERMISSIVE_HOLD_PER_KEY
+#define HOLD_ON_OTHER_KEY_PRESS
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS

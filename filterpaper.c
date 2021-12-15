@@ -1,10 +1,10 @@
-// Copyright 2021 @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 #include "filterpaper.h"
 
 
-// Tap hold customisation
+// Tap-hold customisation
 #ifdef TAPPING_FORCE_HOLD_PER_KEY // Enable for right thumb keys
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 	return keycode == RSFT_T(KC_SPC) || keycode == LT(NUM,KC_BSPC) ? true : false;
@@ -13,8 +13,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for alphanumeric tap hold
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-//	return (keycode & 0xf000) == LMT_BITS || (keycode & 0xff00) == LT0_BITS ? false : true;
-	return (QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) || (keycode & 0xff00) == LT0_BITS ? false : true;
+	return (keycode & 0xf000) == LMT_BITS || (keycode & 0xff00) == LT0_BITS ? false : true;
 }
 #endif
 
