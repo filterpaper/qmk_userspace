@@ -6,6 +6,7 @@
 
 :adn:          -> and
 :alot:         -> a lot
+:anually       -> annually
 :comming:      -> coming
 :eratic        -> erratic
 :esle          -> else
@@ -83,7 +84,6 @@ adress         -> address
 aknowledge     -> acknowledge
 amatuer        -> amateur
 annualy        -> annually
-anually        -> annually
 aparent        -> apparent
 aparrent       -> apparent
 apparant       -> apparent

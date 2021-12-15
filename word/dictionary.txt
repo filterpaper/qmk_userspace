@@ -4,6 +4,7 @@
 # Original source: https://getreuer.info/posts/keyboards/autocorrection
 
 :alot:         -> a lot
+:anually       -> annually
 :comming:      -> coming
 :grammer       -> grammar
 :guage         -> gauge
@@ -41,7 +42,6 @@ allmost        -> almost
 amatuer        -> amateur
 amature        -> amateur
 annualy        -> annually
-anually        -> annually
 aparent        -> apparent
 aparrent       -> apparent
 apparant       -> apparent
