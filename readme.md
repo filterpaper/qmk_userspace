@@ -35,24 +35,24 @@ qmk compile keymaps/corne.json
 
 # Code Features
 * Shared [layout](keymaps/) wrapper macros
-* Combos simplified with preprocessors
-* Tap-hold clipboard shortcuts
+* [Combos](#combo-helper-macros) simplified with preprocessors
+* [Tap-hold](#tap-hold-macros) clipboard shortcuts
 * [OLED](oled/) indicators and animation
-  * Bongocat with compressed RLE frames
-  * Luna (and Felix) the dog
-  * Soundmonster indicator icons
+  * [Bongocat](oled/oled-bongocat.c) with compressed RLE frames
+  * [Luna](oled/oled-luna.c) (and Felix) the dog
+  * Soundmonster [indicator](oled/oled-icons.c) icons
   * Katakana コルネ font file
 * [RGB](rgb/) matrix lighting and effects
   * Custom "candy" matrix effect
-  * Layer indicators of active keys
+  * [Layer indicators](#light-configured-layers-keys) of active keys
 * [Word](word/) processing functions
-  * Turn off caps lock following a word
+  * Caps Word to toggle caps lock following a word
   * Autocorrection for typos
 
 
 
 # Split Keyboard Handedness
-All split keyboards use `EE_HANDS` with left and right handedness saved in EEPROM, allowing USB cable use on either side. Each side is flashed once with the following commands:
+All split keyboards use `EE_HANDS` with left and right handedness saved in EEPROM. Each side is flashed once with the following commands:
 ```sh
 qmk flash -kb cradio -km default -bl dfu-split-left
 qmk flash -kb cradio -km default -bl dfu-split-right
@@ -135,10 +135,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true; // continue with unmatched keycodes
 }
 ```
-Tap hold shortcut can be found in QMK's [tap dance feature](../../docs/feature_tap_dance.md) but replicated here inside `process_record_user()` with layer tap (`LT()`) and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per macro). Key macro `W_TH` replaces `KC_W` on the key map (`keymap[]`). The `if-else` statements are in a `#define TAP_HOLD(_tap_, _hold_)` macro. There are more examples in QMK's [Intercepting Mod Taps](https://docs.qmk.fm/#/mod_tap?id=intercepting-mod-taps).
+Tap hold shortcuts can be found in QMK's [tap dance feature](https://docs.qmk.fm/#/feature_tap_dance) but replicated here with layer tap (`LT()`) and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per shortcut). The macro `W_TH` replaces `KC_W` on the key map (`keymap[]`), and the code will intercept hold function of `LT()` to send the macro string. There are more examples in QMK's [Intercepting Mod Taps](https://docs.qmk.fm/#/mod_tap?id=intercepting-mod-taps).
 
 ## Combo helper macros
-The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) code file `combos.c` is modified from [Germ's helper macros](http://combos.gboards.ca/) to help simplify addition of combo shortcuts. New shortcuts are added to `combos.inc` and the preprocessor macros will generate required QMK combo source codes at compile time.
+The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) code file `combos.c` is modified from [Germ's helper macros](http://combos.gboards.ca/) to simplify combo creation. New combo shortcuts are added to `combos.inc` as one-liners and preprocessor macros will generate required QMK combo source codes at compile time.
 
 ## Pro Micro RX/TX LEDs
 Data LEDs on Pro Micro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) on Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pin in `config.h`:
@@ -307,21 +307,20 @@ The JSON layout for 34-key Cradio keyboard uses the macro above to adapt 3x6_3 f
 * [Breadboard](https://www.aliexpress.com/item/1742546890.html)
 * [Jumper wires](https://www.aliexpress.com/item/32996173648.html)
 * [Sockets](https://www.aliexpress.com/item/32852480645.html) and [breadboard](https://www.aliexpress.com/item/1742546890.html)
-* [Pro Micro C](https://www.aliexpress.com/item/32887074671.html) controller
 
 ## USBasp wiring
-Connect the USBasp programmer to the controller in this manner:
+Connect the USBasp programmer to the target controller in this manner:
 ```
-USBasp RST  <-> Pro Micro RST
-USBasp SCLK <-> Pro Micro 15/B1 (SCLK)
-USBasp MOSI <-> Pro Micro 16/B2 (MOSI)
-USBasp MISO <-> Pro Micro 14/B3 (MISO)
-USBasp VCC  <-> Pro Micro VCC
 USBasp GND  <-> Pro Micro GND
+USBasp RST  <-> Pro Micro RST
+USBasp VCC  <-> Pro Micro VCC
+USBasp SCLK <-> Pro Micro 15/B1 (SCLK)
+USBasp MISO <-> Pro Micro 14/B3 (MISO)
+USBasp MOSI <-> Pro Micro 16/B2 (MOSI)
 ```
 
 ## Atmel DFU
-See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide). Replace the Pro Micro's default Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command and fuses argument:
+See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide). Replace the Pro Micro's default Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command for USBasp and fuses parameter:
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 \
 -U flash:w:bootloader_atmega32u4_1.0.0.hex:i \
@@ -340,6 +339,7 @@ Use the following `rules.mk` options for nanoBoot:
 BOOTLOADER = qmk-hid
 BOOTLOADER_SIZE = 512
 ```
+Limitation: [Bootmagic lite](https://docs.qmk.fm/#/feature_bootmagic?id=bootmagic-lite) will not work with nanoBoot
 
 
 
@@ -353,9 +353,9 @@ BOOTLOADER_SIZE = 512
 * [Autocorrections with QMK](https://getreuer.info/posts/keyboards/autocorrection/index.html)
 ## Hardware Parts
 * [Elite-C](https://boardsource.xyz/store/5ef67ea66786dc1e65a80708)
-* [Pro Micro C](https://www.aliexpress.com/item/32887074671.html)
-* Mill-Max [315-43-112-41-003000 sockets](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) for Elite-C
-* Mill-Max [315-43-164-41-001000 sockets](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-001000/1212142) for Pro Micro C
+* [Pro Micro C](https://www.aliexpress.com/item/1005003230811462.html)
+* Mill-Max [315-43-112-41-003000](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) low sockets for Elite-C
+* Mill-Max [315-43-164-41-001000](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-001000/1212142) sockets for Pro Micro C
 * Mill-Max [connector pins](https://www.digikey.com/product-detail/en/3320-0-00-15-00-00-03-0/ED1134-ND/4147392)
 * [PJ320A](https://www.aliexpress.com/item/1005001928651798.html) jack
 * [TRRS](https://www.aliexpress.com/item/32961128759.html) cable
