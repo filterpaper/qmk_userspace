@@ -13,18 +13,18 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Disable for alphanumeric tap hold
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xf000) == LMT_BITS || (keycode & 0xff00) == LT0_BITS ? false : true;
+	return (keycode & 0xf000) == QK_LMOD_TAP || (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
 }
 #endif
 
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY // Enable for layer taps
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	return LT1_BITS <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
+	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
 }
 #endif
 
 
-// Send custom keycode on hold for mod tap
+// Send custom hold keycode for mod tap
 static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 	if (!record->tap.count && record->event.pressed) {
 		tap_code16(hold_keycode);
@@ -53,7 +53,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	}
 
 	switch (keycode) {
-		// Undo cut copy paste using LT(0,kc)
+		// LT(0,kc) clipboard shortcuts
 		case SLSH_TH: return process_tap_hold(Z_UND, record);
 		case DOT_TH:  return process_tap_hold(Z_CUT, record);
 		case COMM_TH: return process_tap_hold(Z_CPY, record);
@@ -87,33 +87,3 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 	return false;
 }
 #endif
-
-
-#ifdef KEYBOARD_a_dux
-// Pro Micro data LED pins
-#define RXLED B0
-#define TXLED D5
-// GPIO control macros
-#define RXLED_INIT setPinOutput(RXLED)
-#define TXLED_INIT setPinOutput(TXLED)
-#define RXLED_ON   writePinLow(RXLED)
-#define TXLED_ON   writePinLow(TXLED)
-#define RXLED_OFF  writePinHigh(RXLED)
-#define TXLED_OFF  writePinHigh(TXLED)
-
-void matrix_init_user(void) {
-	RXLED_INIT;
-	TXLED_INIT;
-}
-
-layer_state_t layer_state_set_user(layer_state_t const state) {
-	switch (get_highest_layer(state|default_layer_state)) {
-		case CMK:
-		case FNC: RXLED_ON;  TXLED_ON;  break;
-		case SYM: RXLED_OFF; TXLED_ON;  break;
-		case NUM: RXLED_ON;  TXLED_OFF; break;
-		default:  RXLED_OFF; TXLED_OFF;
-	}
-	return state;
-}
-#endif // KEYBOARD_a_dux
