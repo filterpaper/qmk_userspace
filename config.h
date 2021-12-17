@@ -13,6 +13,8 @@
 #define GRAVE_ESC_SHIFT_OVERRIDE
 #define USB_SUSPEND_WAKEUP_DELAY 200
 // Space saving options
+#undef LOCKING_SUPPORT_ENABLE
+#undef LOCKING_RESYNC_ENABLE
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
@@ -111,10 +113,4 @@
 #ifdef COMBO_ENABLE
 #	define COMBO_TERM 25
 #	define COMBO_ONLY_FROM_LAYER 0
-#endif
-
-#ifdef AUTO_SHIFT_ENABLE
-#	define NO_AUTO_SHIFT_ALPHA
-#	define NO_AUTO_SHIFT_NUMERIC
-#	define AUTO_SHIFT_TIMEOUT 150
 #endif
