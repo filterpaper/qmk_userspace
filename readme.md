@@ -351,6 +351,7 @@ Limitation: [Bootmagic lite](https://docs.qmk.fm/#/feature_bootmagic?id=bootmagi
 * [Sockets](https://github.com/joric/nrfmicro/wiki/Sockets)
 * [Git Purr](https://girliemac.com/blog/2017/12/26/git-purr/)
 * [Autocorrections with QMK](https://getreuer.info/posts/keyboards/autocorrection/index.html)
+̃* [Split Keyboard](https://golem.hu/boards/) database
 ## Hardware Parts
 * [Elite-C](https://boardsource.xyz/store/5ef67ea66786dc1e65a80708)
 * [Pro Micro C](https://www.aliexpress.com/item/1005003230811462.html)
