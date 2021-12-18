@@ -9,6 +9,7 @@
 :anually       -> annually
 :comming:      -> coming
 :eratic        -> erratic
+:errupted      -> erupted
 :esle          -> else
 :giit:         -> git
 :grammer       -> grammar
@@ -229,7 +230,6 @@ enviroment     -> environment
 enxt:          -> next
 epidsode       -> episode
 epsiode        -> episode
-errupted       -> erupted
 esential       -> essential
 esitmated      -> estimated
 especialy      -> especially
