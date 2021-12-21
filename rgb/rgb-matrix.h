@@ -1,4 +1,4 @@
-// Copyright 2021 @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 #pragma once
@@ -15,16 +15,8 @@
 #define RGB_LAYER	RGB_DPINK
 
 // Custom effects
-#ifdef ENABLE_RGB_MATRIX_CANDY_TAP
-#	define DEF_MODE	RGB_MATRIX_CUSTOM_CANDY_TAP
-#else
-#	define DEF_MODE	RGB_MATRIX_SOLID_REACTIVE_SIMPLE
-#endif
-#ifdef ENABLE_RGB_MATRIX_CANDY_RAIN
-#	define CMK_MODE	RGB_MATRIX_CUSTOM_CANDY_RAIN
-#else
-#	define CMK_MODE	RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
-#endif
+#define DEF_MODE	RGB_MATRIX_CUSTOM_CANDY_TAP
+#define CMK_MODE	RGB_MATRIX_CUSTOM_CANDY_RAIN
 
 // Custom indicators
 #ifdef KEYBOARD_crkbd_rev1

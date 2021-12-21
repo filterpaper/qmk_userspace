@@ -71,6 +71,7 @@
 #endif
 
 #ifdef RGB_MATRIX_ENABLE
+#	include "rgb/rgb-disable.h"
 #	ifndef SPLIT_KEYBOARD
 #		define RGB_DISABLE_TIMEOUT 180000
 #	endif
