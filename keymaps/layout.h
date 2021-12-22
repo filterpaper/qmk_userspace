@@ -31,16 +31,16 @@
 #define HRMR(k1,k2,k3,k4) GUI_T(k1),CTL_T(k2),ALT_T(k3),SFT_T(k4)
 
 // One shot mods
-#ifndef NO_ACTION_ONESHOT
-#	define OSM_SFT OSM(MOD_LSFT)
-#	define OSM_CTL OSM(MOD_LCTL)
-#	define OSM_ALT OSM(MOD_LALT)
-#	define OSM_GUI OSM(MOD_LGUI)
-#else
+#ifdef NO_ACTION_ONESHOT
 #	define OSM_SFT KC_LSFT
 #	define OSM_CTL KC_LCTL
 #	define OSM_ALT KC_LALT
 #	define OSM_GUI KC_LGUI
+#else
+#	define OSM_SFT OSM(MOD_LSFT)
+#	define OSM_CTL OSM(MOD_LCTL)
+#	define OSM_ALT OSM(MOD_LALT)
+#	define OSM_GUI OSM(MOD_LGUI)
 #endif
 
 // Layers
@@ -55,7 +55,7 @@
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
 	OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,  \
-	        RSG_T(KC_ESC), LT(SYM,KC_TAB), RSA_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
+	       RSG_T(KC_ESC), LT(SYM,KC_TAB), RSFT_T(KC_ENT),     KC_SPC, LT(NUM,KC_BSPC), RAG_T(KC_DEL)
 /* ,-----------------------------------------.                ,-----------------------------------------.
  * | TAB  |  Q   |  W   |  E   |  R   |  T   |                |  Y   |  U   |  I   |  O   |  P   | BSPC |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
