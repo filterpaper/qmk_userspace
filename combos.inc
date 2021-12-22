@@ -7,30 +7,22 @@
 //	KC_Z    KC_X    KC_C    KC_V    KC_B        KC_N    M_TH    COMM_TH DOT_TH  SLSH_TH
 //	        LT(SYM,KC_TAB)  RSA_T(KC_ENT)       RSFT_T(KC_SPC)  LT(NUM,KC_BSPC)
 
-#if defined(KEYBOARD_3w6_rev2) || defined(KEYBOARD_a_dux) || defined(KEYBOARD_cradio)
-	// Vertical for choc spacing
-	COMB(KC_VOLU,  KC_VOLU,  KC_Y, KC_H)
-	COMB(KC_VOLD,  KC_VOLD,  KC_H, KC_N)
-#else
-	// Horizontal for MX spacing
-	COMB(KC_VOLU,  KC_VOLU,  KC_Y, KC_U)
-	COMB(KC_VOLD,  KC_VOLD,  KC_H, HM_J)
-	COMB(KC_MUTE,  KC_MUTE,  KC_N, M_TH)
-#endif
-
 #ifdef SWAP_HANDS_ENABLE
 	COMB(swap_l,  SH_TT,  KC_X, KC_V)
 	COMB(swap_r,  SH_TT,  M_TH, DOT_TH)
 #endif
 
+COMB(KC_VOLU,  KC_VOLU,  KC_P, HM_SCLN)
+COMB(KC_VOLD,  KC_VOLD,  HM_SCLN, SLSH_TH)
 // Layer toggles
-COMB(func,  TG(FNC),  LT(SYM,KC_TAB), KC_B)
-COMB(numb,  TG(NUM),  LT(NUM,KC_BSPC), KC_N)
-
+COMB(func,     TG(FNC),  LT(SYM,KC_TAB), KC_B)
+COMB(numb,     TG(NUM),  LT(NUM,KC_BSPC), KC_N)
 // Vimac shortcuts
-COMB(vimacf,  HYPR(KC_F),  HM_D, HM_F)
-COMB(vimacj,  HYPR(KC_J),  HM_J, HM_K)
-
+COMB(vimacf,   HYPR(KC_F),  HM_D, HM_F)
+COMB(vimacj,   HYPR(KC_J),  HM_J, HM_K)
+// Discord
+COMB(dis_up,   S(A(KC_UP)),   KC_O, HM_L)
+COMB(dis_dn,   S(A(KC_DOWN)), HM_L, DOT_TH)
 // Macros
 SUBS(dir_up,   "../",   DOT_TH, SLSH_TH)
 SUBS(vi_quit,  ":q!",   KC_Q, KC_W)
