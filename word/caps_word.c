@@ -1,32 +1,37 @@
 // Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
-// Toggle caps lock following a word
+// Lean caps word code using caps lock
 
 #include QMK_KEYBOARD_H
 
 bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
-	// Ignore if caps lock is not enabled
+	// Return if caps lock is inactive
 	if (!host_keyboard_led_state().caps_lock) {
 		return true;
 	}
 
-	// Get base key code from mod tap
-	if (record->tap.count &&
-		((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
-		(QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX))
+#ifndef NO_ACTION_TAPPING
+	if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX)
+#	ifndef NO_ACTION_LAYER
+	|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)
+#	endif
 	) {
+		if (!record->tap.count) {
+			return true;
+		}
+		// Get base keycode from tap hold key
 		keycode &= 0xff;
 	}
+#endif
 
-	// Deactivate caps lock with listed keycodes
+	// Deactivate caps lock for unmatched keycodes
 	switch (keycode) {
-		case KC_TAB:
-		case KC_ESC:
-		case KC_SPC:
-		case KC_ENT:
-		case KC_DOT:
-		case KC_EQL:
-		case KC_GESC:
+		case KC_A ... KC_0:
+		case KC_BSPC:
+		case KC_MINS:
+		case KC_UNDS:
+			break;
+		default:
 			tap_code(KC_CAPS);
 	}
 	return true;
