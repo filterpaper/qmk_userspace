@@ -26,7 +26,7 @@ Keyboard, keymap name and layout are named in each JSON file. They are used by `
 |------+------+------+------+------+------|                |------+------+------+------+------+------|
 |OS_SFT|  Z   |  X   |  C   |  V   |  B   |                |  N   |  M   | , <  | . >  | / ?  | ENT  |
 `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
-                            |RSG_T |_SYMB |RSA_T |  |RSFT_T|_NUMB |RAG_T |
+                            |RSG_T |_SYMB |RCTL_T|  |RSFT_T|_NUMB |RAG_T |
                             | ESC  | TAB  | ENT  |  | SPC  | BSPC | DEL  |
                             `--------------------'  `--------------------'
  _COLE
@@ -80,7 +80,7 @@ Keyboard, keymap name and layout are named in each JSON file. They are used by `
 |------+------+------+------+------|                |------+------+------+------+------|
 |  Z   |  X   |  C   |  V   |  B   |                |  N   |  M   | , <  | . >  | / ?  |
 `------+------+------+------+------+------.  ,------+------+------+------+------+------'
-                            |_SYMB |RSA_T |  |RSFT_T|_NUMB |
+                            |_SYMB |RCTL_T|  |RSFT_T|_NUMB |
                             | TAB  | ENT  |  | SPC  | BSPC |
                             `-------------'  `-------------'
  _COLE

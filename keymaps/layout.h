@@ -55,7 +55,7 @@
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
 	OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,  \
-	       RSG_T(KC_ESC), LT(SYM,KC_TAB), RSFT_T(KC_ENT),     KC_SPC, LT(NUM,KC_BSPC), RAG_T(KC_DEL)
+	       RSG_T(KC_ESC), LT(SYM,KC_TAB), RCTL_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
 /* ,-----------------------------------------.                ,-----------------------------------------.
  * | TAB  |  Q   |  W   |  E   |  R   |  T   |                |  Y   |  U   |  I   |  O   |  P   | BSPC |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
@@ -63,7 +63,7 @@
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * |OS_SFT|  Z   |  X   |  C   |  V   |  B   |                |  N   |  M   | , <  | . >  | / ?  | ENT  |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
- *                             |RSG_T |_SYMB |RSA_T |  |RSFT_T|_NUMB |RAG_T |
+ *                             |RSG_T |_SYMB |RCTL_T|  |RSFT_T|_NUMB |RAG_T |
  *                             | ESC  | TAB  | ENT  |  | SPC  | BSPC | DEL  |
  *                             `--------------------'  `--------------------'
  */
