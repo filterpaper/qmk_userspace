@@ -13,7 +13,7 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 #ifndef NO_ACTION_TAPPING
 	if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX)
 #	ifndef NO_ACTION_LAYER
-	|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)
+		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)
 #	endif
 	) {
 		if (!record->tap.count) {
@@ -25,14 +25,12 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 	// Deactivate caps lock for unmatched keycodes
-	switch (keycode) {
-		case KC_A ... KC_0:
-		case KC_BSPC:
-		case KC_MINS:
-		case KC_UNDS:
-			break;
-		default:
-			tap_code(KC_CAPS);
+	if (!(KC_A <= keycode && keycode <= KC_0)
+		&& keycode != KC_BSPC
+		&& keycode != KC_MINS
+		&& keycode != KC_UNDS
+	) {
+		tap_code(KC_CAPS);
 	}
 	return true;
 }
