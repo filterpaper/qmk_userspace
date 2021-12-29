@@ -1,18 +1,17 @@
 # Summary
-This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` source files deep inside QMK's sub-directories. All customisation required to build firmwares are configured within this space in the following manner:
+This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` files inside keyboard sub-directories. All firmware customisations are configured within this space in the following manner:
 
-* Store [QMK Configurator](https://config.qmk.fm/#/) layout or wrapper macro keymap in JSON format.
-* Use `rules.mk`, `config.h` and shared source codes in this folder.
-* Build QMK firmware using JSON files as parameter.
+* Save [QMK Configurator](https://config.qmk.fm/#/) layout or wrapper macro keymaps in JSON format.
+* Use shared `rules.mk`, `config.h` and source files in this space.
 * See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
 ## Setup
-Forking the QMK repo can be avoided in this manner: clone the QMK firmware, followed by this repository into `users/filterpaper`:
+Forking QMK repository can be avoided in this manner: clone the QMK firmware, followed by this repository into `users/filterpaper`:
 ```sh
 git clone https://github.com/qmk/qmk_firmware qmk_firmware
 git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filterpaper
 ```
-Git updates within `users/filterpaper` will be independent from QMK.
+Git updates to `users/filterpaper` will be independent from QMK source when setup in this manner.
 
 
 
@@ -52,17 +51,16 @@ qmk compile keymaps/corne.json
 
 
 # Split Keyboard Handedness
-All split keyboards use `EE_HANDS` with left and right handedness saved in EEPROM. Each side is flashed once with the following commands:
+Split keyboards use [Handedness by EEPROM](https://github.com/qmk/qmk_firmware/docs/feature_split_keyboard.md), and each half is flashed once with the following command:
 ```sh
 qmk flash -kb cradio -km default -bl dfu-split-left
 qmk flash -kb cradio -km default -bl dfu-split-right
 ```
-Subsequently, the same firmware binary can be flashed normally to both sides. See [split keyboard features](https://github.com/qmk/qmk_firmware/docs/feature_split_keyboard.md) for details.
 
 
 
 # Modular Corne (CRKBD) Build
-Corne is configured with a few modular build options in [rules.mk](rules.mk):
+Corne keyboard is configured with a few modular build options using [rules.mk](rules.mk):
 ## Tiny build
 Minimal firmware with no OLED and RGB support is the default:
 ```
@@ -135,10 +133,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true; // continue with unmatched keycodes
 }
 ```
-Tap hold shortcuts can be found in QMK's [tap dance feature](https://docs.qmk.fm/#/feature_tap_dance) but replicated here with layer tap (`LT()`) and tapping term delay. It uses less firmware space than `TAP_DANCE_ENABLE` (~35 bytes per shortcut). The macro `W_TH` replaces `KC_W` on the key map (`keymap[]`), and the code will intercept hold function of `LT()` to send the macro string. There are more examples in QMK's [Intercepting Mod Taps](https://docs.qmk.fm/#/mod_tap?id=intercepting-mod-taps).
+Tap hold shortcuts using layer tap (`LT()`) uses less firmware space than [tap dance ](https://docs.qmk.fm/#/feature_tap_dance) (~35 bytes per shortcut). Macro `W_TH` replaces `KC_W` on the key map (`keymap[]`), and the code will intercept hold function of `LT()` to send the macro string. There are more examples in QMK's [Intercepting Mod Taps](https://docs.qmk.fm/#/mod_tap?id=intercepting-mod-taps).
 
 ## Combo helper macros
-The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) code file `combos.c` is modified from [Germ's helper macros](http://combos.gboards.ca/) to simplify combo creation. New combo shortcuts are added to `combos.inc` as one-liners and preprocessor macros will generate required QMK combo source codes at compile time.
+The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) code file `combos.c` is modified from [Germ's helper macros](http://combos.gboards.ca/) to simplify combo management. New shortcuts are added to `combos.inc` as one-liners and preprocessor macros will generate required QMK combo source codes at compile time.
 
 ## Pro Micro RX/TX LEDs
 Data LEDs on Pro Micro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) on Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pin in `config.h`:
@@ -202,7 +200,7 @@ paste_keycode = keymap_config.swap_lctl_lgui ? C(KC_V) : G(KC_V);
 # Layout wrapper macros
 
 ## Basic layout
-Text-based key map layout (in `keymap.c` format) using JSON file is supported with the use of preprocessor wrapper macros. Create each layer as a C preprocessor macro, in a `layout.h` file. Here is an example of a "number" layer for Corne:
+Text-based key map layout (in `keymap.c` format) using JSON file is supported with the use of preprocessor macros. Create each layer as a C macro definition in a `layout.h` file. This is an example of a "number" layer for Corne:
 ```c
 #define _NUMB \
     _______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
@@ -214,7 +212,7 @@ Next, create a wrapper name in `layout.h` that points to the actual layout used 
 ```c
 #define CORNE_wrapper(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 ```
-Finally create the keyboard's JSON file with macro names of each layer, together the layout wrapper name in the following format:
+Finally create the keyboard's JSON file using the macro names for each layer, and the layout wrapper name in the following format:
 ```c
 {
     "author": "",
@@ -232,10 +230,10 @@ Finally create the keyboard's JSON file with macro names of each layer, together
     "version": 1
 }
 ```
-Finally, add `#include layout.h` into `config.h`. The build process will construct a transient `keymap.c` from JSON file that includes `config.h`, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure in the compile process.
+Add `#include layout.h` into `config.h`. The build process will construct a transient `keymap.c` from JSON file that includes `config.h`, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure in the compile process.
 
 ## Wrapping home row modifiers
-[Home row mods](https://precondition.github.io/home-row-mods) feature can be placed over the layout macros. A home row mod macro is defined below following the keyboard's matrix layout (crkbd/rev1) with home letters wrapped by a mod-tap:
+[Home row mods](https://precondition.github.io/home-row-mods) can be placed over the layout macros. An example below uses the keyboard matrix layout of `crkbd/rev1` with home row keys wrapped by mod-taps:
 ```c
 #define HRM(a) HRM_SACG(a)
 #define HRM_SACG( \
@@ -250,7 +248,7 @@ Finally, add `#include layout.h` into `config.h`. The build process will constru
     k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
     k37, k38, k39, k40, k41, k42
 ```
-Next, wrap the layer that requires home-row mods with `HRM()` in the JSON file, making it convenient to apply and change mods on multiple layouts:
+Next, wrap layers that requires home-row mods with `HRM()` in the JSON file, making it convenient manage home row mods on multiple layouts:
 ```c
 "layers": [
     [ "HRM(_BASE)" ],
@@ -339,7 +337,7 @@ Use the following `rules.mk` options for nanoBoot:
 BOOTLOADER = qmk-hid
 BOOTLOADER_SIZE = 512
 ```
-Limitation: [Bootmagic lite](https://docs.qmk.fm/#/feature_bootmagic?id=bootmagic-lite) will not work with nanoBoot
+Limitation: [Bootmagic lite](https://docs.qmk.fm/#/feature_bootmagic?id=bootmagic-lite) will not work.
 
 
 
