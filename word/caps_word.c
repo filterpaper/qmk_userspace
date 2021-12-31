@@ -13,7 +13,7 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 #ifndef NO_ACTION_TAPPING
 	if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX)
 #	ifndef NO_ACTION_LAYER
-		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)
+		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_MOD_MAX)
 #	endif
 	) {
 		if (!record->tap.count) {

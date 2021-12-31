@@ -24,7 +24,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		&& !(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #	ifndef NO_ACTION_LAYER
 		// Layer key.
-		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX
+		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_MOD_MAX
 		&& !record->tap.count)
 #	endif
 #endif
