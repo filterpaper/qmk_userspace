@@ -11,7 +11,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t buffer_size = 0;
 
-	// Exclude Shift-only mod or layer key.
+	// Exclude Shift-only mod, layer and swap hands key.
 	if (keycode == KC_LSFT || keycode == KC_RSFT
 #ifndef NO_ACTION_ONESHOT
 		// One-shot Shift.
@@ -24,9 +24,12 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		&& !(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
 #	ifndef NO_ACTION_LAYER
 		// Layer key.
-		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_MOD_MAX
+		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX
 		&& !record->tap.count)
 #	endif
+#endif
+#ifdef SWAP_HANDS_ENABLE
+		|| (QK_SWAP_HANDS <= keycode && keycode <= QK_SWAP_HANDS_MAX)
 #endif
 	) {
 		return true;
