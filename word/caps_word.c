@@ -25,10 +25,12 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 	// Deactivate caps lock for unmatched keycodes
-	if (!(KC_A <= keycode && keycode <= KC_0)
+	if (
+		(!(KC_A <= keycode && keycode <= KC_0)
 		&& keycode != KC_BSPC
 		&& keycode != KC_MINS
-		&& keycode != KC_UNDS
+		&& keycode != KC_UNDS)
+		|| (get_mods() & ~MOD_MASK_SHIFT)
 	) {
 		tap_code(KC_CAPS);
 	}
