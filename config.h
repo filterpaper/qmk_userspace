@@ -3,9 +3,6 @@
 
 #pragma once
 
-// Key and layout wrapper macros
-#include "keymaps/layout.h"
-
 // Common QMK settings
 #define TAPPING_TOGGLE 1
 #define TAP_CODE_DELAY 5
@@ -115,3 +112,6 @@
 #	define COMBO_TERM 25
 #	define COMBO_ONLY_FROM_LAYER 0
 #endif
+
+// Key and layout wrapper macros
+#include "keymaps/layout.h"
