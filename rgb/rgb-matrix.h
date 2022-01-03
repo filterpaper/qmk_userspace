@@ -16,7 +16,7 @@
 
 // Custom effects
 #define DEF_MODE	RGB_MATRIX_CUSTOM_CANDY_TAP
-#define CMK_MODE	RGB_MATRIX_CUSTOM_CANDY_RAIN
+#define CMK_MODE	RGB_MATRIX_CUSTOM_CANDY_FRACTAL
 
 // Custom indicators
 #ifdef KEYBOARD_crkbd_rev1

@@ -90,10 +90,10 @@ static bool CANDY_RAIN(effect_params_t* params) {
 
 
 
-#ifdef ENABLE_RGB_MATRIX_FRACTAL
-RGB_MATRIX_EFFECT(FRACTAL)
+#ifdef ENABLE_RGB_MATRIX_CANDY_FRACTAL
+RGB_MATRIX_EFFECT(CANDY_FRACTAL)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-static bool MONO_FRACTAL(effect_params_t* params) {
+static bool CANDY_FRACTAL(effect_params_t* params) {
 	#define MID_COL MATRIX_COLS / 2
 	static bool led[MATRIX_ROWS][MATRIX_COLS];
 
