@@ -4,7 +4,6 @@
 #pragma once
 
 // Common QMK settings
-#define TAPPING_TOGGLE 1
 #define TAP_CODE_DELAY 5
 #define TAP_HOLD_CAPS_DELAY 20
 #define GRAVE_ESC_SHIFT_OVERRIDE

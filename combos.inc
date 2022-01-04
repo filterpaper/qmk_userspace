@@ -8,8 +8,8 @@
 //	       LT(SYM,KC_TAB)  RCTL_T(KC_ENT)       RSFT_T(KC_SPC)  LT(NUM,KC_BSPC)
 
 #ifdef SWAP_HANDS_ENABLE
-	COMB(swap_l,  SH_TT,  KC_X, KC_V)
-	COMB(swap_r,  SH_TT,  M_TH, DOT_TH)
+	COMB(swap_l,  SH_TG,  KC_X, KC_V)
+	COMB(swap_r,  SH_TG,  M_TH, DOT_TH)
 #endif
 
 COMB(KC_VOLU,  KC_VOLU,  KC_P, HM_SCLN)
