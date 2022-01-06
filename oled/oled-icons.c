@@ -4,6 +4,16 @@
 /* Graphical active layer and modifier status display.
    Modified from @soundmonster's keymap:
    (keyboards/crkbd/keymaps/soundmonster)
+
+   Usage guide
+   1 Place this file next to keymap.c or in userspace.
+   2 Add the following lines into rules.mk:
+        OLED_ENABLE = yes
+        SRC += oled-icons.c
+   3 Add the following lines into the main 'oled_task_user()'
+     function to render this module:
+        extern void render_mod_status(void);
+        render_mod_status();
 */
 
 #include QMK_KEYBOARD_H

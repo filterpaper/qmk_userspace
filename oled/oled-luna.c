@@ -29,7 +29,7 @@
             return true;
         }
    5 The 'oled_task_user()' calls 'render_mod_status()' for secondary OLED.
-     It can be replaced with your own function, or delete the 'else' line.
+     It can be replaced with your own function, or deleted.
 */
 
 #include QMK_KEYBOARD_H
