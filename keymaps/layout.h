@@ -26,7 +26,8 @@
 #define HM_J	GUI_T(KC_J)
 #define HM_K	CTL_T(KC_K)
 #define HM_L	ALT_T(KC_L)
-#define HM_SCLN	SFT_T(KC_SCLN)
+#define HM_QUOT	SFT_T(KC_QUOT)
+//#define HM_SCLN	SFT_T(KC_SCLN)
 #define HRML(k1,k2,k3,k4) SFT_T(k1),ALT_T(k2),CTL_T(k3),GUI_T(k4)
 #define HRMR(k1,k2,k3,k4) GUI_T(k1),CTL_T(k2),ALT_T(k3),SFT_T(k4)
 
@@ -53,13 +54,13 @@
 // Default 3x6_3 layout
 #define _BASE \
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
-	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
+	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, KC_SCLN, \
 	OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,  \
 	       RSG_T(KC_ESC), LT(SYM,KC_TAB), RCTL_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
 /* ,-----------------------------------------.                ,-----------------------------------------.
  * | TAB  |  Q   |  W   |  E   |  R   |  T   |                |  Y   |  U   |  I   |  O   |  P   | BSPC |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * | GESC |  A   |  S   |  D   |  F   |  G   |                |  H   |  J   |  K   |  L   | ; :  | ' "  |
+ * | GESC |  A   |  S   |  D   |  F   |  G   |                |  H   |  J   |  K   |  L   | ' "  | ; :  |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * |OS_SFT|  Z   |  X   |  C   |  V   |  B   |                |  N   |  M   | , <  | . >  | / ?  | ENT  |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
@@ -68,12 +69,12 @@
  *                             `--------------------'  `--------------------'
  */
 #define _COLE \
-	_______, KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, \
+	_______, KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, _______, \
 	_______, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,        KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    _______, \
 	_______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, _______, \
 	                           _______, _______, _______,     _______, _______, _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
- * |      |  Q   |  W   |  F   |  P   |  G   |                |  J   |  L   |  U   |  Y   | ; :  |      |
+ * |      |  Q   |  W   |  F   |  P   |  G   |                |  J   |  L   |  U   |  Y   | ' "  |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * |      |  A   |  R   |  S   |  T   |  D   |                |  H   |  N   |  E   |  I   |  O   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
@@ -83,14 +84,14 @@
  *                             `--------------------'  `--------------------'
  */
 #define _NUMB \
-	_______, _______, KC_1,    KC_2,    KC_3,    KC_VOLU,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
-	_______, _______, KC_4,    KC_5,    KC_6,    KC_VOLD,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_QUOT, _______, \
+	_______, _______, KC_1,    KC_2,    KC_3,    KC_VOLU,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_COLN, _______, \
+	_______, _______, KC_4,    KC_5,    KC_6,    KC_VOLD,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_SCLN, _______, \
 	_______, KC_CAPS, KC_7,    KC_8,    KC_9,    KC_0,        _______, _______, _______, _______, _______, _______, \
 	                           _______, MO(FNC), KC_GESC,     _______, _______, _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
- * |      |      |  1   |  2   |  3   | VOLU |                | HOME | PGDN | PGUP | END  |  "   |      |
+ * |      |      |  1   |  2   |  3   | VOLU |                | HOME | PGDN | PGUP | END  |  :   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      |      |  4   |  5   |  6   | VOLD |                | LEFT | DOWN |  UP  | RGHT |  '   |      |
+ * |      |      |  4   |  5   |  6   | VOLD |                | LEFT | DOWN |  UP  | RGHT |  ;   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * |      | CAPS |  7   |  8   |  9   |  0   |                |      |      |      |      |      |      |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
