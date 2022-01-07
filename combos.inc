@@ -20,9 +20,6 @@ COMB(numb,     TG(NUM),  LT(NUM,KC_BSPC), KC_N)
 // Vimac shortcuts
 COMB(vimacf,   HYPR(KC_F),  HM_D, HM_F)
 COMB(vimacj,   HYPR(KC_J),  HM_J, HM_K)
-// Discord shortcuts
-COMB(dis_up,   S(A(KC_UP)),   KC_O, HM_L)
-COMB(dis_dn,   S(A(KC_DOWN)), HM_L, DOT_TH)
 // Macros
 SUBS(dir_up,   "../",   DOT_TH, SLSH_TH)
 SUBS(vi_quit,  ":q!",   KC_Q, KC_W)
