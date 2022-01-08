@@ -3,12 +3,12 @@ These modules are coded for Corne (CRKBD)'s 128x32 and can be integrated as stan
 
 # Integration Guide
 1. Save this folder in your keymap (or user space) directory.
-2. Add the following lines into `rules.mk` ():
+2. Add the following lines into `rules.mk`:
    ```c
    OLED_ENABLE = yes
    SRC += oled-bongocat.c oled-icons.c
    ```
-   (Use `oled-luna.c` for Luna the dog)
+   (Substitute `oled-bongocat.c` with `oled-luna.c` for Luna the dog)
 3. Left and right aligned Bongocat will be compiled by default. To save space, add *either* one of the following directives into `rules.mk`:
    ```c
    OPT_DEFS += -DLEFTCAT
@@ -18,7 +18,7 @@ These modules are coded for Corne (CRKBD)'s 128x32 and can be integrated as stan
    ```
    (Skip this step for Luna)
 4. Animation can be driven by WPM or normal keystrokes:
-   * To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
+   * To animate with WPM, add `WPM_ENABLE = yes` into `rules.mk`.
    * To animate with keystrokes, add the following 'process_record_user()' code block to your `keymap.c` file to trigger animation tap timer with key presses:
    ```c
    bool process_record_user(uint16_t keycode, keyrecord_t *record) {
