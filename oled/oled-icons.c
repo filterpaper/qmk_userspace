@@ -14,10 +14,15 @@
      function to render this module:
         extern void render_mod_status(void);
         render_mod_status();
+   4 Add the font file reference into `config.h`:
+        #define OLED_FONT_H "oledfont.c"
 */
 
 #include QMK_KEYBOARD_H
 
+#ifndef CMK
+#	define CMK 1
+#endif
 
 static void render_logo(void) {
 	static char const corne_logo[] PROGMEM = {
