@@ -6,7 +6,7 @@ These modules are coded for Corne (CRKBD)'s 128x32 and can be integrated as stan
 2. Add the following lines into `rules.mk`:
    ```c
    OLED_ENABLE = yes
-   SRC += oled-bongocat.c oled-icons.c
+   SRC += oled/oled-bongocat.c oled/oled-icons.c
    ```
    (Substitute `oled-bongocat.c` with `oled-luna.c` for Luna the dog)
 3. Left and right aligned Bongocat will be compiled by default. To save space, add *either* one of the following directives into `rules.mk`:
