@@ -87,18 +87,6 @@
 #	endif
 #endif
 
-#ifdef RGBLIGHT_ENABLE
-#	ifdef KEYBOARD_crkbd_rev1
-#		undef RGBLED_NUM
-#		define RGBLED_NUM 54
-#		undef RGBLED_SPLIT
-#		define RGBLED_SPLIT { 27, 27 }
-#		define RGBLIGHT_SPLIT
-#	endif
-#	define RGBLIGHT_LIMIT_VAL 150
-#	define RGBLIGHT_SLEEP 180000
-#endif
-
 #ifdef OLED_ENABLE
 #	define OLED_TIMEOUT 10000
 #	define OLED_DISABLE_TIMEOUT // Prevent matrix_changed triggering oled_on()
