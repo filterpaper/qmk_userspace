@@ -35,3 +35,10 @@ These modules are coded for Corne (CRKBD)'s 128x32 and can be integrated as stan
    ```c
    #define OLED_FONT_H "oled/oledfont.c"
    ```
+7. OLED code uses the following preprocessors as layer indicators. Add them into `config.h` and edit accordingly:
+   ```c
+   #define CMK 1
+   #define NUM 2
+   #define SYM 3
+   #define FNC 4
+   ```
