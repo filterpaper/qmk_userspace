@@ -34,6 +34,10 @@
 
 #include QMK_KEYBOARD_H
 
+#ifndef CMK
+#	define CMK 1
+#endif
+
 #define LUNA_SIZE 96
 #define LUNA_FRAME_DURATION 200 // milliseconds
 #define RUN_INTERVAL  LUNA_FRAME_DURATION*2
