@@ -157,7 +157,7 @@ static bool CANDY_FLOW(effect_params_t* params) {
 		rgb_matrix_set_color(i, led[i].r, led[i].g, led[i].b);
 	}
 
-	if (led_max == DRIVER_LED_TOTAL) {
+	if (!rgb_matrix_check_finished_leds(led_max)) {
 		for (uint8_t j = 0; j < led_max-1; ++j) {
 			led[j] = led[j+1];  // Shift LED state forward
 		}
@@ -167,7 +167,7 @@ static bool CANDY_FLOW(effect_params_t* params) {
 		wait_timer = g_rgb_timer + interval();
 	}
 
-	return led_max < DRIVER_LED_TOTAL;
+	return rgb_matrix_check_finished_leds(led_max);
 }
 #	endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // ENABLE_RGB_MATRIX_CANDY_FLOW
