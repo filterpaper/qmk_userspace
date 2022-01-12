@@ -12,8 +12,6 @@
 	COMB(swap_r,  SH_TG,  M_TH, DOT_TH)
 #endif
 
-COMB(KC_VOLU,  KC_VOLU,  KC_P, HM_QUOT)
-COMB(KC_VOLD,  KC_VOLD,  HM_QUOT, SLSH_TH)
 // Layer toggles
 COMB(func,     TG(FNC),  LT(SYM,KC_TAB), KC_B)
 COMB(numb,     TG(NUM),  LT(NUM,KC_BSPC), KC_N)
