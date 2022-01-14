@@ -4,7 +4,7 @@
 #pragma once
 
 // Common QMK settings
-#define TAP_CODE_DELAY 5
+#define TAP_CODE_DELAY 2
 #define TAP_HOLD_CAPS_DELAY 20
 #define GRAVE_ESC_SHIFT_OVERRIDE
 #define USB_SUSPEND_WAKEUP_DELAY 200
@@ -89,7 +89,6 @@
 
 #ifdef OLED_ENABLE
 #	define OLED_TIMEOUT 10000
-#	define OLED_DISABLE_TIMEOUT // Prevent matrix_changed triggering oled_on()
 #	define OLED_UPDATE_INTERVAL 50
 #	define OLED_BRIGHTNESS 180
 #	define OLED_FONT_H "oled/oledfont.c"
