@@ -146,7 +146,7 @@
 #define CORNE_wrapper(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 #define ORTHO_wrapper(...) LAYOUT_ortho_4x12(__VA_ARGS__)
 #define _36key_wrapper(...) LAYOUT(__VA_ARGS__)
-#define _34key_wrapper(...) LAYOUT(__VA_ARGS__)
+#define _34key_wrapper(...) LAYOUT_split_3x5_2(__VA_ARGS__)
 #define MARK65_wrapper(...) LAYOUT_all(__VA_ARGS__)
 
 
