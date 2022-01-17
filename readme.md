@@ -68,7 +68,7 @@ qmk compile corne.json
 ```
 
 ## Compiling for OLED display
-The `-OLED=` option will build support for pet animation on primary OLED with status icons on the secondary. Animation are key stroke driven by `tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes` to the compile commands:
+The `-e OLED=` option will build support for pet animation on primary OLED with status icons on the secondary. Animation are key stroke driven by `tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes` to the compile commands:
 ### Bongocat
 Build and flash each side with the corresponding options for left and right aligned Bongocat:
 ```
