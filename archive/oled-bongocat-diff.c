@@ -26,7 +26,7 @@
    Cat images courtesy of @plandevida
 
    Differential code is modified from @Dake's Modular Bongocat
-   (https://github.com/Dakes/kyria/blob/main/keymaps/dakes/)
+   (https://github.com/Dakes/qmk_config/tree/main/userspace/dakes)
 
 
    Usage guide
