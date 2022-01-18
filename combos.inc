@@ -12,6 +12,8 @@
 	COMB(swap_r,  SH_TG,  M_TH, DOT_TH)
 #endif
 
+COMB(up,     RSA(KC_UP),    KC_U, KC_I)
+COMB(down,   RSA(KC_DOWN),  M_TH, COMM_TH)
 // Layer toggles
 COMB(func,     TG(FNC),  LT(SYM,KC_TAB), KC_B)
 COMB(numb,     TG(NUM),  LT(NUM,KC_BSPC), KC_N)
