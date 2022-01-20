@@ -37,7 +37,7 @@ jobs:
     - name: Archive firmware
       uses: actions/upload-artifact@v2
       with:
-        name: "${{ steps.build.outputs.artifact-name }}"
+        name: "${{ matrix.keyboard }}_firmware"
         retention-days: 2
         path: |
           *.hex
