@@ -1,13 +1,14 @@
-name: Build QMK userspace
+name: Build userspace
 
 on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
     container: qmkfm/qmk_cli
     strategy:
@@ -22,7 +23,6 @@ jobs:
           - technik
 
     steps:
-    - name: Checkout QMK source
     - uses: actions/checkout@v2
       with:
         repository: qmk/qmk_firmware
@@ -30,7 +30,6 @@ jobs:
         persist-credentials: false
         submodules: recursive
 
-    - name: Checkout userspace
     - uses: actions/checkout@v2
       with:
         path: users/${{ github.actor }}
@@ -39,7 +38,6 @@ jobs:
 
     - name: Build firmware
       run: qmk compile "users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json"
-
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
