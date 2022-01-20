@@ -26,6 +26,7 @@ jobs:
     - name: Checkout userspace
       uses: actions/checkout@v2
       with:
+        repository: ${{ github.actor }}/qmk_userspace
         path: users/${{ github.actor }}
         fetch-depth: 1
         persist-credentials: false
