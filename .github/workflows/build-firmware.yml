@@ -34,7 +34,7 @@ jobs:
         persist-credentials: false
 
     - name: Build firmware
-      run: qmk compile "users/caksoylar/keymaps/${{ matrix.keyboard }}.json"
+      run: qmk compile "users/filterpaper/keymaps/${{ matrix.keyboard }}.json"
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
