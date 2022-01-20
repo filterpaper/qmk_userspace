@@ -1,10 +1,5 @@
-name: Build userspace
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+name: Build QMK userspace
+on: [push, workflow_dispatch]
 
 jobs:
   build:
@@ -18,10 +13,8 @@ jobs:
           - adux
           - cradio
           - macro3
-          - mark65
-          - technik
-
     steps:
+
     - name: Checkout QMK
       uses: actions/checkout@v2
       with:
@@ -39,7 +32,8 @@ jobs:
 
     - name: Build firmware
       run: qmk compile "users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json"
-    - name: Upload artifacts
+
+    - name: Upload firmware
       uses: actions/upload-artifact@v2
       with:
         name: ${{ github.actor }}_firmware
