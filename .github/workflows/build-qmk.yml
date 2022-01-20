@@ -40,4 +40,4 @@ jobs:
       with:
         name: filterpaper_firmware
         path: '*.hex'
-        retention-days: 5
+        retention-days: 2
