@@ -4,11 +4,10 @@ on:
   push:
     branches:
       - main
-
   workflow_dispatch:
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     container: qmkfm/qmk_cli
     strategy:
@@ -24,7 +23,7 @@ jobs:
 
     steps:
     - name: Checkout QMK
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         repository: qmk/qmk_firmware
         fetch-depth: 1
@@ -32,7 +31,7 @@ jobs:
         submodules: recursive
 
     - name: Checkout userspace
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         path: users/${{ github.actor }}
         fetch-depth: 1
