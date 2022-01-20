@@ -34,9 +34,12 @@ jobs:
     - name: Build firmware
       run: qmk compile "users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json"
 
-    - name: Upload firmware
+    - name: Archive firmware
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ github.actor }}_firmware
-        path: '*.hex'
+        name: "${{ steps.build.outputs.artifact-name }}"
         retention-days: 2
+        path: |
+          *.hex
+          *.bin
+      continue-on-error: true
