@@ -19,6 +19,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: qmk/qmk_firmware
+        ref: develop
         fetch-depth: 1
         persist-credentials: false
         submodules: recursive
