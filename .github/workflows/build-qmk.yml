@@ -14,8 +14,12 @@ jobs:
       fail-fast: false
       matrix:
         keyboard:
-          - cradio
+          - 3w6
           - adux
+          - cradio
+          - macro3
+          - mark65
+          - technik
 
     container: qmkfm/qmk_cli
 
