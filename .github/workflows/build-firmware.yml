@@ -1,0 +1,43 @@
+name: Build userspace
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        keyboard:
+          - cradio
+          - adux
+
+    container: qmkfm/qmk_cli
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: qmk/qmk_firmware
+        fetch-depth: 1
+        persist-credentials: false
+        submodules: recursive
+
+    - uses: actions/checkout@v2
+      with:
+        path: users/filterpaper
+        fetch-depth: 1
+        persist-credentials: false
+
+    - name: Build firmware
+      run: qmk compile "users/caksoylar/keymaps/${{ matrix.keyboard }}.json"
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: filterpaper_firmware
+        path: '*.hex'
+        retention-days: 30
