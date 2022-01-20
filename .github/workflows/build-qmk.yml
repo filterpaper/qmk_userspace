@@ -23,6 +23,7 @@ jobs:
           - technik
 
     steps:
+    - name: Checkout QMK
     - uses: actions/checkout@v2
       with:
         repository: qmk/qmk_firmware
@@ -30,6 +31,7 @@ jobs:
         persist-credentials: false
         submodules: recursive
 
+    - name: Checkout userspace
     - uses: actions/checkout@v2
       with:
         path: users/${{ github.actor }}
