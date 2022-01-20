@@ -5,7 +5,7 @@ on:
     branches:
       - main
 
-  workflow_dispatch:
+workflow_dispatch:
 
 jobs:
   Build:
@@ -40,4 +40,4 @@ jobs:
       with:
         name: filterpaper_firmware
         path: '*.hex'
-        retention-days: 30
+        retention-days: 5
