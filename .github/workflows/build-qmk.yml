@@ -35,7 +35,7 @@ jobs:
       id: build
       run: |
         qmk compile "users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json"
-        OUTPUT=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.keymap }}
+        OUTPUT=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ github.actor }}
         echo "::set-output name=artifact-name::${OUTPUT}"
 
     - name: Archive firmware
