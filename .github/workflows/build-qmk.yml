@@ -32,12 +32,16 @@ jobs:
         persist-credentials: false
 
     - name: Build firmware
-      run: qmk compile "users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json"
+      id: build
+      run: |
+        qmk compile "users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json"
+        OUTPUT=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.keymap }}
+        echo "::set-output name=artifact-name::${OUTPUT}"
 
     - name: Archive firmware
       uses: actions/upload-artifact@v2
       with:
-        name: "${{ matrix.keyboard }}_firmware"
+        name: "${{ steps.build.outputs.artifact-name }}_firmware"
         retention-days: 2
         path: |
           *.hex
