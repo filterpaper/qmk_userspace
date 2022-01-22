@@ -9,10 +9,13 @@ jobs:
       fail-fast: false
       matrix:
         keyboard:
-          - 3w6
-          - adux
-          - cradio
-          - macro3
+        - 3w6
+        - adux
+        - cradio
+        - macro3
+        keymap:
+        - {{ github.actor }}
+
     steps:
 
     - name: Checkout QMK
@@ -27,15 +30,15 @@ jobs:
     - name: Checkout userspace
       uses: actions/checkout@v2
       with:
-        path: users/${{ github.actor }}
+        path: users/${{ matrix.keymap }}
         fetch-depth: 1
         persist-credentials: false
 
     - name: Build firmware
       id: build
       run: |
-        qmk compile "users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json"
-        OUTPUT=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ github.actor }}
+        qmk compile "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
+        OUTPUT=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.keymap }}
         echo "::set-output name=artifact-name::${OUTPUT}"
 
     - name: Archive firmware
@@ -46,4 +49,5 @@ jobs:
         path: |
           *.hex
           *.bin
+          *.uf2
       continue-on-error: true

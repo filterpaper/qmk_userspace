@@ -52,7 +52,7 @@
 // Default 3x6_3 layout
 #define _BASE \
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
-	KC_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, KC_SCLN, \
+	QK_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, KC_SCLN, \
 	OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,  \
 	        RSG_T(KC_ESC), LT(SYM,KC_TAB), RSA_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
 /* ,-----------------------------------------.                ,-----------------------------------------.
@@ -85,7 +85,7 @@
 	_______, _______, KC_1,    KC_2,    KC_3,    KC_VOLU,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_COLN, _______, \
 	_______, _______, KC_4,    KC_5,    KC_6,    KC_VOLD,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_SCLN, _______, \
 	_______, KC_CAPS, KC_7,    KC_8,    KC_9,    KC_0,        _______, _______, _______, _______, _______, _______, \
-	                           _______, MO(FNC), KC_GESC,     _______, _______, _______
+	                           _______, MO(FNC), QK_GESC,     _______, _______, _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
  * |      |      |  1   |  2   |  3   | VOLU |                | HOME | PGDN | PGUP | END  |  :   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
@@ -112,7 +112,7 @@
  *                             `--------------------'  `--------------------'
  */
 #define _FUNC \
-	_______, RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F10,      _______, KC_WH_U, KC_WH_D, KC_INS,  TG(CMK), _______, \
+	_______, QK_BOOT, KC_F1,   KC_F2,   KC_F3,   KC_F10,      _______, KC_WH_U, KC_WH_D, KC_INS,  TG(CMK), _______, \
 	_______, _______, KC_F4,   KC_F5,   KC_F6,   KC_F11,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______, \
 	_______, Z_SLEEP, KC_F7,   KC_F8,   KC_F9,   KC_F12,      _______, KC_BTN2, KC_BTN1, KC_DEL,  _______, _______, \
 	                           _______, _______, _______,     _______,	 _______, _______
