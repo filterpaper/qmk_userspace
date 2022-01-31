@@ -66,8 +66,8 @@ qmk flash -kb cradio -km default -bl dfu-split-right
 
 # Modular Corne (CRKBD) Build
 Corne keyboard is configured with a few modular build options using [rules.mk](rules.mk):
-## Tiny build
-Minimal firmware with no OLED and RGB support is the default:
+## RGB Matrix default
+Default build will be compiled with RGB matrix support as default:
 ```
 qmk compile corne.json
 ```
@@ -86,6 +86,12 @@ Build for Luna or Felix the dog:
 ```
 qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
+```
+
+## Minimal build
+Minimal firmware with no OLED and RGB support will be compiled with `-e TINY=yes`:
+```
+qmk compile -e TINY=yes corne.json
 ```
 
 ## Logo file
