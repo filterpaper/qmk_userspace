@@ -1,4 +1,4 @@
-name: Build QMK userspace
+name: Build CRKBD firmware
 on: [push, workflow_dispatch]
 
 jobs:
@@ -9,14 +9,12 @@ jobs:
       fail-fast: false
       matrix:
         keyboard:
-        - 3w6
-        - adux
-        - cradio
-        - macro3
-        - mark65
-        - technik
+        - corne
         keymap:
         - ${{ github.actor }}
+        side:
+        - LEFT
+        - RIGHT
 
     steps:
 
@@ -36,17 +34,17 @@ jobs:
         fetch-depth: 1
         persist-credentials: false
 
-    - name: Build firmware
-      id: build
+    - name: Build crkbd
+      id: crkbd
       run: |
-        qmk compile "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
-        OUTPUT=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.keymap }}
+        qmk compile -e KB=IMK -e OLED=${{ matrix.side }}CAT "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
+        OUTPUT=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.side }}_${{ matrix.keymap }}
         echo "::set-output name=artifact-name::${OUTPUT}"
 
     - name: Archive firmware
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.build.outputs.artifact-name }}_firmware
+        name: ${{ steps.crkbd.outputs.artifact-name }}_firmware
         retention-days: 2
         path: |
           *.hex
