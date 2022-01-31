@@ -88,14 +88,6 @@ qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
 ```
 
-## Compiling for RGB matrix
-The `-KB=` option will add support for RGB matrix lighting. `IMK` value will use under glow LEDs as indicators:
-```
-qmk compile -e KB=LP corne.json
-qmk compile -e KB=IMK corne.json
-```
-Combine `-e OLED=` and `-e KB=` options to support both features.
-
 ## Logo file
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)

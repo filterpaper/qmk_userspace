@@ -38,7 +38,7 @@ jobs:
     - name: Build crkbd
       id: crkbd
       run: |
-        qmk compile -e KB=IMK -e OLED=${{ matrix.side }}CAT "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
+        qmk compile -e OLED=${{ matrix.side }}CAT "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
         OUTPUT=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.side }}_${{ matrix.keymap }}
         echo "::set-output name=artifact-name::${OUTPUT}"
 

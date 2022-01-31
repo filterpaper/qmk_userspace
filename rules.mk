@@ -52,6 +52,9 @@ endif
 
 # Corne CRKBD
 ifeq ($(KEYBOARD), crkbd/rev1)
+	RGB_MATRIX_ENABLE = yes
+	RGB_MATRIX_CUSTOM_USER = yes
+	SRC += rgb-matrix.c
 	ifneq ($(strip $(OLED)),)
 		OLED_ENABLE = yes
 		OPT_DEFS += -D${OLED}
@@ -61,13 +64,13 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 			SRC += oled-icons.c oled-luna.c
 		endif
 	endif
-	ifneq ($(strip $(KB)),)
-		RGB_MATRIX_ENABLE = yes
-		RGB_MATRIX_CUSTOM_USER = yes
-		SRC += rgb-matrix.c
-		OPT_DEFS += -D${KB}
-	endif
-	ifeq ($(strip $(KB)), $(strip $(OLED)))
-		LTO_ENABLE = no
-	endif
+#	ifneq ($(strip $(KB)),)
+#		RGB_MATRIX_ENABLE = yes
+#		RGB_MATRIX_CUSTOM_USER = yes
+#		SRC += rgb-matrix.c
+#		OPT_DEFS += -D${KB}
+#	endif
+#	ifeq ($(strip $(KB)), $(strip $(OLED)))
+#		LTO_ENABLE = no
+#	endif
 endif
