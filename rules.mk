@@ -34,20 +34,20 @@ VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/word
 # Combo support
 COMBO_ENABLE = yes
 SRC += combos.c
+OPT_DEFS += -DCAPS_WORD
+SRC += caps_word.c
 
 # Small split keyboards
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
 	SWAP_HANDS_ENABLE = yes
-	OPT_DEFS += -DWORD_FEATURES
-	SRC += autocorrection.c caps_word.c
+	OPT_DEFS += -DAUTO_CORRECT
+	SRC += autocorrection.c
 endif
 
 # Boardsource's Mark65 and Technik
 ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
-	OPT_DEFS += -DWORD_FEATURES
-	SRC += rgb-matrix.c autocorrection.c caps_word.c
 endif
 
 # Corne CRKBD
