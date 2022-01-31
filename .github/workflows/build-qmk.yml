@@ -43,20 +43,6 @@ jobs:
         OUTPUT=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.keymap }}
         echo "::set-output name=artifact-name::${OUTPUT}"
 
-    - name: Build Corne Left
-      id: build
-      run: |
-        qmk compile -e KB=IMK -e OLED=LEFTCAT "users/${{ matrix.keymap }}/keymaps/corne.json"
-        OUTPUT=corne_left_${{ matrix.keymap }}
-        echo "::set-output name=artifact-name::${OUTPUT}"
-
-    - name: Build Corne Right
-      id: build
-      run: |
-        qmk compile -e KB=IMK -e OLED=RIGHTCAT "users/${{ matrix.keymap }}/keymaps/corne.json"
-        OUTPUT=corne_right_${{ matrix.keymap }}
-        echo "::set-output name=artifact-name::${OUTPUT}"
-
     - name: Archive firmware
       uses: actions/upload-artifact@v2
       with:
