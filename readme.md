@@ -33,7 +33,7 @@ qmk compile keymaps/corne.json
 
 
 # Building with GitHub Actions
-This userspace can also be built with [GitHub Actions](https://docs.github.com/en/actions). Workflow for building this space is in the [build-qmk.yml](.github/workflows/build-qmk.yml) file. It will setup an Ubuntu container, clone the QMK firmware repository, this userspace, and run `qmk compile` on keyboards listed in the workflow matrix. Compiled firmware files can be downloaded in the output zip.
+This userspace can be built with [GitHub Actions](https://docs.github.com/en/actions). Workflow for building this space is in the [build-qmk.yml](.github/workflows/build-qmk.yml) file. It will setup an Ubuntu container, checkout the QMK `develop` branch and this userspace, and compile firmware listed in the workflow build matrix. There is also a separate [build-crkbd.yml](.github/workflows/build-crkbd.yml) workflow with Corne-specific build matrix. Compiled firmware files can be downloaded in compressed zip files within the Actions tab on GitHub.
 
 
 
