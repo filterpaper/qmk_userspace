@@ -147,7 +147,7 @@ Data LEDs on Pro Micro can be used as indicators with code. They are pins `B0` (
 #define LED_CAPS_LOCK_PIN B0
 #define LED_PIN_ON_STATE 0
 ```
-For advance usage, setup the following macros to use both pins with GPIO controls:
+For advance usage, setup the following macros to call both pins with GPIO functions:
 ```c
 // Pro Micro data LED pins
 #define RXLED B0
@@ -160,37 +160,7 @@ For advance usage, setup the following macros to use both pins with GPIO control
 #define RXLED_OFF  writePinHigh(RXLED)
 #define TXLED_OFF  writePinHigh(TXLED)
 ```
-Initiate the LEDs and turn them off with:
-```c
-void matrix_init_user(void) {
-    RXLED_INIT;
-    TXLED_INIT;
-    RXLED_OFF;
-    TXLED_OFF;
-}
-```
-LED macros can then be used as indicators like Caps Lock:
-```c
-void matrix_scan_user(void) {
-    if (host_keyboard_led_state().caps_lock) {
-        RXLED_ON; TXLED_ON;
-    } else {
-        RXLED_OFF; TXLED_OFF;
-    }
-}
-```
-Or as layer indicator:
-```c
-layer_state_t layer_state_set_user(layer_state_t const state) {
-    switch(get_highest_layer(state|default_layer_state)) {
-        case FNC: RXLED_ON;  TXLED_ON;  break;
-        case SYM: RXLED_OFF; TXLED_ON;  break;
-        case NUM: RXLED_ON;  TXLED_OFF; break;
-        default:  RXLED_OFF; TXLED_OFF;
-    }
-    return state;
-}
-```
+Initialise LEDs with the `*_INIT` macro on startup inside `matrix_scan_user(void)`. Subsequently, LEDs can be used as indicators with the `*_ON` and `*_OFF` macros that follows.
 
 ## macOS / Windows Shortcuts
 [Magic Keycodes](https://docs.qmk.fm/#/keycodes_magic?id=magic-keycodes) swap key `MAGIC_TOGGLE_CTL_GUI` can be used as OS toggle, allowing QMK to read its status from the following variable to swap clipboard shortcuts:
