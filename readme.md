@@ -5,14 +5,6 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 * Use shared `rules.mk`, `config.h` and source files in this space.
 * See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
-## Setup
-Forking QMK repository can be avoided in this manner: clone the QMK firmware, followed by this repository into `users/filterpaper`:
-```sh
-git clone https://github.com/qmk/qmk_firmware qmk_firmware
-git clone https://github.com/filterpaper/qmk_userspace qmk_firmware/users/filterpaper
-```
-Git updates to `users/filterpaper` will be independent from QMK source when setup in this manner.
-
 
 
 # Supported Keyboards
@@ -25,15 +17,10 @@ Git updates to `users/filterpaper` will be independent from QMK source when setu
 * [Technik](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/technik_o)
 * [The Mark: 65](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/the_mark)
 
-To build, run `qmk compile` on the JSON files in [keymaps](keymaps/) folder. Example:
-```sh
-qmk compile keymaps/corne.json
-```
 
 
-
-# Building with GitHub Actions
-This userspace can be built with [GitHub Actions](https://docs.github.com/en/actions). Workflow for building this space is in the [build-qmk.yml](.github/workflows/build-qmk.yml) file. It will setup an Ubuntu container, checkout the QMK `develop` branch and this userspace, and compile firmware listed in the workflow build matrix. There is also a separate [build-crkbd.yml](.github/workflows/build-crkbd.yml) workflow with Corne-specific build matrix. Compiled firmware files can be downloaded in compressed zip files within the Actions tab on GitHub.
+# Building Userspace
+This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) in a `users` folder. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with [build-qmk.yml](.github/workflows/build-qmk.yml) workflow, while CRKBD build options are in the [build-crkbd.yml](.github/workflows/build-crkbd.yml) workflow matrix.
 
 
 
@@ -56,7 +43,7 @@ This userspace can be built with [GitHub Actions](https://docs.github.com/en/act
 
 
 # Split Keyboard Handedness
-Split keyboards use [Handedness by EEPROM](https://github.com/qmk/qmk_firmware/docs/feature_split_keyboard.md), and each half is flashed once with the following command:
+Split keyboards use [Handedness by EEPROM](https://github.com/qmk/qmk_firmware/docs/feature_split_keyboard.md), and each half is flashed once with the following:
 ```sh
 qmk flash -kb cradio -km default -bl dfu-split-left
 qmk flash -kb cradio -km default -bl dfu-split-right
