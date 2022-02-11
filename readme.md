@@ -282,7 +282,7 @@ See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide). Repl
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 \
 -U flash:w:bootloader_atmega32u4_1.0.0.hex:i \
--U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xC3:m
+-U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xF3:m
 ```
 
 ## NanoBoot
