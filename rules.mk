@@ -22,6 +22,7 @@ SPACE_CADET_ENABLE = no
 
 # Common features
 LTO_ENABLE = yes
+WAIT_FOR_USB = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTLOADER = atmel-dfu
