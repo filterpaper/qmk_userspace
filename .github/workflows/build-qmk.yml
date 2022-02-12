@@ -20,9 +20,9 @@ jobs:
         - ${{ github.actor }}
         include:
         - keyboard: corne
-          side:
-          - LEFT
-          - RIGHT
+          side: LEFT
+        - keyboard: corne
+          side: RIGHT
 
     steps:
 
