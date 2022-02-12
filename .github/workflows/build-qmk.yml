@@ -18,6 +18,11 @@ jobs:
         - technik
         keymap:
         - ${{ github.actor }}
+        include:
+        - keyboard: corne
+          side:
+          - LEFT
+          - RIGHT
 
     steps:
 
@@ -38,7 +43,7 @@ jobs:
         persist-credentials: false
 
     - name: Build firmware
-      run: qmk compile "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
+      run: qmk compile -e OLED=${{ matrix.side }}CAT "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
 
     - name: Archive firmware
       uses: actions/upload-artifact@v2
