@@ -12,15 +12,16 @@
 	COMB(swap_r,  SH_TG,  M_TH, DOT_TH)
 #endif
 
-COMB(up,     RSA(KC_UP),    KC_U, KC_I)
-COMB(down,   RSA(KC_DOWN),  M_TH, COMM_TH)
-// Layer toggles
+// layer toggles
 COMB(func,     TG(FNC),  LT(SYM,KC_TAB), KC_B)
 COMB(numb,     TG(NUM),  LT(NUM,KC_BSPC), KC_N)
-// Vimac shortcuts
+// vimac shortcuts
 COMB(vimacf,   HYPR(KC_F),  HM_D, HM_F)
 COMB(vimacj,   HYPR(KC_J),  HM_J, HM_K)
-// Macros
+// navigation
+COMB(up,     RSA(KC_UP),    KC_Y, KC_U)
+COMB(down,   RSA(KC_DOWN),  KC_N, M_TH)
+// macros
 SUBS(dir_up,   "../",   DOT_TH, SLSH_TH)
 SUBS(vi_quit,  ":q!",   KC_Q, KC_W)
 SUBS(vi_save,  ":wq!",  KC_Z, KC_X)
