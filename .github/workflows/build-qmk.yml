@@ -1,5 +1,5 @@
 name: Build QMK userspace
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 
 jobs:
   build:
@@ -20,8 +20,10 @@ jobs:
         - ${{ github.actor }}
         include:
         - keyboard: corne
+          keymap: ${{ github.actor }}
           side: LEFT
         - keyboard: corne
+          keymap: ${{ github.actor }}
           side: RIGHT
 
     steps:
