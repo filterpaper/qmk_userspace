@@ -46,10 +46,10 @@ jobs:
         cd users/${{ github.actor }}
         if [[ ${{ matrix.keyboard }} == "corne" ]]
         then
-          qmk compile -e OLED=${{ matrix.oled }} "keymaps/${{ matrix.keyboard }}.json"
+          qmk compile -j 10 -e OLED=${{ matrix.oled }} "keymaps/${{ matrix.keyboard }}.json"
           TARGET=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}
         else
-          qmk compile "keymaps/${{ matrix.keyboard }}.json"
+          qmk compile -j 10 "keymaps/${{ matrix.keyboard }}.json"
           TARGET=${{ matrix.keyboard }}
         fi
         echo "::set-output name=artifact-name::${TARGET}"
