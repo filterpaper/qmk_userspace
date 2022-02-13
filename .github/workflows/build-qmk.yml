@@ -1,10 +1,12 @@
 name: Build QMK userspace
 on: [workflow_dispatch]
 
+env:
+  USERSPACE: ${{ github.actor }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
-#    container: qmkfm/qmk_cli
     container: qmkfm/base_container
     strategy:
       fail-fast: false
@@ -16,14 +18,10 @@ jobs:
         - macro3
         - mark65
         - technik
-        keymap:
-        - ${{ github.actor }}
         include:
         - keyboard: corne
-          keymap: ${{ github.actor }}
           oled: LEFTCAT
         - keyboard: corne
-          keymap: ${{ github.actor }}
           oled: RIGHTCAT
 
     steps:
@@ -50,11 +48,11 @@ jobs:
       run: |
         if [[ ${{ matrix.keyboard }} == "corne" ]]
         then
-          qmk compile -e OLED=${{ matrix.oled }} "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
-          TARGET=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}_${{ matrix.keymap }}
+          qmk compile -e OLED=${{ matrix.oled }} "users/${{ env.USERSPACE }}/keymaps/${{ matrix.keyboard }}.json"
+          TARGET=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}_${{ env.USERSPACE }}
         else
-          qmk compile "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
-          TARGET=${{ matrix.keyboard }}_${{ matrix.keymap }}
+          qmk compile "users/${{ env.USERSPACE }}/keymaps/${{ matrix.keyboard }}.json"
+          TARGET=${{ matrix.keyboard }}_${{ env.USERSPACE }}
         fi
         echo "::set-output name=artifact-name::${TARGET}"
 
