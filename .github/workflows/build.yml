@@ -17,9 +17,7 @@ jobs:
         - technik
         include:
         - keyboard: corne
-          oled: LEFTCAT
-        - keyboard: corne
-          oled: RIGHTCAT
+          oled: [LEFTCAT, RIGHTCAT]
 
     steps:
 
