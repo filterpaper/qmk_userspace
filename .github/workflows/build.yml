@@ -1,9 +1,6 @@
 name: Build QMK userspace
 on: [workflow_dispatch]
 
-env:
-  USERSPACE: ${{ github.actor }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -38,7 +35,7 @@ jobs:
     - name: Checkout userspace
       uses: actions/checkout@v2
       with:
-        path: users/${{ env.USERSPACE }}
+        path: users/${{ github.actor }}
         fetch-depth: 1
         persist-credentials: false
 
@@ -46,13 +43,14 @@ jobs:
       id: build
       shell: bash
       run: |
+        cd users/${{ github.actor }}
         if [[ ${{ matrix.keyboard }} == "corne" ]]
         then
-          qmk compile -e OLED=${{ matrix.oled }} "users/${{ env.USERSPACE }}/keymaps/${{ matrix.keyboard }}.json"
-          TARGET=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}_${{ env.USERSPACE }}
+          qmk compile -e OLED=${{ matrix.oled }} "keymaps/${{ matrix.keyboard }}.json"
+          TARGET=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}
         else
-          qmk compile "users/${{ env.USERSPACE }}/keymaps/${{ matrix.keyboard }}.json"
-          TARGET=${{ matrix.keyboard }}_${{ env.USERSPACE }}
+          qmk compile "keymaps/${{ matrix.keyboard }}.json"
+          TARGET=${{ matrix.keyboard }}
         fi
         echo "::set-output name=artifact-name::${TARGET}"
 

@@ -20,7 +20,7 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 
 
 # Building Userspace
-This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) in a `users` folder. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with [build-qmk.yml](.github/workflows/build-qmk.yml) workflow, while CRKBD build options are in the [build-crkbd.yml](.github/workflows/build-crkbd.yml) workflow matrix.
+This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) in a `users` folder by running `qmk compile` for the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with [build.yml](.github/workflows/build.yml) workflow.
 
 
 
