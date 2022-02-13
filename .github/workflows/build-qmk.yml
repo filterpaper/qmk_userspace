@@ -20,11 +20,11 @@ jobs:
         - ${{ github.actor }}
         include:
         - keyboard: corne
-          keymap: ${{ github.actor }}
-          side: LEFT
+#          keymap: ${{ github.actor }}
+          oled: LEFTCAT
         - keyboard: corne
-          keymap: ${{ github.actor }}
-          side: RIGHT
+#          keymap: ${{ github.actor }}
+          oled: RIGHTCAT
 
     steps:
 
@@ -45,12 +45,23 @@ jobs:
         persist-credentials: false
 
     - name: Build firmware
-      run: qmk compile -e OLED=${{ matrix.side }}CAT "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
+      id: build
+      shell: bash
+      run: |
+        if [[ ${{ matrix.keyboard }} eq "corne" ]]
+        then
+          qmk compile -e OLED=${{ matrix.oled }} "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
+          TARGET=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}_${{ matrix.keymap }}
+        else
+          qmk compile "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
+          TARGET=${{ matrix.keyboard }}_${{ matrix.keymap }}
+        fi
+        echo "::set-output name=artifact-name::${TARGET}"
 
     - name: Archive firmware
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ matrix.keyboard }}_${{ matrix.keymap }}
+        name: ${{ steps.build.outputs.artifact-name }}
         retention-days: 2
         path: |
           *.hex
