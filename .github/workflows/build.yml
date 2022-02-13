@@ -47,7 +47,7 @@ jobs:
         if [[ ${{ matrix.keyboard }} == "corne" ]]
         then
           qmk compile -j 10 -e OLED=${{ matrix.oled }} "keymaps/${{ matrix.keyboard }}.json"
-          FILENAME=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}
+          FILENAME=${{ matrix.keyboard }}_${{ matrix.oled }}
         else
           qmk compile -j 10 "keymaps/${{ matrix.keyboard }}.json"
           FILENAME=${{ matrix.keyboard }}
