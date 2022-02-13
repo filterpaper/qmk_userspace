@@ -38,7 +38,7 @@ jobs:
     - name: Checkout userspace
       uses: actions/checkout@v2
       with:
-        path: users/${{ matrix.keymap }}
+        path: users/${{ env.USERSPACE }}
         fetch-depth: 1
         persist-credentials: false
 
