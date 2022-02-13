@@ -20,10 +20,10 @@ jobs:
         - ${{ github.actor }}
         include:
         - keyboard: corne
-#          keymap: ${{ github.actor }}
+          keymap: ${{ github.actor }}
           oled: LEFTCAT
         - keyboard: corne
-#          keymap: ${{ github.actor }}
+          keymap: ${{ github.actor }}
           oled: RIGHTCAT
 
     steps:
