@@ -41,18 +41,17 @@ jobs:
 
     - name: Build firmware
       id: build
-      shell: bash
       run: |
         cd users/${{ github.actor }}
         if [[ ${{ matrix.keyboard }} == "corne" ]]
         then
           qmk compile -j 10 -e OLED=${{ matrix.oled }} "keymaps/${{ matrix.keyboard }}.json"
-          FILENAME=${{ matrix.keyboard }}_${{ matrix.oled }}
+          OUTPUT=${{ matrix.keyboard }}_${{ matrix.oled }}
         else
           qmk compile -j 10 "keymaps/${{ matrix.keyboard }}.json"
-          FILENAME=${{ matrix.keyboard }}
+          OUTPUT=${{ matrix.keyboard }}
         fi
-        echo "::set-output name=artifact-name::${FILENAME}"
+        echo "::set-output name=artifact-name::${OUTPUT}"
 
     - name: Archive firmware
       uses: actions/upload-artifact@v2
