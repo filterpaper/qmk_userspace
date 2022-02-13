@@ -17,7 +17,9 @@ jobs:
         - technik
         include:
         - keyboard: corne
-          oled: [LEFTCAT, RIGHTCAT]
+          oled: LEFTCAT
+        - keyboard: corne
+          oled: RIGHTCAT
 
     steps:
 
@@ -45,12 +47,12 @@ jobs:
         if [[ ${{ matrix.keyboard }} == "corne" ]]
         then
           qmk compile -j 10 -e OLED=${{ matrix.oled }} "keymaps/${{ matrix.keyboard }}.json"
-          TARGET=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}
+          FILENAME=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}
         else
           qmk compile -j 10 "keymaps/${{ matrix.keyboard }}.json"
-          TARGET=${{ matrix.keyboard }}
+          FILENAME=${{ matrix.keyboard }}
         fi
-        echo "::set-output name=artifact-name::${TARGET}"
+        echo "::set-output name=artifact-name::${FILENAME}"
 
     - name: Archive firmware
       uses: actions/upload-artifact@v2
