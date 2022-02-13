@@ -48,7 +48,7 @@ jobs:
       id: build
       shell: bash
       run: |
-        if [[ ${{ matrix.keyboard }} eq "corne" ]]
+        if [[ ${{ matrix.keyboard }} == "corne" ]]
         then
           qmk compile -e OLED=${{ matrix.oled }} "users/${{ matrix.keymap }}/keymaps/${{ matrix.keyboard }}.json"
           TARGET=$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{ matrix.oled }}_${{ matrix.keymap }}
