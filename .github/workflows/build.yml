@@ -41,7 +41,6 @@ jobs:
 
     - name: Build firmware
       id: build
-      shell: bash
       run: |
         cd users/${{ github.actor }}
         if [[ ${{ matrix.keyboard }} == "corne" ]]
