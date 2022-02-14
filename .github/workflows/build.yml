@@ -41,9 +41,10 @@ jobs:
 
     - name: Build firmware
       id: build
+      shell: bash
       run: |
         cd users/${{ github.actor }}
-        if [[ ${{ matrix.keyboard }} == "corne" ]]
+        if [ ${{ matrix.keyboard }} == "corne" ]
         then
           qmk compile -j 10 -e OLED=${{ matrix.oled }} "keymaps/${{ matrix.keyboard }}.json"
           OUTPUT=${{ matrix.keyboard }}_${{ matrix.oled }}
