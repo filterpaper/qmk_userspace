@@ -1,10 +1,9 @@
-// Copyright 2021 @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
-/* 5x3 Corne logo and コルネ katakana name
-   with modifier and layer icons from @soundmonster.
-   Online editor: https://helixfonteditor.netlify.com/
-*/
+/* Corne logo, コルネ label and @soundmonster icons
+   Editor: https://helixfonteditor.netlify.com/
+ */
 
 #include "progmem.h"
 

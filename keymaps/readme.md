@@ -1,21 +1,6 @@
-Copyright (C) 2021 @filterpaper
+# QMK keymaps
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-# QMK layout files in JSON format
-
-Keyboard, keymap name and layout are named in each JSON file. They are used by `qmk compile <keyboard>.json` to build its firmware. Each layer are preprocessor macros to the layout found in `layout.h`.
+Keymap JSON file content are preprocessors to macros in `layout.h`. They can be compiled directly using `qmk compile <keyboard>.json` command.
 
 ## 3x6_3 Layout
 ```
@@ -26,7 +11,7 @@ Keyboard, keymap name and layout are named in each JSON file. They are used by `
 |------+------+------+------+------+------|                |------+------+------+------+------+------|
 |OS_SFT|  Z   |  X   |  C   |  V   |  B   |                |  N   |  M   | , <  | . >  | / ?  | ENT  |
 `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
-                            |RSG_T |_SYMB |RSA_T |  |RSFT_T|_NUMB |RAG_T |
+                            |RSA_T |_SYMB |RSG_T |  |RSFT_T|_NUMB |RAG_T |
                             | ESC  | TAB  | ENT  |  | SPC  | BSPC | DEL  |
                             `--------------------'  `--------------------'
  _COLE
@@ -80,7 +65,7 @@ Keyboard, keymap name and layout are named in each JSON file. They are used by `
 |------+------+------+------+------|                |------+------+------+------+------|
 |  Z   |  X   |  C   |  V   |  B   |                |  N   |  M   | , <  | . >  | / ?  |
 `------+------+------+------+------+------.  ,------+------+------+------+------+------'
-                            |_SYMB |RSA_T |  |RSFT_T|_NUMB |
+                            |_SYMB |RSG_T |  |RSFT_T|_NUMB |
                             | TAB  | ENT  |  | SPC  | BSPC |
                             `-------------'  `-------------'
  _COLE

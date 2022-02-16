@@ -1,3 +1,6 @@
+// Copyright 2021 @vectorstorm
+// SPDX-License-Identifier: GPL-2.0+
+
 #include <stddef.h>
 #include <stdio.h>
 

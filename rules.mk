@@ -66,7 +66,7 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		OPT_DEFS += -D${OLED}
 		ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT CAT))
 			SRC += oled-icons.c oled-bongocat.c
-		else ifeq ($(OLED), $(filter $(OLED), FELIX LUNA))
+		else ifeq ($(OLED), $(filter $(OLED), LUNA FELIX))
 			SRC += oled-icons.c oled-luna.c
 		endif
 	endif
