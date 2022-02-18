@@ -20,6 +20,8 @@ jobs:
           oled: LEFTCAT
         - keyboard: corne
           oled: RIGHTCAT
+        - keyboard: corne
+          oled: LUNA
 
     steps:
 
@@ -28,15 +30,13 @@ jobs:
       with:
         repository: qmk/qmk_firmware
         ref: develop
-        fetch-depth: 1
-        persist-credentials: false
         submodules: recursive
+        persist-credentials: false
 
     - name: Checkout userspace
       uses: actions/checkout@v2
       with:
         path: users/${{ github.actor }}
-        fetch-depth: 1
         persist-credentials: false
 
     - name: Build firmware
@@ -46,10 +46,10 @@ jobs:
         cd users/${{ github.actor }}
         if [ ${{ matrix.keyboard }} == "corne" ]
         then
-          qmk compile -j 10 -e OLED=${{ matrix.oled }} "keymaps/${{ matrix.keyboard }}.json"
+          qmk compile -j 10 -e OLED=${{ matrix.oled }} keymaps/${{ matrix.keyboard }}.json
           OUTPUT=${{ matrix.keyboard }}_${{ matrix.oled }}
         else
-          qmk compile -j 10 "keymaps/${{ matrix.keyboard }}.json"
+          qmk compile -j 10 keymaps/${{ matrix.keyboard }}.json
           OUTPUT=${{ matrix.keyboard }}
         fi
         echo "::set-output name=artifact-name::${OUTPUT}"

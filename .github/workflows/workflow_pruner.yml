@@ -19,7 +19,7 @@ jobs:
     - name: Prune cancelled/skipped runs
       uses: actions/github-script@v4
       with:
-        github-token: ${{ secrets.GH_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const cancelled = await github.actions.listWorkflowRunsForRepo({
             owner: context.repo.owner,
@@ -49,7 +49,7 @@ jobs:
     - name: Prune runs older than ${{ env.days }};
       uses: actions/github-script@v4
       with:
-        github-token: ${{ secrets.GH_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const days_to_expiration = ${{ env.days }};
           const ms_in_day = 86400000;
@@ -99,7 +99,7 @@ jobs:
     - name: Remove runs of the cleanup workflow itself
       uses: actions/github-script@v4 # https://github.com/actions/github-script
       with:
-        github-token: ${{ secrets.GH_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const pages = 5;
           let runs_to_delete = [];
@@ -112,6 +112,7 @@ jobs:
               repo: context.repo.repo,
               workflow_id: 'workflow_pruner.yml'
             });
+
             if (response.data.workflow_runs.length > 0) {
               for (const run of response.data.workflow_runs) {
                 runs_to_delete.push([run.id, run.name]);
