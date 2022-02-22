@@ -60,12 +60,6 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		case DOT_TH:  return process_tap_hold(Z_CUT, record);
 		case COMM_TH: return process_tap_hold(Z_CPY, record);
 		case M_TH:    return process_tap_hold(Z_PST, record);
-#ifdef RGB_MATRIX_ENABLE
-		case RESET:
-			rgb_matrix_set_color_all(RGB_RED);
-			rgb_matrix_driver.flush();
-			break;
-#endif
 	}
 	return true; // Continue with unmatched keycodes
 }
