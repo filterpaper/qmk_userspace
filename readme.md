@@ -20,7 +20,7 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 
 
 # Building Userspace
-This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) in a `users` folder by running `qmk compile` for the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with [build.yml](.github/workflows/build.yml) workflow.
+This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) within a `users` folder by running `qmk compile` on the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with the [build.yml](.github/workflows/build.yml) workflow.
 
 
 
@@ -39,15 +39,6 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 * [Word](word/) processing functions
   * Caps Word to toggle caps lock following a word
   * Autocorrection for typos
-
-
-
-# Split Keyboard Handedness
-Split keyboards use [Handedness by EEPROM](https://github.com/qmk/qmk_firmware/docs/feature_split_keyboard.md), and each half is flashed once with the following:
-```sh
-qmk flash -kb cradio -km default -bl dfu-split-left
-qmk flash -kb cradio -km default -bl dfu-split-right
-```
 
 
 
