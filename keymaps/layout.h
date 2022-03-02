@@ -147,11 +147,11 @@
 
 
 // Layout aliases
-#define CORNE_wrapper(...) LAYOUT_split_3x6_3(__VA_ARGS__)
-#define ORTHO_wrapper(...) LAYOUT_ortho_4x12(__VA_ARGS__)
-#define _36key_wrapper(...) LAYOUT(__VA_ARGS__)
-#define _34key_wrapper(...) LAYOUT_split_3x5_2(__VA_ARGS__)
-#define MARK65_wrapper(...) LAYOUT_all(__VA_ARGS__)
+#define LAYOUT_corne_w(...) LAYOUT_split_3x6_3(__VA_ARGS__)
+#define LAYOUT_ortho_w(...) LAYOUT_ortho_4x12(__VA_ARGS__)
+#define LAYOUT_36key_w(...) LAYOUT(__VA_ARGS__)
+#define LAYOUT_34key_w(...) LAYOUT_split_3x5_2(__VA_ARGS__)
+#define LAYOUT_mrk65_w(...) LAYOUT_all(__VA_ARGS__)
 
 
 
@@ -234,10 +234,10 @@ KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_R
 
 
 // Macro3
-#define MACRO3_wrapper(...) LAYOUT(__VA_ARGS__)
+#define LAYOUT_macro3_w(...) LAYOUT(__VA_ARGS__)
 #define MACRO3_0 \
 	KC_MUTE, KC_MSTP, KC_MRWD, KC_MFFD, \
 	G(KC_V), G(KC_C), G(KC_X), LT(1,KC_MPLY)
 #define MACRO3_1 \
-	RESET,   _______, KC_SLEP, KC_PWR,  \
+	QK_BOOT, _______, KC_SLEP, KC_PWR,  \
 	TG(1),   _______, _______, _______

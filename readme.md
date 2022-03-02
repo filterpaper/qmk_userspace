@@ -161,7 +161,7 @@ Text-based key map layout (in `keymap.c` format) using JSON file is supported wi
 ```
 Next, create a wrapper name in `layout.h` that points to the actual layout used by the keyboard, example:
 ```c
-#define CORNE_wrapper(...) LAYOUT_split_3x6_3(__VA_ARGS__)
+#define LAYOUT_corne_w(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 ```
 Finally create the keyboard's JSON file using the macro names for each layer, and the layout wrapper name in the following format:
 ```c
@@ -176,7 +176,7 @@ Finally create the keyboard's JSON file using the macro names for each layer, an
         [ "_SYMB" ],
         [ "_FUNC" ]
     ],
-    "layout": "CORNE_wrapper",
+    "layout": "LAYOUT_corne_w",
     "notes": "",
     "version": 1
 }
@@ -213,7 +213,7 @@ Next, wrap layers that requires home-row mods with `HRM()` in the JSON file, mak
 ## Adapting layouts
 Depending compatibility, layouts can be adapted with macros. Corne's split 3x6_3 (6-column, 3-thumb) can be reduced to a split 34-key 3x5_2 (5-column, 2-thumb) with a simple wrapper macro to exclude the outer column and thumb keys:
 ```c
-#define _34key_wrapper(...) LAYOUT(__VA_ARGS__)
+#define LAYOUT_34key_w(...) LAYOUT(__VA_ARGS__)
 // Corne to 34-key layout conversion
 #define C_34(k) SPLIT_3x6_3_TO_3x5_2(k)
 #define SPLIT_3x6_3_TO_3x5_2( \
@@ -241,7 +241,7 @@ The JSON layout for 34-key Cradio keyboard uses the macro above to adapt 3x6_3 f
         [ "C_34(_SYMB)" ],
         [ "C_34(_FUNC)" ]
     ],
-    "layout": "_34key_wrapper",
+    "layout": "LAYOUT_34key_w",
     "notes": "",
     "version": 1
 }

@@ -3,7 +3,7 @@
 	"documentation": "Wrapper based keymap",
 	"keyboard": "cradio",
 	"keymap": "filterpaper",
-	"layout": "_34key_wrapper",
+	"layout": "LAYOUT_34key_w",
 	"layers": [
 		[ "C_34(HRM(_BASE))" ],
 		[ "C_34(HRM(_COLE))" ],

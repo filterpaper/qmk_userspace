@@ -3,7 +3,7 @@
 	"documentation": "Wrapper based keymap",
 	"keyboard": "boardsource/the_mark",
 	"keymap": "filterpaper",
-	"layout": "MARK65_wrapper",
+	"layout": "LAYOUT_mrk65_w",
 	"layers": [
 		[ "HRM65(MARK_DEFAULT)" ],
 		[ "HRM65(MARK_COLEMAK)" ],
