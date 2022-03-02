@@ -1,5 +1,6 @@
+// Copyright 2012 Adafruit Industries.
 // Copyright 2022 @filterpaper
-// SPDX-License-Identifier: GPL-2.0+
+// SPDX-License-Identifier: BSD-2-Clause
 
 /* Corne logo, コルネ label and @soundmonster icons
    Editor: https://helixfonteditor.netlify.com/
