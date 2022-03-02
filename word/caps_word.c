@@ -6,7 +6,11 @@
 
 bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	// Return if caps lock is inactive
-	if (!host_keyboard_led_state().caps_lock) {
+	if (!host_keyboard_led_state().caps_lock
+#ifndef NO_ACTION_ONESHOT // Ignore one-shot tap
+		|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX)
+#endif
+	) {
 		return true;
 	}
 
