@@ -42,7 +42,7 @@
 #	define OSM_GUI OSM(MOD_LGUI)
 #endif
 
-// Navigation
+// Navigation shortcuts
 #define RSA_UP RSA(KC_UP)
 #define RSA_DN RSA(KC_DOWN)
 
@@ -52,6 +52,7 @@
 #define NUM 2
 #define SYM 3
 #define FNC 4
+
 
 // Default 3x6_3 layout
 #define _BASE \
@@ -134,15 +135,15 @@
 // 3x6_3 home row mod and tap hold wrapper
 #define HRM(k) HRM_TAPHOLD(k)
 #define HRM_TAPHOLD( \
-	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
-	k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
-	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
-	k37, k38, k39, k40, k41, k42 \
+	      k01, k02, k03, k04, k05, k06,    k07, k08, k09, k10, k11, k12, \
+	      k13, k14, k15, k16, k17, k18,    k19, k20, k21, k22, k23, k24, \
+	      k25, k26, k27, k28, k29, k30,    k31, k32, k33, k34, k35, k36, \
+	                     k37, k38, k39,    k40, k41, k42 \
 ) \
-	k01,      k02, k03, k04, k05,  k06, k07,      k08, k09, k10, k11,  k12, \
-	k13, HRML(k14, k15, k16, k17), k18, k19, HRMR(k20, k21, k22, k23), k24, \
-	k25,      k26, k27, k28, k29,  k30, k31,   TH(k32, k33, k34, k35), k36, \
-	k37, k38, k39, k40, k41, k42
+	k01,      k02, k03, k04, k05,  k06,    k07,      k08, k09, k10, k11,  k12, \
+	k13, HRML(k14, k15, k16, k17), k18,    k19, HRMR(k20, k21, k22, k23), k24, \
+	k25,      k26, k27, k28, k29,  k30,    k31,   TH(k32, k33, k34, k35), k36, \
+	                    k37, k38,  k39,    k40, k41, k42
 
 
 
@@ -151,39 +152,38 @@
 #define LAYOUT_ortho_w(...) LAYOUT_ortho_4x12(__VA_ARGS__)
 #define LAYOUT_36key_w(...) LAYOUT(__VA_ARGS__)
 #define LAYOUT_34key_w(...) LAYOUT_split_3x5_2(__VA_ARGS__)
-#define LAYOUT_mrk65_w(...) LAYOUT_all(__VA_ARGS__)
 
 
 
 // 3x6_3 to 36-key conversion
-#define C_36(k) SPLIT_3x6_3_TO_3x5_3(k)
-#define SPLIT_3x6_3_TO_3x5_3( \
-	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
-	k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
-	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
-	               k37, k38, k39, k40, k41, k42 \
+#define C_36(k) SPLIT_42_TO_36(k)
+#define SPLIT_42_TO_36( \
+	k01, k02, k03, k04, k05, k06,    k07, k08, k09, k10, k11, k12, \
+	k13, k14, k15, k16, k17, k18,    k19, k20, k21, k22, k23, k24, \
+	k25, k26, k27, k28, k29, k30,    k31, k32, k33, k34, k35, k36, \
+	               k37, k38, k39,    k40, k41, k42 \
 ) \
-	     k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, \
-	     k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, \
-	     k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
-	               k37, k38, k39, k40, k41, k42
+	     k02, k03, k04, k05, k06,    k07, k08, k09, k10, k11, \
+	     k14, k15, k16, k17, k18,    k19, k20, k21, k22, k23, \
+	     k26, k27, k28, k29, k30,    k31, k32, k33, k34, k35, \
+	               k37, k38, k39,    k40, k41, k42
 
 // 3x6_3 to 34-key conversion
-#define C_34(k) SPLIT_3x6_3_TO_3x5_2(k)
-#define SPLIT_3x6_3_TO_3x5_2( \
-	k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
-	k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
-	k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
-	               k37, k38, k39, k40, k41, k42 \
+#define C_34(k) SPLIT_42_TO_34(k)
+#define SPLIT_42_TO_34( \
+	k01, k02, k03, k04, k05, k06,    k07, k08, k09, k10, k11, k12, \
+	k13, k14, k15, k16, k17, k18,    k19, k20, k21, k22, k23, k24, \
+	k25, k26, k27, k28, k29, k30,    k31, k32, k33, k34, k35, k36, \
+	               k37, k38, k39,    k40, k41, k42 \
 ) \
-	     k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, \
-	     k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, \
-	     k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
-	                    k38, k39, k40, k41
+	     k02, k03, k04, k05, k06,    k07, k08, k09, k10, k11, \
+	     k14, k15, k16, k17, k18,    k19, k20, k21, k22, k23, \
+	     k26, k27, k28, k29, k30,    k31, k32, k33, k34, k35, \
+	                    k38, k39,    k40, k41
 
 // 3x6_3 to Ortho 4x12 conversion
-#define C_O(k) SPLIT_3x6_3_TO_4x12(k)
-#define SPLIT_3x6_3_TO_4x12( \
+#define C_O(k) SPLIT_42_TO_4x12(k)
+#define SPLIT_42_TO_4x12( \
            k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
            k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
            k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
@@ -231,13 +231,16 @@ KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_R
 	k300, k301, k302, k303, k304, k305,  k306, k307,   TH(k308, k309, k310, k311),       k313, k314,      \
 	k400, k401,       k403, k404,        k406,            k408,       k410, k411,  k412, k413, k414, k415
 
+// Mark 65 layout alias
+#define LAYOUT_mrk65_w(...) LAYOUT_all(__VA_ARGS__)
+
 
 
 // Macro3
-#define LAYOUT_macro3_w(...) LAYOUT(__VA_ARGS__)
 #define MACRO3_0 \
 	KC_MUTE, KC_MSTP, KC_MRWD, KC_MFFD, \
 	G(KC_V), G(KC_C), G(KC_X), LT(1,KC_MPLY)
 #define MACRO3_1 \
 	QK_BOOT, _______, KC_SLEP, KC_PWR,  \
 	TG(1),   _______, _______, _______
+#define LAYOUT_macro3_w(...) LAYOUT(__VA_ARGS__)
