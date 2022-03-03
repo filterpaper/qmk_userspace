@@ -10,33 +10,43 @@
 bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t buffer_size = 0;
-
-	// Exclude Shift-only mod, layer and swap hands key.
-	if (keycode == KC_LSFT || keycode == KC_RSFT
+	bool mods = get_mods();
 #ifndef NO_ACTION_ONESHOT
-		// One-shot Shift.
-		|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX
-		&& !((keycode & 0xf) & ~MOD_MASK_SHIFT))
+	mods |= get_oneshot_mods();
 #endif
-#ifndef NO_ACTION_TAPPING
-		// Mod-tap Shift.
-		|| (QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX
-		&& !(((keycode >> 8) & 0xf) & ~MOD_MASK_SHIFT) && !record->tap.count)
-#	ifndef NO_ACTION_LAYER
-		// Layer key.
-		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX
-		&& !record->tap.count)
-#	endif
-#endif
+
+	// Handle mod and quantum keycodes.
+	switch(keycode) {
+		case KC_LSFT:
+		case KC_RSFT:
+		case KC_CAPS:
 #ifdef SWAP_HANDS_ENABLE
-		|| (QK_SWAP_HANDS <= keycode && keycode <= QK_SWAP_HANDS_MAX)
+		case QK_SWAP_HANDS ... QK_SWAP_HANDS_MAX:
 #endif
-	) {
-		return true;
+#ifndef NO_ACTION_ONESHOT
+		case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:
+#endif
+			return true;
+#ifndef NO_ACTION_TAPPING
+		case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+#	ifndef NO_ACTION_LAYER
+		case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+#	endif
+			// Exclude hold keycode.
+			if (!record->tap.count) {
+				return true;
+			}
+#endif
+		default:
+			// Reset if modifier other than Shift is active.
+			if (mods & ~MOD_MASK_SHIFT) {
+				buffer_size = 0;
+				return true;
+			}
 	}
 
-	// Handle non-alpha keys.
-	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z)) {
+	// Handle base keycodes.
+/*	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z)) {
 		// Append Space as word boundary for punctuation.
 		if (KC_TAB <= (uint8_t)keycode && (uint8_t)keycode <= KC_SLASH) {
 			keycode = KC_SPC;
@@ -49,6 +59,25 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 			buffer_size = 0;
 			return true;
 		}
+	} */
+	switch ((uint8_t)keycode) {
+		case KC_A ... KC_Z:
+		// Accept alphabet keycode
+			break;
+		case KC_TAB ... KC_SLASH:
+		// Append Space as word boundary for punctuation.
+			keycode = KC_SPC;
+			break;
+		case KC_BSPC:
+		// Subtract buffer for Backspace.
+			if (buffer_size > 0) {
+				 --buffer_size;
+				 return true;
+			}
+		default:
+		// Reset for everything else.
+			buffer_size = 0;
+			return true;
 	}
 
 	// Rotate oldest character if buffer is full.
@@ -59,6 +88,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 
 	// Append `keycode` to buffer.
 	typo_buffer[buffer_size++] = (uint8_t)keycode;
+
 	// Return if buffer is smaller than the shortest word.
 	if (buffer_size < DICTIONARY_MIN_LENGTH) {
 		return true;

@@ -5,8 +5,12 @@
 #include QMK_KEYBOARD_H
 
 bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
-	// Return and ignore further processing if caps lock was
-	// not enabled or key press was a one-shot-mod
+	bool mods = get_mods();
+#ifndef NO_ACTION_ONESHOT
+	mods |= get_oneshot_mods();
+#endif
+
+	// Skip processing if caps lock is off and for one-shot keys.
 	if (!host_keyboard_led_state().caps_lock
 #ifndef NO_ACTION_ONESHOT
 		|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX)
@@ -15,11 +19,11 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 		return true;
 	}
 
-	// Ignore hold from a tap-hold key and mask base keycode from a tap
+	// Ignore hold from a tap-hold key and mask base keycode from a tap.
 #ifndef NO_ACTION_TAPPING
 	if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX)
 #	ifndef NO_ACTION_LAYER
-		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_MOD_MAX)
+		|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)
 #	endif
 	) {
 		if (!record->tap.count) {
@@ -29,16 +33,19 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	}
 #endif
 
-	// Deactivate caps lock if keycodes do not match the
-	// following or mods other than shift is used
-	if (
-		(!(KC_A <= keycode && keycode <= KC_0)
-		&& keycode != KC_BSPC
-		&& keycode != KC_MINS
-		&& keycode != KC_UNDS)
-		|| (get_mods() & ~MOD_MASK_SHIFT)
-	) {
-		tap_code(KC_CAPS);
+	// Deactivate caps lock for non-word keycodes
+	// or if a modifier other than Shift is active.
+	switch(keycode) {
+		case KC_A...KC_0:
+		case KC_BSPC:
+		case KC_MINS:
+		case KC_UNDS:
+			if ((mods & ~MOD_MASK_SHIFT) == false) {
+				break;
+			}
+		default:
+			tap_code(KC_CAPS);
 	}
+
 	return true;
 }
