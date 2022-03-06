@@ -39,6 +39,12 @@ SRC += combos.c
 OPT_DEFS += -DCAPS_WORD
 SRC += caps_word.c
 
+# STMC build
+ifneq ($(strip $(STMC)),)
+	LTO_ENABLE = no
+	BOOTLOADER = tinyuf2
+endif
+
 # Small split keyboards
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
 	SWAP_HANDS_ENABLE = yes

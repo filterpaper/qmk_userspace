@@ -30,8 +30,10 @@ jobs:
     - name: Checkout QMK
       uses: actions/checkout@v2
       with:
-        repository: qmk/qmk_firmware
-        ref: develop
+#        repository: qmk/qmk_firmware
+#        ref: develop
+        repository: filterpaper/qmk_firmware
+        ref: stemcell
         submodules: recursive
         persist-credentials: false
 
@@ -50,6 +52,10 @@ jobs:
         then
           qmk compile -j 10 -e OLED=${{ matrix.oled }} keymaps/${{ matrix.keyboard }}.json
           OUTPUT=${{ matrix.keyboard }}_${{ matrix.oled }}
+        elif [ ${{ matrix.keyboard }} == "adux" ]
+        then
+          qmk compile -j 10 -e STMC=yes keymaps/${{ matrix.keyboard }}.json
+          OUTPUT=${{ matrix.keyboard }}_stmc
         else
           qmk compile -j 10 keymaps/${{ matrix.keyboard }}.json
           OUTPUT=${{ matrix.keyboard }}
