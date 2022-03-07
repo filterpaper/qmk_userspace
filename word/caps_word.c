@@ -5,7 +5,7 @@
 #include QMK_KEYBOARD_H
 
 bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
-	bool mods = get_mods();
+	uint8_t mods = get_mods();
 #ifndef NO_ACTION_ONESHOT
 	mods |= get_oneshot_mods();
 #endif

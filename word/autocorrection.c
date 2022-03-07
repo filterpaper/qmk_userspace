@@ -25,13 +25,13 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 			return true;
 		case QK_MOD_TAP ... QK_MOD_TAP_MAX:
 		case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
-			// Exclude hold if modifiers other than Shift is not active
-			if (!record->tap.count && (((keycode >> 8) & 0x1f) & ~MOD_MASK_SHIFT) == 0) {
+			// Exclude hold keycode
+			if (!record->tap.count) {
 				return true;
 			}
 			break;
 		default:
-			// Reset if modifiers other than Shift is active.
+			// Reset if modifier other than Shift is active.
 			if (mods & ~MOD_MASK_SHIFT) {
 				buffer_size = 0;
 				return true;
