@@ -97,5 +97,9 @@
 #	define COMBO_ONLY_FROM_LAYER 0
 #endif
 
+#ifdef STMC
+#	include "stmc.h"
+#endif
+
 // Key and layout wrapper macros
 #include "keymaps/layout.h"

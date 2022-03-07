@@ -33,7 +33,7 @@ jobs:
 #        repository: qmk/qmk_firmware
 #        ref: develop
         repository: filterpaper/qmk_firmware
-        ref: stemcell
+        ref: stmc-dev
         submodules: recursive
         persist-credentials: false
 
@@ -52,9 +52,9 @@ jobs:
         then
           qmk compile -j 10 -e OLED=${{ matrix.oled }} keymaps/${{ matrix.keyboard }}.json
           OUTPUT=${{ matrix.keyboard }}_${{ matrix.oled }}
-        elif [ ${{ matrix.keyboard }} == "adux" ]
+        elif [ ${{ matrix.keyboard }} == "cradio" ]
         then
-          qmk compile -j 10 -e STMC=yes keymaps/${{ matrix.keyboard }}.json
+          qmk compile -j 10 -e STMC=yes -e STMC_US=yes keymaps/${{ matrix.keyboard }}.json
           OUTPUT=${{ matrix.keyboard }}_stmc
         else
           qmk compile -j 10 keymaps/${{ matrix.keyboard }}.json

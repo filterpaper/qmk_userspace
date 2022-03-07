@@ -43,6 +43,7 @@ SRC += caps_word.c
 ifneq ($(strip $(STMC)),)
 	LTO_ENABLE = no
 	BOOTLOADER = tinyuf2
+	OPT_DEFS += -DSTMC
 endif
 
 # Small split keyboards

@@ -249,6 +249,28 @@ The JSON layout for 34-key Cradio keyboard uses the macro above to adapt 3x6_3 f
 
 
 
+# STeMcell notes
+
+STM32F411 replacement [controller](https://github.com/megamind4089/STeMCell) with Pro micro footprint, [v1.0.1](https://github.com/megamind4089/STeMCell/releases/tag/v1.0.1). Runs on [tinyuf2 bootloader](https://megamind4089.github.io/STeMCell/software/).
+
+* Reset new STMC to `stm-dfu`:
+  * Connect USB while holding button
+  * Short `RST` and `GND` while holding button
+* Reset STMC with tinyuf2:
+  * Double-short `RST` and `GND`
+  * `QK_BOOT` keycode
+  * Bootmagic lite
+
+## Bootloaders
+To install the STeMcell tinyuf2 bootloader
+```
+dfu-util -a 0 -i 0 -s 0x08000000:leave -D tinyuf2-stemcell.bin
+```
+To wipe the entire STeMcell flash (wait up to 30s):
+```
+dfu-util -a 0 -i 0 -s 0x08000000:mass-erase:force
+```
+
 # ISP Flashing Notes
 
 ## Hardware
