@@ -6,6 +6,7 @@
 :agre:              -> agree
 :alege              -> allege
 :alot:              -> a lot
+andd:               -> and
 :andteh             -> and the
 :andthe             -> and the
 :anual              -> annual
@@ -20,7 +21,7 @@
 :gt:                -> git
 :guage              -> gauge
 :haev               -> have
-:halp               -> help
+:halp:              -> help
 :hapen              -> happen
 :hten:              -> then
 :htere              -> there
@@ -338,7 +339,6 @@ anarchistm          -> anarchism
 anbd                -> and
 ancestory           -> ancestry
 ancilliary          -> ancillary
-andd                -> and
 androgenous         -> androgynous
 androgeny           -> androgyny
 anihilation         -> annihilation
@@ -590,8 +590,8 @@ boook               -> book
 borke               -> broke
 boundry             -> boundary
 bouyancy            -> buoyancy
-bouyant             -> buoyant
-boyant              -> buoyant
+:bouyant            -> buoyant
+:boyant             -> buoyant
 bradcast            -> broadcast
 breakthough         -> breakthrough
 breakthroughts      -> breakthroughs
@@ -629,7 +629,6 @@ campain             -> campaign
 candadate           -> candidate
 candiate            -> candidate
 candidiate          -> candidate
-cannister           -> canister
 cannnot             -> cannot
 cannonical          -> canonical
 cannotation         -> connotation
@@ -987,7 +986,7 @@ decidely            -> decidedly
 decied              -> decide
 decieve             -> deceive
 decison             -> decision
-decomposit          -> decompose
+decomposit:         -> decompose
 decress             -> decrees
 decribe             -> describe
 decribing           -> describing
@@ -1035,7 +1034,7 @@ desctruction        -> destruction
 descuss             -> discuss
 desgin              -> design
 desicion            -> decision
-deside              -> decide
+deside:             -> decide
 desigining          -> designing
 desinations         -> destinations
 desintegrated       -> disintegrated
@@ -1154,7 +1153,7 @@ driectly            -> directly
 drnik               -> drink
 druming             -> drumming
 drummless           -> drumless
-dum:                -> dumb
+:dum:               -> dumb
 dupicate            -> duplicate
 durig               -> during
 durring             -> during
@@ -1172,13 +1171,13 @@ eclispe             -> eclipse
 ecomonic            -> economic
 econoimic           -> economic
 eearly              -> early
-efel                -> evil
+:efel               -> evil
 effeciency          -> efficiency
 effecient           -> efficient
 efficency           -> efficiency
 efficent            -> efficient
 effulence           -> effluence
-eiter               -> either
+:eiter              -> either
 elasped             -> elapsed
 elction             -> election
 electrial           -> electrical
@@ -1211,7 +1210,7 @@ emmited             -> emitted
 emmiting            -> emitting
 emmitted            -> emitted
 emmitting           -> emitting
-emnity              -> enmity
+:emnity             -> enmity
 emperical           -> empirical
 emphaised           -> emphasised
 emphsis             -> emphasis
@@ -1341,7 +1340,7 @@ expeced             -> expected
 expecially          -> especially
 expeditonary        -> expeditionary
 expeiments          -> experiments
-expell              -> expel
+:expell:            -> expel
 experiance          -> experience
 expiditions         -> expeditions
 expierence          -> experience
@@ -1366,7 +1365,7 @@ extremeophile       -> extremophile
 extremly            -> extremely
 extrordinarily      -> extraordinarily
 extrordinary        -> extraordinary
-eyar                -> year
+:eyar               -> year
 
 faciliate           -> facilitate
 facilites           -> facilities
@@ -1410,8 +1409,8 @@ fitler              -> filter
 flamable            -> flammable
 flase               -> false
 flawess             -> flawless
-florescent          -> fluorescent
-flourescent         -> fluorescent
+:florescent         -> fluorescent
+:flourescent        -> fluorescent
 flourine            -> fluorine
 fluorish            -> flourish
 follwo              -> follow
@@ -1464,7 +1463,7 @@ galatic             -> galactic
 gallaxies           -> galaxies
 galvinized          -> galvanized
 ganerate            -> generate
-ganes               -> games
+:ganes              -> games
 ganster             -> gangster
 garantee            -> guarantee
 garnison            -> garrison
@@ -1478,7 +1477,6 @@ generaly            -> generally
 generatting         -> generating
 genialia            -> genitalia
 geographicial       -> geographical
-geometrician        -> geometer
 gerat:              -> great
 giit:               -> git
 giti:               -> git
@@ -1554,7 +1552,7 @@ helpped             -> helped
 hemmorhage          -> hemorrhage
 herad               -> heard
 heridity            -> heredity
-heroe               -> hero
+heroe:              -> hero
 heros               -> heroes
 hertiage            -> heritage
 hertzs              -> hertz
@@ -1776,7 +1774,7 @@ interferance        -> interference
 interfereing        -> interfering
 intergrated         -> integrated
 intergration        -> integration
-interm              -> interim
+interm:             -> interim
 interpet            -> interpret
 interrim            -> interim
 interrugum          -> interregnum
@@ -1843,7 +1841,7 @@ laguage             -> language
 laparascopic        -> laparoscopic
 largst              -> largest
 larrry              -> larry
-lastr               -> last
+:lastr:             -> last
 lattitude           -> latitude
 launhed             -> launched
 lavae               -> larvae
@@ -1987,7 +1985,7 @@ milennium           -> millennium
 mileu               -> milieu
 miliary             -> military
 miligram            -> milligram
-milion              -> million
+:milion             -> million
 miliraty            -> military
 millenia            -> millennia
 millenium           -> millennium
@@ -2027,7 +2025,7 @@ modle               -> model
 moent               -> moment
 moeny               -> money
 moleclues           -> molecules
-momento             -> memento
+momento:            -> memento
 monestaries         -> monasteries
 monickers           -> monikers
 monolite            -> monolithic

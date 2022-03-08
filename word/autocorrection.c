@@ -5,7 +5,11 @@
 
 #include QMK_KEYBOARD_H
 #include <string.h>
-#include "autocorrection_data.h"
+#ifdef STMC
+#	include "autocorrection_data_huge.h"
+#else
+#	include "autocorrection_data.h"
+#endif
 
 bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
