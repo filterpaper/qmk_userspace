@@ -3,7 +3,7 @@
 name: Workflow Run Pruner
 on:
   schedule:
-  - cron: '0 */12 * * *'  # GMT
+  - cron: '0 */12 * * *'
   workflow_dispatch:
   push:
 
@@ -97,7 +97,7 @@ jobs:
           }
 
     - name: Remove runs of the cleanup workflow itself
-      uses: actions/github-script@v4 # https://github.com/actions/github-script
+      uses: actions/github-script@v4
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
