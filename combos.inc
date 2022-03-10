@@ -8,8 +8,8 @@
 //	        LT(SYM,KC_TAB)  RSG_T(KC_ENT)       RSFT_T(KC_SPC)  LT(NUM,KC_BSPC)
 
 #ifdef SWAP_HANDS_ENABLE
-	COMB(swap_l,  SH_TG,  KC_X, KC_V)
-	COMB(swap_r,  SH_TG,  M_TH, DOT_TH)
+	COMB(swap_l,  SH_TG,  KC_X, KC_C, KC_V)
+	COMB(swap_r,  SH_TG,  M_TH, COMM_TH, DOT_TH)
 #endif
 
 // layer toggles
@@ -19,6 +19,6 @@ COMB(numb,     TG(NUM),  LT(NUM,KC_BSPC), KC_N)
 COMB(vimacf,   HYPR(KC_F),  HM_D, HM_F)
 COMB(vimacj,   HYPR(KC_J),  HM_J, HM_K)
 // macros
-SUBS(vi_quit,  "ZQ",  KC_Q, KC_W)
-SUBS(vi_save,  "ZZ",  KC_Z, KC_X)
+SUBS(vi_quit,  ":q!",  KC_Q, KC_W)
+SUBS(vi_save,  ":wq",  KC_Z, KC_X)
 SUBS(dir_up,   "../", DOT_TH, SLSH_TH)

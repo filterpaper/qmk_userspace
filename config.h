@@ -14,7 +14,7 @@
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
-#define TAPPING_TERM 200
+#define TAPPING_TERM 210
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_FORCE_HOLD
 #define TAPPING_FORCE_HOLD_PER_KEY
@@ -35,6 +35,11 @@
 #		define SPLIT_MODS_ENABLE
 #		define SPLIT_LED_STATE_ENABLE
 #		define SPLIT_LAYER_STATE_ENABLE
+#	endif
+#	ifdef STMC
+#		undef EE_HANDS
+#		undef BOOTMAGIC_LITE_ROW_RIGHT
+#		undef BOOTMAGIC_LITE_COLUMN_RIGHT
 #	endif
 #endif
 
@@ -95,10 +100,6 @@
 #ifdef COMBO_ENABLE
 #	define COMBO_TERM 25
 #	define COMBO_ONLY_FROM_LAYER 0
-#endif
-
-#ifdef STMC
-#	include "stmc.h"
 #endif
 
 // Key and layout wrapper macros
