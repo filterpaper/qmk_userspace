@@ -4,20 +4,26 @@
 #include "filterpaper.h"
 
 
-// Tap-hold customisation
-#ifdef TAPPING_FORCE_HOLD_PER_KEY // Enable for right thumb keys
+// Force hold on tap-hold key when held after tapping
+// Enable for right thumb keys
+#ifdef TAPPING_FORCE_HOLD_PER_KEY
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
+
 	return keycode == RSFT_T(KC_SPC) || keycode == LT(NUM,KC_BSPC) ? true : false;
 }
 #endif
 
-#ifdef PERMISSIVE_HOLD_PER_KEY // Disable for alphanumeric tap hold
+// Select hold function immediately when another key is pressed and released
+// Disable for left mod-tap and layer-tap 0
+#ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return (keycode & 0xf000) == QK_LMOD_TAP || (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
 }
 #endif
 
-#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY // Enable for layer taps
+// Select hold function immediately when another key is pressed
+// Enable for layer tap 1 or higher
+#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
 }
@@ -38,7 +44,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
 #if defined(OLED_ENABLE) && !defined(WPM_ENABLE)
 		extern uint32_t tap_timer;
-		tap_timer = timer_read32();  // Reset OLED animation tap timer
+		tap_timer = timer_read32(); // Reset OLED animation timer
 #endif
 #ifdef AUTO_CORRECT
 		extern bool process_autocorrection(uint16_t keycode, keyrecord_t* record);

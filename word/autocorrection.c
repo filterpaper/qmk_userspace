@@ -19,7 +19,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	mods |= get_oneshot_mods();
 #endif
 
-	// Handle mod and quantum keycode, return true to skip processing.
+	// Exclude matched modifiers and quantum keycodes.
 	switch(keycode) {
 		case KC_LSFT:
 		case KC_RSFT:
@@ -42,7 +42,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 			}
 	}
 
-	// Handle base keycode
+	// Handle non-alpha keycodes.
 	if (!(KC_A <= (uint8_t)keycode && (uint8_t)keycode <= KC_Z)) {
 		if (KC_TAB <= (uint8_t)keycode && (uint8_t)keycode <= KC_SLASH) {
 			// Replace punctuation with Space as word boundary.

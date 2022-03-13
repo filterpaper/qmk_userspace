@@ -1,7 +1,7 @@
 # Word Processing Features
 
 ## Caps Word
-It is a lean code library that disables caps lock automatically after a word boundary key, hence caps word. It is a simple variants of the idea conceived by the `#ergonomics` enthusiasts of splitkb.com discord.
+It is a lean code function that switches off caps lock at a word boundary. It is a convenient feature for handling a single capital word that is the typical use-case for caps lock.
 
 ## Autocorrections
 Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection) source with the following additions:

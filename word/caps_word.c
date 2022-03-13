@@ -5,12 +5,7 @@
 #include QMK_KEYBOARD_H
 
 bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
-	uint8_t mods = get_mods();
-#ifndef NO_ACTION_ONESHOT
-	mods |= get_oneshot_mods();
-#endif
-
-	// Skip processing if caps lock is off and for one-shot key.
+	// Skip processing if caps lock is off or for one-shot key.
 	if (host_keyboard_led_state().caps_lock == false
 #ifndef NO_ACTION_ONESHOT
 	|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX)
@@ -28,20 +23,25 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 		keycode &= 0xff;
 	}
 
+	uint8_t mods = get_mods();
+#ifndef NO_ACTION_ONESHOT
+	mods |= get_oneshot_mods();
+#endif
+
 	switch(keycode) {
 		case KC_A ... KC_0:
 		case KC_BSPC:
 		case KC_MINS:
 		case KC_UNDS:
-			// Retain caps lock for word keys if there
-			// are no active modifiers other than Shift.
+			// Retain caps lock for listed keycodes if
+			// there are no active non-Shift modifiers.
 			if ((mods & ~MOD_MASK_SHIFT) == false) {
 				break;
 			}
-		// Fall-through active non-Shift modifiers.
+		// Fall-through when a modifier other than Shift
+		// is active.
 		default:
-			// Deactivate caps on word boundary.
-			tap_code(KC_CAPS);
+			tap_code(KC_CAPS); // Toggle caps lock
 	}
 
 	return true;
