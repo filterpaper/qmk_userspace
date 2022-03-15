@@ -8,8 +8,12 @@
 // Enable for right thumb keys
 #ifdef TAPPING_FORCE_HOLD_PER_KEY
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
-
-	return keycode == RSFT_T(KC_SPC) || keycode == LT(NUM,KC_BSPC) ? true : false;
+	switch (keycode) {
+		case RSFT_T(KC_SPC):
+		case LT(NUM,KC_BSPC):
+			return true;
+	}
+	return false;*/
 }
 #endif
 
@@ -22,7 +26,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 // Select hold function immediately when another key is pressed
-// Enable for layer tap 1 or higher
+// Enable for layer tap other than layer 0
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
@@ -79,7 +83,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 		} else if (index == 1) {
 			clockwise ? tap_code(KC_PGDN) : tap_code(KC_PGUP);
 		}
-	} else {  // Base layer
+	} else { // Base layer
 		if (index == 0) {
 			clockwise ? tap_code(KC_VOLU) : tap_code(KC_VOLD);
 		} else if (index == 1) {
