@@ -13,7 +13,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 		case LT(NUM,KC_BSPC):
 			return true;
 	}
-	return false;*/
+	return false;
 }
 #endif
 
