@@ -8,12 +8,7 @@
 // Enable for right thumb keys
 #ifdef TAPPING_FORCE_HOLD_PER_KEY
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
-	switch (keycode) {
-		case RSFT_T(KC_SPC):
-		case LT(NUM,KC_BSPC):
-			return true;
-	}
-	return false;
+	return keycode == RSFT_T(KC_SPC) || keycode == LT(NUM,KC_BSPC) ? true : false;
 }
 #endif
 
@@ -71,6 +66,26 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		case COMM_TH: return process_tap_hold(Z_CPY, record);
 		case M_TH:    return process_tap_hold(Z_PST, record);
 	}
+
+	// Disable unilateral RALT_T(KC_L)
+	if (record->event.key.row > 3 && keycode != RALT_T(KC_L)) {
+		if (get_mods() & MOD_BIT(KC_RALT)) {
+			unregister_mods(MOD_BIT(KC_RALT));
+			tap_code(KC_L);
+			tap_code(keycode);
+			return false;
+		}
+	}
+	// Disable unilateral LALT_T(KC_S)
+	if (record->event.key.row < 4 && keycode != LALT_T(KC_S)) {
+		if (get_mods() & MOD_BIT(KC_LALT)) {
+			unregister_mods(MOD_BIT(KC_LALT));
+			tap_code(KC_S);
+			tap_code(keycode);
+			return false;
+		}
+	}
+
 	return true; // Continue with unmatched keycodes
 }
 
