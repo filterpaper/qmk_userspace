@@ -16,7 +16,8 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 // Disable for left mod-tap and layer-tap 0
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return (keycode & 0xf000) == QK_LMOD_TAP || (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
+//	return (keycode & 0xf000) == QK_LMOD_TAP || (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
+	return (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
 }
 #endif
 
@@ -57,6 +58,35 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
+		// Disable unilateral Alt mod-tap
+/*		if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX && record->tap.count) || IS_ANY(keycode)) {
+			if (record->event.key.row > 3 && keycode != RALT_T(KC_L) && get_mods() & MOD_BIT(KC_RALT)) {
+				unregister_mods(MOD_BIT(KC_RALT));
+				tap_code(KC_L);
+			}
+			if (record->event.key.row < 4 && keycode != LALT_T(KC_S) && get_mods() & MOD_BIT(KC_LALT)) {
+				unregister_mods(MOD_BIT(KC_LALT));
+				tap_code(KC_S);
+			}
+		}*/
+
+		void process_unilateral(uint16_t kc) {
+			// Check for R mod-tap bit and shift 4-bits left for mod_bits
+			uint8_t mod_tap_bit = (kc & 0x1000) ? 4<<((kc>>8)&0xf) : (kc>>8)&0xf;
+			if (keycode != kc && get_mods() & mod_tap_bit) {
+				unregister_mods(mod_tap_bit);
+				tap_code(kc);
+			}
+		}
+		if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX && record->tap.count) || IS_ANY(keycode)) {
+			if (record->event.key.row > 3) {
+				process_unilateral(RALT_T(KC_L));
+			}
+			if (record->event.key.row < 4) {
+				process_unilateral(LALT_T(KC_S));
+			}
+		}
+
 	}
 
 	switch (keycode) {
@@ -65,25 +95,6 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		case DOT_TH:  return process_tap_hold(Z_CUT, record);
 		case COMM_TH: return process_tap_hold(Z_CPY, record);
 		case M_TH:    return process_tap_hold(Z_PST, record);
-	}
-
-	// Disable unilateral RALT_T(KC_L)
-	if (record->event.key.row > 3 && keycode != RALT_T(KC_L)) {
-		if (get_mods() & MOD_BIT(KC_RALT)) {
-			unregister_mods(MOD_BIT(KC_RALT));
-			tap_code(KC_L);
-			tap_code(keycode);
-			return false;
-		}
-	}
-	// Disable unilateral LALT_T(KC_S)
-	if (record->event.key.row < 4 && keycode != LALT_T(KC_S)) {
-		if (get_mods() & MOD_BIT(KC_LALT)) {
-			unregister_mods(MOD_BIT(KC_LALT));
-			tap_code(KC_S);
-			tap_code(keycode);
-			return false;
-		}
 	}
 
 	return true; // Continue with unmatched keycodes
