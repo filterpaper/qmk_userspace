@@ -52,6 +52,8 @@ ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
 	# Autocorrection feature
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrection.c
+	OPT_DEFS += -DBILATERAL_MODS
+	SRC += bilateral-mods.c
 endif
 
 # Boardsource's Mark65 and Technik

@@ -28,12 +28,12 @@
  *   bit 4      +----- LR flag(Left:0, Right:1)
 
    Left and right mod_bits are 8-bits wide:
-   MOD_BIT(KC_LALT) 0x0004
-   MOD_BIT(KC_RALT) 0x0040
-   Mod-tap uses 5-bits with LR flag above.
+   MOD_BIT(KC_LALT) = 0x0004
+   MOD_BIT(KC_RALT) = 0x0040
+   Mod-tap are 5-bits wide with LR flag above.
    To convert mod-tap bits to mod_bits, check for the R
-   flag and shift 4 bits left:
-   mod_bits = (kc & 0x1000) ? 4 << ((kc >> 8) & 0xf) : (kc >> 8) & 0xf
+   flag and shift 4 bits left with ternary:
+   mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : (kc >> 8) & 0xf
  */
 
 // Macro for LT(0,kc) mod tap. Return true for kc on tap

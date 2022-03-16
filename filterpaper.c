@@ -58,35 +58,10 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
-		// Disable unilateral Alt mod-tap
-/*		if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX && record->tap.count) || IS_ANY(keycode)) {
-			if (record->event.key.row > 3 && keycode != RALT_T(KC_L) && get_mods() & MOD_BIT(KC_RALT)) {
-				unregister_mods(MOD_BIT(KC_RALT));
-				tap_code(KC_L);
-			}
-			if (record->event.key.row < 4 && keycode != LALT_T(KC_S) && get_mods() & MOD_BIT(KC_LALT)) {
-				unregister_mods(MOD_BIT(KC_LALT));
-				tap_code(KC_S);
-			}
-		}*/
-
-		void process_unilateral(uint16_t kc) {
-			// Check for R mod-tap bit and shift 4-bits left for mod_bits
-			uint8_t mod_tap_bit = (kc & 0x1000) ? 4<<((kc>>8)&0xf) : (kc>>8)&0xf;
-			if (keycode != kc && get_mods() & mod_tap_bit) {
-				unregister_mods(mod_tap_bit);
-				tap_code(kc);
-			}
-		}
-		if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX && record->tap.count) || IS_ANY(keycode)) {
-			if (record->event.key.row > 3) {
-				process_unilateral(RALT_T(KC_L));
-			}
-			if (record->event.key.row < 4) {
-				process_unilateral(LALT_T(KC_S));
-			}
-		}
-
+#ifdef BILATERAL_MODS
+		extern void process_bilateral_mod(uint16_t keycode, keyrecord_t *record);
+		process_bilateral_mod(keycode, record);
+#endif
 	}
 
 	switch (keycode) {
