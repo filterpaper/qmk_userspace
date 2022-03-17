@@ -58,9 +58,9 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
-#ifdef BILATERAL_MODS
-		extern void process_bilateral_mod(uint16_t keycode, keyrecord_t *record);
-		process_bilateral_mod(keycode, record);
+#ifdef UNILATERAL_TAPS
+		extern void process_unilateral_taps(uint16_t keycode, keyrecord_t *record);
+		process_unilateral_taps(keycode, record);
 #endif
 	}
 
