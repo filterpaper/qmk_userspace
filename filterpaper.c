@@ -16,8 +16,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 // Disable for left mod-tap and layer-tap 0
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-//	return (keycode & 0xf000) == QK_LMOD_TAP || (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
-	return (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
+	return (keycode & 0xf000) == QK_LMOD_TAP || (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
 }
 #endif
 
