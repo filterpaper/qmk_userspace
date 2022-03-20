@@ -47,7 +47,7 @@ ifneq ($(strip $(STMC)),)
 endif
 
 # Small split keyboards
-ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 a_dux cradio))
+ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio))
 	SWAP_HANDS_ENABLE = yes
 	# Autocorrection feature
 	OPT_DEFS += -DAUTO_CORRECT

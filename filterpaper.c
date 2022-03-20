@@ -1,4 +1,4 @@
-// Copyright 2022 @filterpaper
+// Copyright 2021 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 #include "filterpaper.h"
@@ -6,27 +6,29 @@
 
 // Force hold on tap-hold key when held after tapping
 // Enable for right thumb keys
-#ifdef TAPPING_FORCE_HOLD_PER_KEY
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
+#ifdef SPLIT_KEYBOARD
+	return record->event.key.row == 7 ? true : false;
+#else
 	return keycode == RSFT_T(KC_SPC) || keycode == LT(NUM,KC_BSPC) ? true : false;
-}
 #endif
+}
 
 // Select hold function immediately when another key is pressed and released
-// Disable for left mod-tap and layer-tap 0
-#ifdef PERMISSIVE_HOLD_PER_KEY
+// Enable for thumb keys
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+#ifdef SPLIT_KEYBOARD
+	return record->event.key.row == 3 || record->event.key.row == 7 ? true : false;
+#else
 	return (keycode & 0xf000) == QK_LMOD_TAP || (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
-}
 #endif
+}
 
 // Select hold function immediately when another key is pressed
 // Enable for layer tap other than layer 0
-#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
 }
-#endif
 
 
 // Send custom hold keycode for mod tap

@@ -1,11 +1,11 @@
-// Copyright 2022 @filterpaper
+// Copyright 2021 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 #pragma once
 
 // Common QMK settings
 #define TAP_CODE_DELAY 5
-#define TAP_HOLD_CAPS_DELAY 20
+#define TAP_HOLD_CAPS_DELAY 25
 #define GRAVE_ESC_SHIFT_OVERRIDE
 #define USB_SUSPEND_WAKEUP_DELAY 5000
 // Space saving options
@@ -55,9 +55,9 @@
 #		define MOUSEKEY_ACCELERATED_SPEED 2000
 #	else
 #		define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
-#		define MOUSEKEY_INTERVAL 16		// Time between cursor movements in milliseconds
-#		define MOUSEKEY_MOVE_DELTA 9	// Step size for acceleration
-#		define MOUSEKEY_MAX_SPEED 12
+#		define MOUSEKEY_INTERVAL 15		// Time between cursor movements in milliseconds
+#		define MOUSEKEY_MOVE_DELTA 10	// Step size for acceleration
+#		define MOUSEKEY_MAX_SPEED 10
 #		define MOUSEKEY_TIME_TO_MAX 70
 #	endif
 #	define MOUSEKEY_WHEEL_DELAY 16

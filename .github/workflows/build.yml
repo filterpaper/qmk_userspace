@@ -12,7 +12,6 @@ jobs:
       matrix:
         keyboard:
         - 3w6
-        - adux
         - cradio
         - macro3
         - mark65

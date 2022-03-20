@@ -11,7 +11,6 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
 * [3w6](https://github.com/qmk/qmk_firmware/tree/master/keyboards/3w6/rev2)
-* [Architeuthis Dux](https://github.com/qmk/qmk_firmware/tree/master/keyboards/a_dux)
 * [Cradio](https://github.com/qmk/qmk_firmware/tree/master/keyboards/cradio)
 * [Corne (CRKBD)](https://github.com/qmk/qmk_firmware/tree/master/keyboards/crkbd/rev1)
 * [Technik](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/technik_o)
