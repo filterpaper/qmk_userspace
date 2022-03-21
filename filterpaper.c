@@ -20,7 +20,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 #ifdef SPLIT_KEYBOARD
 	return record->event.key.row == 3 || record->event.key.row == 7 ? true : false;
 #else
-	return (keycode & 0xf000) == QK_LMOD_TAP || (keycode & 0xff00) == QK_LAYER_TAP_0 ? false : true;
+	return record->event.key.row == MATRIX_ROWS - 1 ? true : false;
 #endif
 }
 
@@ -59,9 +59,16 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
-#ifdef UNILATERAL_TAPS
-		extern void process_unilateral_taps(uint16_t keycode, keyrecord_t *record);
-		process_unilateral_taps(keycode, record);
+#ifdef SPLIT_KEYBOARD
+		// Disable unilateral home row Alt
+		if (get_mods() & MOD_BIT(KC_RALT) &&
+		record->event.key.row >= 4 && record->event.key.row <= 6) {
+			unregister_mods(MOD_BIT(KC_RALT));
+			tap_code((uint8_t)HM_L);
+		} else if (get_mods() & MOD_BIT(KC_LALT) && record->event.key.row < 3) {
+			unregister_mods(MOD_BIT(KC_LALT));
+			tap_code((uint8_t)HM_S);
+		}
 #endif
 	}
 
