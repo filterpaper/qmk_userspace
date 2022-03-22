@@ -61,23 +61,29 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #endif
 #ifdef SPLIT_KEYBOARD
 		// Disable unilateral home row Alt
-		if (get_mods() & MOD_BIT(KC_RALT) &&
-		record->event.key.row >= 4 && record->event.key.row <= 6) {
-			unregister_mods(MOD_BIT(KC_RALT));
-			tap_code((uint8_t)HM_L);
-		} else if (get_mods() & MOD_BIT(KC_LALT) && record->event.key.row < 3) {
-			unregister_mods(MOD_BIT(KC_LALT));
-			tap_code((uint8_t)HM_S);
+		switch(record->event.key.row) {
+		case 0 ... 2:
+			if (get_mods() & MOD_BIT(KC_LALT)) {
+				unregister_mods(MOD_BIT(KC_LALT));
+				tap_code((uint8_t)HM_S);
+			}
+			break;
+		case 4 ... 6:
+			if (get_mods() & MOD_BIT(KC_RALT)) {
+				unregister_mods(MOD_BIT(KC_RALT));
+				tap_code((uint8_t)HM_L);
+			}
+			break;
 		}
 #endif
 	}
 
 	switch (keycode) {
-		// LT(0,kc) clipboard shortcuts
-		case SLSH_TH: return process_tap_hold(Z_UND, record);
-		case DOT_TH:  return process_tap_hold(Z_CUT, record);
-		case COMM_TH: return process_tap_hold(Z_CPY, record);
-		case M_TH:    return process_tap_hold(Z_PST, record);
+	// LT(0,kc) clipboard shortcuts
+	case SLSH_TH: return process_tap_hold(Z_UND, record);
+	case DOT_TH:  return process_tap_hold(Z_CUT, record);
+	case COMM_TH: return process_tap_hold(Z_CPY, record);
+	case M_TH:    return process_tap_hold(Z_PST, record);
 	}
 
 	return true; // Continue with unmatched keycodes

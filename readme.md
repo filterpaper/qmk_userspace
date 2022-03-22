@@ -145,6 +145,26 @@ Initialise LEDs with the `*_INIT` macro on startup inside `matrix_scan_user(void
 paste_keycode = keymap_config.swap_lctl_lgui ? C(KC_V) : G(KC_V);
 ```
 
+## Disable unilateral modifiers
+Home row mod-taps can cause accidental activation of mods on the same hand, especially on weaker fingers like ring and pinky. The following code snippet in `process_record_user` will replace activated Alt on the same half as the key press, and replace it with the mod-tap letter:
+```c
+switch(record->event.key.row) {
+case 0 ... 2:
+    if (get_mods() & MOD_BIT(KC_LALT)) {
+        unregister_mods(MOD_BIT(KC_LALT));
+        tap_code((uint8_t)HM_S);
+    }
+    break;
+case 4 ... 6:
+    if (get_mods() & MOD_BIT(KC_RALT)) {
+        unregister_mods(MOD_BIT(KC_RALT));
+        tap_code((uint8_t)HM_L);
+    }
+    break;
+}
+```
+Complete implementation of this for all four modifiers is in the [unilateral-taps.c](process/unilateral-taps.c) file.
+
 
 
 # Layout wrapper macros

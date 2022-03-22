@@ -31,11 +31,11 @@ void keyboard_post_init_user(void) {
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
 	switch (get_highest_layer(state)) {
-		case CMK:
-			rgb_matrix_mode_noeeprom(CMK_MODE);
-			break;
-		default:
-			rgb_matrix_mode_noeeprom(DEF_MODE);
+	case CMK:
+		rgb_matrix_mode_noeeprom(CMK_MODE);
+		break;
+	default:
+		rgb_matrix_mode_noeeprom(DEF_MODE);
 	}
 	return state;
 }

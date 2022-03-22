@@ -60,10 +60,10 @@ static void render_layer_state(uint8_t const state) {
 		0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
 
 	switch(state) {
-		case FNC: oled_write_P(func_layer, false); break;
-		case SYM: oled_write_P(symb_layer, false); break;
-		case NUM: oled_write_P(numb_layer, false); break;
-		default:  oled_write_P(base_layer, false);
+	case FNC: oled_write_P(func_layer, false); break;
+	case SYM: oled_write_P(symb_layer, false); break;
+	case NUM: oled_write_P(numb_layer, false); break;
+	default:  oled_write_P(base_layer, false);
 	}
 }
 

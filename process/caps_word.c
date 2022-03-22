@@ -29,19 +29,19 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 	switch(keycode) {
-		case KC_A ... KC_0:
-		case KC_BSPC:
-		case KC_MINS:
-		case KC_UNDS:
-			// Retain caps lock for listed keycodes if
-			// there are no active non-Shift modifiers.
-			if ((mods & ~MOD_MASK_SHIFT) == false) {
-				break;
-			}
-		// Fall-through when a modifier other than Shift
-		// is active.
-		default:
-			tap_code(KC_CAPS); // Toggle caps lock
+	case KC_A ... KC_0:
+	case KC_BSPC:
+	case KC_MINS:
+	case KC_UNDS:
+		// Retain caps lock for listed keycodes if
+		// there are no active non-Shift modifiers.
+		if ((mods & ~MOD_MASK_SHIFT) == false) {
+			break;
+		}
+	// Fall-through when a modifier other than Shift
+	// is active.
+	default:
+		tap_code(KC_CAPS); // Toggle caps lock
 	}
 
 	return true;
