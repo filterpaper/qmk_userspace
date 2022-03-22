@@ -146,7 +146,7 @@ paste_keycode = keymap_config.swap_lctl_lgui ? C(KC_V) : G(KC_V);
 ```
 
 ## Disable unilateral modifiers
-Home row mod-taps can cause accidental activation of mods on the same hand, especially on weaker fingers like ring and pinky. The following code snippet in `process_record_user` will replace activated Alt on the same half as the key press, and replace it with the mod-tap letter:
+Home row mod-taps can cause accidental activation of mods on the same hand, especially on rolls with weaker fingers like ring and pinky. The following code snippet in `process_record_user` will replace activated Alt on the same half with its mod-tap letter on a key press event for split keyboards:
 ```c
 switch(record->event.key.row) {
 case 0 ... 2:
