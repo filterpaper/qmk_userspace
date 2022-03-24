@@ -1,22 +1,22 @@
-# workflow_pruner.yml
-# This workflow prunes old workflow runs for an entire repository.
-name: Workflow Run Pruner
+name: Delete Old Workflow
 on:
   push:
   schedule:
   - cron: '0 */12 * * *'
   workflow_dispatch:
+  workflow_call:
 
 env:
   days: 7
 
 jobs:
-  prune:
+  delete:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
-    - name: Prune cancelled/skipped runs
+
+    - name: Delete cancelled/skipped runs
       uses: actions/github-script@v4
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -27,14 +27,12 @@ jobs:
             repo: context.repo.repo,
             status: 'cancelled',
           });
-
           const skipped = await github.actions.listWorkflowRunsForRepo({
             owner: context.repo.owner,
             per_page: 100,
             repo: context.repo.repo,
             status: 'skipped',
           });
-
           for (const response of [cancelled, skipped]) {
             for (const run of response.data.workflow_runs) {
               console.log(`Run id ${run.id} of '${run.name}' is a cancelled/skipped run. Deleting...`);
@@ -46,7 +44,7 @@ jobs:
             }
           }
 
-    - name: Prune runs older than ${{ env.days }} days
+    - name: Delete runs older than ${{ env.days }} days
       uses: actions/github-script@v4
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -54,35 +52,17 @@ jobs:
           const days_to_expiration = ${{ env.days }};
           const ms_in_day = 86400000;
           const now = Date.now();
-          const pages = 5;
-
-          // List of workflows to prune
-          const workflows = [
-            'build.yml'
-          ]
-
           let runs_to_delete = [];
-
-          for (const workflow of workflows) {
-            for (let page = 0; page < pages; page += 1) {
-              let response = await github.actions.listWorkflowRuns({
-                owner: context.repo.owner,
-                page: page,
-                per_page: 100,
-                repo: context.repo.repo,
-                workflow_id: workflow
-              });
-
-              if (response.data.workflow_runs.length > 0) {
-                for (const run of response.data.workflow_runs) {
-                  if (now - Date.parse(run.created_at) > ms_in_day * days_to_expiration) {
-                    runs_to_delete.push([run.id, run.name]);
-                  }
-                }
-              }
+          const workruns = await github.actions.listWorkflowRunsForRepo({
+            owner: context.repo.owner,
+            per_page: 100,
+            repo: context.repo.repo,
+          });
+          for (const run of workruns.data.workflow_runs) {
+            if (now - Date.parse(run.created_at) > ms_in_day * days_to_expiration) {
+              runs_to_delete.push([run.id, run.name]);
             }
           }
-
           for (const run of runs_to_delete) {
             console.log(`Run id ${run[0]} of '${run[1]}' is older than ${days_to_expiration} days. Deleting...`);
             try {
@@ -96,30 +76,27 @@ jobs:
             }
           }
 
-    - name: Remove runs of the cleanup workflow itself
+    - name: Delete old self
       uses: actions/github-script@v4
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const pages = 5;
           let runs_to_delete = [];
-
           for (let page = 0; page < pages; page += 1) {
             let response = await github.actions.listWorkflowRuns({
               owner: context.repo.owner,
               page: page,
               per_page: 100,
               repo: context.repo.repo,
-              workflow_id: 'workflow_pruner.yml'
+              workflow_id: 'delete_workflow.yml'
             });
-
             if (response.data.workflow_runs.length > 0) {
               for (const run of response.data.workflow_runs) {
                 runs_to_delete.push([run.id, run.name]);
               }
             }
           }
-
           for (const run of runs_to_delete) {
             console.log(`[Deleting] Run id ${run[0]} of '${run[1]}'.`);
             try {
