@@ -38,23 +38,37 @@ void process_unilateral_taps(uint16_t keycode, keyrecord_t *record) {
 		return (kc & 0x1000) ? ((kc>>8)&0xf)<<4 : (kc>>8)&0xf;
 	}
 
+	// Mod-tap modifier that is replaced with a tap is recreated as a
+	// keyrecord_t and send through process_record() as a tap record.
+	void re_process(uint16_t modtap_kc) {
+		// Remove modifier status
+		unregister_mods(get_modtap_bit(modtap_kc));
+		// Create keyrecord with mod-tap basic keycode
+		// and send it as a process record tap event
+		keyrecord_t re_process_record;
+		re_process_record.keycode = (uint8_t)modtap_kc;
+		re_process_record.event.pressed = true;
+		process_record(&re_process_record);
+#if TAP_CODE_DELAY > 0
+		wait_ms(TAP_CODE_DELAY);
+#endif
+		re_process_record.event.pressed = false;
+		process_record(&re_process_record);
+	}
+
 	if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX && record->tap.count) || IS_ANY(keycode)) {
 		if (KEY_POSITION < KB_MIDPOINT) {
 			// Process key press on the left half. If left mod is active, assume it
 			// was rolled from the previous left mod taps listed below and replace
 			// the modifier with base keycode.
 			if (get_mods() == get_modtap_bit(LSFT_T(KC_A))) {
-				unregister_mods(get_modtap_bit(LSFT_T(KC_A)));
-				tap_code((uint8_t)LSFT_T(KC_A));
+				re_process(LSFT_T(KC_A);
 			} else if (get_mods() == get_modtap_bit(LALT_T(KC_S))) {
-				unregister_mods(get_modtap_bit(LALT_T(KC_S)));
-				tap_code((uint8_t)LALT_T(KC_S));
+				re_process(LALT_T(KC_S));
 			} else if (get_mods() == get_modtap_bit(LCTL_T(KC_D))) {
-				unregister_mods(get_modtap_bit(LCTL_T(KC_D)));
-				tap_code((uint8_t)LCTL_T(KC_D));
+				re_process(LCTL_T(KC_D));
 			} else if (get_mods() == get_modtap_bit(LGUI_T(KC_F))) {
-				unregister_mods(get_modtap_bit(LGUI_T(KC_F)));
-				tap_code((uint8_t)LGUI_T(KC_F));
+				re_process(LGUI_T(KC_F));
 			}
 		}
 		if (KEY_POSITION >= KB_MIDPOINT) {
@@ -62,17 +76,13 @@ void process_unilateral_taps(uint16_t keycode, keyrecord_t *record) {
 			// was rolled from the previous right mod tap listed below and replace
 			// the modifier with base keycode.
 			if (get_mods() == get_modtap_bit(RSFT_T(KC_QUOT))) {
-				unregister_mods(get_modtap_bit(RSFT_T(KC_QUOT)));
-				tap_code((uint8_t)RSFT_T(KC_QUOT));
+				re_process(RSFT_T(KC_QUOT));
 			} else if (get_mods() == get_modtap_bit(RALT_T(KC_L))) {
-				unregister_mods(get_modtap_bit(RALT_T(KC_L)));
-				tap_code((uint8_t)RALT_T(KC_L));
+				re_process(RALT_T(KC_L));
 			} else if (get_mods() == get_modtap_bit(RCTL_T(KC_K))) {
-				unregister_mods(get_modtap_bit(RCTL_T(KC_K)));
-				tap_code((uint8_t)RCTL_T(KC_K));
+				re_process(RCTL_T(KC_K));
 			} else if (get_mods() == get_modtap_bit(RGUI_T(KC_J))) {
-				unregister_mods(get_modtap_bit(RGUI_T(KC_J)));
-				tap_code((uint8_t)RGUI_T(KC_J));
+				re_process(RGUI_T(KC_J));
 			}
 		}
 	}
