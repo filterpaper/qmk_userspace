@@ -5,7 +5,7 @@
 
 #include QMK_KEYBOARD_H
 #include <string.h>
-#ifdef STMC
+#if defined(STMC) || defined(KEYBOARD_cradio_kb2040)
 #	include "autocorrection_data_huge.h"
 #else
 #	include "autocorrection_data.h"

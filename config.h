@@ -24,7 +24,9 @@
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 #ifdef SPLIT_KEYBOARD
-#	define EE_HANDS
+#	ifndef KEYBOARD_cradio_kb2040
+#		define EE_HANDS
+#	endif
 #	ifdef KEYBOARD_crkbd_rev1
 #		define BOOTMAGIC_LITE_ROW    0
 #		define BOOTMAGIC_LITE_COLUMN 0

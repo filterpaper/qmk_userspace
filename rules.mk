@@ -54,6 +54,16 @@ ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio))
 	SRC += autocorrection.c
 endif
 
+# RPi 2040
+ifeq ($(findstring 2040, $(KEYBOARD)), 2040)
+	LTO_ENABLE = no
+	BOOTLOADER = rp2040
+	SWAP_HANDS_ENABLE = yes
+	# Autocorrection feature
+	OPT_DEFS += -DAUTO_CORRECT
+	SRC += autocorrection.c
+endif
+
 # Boardsource's Mark65 and Technik
 ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
 	RGB_MATRIX_ENABLE = yes
