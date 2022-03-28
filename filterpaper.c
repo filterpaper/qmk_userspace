@@ -31,6 +31,47 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+// If a modifier is active with a key press from the same half, disable
+// the modifier and resend its base keycode as a tap
+#ifdef SPLIT_KEYBOARD
+static bool process_unilateral_tap(keyrecord_t *record) {
+	void resend_key(uint8_t base_keycode) {
+		// Create new keyrecord with basic keycode
+		// and send it as a process record tap event
+		keyrecord_t resend_key_record;
+		resend_key_record.keycode = base_keycode;
+
+		resend_key_record.event.pressed = true;
+		process_record(&resend_key_record);
+#	if TAP_CODE_DELAY > 0
+		wait_ms(TAP_CODE_DELAY);
+#	endif
+		resend_key_record.event.pressed = false;
+		process_record(&resend_key_record);
+	}
+
+	// Disable unilateral home row Alt and re-process the
+	// base keycode as a tap event
+	switch(record->event.key.row) {
+	case 0 ... 2:
+		if (get_mods() & MOD_BIT(KC_LALT)) {
+			unregister_mods(MOD_BIT(KC_LALT));
+			resend_key((uint8_t)HM_S);
+		}
+		break;
+	case 4 ... 6:
+		if (get_mods() & MOD_BIT(KC_RALT)) {
+			unregister_mods(MOD_BIT(KC_RALT));
+			resend_key((uint8_t)HM_L);
+		}
+		break;
+	}
+
+	return true;
+}
+#endif
+
+
 // Send custom hold keycode for mod tap
 static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 	if (!record->tap.count && record->event.pressed) {
@@ -48,34 +89,8 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		tap_timer = timer_read32(); // Reset OLED animation timer
 #endif
 #ifdef SPLIT_KEYBOARD
-		void re_process(uint8_t base_keycode) {
-			// Create new keyrecord with mod-tap basic keycode
-			// and send it as a process record tap event
-			keyrecord_t re_process_record;
-			re_process_record.keycode = base_keycode;
-			re_process_record.event.pressed = true;
-			process_record(&re_process_record);
-#	if TAP_CODE_DELAY > 0
-			wait_ms(TAP_CODE_DELAY);
-#	endif
-			re_process_record.event.pressed = false;
-			process_record(&re_process_record);
-		}
-		// Disable unilateral home row Alt and re-process the
-		// base keycode as a tap event
-		switch(record->event.key.row) {
-		case 0 ... 2:
-			if (get_mods() & MOD_BIT(KC_LALT)) {
-				unregister_mods(MOD_BIT(KC_LALT));
-				re_process((uint8_t)HM_S);
-			}
-			break;
-		case 4 ... 6:
-			if (get_mods() & MOD_BIT(KC_RALT)) {
-				unregister_mods(MOD_BIT(KC_RALT));
-				re_process((uint8_t)HM_L);
-			}
-			break;
+		if (!process_unilateral_tap(record)) {
+			return false;
 		}
 #endif
 #ifdef AUTO_CORRECT
