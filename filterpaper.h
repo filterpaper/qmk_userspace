@@ -36,6 +36,10 @@
    mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : (kc >> 8) & 0xf
  */
 
+// Return left or right mod bits
+#define MODTAP_BIT(kc) ((kc >> 8) & 0x0f)
+#define OSMMOD_BIT(kc) (kc & 0x0f)
+
 // Macro for LT(0,kc) mod tap. Return true for kc on tap
 // send custom tap code on hold after TAPPING_TERM
 #define TAP_HOLD(_hold_) \

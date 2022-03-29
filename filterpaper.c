@@ -5,23 +5,16 @@
 
 
 // Force hold on tap-hold key when held after tapping
-// Enable for right thumb keys
+// Enable for (right split) bottom row keys
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
-#ifdef SPLIT_KEYBOARD
-	return record->event.key.row == 7 ? true : false;
-#else
-	return keycode == RSFT_T(KC_SPC) || keycode == LT(NUM,KC_BSPC) ? true : false;
-#endif
+	return record->event.key.row == MATRIX_ROWS - 1 ? true : false;
 }
 
 // Select hold function immediately when another key is pressed and released
-// Enable for thumb keys
+// Disable for non-Shift home row mod tap
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-#ifdef SPLIT_KEYBOARD
-	return record->event.key.row == 3 || record->event.key.row == 7 ? true : false;
-#else
-	return record->event.key.row == MATRIX_ROWS - 1 ? true : false;
-#endif
+	return QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX &&
+		MODTAP_BIT(keycode) & ~MOD_MASK_SHIFT ? false : true;
 }
 
 // Select hold function immediately when another key is pressed
@@ -33,7 +26,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 // If a modifier is active with a key press from the same half, disable
 // the modifier and resend its base keycode as a tap
-#ifdef SPLIT_KEYBOARD
+#ifdef UNILATERAL_TAP
 static bool process_unilateral_tap(keyrecord_t *record) {
 	void resend_key(uint8_t base_keycode) {
 		// Create new keyrecord with basic keycode
@@ -74,7 +67,7 @@ static bool process_unilateral_tap(keyrecord_t *record) {
 
 // Send custom hold keycode for mod tap
 static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
-	if (!record->tap.count && record->event.pressed) {
+	if (!record->tap.count) {
 		tap_code16(hold_keycode);
 		return false;
 	}
@@ -88,7 +81,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		extern uint32_t tap_timer;
 		tap_timer = timer_read32(); // Reset OLED animation timer
 #endif
-#ifdef SPLIT_KEYBOARD
+#ifdef UNILATERAL_TAP
 		if (!process_unilateral_tap(record)) {
 			return false;
 		}
@@ -105,14 +98,13 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
-	}
-
-	switch (keycode) {
-	// LT(0,kc) clipboard shortcuts
-	case SLSH_TH: return process_tap_hold(Z_UND, record);
-	case DOT_TH:  return process_tap_hold(Z_CUT, record);
-	case COMM_TH: return process_tap_hold(Z_CPY, record);
-	case M_TH:    return process_tap_hold(Z_PST, record);
+		// LT(0,kc) clipboard shortcuts
+		switch(keycode) {
+		case SLSH_TH: return process_tap_hold(Z_UND, record);
+		case DOT_TH:  return process_tap_hold(Z_CUT, record);
+		case COMM_TH: return process_tap_hold(Z_CPY, record);
+		case M_TH:    return process_tap_hold(Z_PST, record);
+		}
 	}
 
 	return true; // Continue with unmatched keycodes
