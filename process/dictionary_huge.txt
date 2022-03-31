@@ -1,3 +1,9 @@
+# Copyright 2021 Google LLC
+# Copyright 2022 @drashna
+# Copyright 2022 @filterpaper
+# SPDX-License-Identifier: Apache-2.0
+# Original source: https://getreuer.info/posts/keyboards/autocorrection
+
 :addin:             -> adding
 :adn:               -> and
 :aganist            -> against
