@@ -13,7 +13,6 @@ MOUSEKEY_ENABLE = no
 TERMINAL_ENABLE = no
 KEY_LOCK_ENABLE = no
 RGBLIGHT_ENABLE = no
-BOOTMAGIC_ENABLE = no
 SLEEP_LED_ENABLE = no
 TAP_DANCE_ENABLE = no
 VELOCIKEY_ENABLE = no
@@ -21,43 +20,28 @@ SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
-LTO_ENABLE = yes
 WAIT_FOR_USB = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
-BOOTLOADER = atmel-dfu
 BOOTMAGIC_ENABLE = yes
 
 # Main source file and source paths
 SRC += filterpaper.c
 VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/process
 
-# Combo support
+# Custom features
 COMBO_ENABLE = yes
 SRC += combos.c
-# Caps word feature
 OPT_DEFS += -DCAPS_WORD
 SRC += caps_word.c
 
-# STMC build
-ifneq ($(strip $(STMC)),)
-	LTO_ENABLE = no
-	BOOTLOADER = tinyuf2
-	OPT_DEFS += -DSTMC
+ifeq ($(MCU), $(filter $(MCU), atmega32u4))
+	LTO_ENABLE = yes
+	BOOTLOADER = atmel-dfu
 endif
 
 # Small split keyboards
-ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio))
-	SWAP_HANDS_ENABLE = yes
-	# Autocorrection feature
-	OPT_DEFS += -DAUTO_CORRECT
-	SRC += autocorrection.c
-endif
-
-# RPi 2040
-ifeq ($(findstring 2040, $(KEYBOARD)), 2040)
-	LTO_ENABLE = no
-	BOOTLOADER = rp2040
+ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio cradio/kb2040))
 	SWAP_HANDS_ENABLE = yes
 	# Autocorrection feature
 	OPT_DEFS += -DAUTO_CORRECT

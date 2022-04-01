@@ -24,9 +24,6 @@
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 #ifdef SPLIT_KEYBOARD
-#	ifndef KEYBOARD_cradio_kb2040
-#		define EE_HANDS
-#	endif
 #	ifdef KEYBOARD_crkbd_rev1
 #		define BOOTMAGIC_LITE_ROW    0
 #		define BOOTMAGIC_LITE_COLUMN 0
@@ -34,11 +31,14 @@
 #		define BOOTMAGIC_LITE_COLUMN_RIGHT 0
 #	endif
 #	if defined(OLED_ENABLE) || defined(RGB_MATRIX_ENABLE)
+#		define SPLIT_OLED_ENABLE
 #		define SPLIT_MODS_ENABLE
 #		define SPLIT_LED_STATE_ENABLE
 #		define SPLIT_LAYER_STATE_ENABLE
 #	endif
-#	ifdef STMC
+#	ifdef __AVR__
+#		define EE_HANDS
+#	else
 #		undef EE_HANDS
 #		undef BOOTMAGIC_LITE_ROW_RIGHT
 #		undef BOOTMAGIC_LITE_COLUMN_RIGHT
@@ -75,11 +75,11 @@
 
 #ifdef RGB_MATRIX_ENABLE
 #	include "rgb/rgb-disable.h"
-#	define RGB_DISABLE_TIMEOUT 180000
-#	undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
-#	define RGB_MATRIX_MAXIMUM_BRIGHTNESS 150
 #	undef RGB_DISABLE_WHEN_USB_SUSPENDED
 #	define RGB_DISABLE_WHEN_USB_SUSPENDED
+#	undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
+#	define RGB_MATRIX_MAXIMUM_BRIGHTNESS 150
+#	define RGB_DISABLE_TIMEOUT 180000
 #	define RGB_MATRIX_STARTUP_HUE 208
 #	define RGB_MATRIX_STARTUP_SAT 135
 #	define RGB_MATRIX_KEYPRESSES
@@ -104,5 +104,5 @@
 #	define COMBO_ONLY_FROM_LAYER 0
 #endif
 
-// Key and layout wrapper macros
+// Layout macros
 #include "keymaps/layout.h"
