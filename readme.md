@@ -35,7 +35,7 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 * [RGB](rgb/) matrix lighting and effects
   * Custom "candy" matrix effect
   * [Layer indicators](#light-configured-layers-keys) of active keys
-* [Word](word/) processing functions
+* [Word](features/) processing features
   * Caps Word to toggle caps lock following a word
   * Autocorrection for typos
 
@@ -144,26 +144,6 @@ Initialise LEDs with the `*_INIT` macro on startup inside `matrix_scan_user(void
 ```c
 paste_keycode = keymap_config.swap_lctl_lgui ? C(KC_V) : G(KC_V);
 ```
-
-## Disable unilateral modifiers
-Home row mod-taps can cause accidental activation of mods on the same hand, especially on rolls with weaker fingers like ring and pinky. The following code snippet in `process_record_user` will replace activated Alt on the same half with its mod-tap letter on a key press event for split keyboards:
-```c
-switch(record->event.key.row) {
-case 0 ... 2:
-    if (get_mods() & MOD_BIT(KC_LALT)) {
-        unregister_mods(MOD_BIT(KC_LALT));
-        tap_code((uint8_t)HM_S);
-    }
-    break;
-case 4 ... 6:
-    if (get_mods() & MOD_BIT(KC_RALT)) {
-        unregister_mods(MOD_BIT(KC_RALT));
-        tap_code((uint8_t)HM_L);
-    }
-    break;
-}
-```
-Complete implementation of this for all four modifiers is in the [unilateral-taps.c](process/unilateral-taps.c) file.
 
 
 
