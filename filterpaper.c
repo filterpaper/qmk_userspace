@@ -28,9 +28,9 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 // the modifier and resend its base keycode as a tap
 #ifdef UNILATERAL_TAP
 static bool process_unilateral_tap(keyrecord_t *record) {
+	// Create new keyrecord with basic keycode
+	// and send it as a process record tap event
 	void resend_key(uint8_t base_keycode) {
-		// Create new keyrecord with basic keycode
-		// and send it as a process record tap event
 		keyrecord_t resend_key_record;
 		resend_key_record.keycode = base_keycode;
 
@@ -43,8 +43,7 @@ static bool process_unilateral_tap(keyrecord_t *record) {
 		process_record(&resend_key_record);
 	}
 
-	// Disable unilateral home row Alt and re-process the
-	// base keycode as a tap event
+	// Disable unilateral home row Alt
 	switch(record->event.key.row) {
 	case 0 ... 2:
 		if (get_mods() & MOD_BIT(KC_LALT)) {

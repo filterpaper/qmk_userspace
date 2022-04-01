@@ -34,6 +34,7 @@ COMBO_ENABLE = yes
 SRC += combos.c
 OPT_DEFS += -DCAPS_WORD
 SRC += caps_word.c
+OPT_DEFS += -DUNILATERAL_TAP
 
 ifeq ($(MCU), $(filter $(MCU), atmega32u4))
 	LTO_ENABLE = yes
