@@ -22,12 +22,27 @@
 
 #include QMK_KEYBOARD_H
 
+// List of left and right home row mod keys to consider
+static uint16_t const l_hrm[] = {
+	HM_A,
+	HM_S,
+	HM_D,
+	HM_F
+};
+
+static uint16_t const r_hrm[] = {
+	HM_J,
+	HM_K,
+	HM_L,
+	HM_QUOT
+};
+
+
 #ifdef SPLIT_KEYBOARD
 // Split keyboard matrix is arranged vertically
 #	define KEY_POSITION record->event.key.row
 #	define KB_MIDPOINT  MATRIX_ROWS/2
 #else
-// On non-split, left and right are split across column
 #	define KEY_POSITION record->event.key.col
 #	define KB_MIDPOINT  MATRIX_COLS/2
 #endif
@@ -42,10 +57,10 @@ static uint8_t get_modtap_bit(uint16_t kc) {
 // Mod-tap modifier that is replaced with a tap is recreated as a
 // keyrecord_t and send through process_record() as a tap record.
 static void resend_key(uint16_t modtap_kc) {
-	// Remove modifier status
+	// Remove activated modifier.
 	unregister_mods(get_modtap_bit(modtap_kc));
-	// Create keyrecord with mod-tap basic keycode
-	// and send it as a process record tap event
+	// Create keyrecord with mod tap basic keycode
+	// and send it as a process record tap event.
 	keyrecord_t resend_key_record;
 	resend_key_record.keycode = (uint8_t)modtap_kc;
 
@@ -63,30 +78,22 @@ void process_unilateral_taps(uint16_t keycode, keyrecord_t *record) {
 	if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX && record->tap.count) || IS_ANY(keycode)) {
 		if (KEY_POSITION < KB_MIDPOINT) {
 			// Process key press on the left half. If left mod is active, assume it
-			// was rolled from the previous left mod taps listed below and replace
-			// the modifier with base keycode.
-			if (get_mods() == get_modtap_bit(LSFT_T(KC_A))) {
-				resend_key(LSFT_T(KC_A));
-			} else if (get_mods() == get_modtap_bit(LALT_T(KC_S))) {
-				resend_key(LALT_T(KC_S));
-			} else if (get_mods() == get_modtap_bit(LCTL_T(KC_D))) {
-				resend_key(LCTL_T(KC_D));
-			} else if (get_mods() == get_modtap_bit(LGUI_T(KC_F))) {
-				resend_key(LGUI_T(KC_F));
+			// was rolled from the previous left mod tap. Replace the activated
+			// modifier with its base keycode.
+			for (uint8_t l = 0; l < sizeof(l_hrm)/sizeof(uint16_t); ++l) {
+				if (get_mods() == get_modtap_bit(l_hrm[l])) {
+					resend_key(l_hrm[l]);
+				}
 			}
 		}
 		if (KEY_POSITION >= KB_MIDPOINT) {
 			// Process key press on the right half. If right mod is active, assume it
-			// was rolled from the previous right mod tap listed below and replace
-			// the modifier with base keycode.
-			if (get_mods() == get_modtap_bit(RSFT_T(KC_QUOT))) {
-				resend_key(RSFT_T(KC_QUOT));
-			} else if (get_mods() == get_modtap_bit(RALT_T(KC_L))) {
-				resend_key(RALT_T(KC_L));
-			} else if (get_mods() == get_modtap_bit(RCTL_T(KC_K))) {
-				resend_key(RCTL_T(KC_K));
-			} else if (get_mods() == get_modtap_bit(RGUI_T(KC_J))) {
-				resend_key(RGUI_T(KC_J));
+			// was rolled from the previous right mod tap. Replace the activated
+			// modifier with its base keycode.
+			for (uint8_t r = 0; r < sizeof(r_hrm)/sizeof(uint16_t); ++r) {
+				if (get_mods() == get_modtap_bit(r_hrm[r])) {
+					resend_key(r_hrm[r]);
+				}
 			}
 		}
 	}
