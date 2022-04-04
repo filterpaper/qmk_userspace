@@ -26,8 +26,8 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 // If a modifier is active with a key press from the same half, disable
 // the modifier and resend its base keycode as a tap
-#ifdef UNILATERAL_TAP
-static bool process_unilateral_tap(keyrecord_t *record) {
+#ifdef UNILATERAL_MOD
+static bool process_unilateral_mod(keyrecord_t *record) {
 	// Create new keyrecord with basic keycode
 	// and send it as a process record tap event
 	void resend_key(uint8_t base_keycode) {
@@ -80,8 +80,8 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		extern uint32_t tap_timer;
 		tap_timer = timer_read32(); // Reset OLED animation timer
 #endif
-#ifdef UNILATERAL_TAP
-		if (!process_unilateral_tap(record)) {
+#ifdef UNILATERAL_MOD
+		if (!process_unilateral_mod(record)) {
 			return false;
 		}
 #endif

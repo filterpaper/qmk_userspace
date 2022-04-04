@@ -18,27 +18,30 @@
 #define QK_LMOD_TAP 0x6000
 #define QK_RMOD_TAP 0x7000
 
-/* (kc >> 8) & 0x1f for mod-tap bits
- * (kc & 0x1f) for osm bits
- * Mod bits:    43210
- *   bit 0      ||||+- Control
- *   bit 1      |||+-- Shift
- *   bit 2      ||+--- Alt
- *   bit 3      |+---- Gui
- *   bit 4      +----- LR flag(Left:0, Right:1)
+/* Mod bit notes
+ (kc >> 8) & 0x1f for mod-tap bits
+ (kc & 0x1f) for osm bits
+ Mod bits:    43210
+   bit 0      ||||+- Control
+   bit 1      |||+-- Shift
+   bit 2      ||+--- Alt
+   bit 3      |+---- Gui
+   bit 4      +----- LR flag(Left:0, Right:1)
 
-   Left and right mod_bits are 8-bits wide:
-   MOD_BIT(KC_LALT) = 0x0004
-   MOD_BIT(KC_RALT) = 0x0040
-   Mod-tap are 5-bits wide with LR flag above.
-   To convert mod-tap bits to mod_bits, check for the R
-   flag and shift 4 bits left with ternary:
-   mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : (kc >> 8) & 0xf
- */
+Left and right mod_bits are 8-bits wide:
+MOD_BIT(KC_LALT) = 0x0004
+MOD_BIT(KC_RALT) = 0x0040
+Mod-tap are 5-bits wide with LR flag above.
+To convert mod-tap bits to mod_bits, check for the R
+flag and shift 4 bits left with ternary:
+mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : (kc >> 8) & 0xf
+*/
 
 // Return left or right mod bits
+#define MODTAP_BITS(kc) (kc & 0x1000) ? ((kc>>8)&0xf)<<4 : (kc>>8)&0xf
 #define MODTAP_BIT(kc) ((kc >> 8) & 0x0f)
 #define OSMMOD_BIT(kc) (kc & 0x0f)
+
 
 // Macro for LT(0,kc) mod tap. Return true for kc on tap
 // send custom tap code on hold after TAPPING_TERM
