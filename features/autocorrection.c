@@ -87,7 +87,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 				}
 			}
 			// Follow link to child node.
-			state = (pgm_read_byte(dictionary + state + 1) | pgm_read_byte(dictionary + state + 2) << 8);
+			state = (pgm_read_word(dictionary + state + 1) | pgm_read_word(dictionary + state + 2) << 8);
 		// Otherwise check for match in node with a single child.
 		} else if (code != typo_buffer[i]) {
 			return true;
