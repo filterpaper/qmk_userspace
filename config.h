@@ -59,8 +59,8 @@
 #		define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
 #		define MOUSEKEY_INTERVAL 15		// Time between cursor movements in milliseconds
 #		define MOUSEKEY_MOVE_DELTA 10	// Step size for acceleration
-#		define MOUSEKEY_MAX_SPEED 10
-#		define MOUSEKEY_TIME_TO_MAX 70
+#		define MOUSEKEY_MAX_SPEED 9
+#		define MOUSEKEY_TIME_TO_MAX 90
 #	endif
 #	define MOUSEKEY_WHEEL_DELAY 16
 #	define MOUSEKEY_WHEEL_INTERVAL 30
