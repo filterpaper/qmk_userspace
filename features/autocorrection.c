@@ -78,7 +78,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 	// Check for typo in buffer using a trie stored in dictionary.
 	uint16_t state = 0;
 	uint8_t code = pgm_read_byte(dictionary + state);
-	for (uint8_t i = buffer_size - 1; i >= 0; --i) {
+	for (int8_t i = buffer_size - 1; i >= 0; --i) {
 		if (code & 64) {  // Check for match in node with multiple children.
 			code &= 63;
 			for (; code != typo_buffer[i]; code = pgm_read_byte(dictionary + (state += 3))) {
@@ -87,7 +87,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 				}
 			}
 			// Follow link to child node.
-			state = (pgm_read_word(dictionary + state + 1) | pgm_read_word(dictionary + state + 2) << 8);
+			state = (pgm_read_byte(dictionary + state + 1) | pgm_read_byte(dictionary + state + 2) << 8);
 		// Otherwise check for match in node with a single child.
 		} else if (code != typo_buffer[i]) {
 			return true;

@@ -107,7 +107,9 @@ def parse_file(file_name: str) -> List[Tuple[str, str]]:
       if len(typo) < 5:
         print(f'Warning:{line_number}: It is suggested that typos are at '
               f'least 5 characters long to avoid false triggers: "{typo}"')
-
+      if len(typo) > 127:
+        print(f'Error:{line_number}: Typo exceeds 127 chars: "{typo}"')
+        sys.exit(1)
       if typo.startswith(':') and typo.endswith(':'):
         if typo[1:-1] in CORRECT_WORDS:
           print(f'Warning:{line_number}: Typo "{typo}" is a correctly spelled '
@@ -262,12 +264,13 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
 
 def main(argv):
   dict_file = argv[1] if len(argv) > 1 else 'dictionary.txt'
+  out_file  = argv[2] if len(argv) > 2 else 'autocorrection_data.h'
   autocorrections = parse_file(dict_file)
   trie = make_trie(autocorrections)
   data = serialize_trie(autocorrections, trie)
   print(f'Processed %d autocorrection entries to table with %d bytes.'
         % (len(autocorrections), len(data)))
-  write_generated_code(autocorrections, data, 'autocorrection_data.h')
+  write_generated_code(autocorrections, data, out_file)
 
 
 if __name__ == '__main__':
