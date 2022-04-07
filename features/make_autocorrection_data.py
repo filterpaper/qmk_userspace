@@ -98,18 +98,22 @@ def parse_file(file_name: str) -> List[Tuple[str, str]]:
         print(f'Error:{line_number}: Typo "{typo}" has '
               'characters other than a-z and :.')
         sys.exit(1)
+
       for other_typo in typos:
         if typo in other_typo or other_typo in typo:
           print(f'Error:{line_number}: Typos may not be substrings of one '
                 f'another, otherwise the longer typo would never trigger: '
                 f'"{typo}" vs. "{other_typo}".')
           sys.exit(1)
+
       if len(typo) < 5:
         print(f'Warning:{line_number}: It is suggested that typos are at '
               f'least 5 characters long to avoid false triggers: "{typo}"')
+
       if len(typo) > 127:
         print(f'Error:{line_number}: Typo exceeds 127 chars: "{typo}"')
         sys.exit(1)
+
       if typo.startswith(':') and typo.endswith(':'):
         if typo[1:-1] in CORRECT_WORDS:
           print(f'Warning:{line_number}: Typo "{typo}" is a correctly spelled '
