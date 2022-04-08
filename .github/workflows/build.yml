@@ -1,10 +1,11 @@
-name: Build QMK userspace
+name: Build QMK Userspace
 on:
   push:
   workflow_dispatch:
 
 jobs:
   build:
+    name: Build Userspace
     runs-on: ubuntu-latest
     container: qmkfm/base_container
     strategy:
@@ -64,3 +65,10 @@ jobs:
           *.bin
           *.uf2
       continue-on-error: true
+
+  prune:
+    name: Prune
+    needs: build
+    uses: filterpaper/blocklists/.github/workflows/delete_workflow.yml@main
+    with:
+      days: 7
