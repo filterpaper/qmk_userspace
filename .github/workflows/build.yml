@@ -66,9 +66,9 @@ jobs:
           *.uf2
       continue-on-error: true
 
-  prune:
-    name: Prune
+  purge:
+    name: Purge
     needs: build
-    uses: filterpaper/blocklists/.github/workflows/delete_workflow.yml@main
+    uses: filterpaper/scripts/.github/workflows/delete-workflow.yml@main
     with:
       days: 7
