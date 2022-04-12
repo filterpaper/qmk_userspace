@@ -11,7 +11,7 @@ Keymap JSON file content are preprocessors to macros in `layout.h`. They can be 
 ├──────┼──────┼──────┼──────┼──────┼──────┤                ├──────┼──────┼──────┼──────┼──────┼──────┤
 │OS_SFT│  Z   │  X   │  C   │  V   │  B   │                │  N   │  M   │ , <  │ . >  │ / ?  │ ENT  │
 ╰──────┴──────┴──────┴──────┼──────┼──────┼──────╮  ╭──────┼──────┼──────┼──────┴──────┴──────┴──────╯
-                            │RSA_T │_SYMB │RSG_T │  │RSFT_T│_NUMB │RAG_T │
+                            │RSA_T │_SYMB │LCA_T │  │RSFT_T│_NUMB │RAG_T │
                             │ ESC  │ TAB  │ ENT  │  │ SPC  │ BSPC │ DEL  │
                             ╰──────┴──────┴──────╯  ╰──────┴──────┴──────╯
  Colemak
@@ -65,7 +65,7 @@ Keymap JSON file content are preprocessors to macros in `layout.h`. They can be 
 ├──────┼──────┼──────┼──────┼──────┤                ├──────┼──────┼──────┼──────┼──────┤
 │  Z   │  X   │  C   │  V   │  B   │                │  N   │  M   │ , <  │ . >  │ / ?  │
 ╰──────┴──────┴──────┼──────┼──────┼──────╮  ╭──────┼──────┼──────┴──────┴──────┴──────╯
-                            │_SYMB │RSG_T │  │RSFT_T│_NUMB │
+                            │_SYMB │LCA_T │  │RSFT_T│_NUMB │
                             │ TAB  │ ENT  │  │ SPC  │ BSPC │
                             ╰──────┴──────╯  ╰──────┴──────╯
  Colemak
