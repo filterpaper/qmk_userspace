@@ -41,6 +41,10 @@ jobs:
         path: users/${{ github.actor }}
         persist-credentials: false
 
+    - name: Update python dependencies
+      shell: bash
+      run: /usr/bin/python3 -m pip install -r requirements.txt
+
     - name: Build firmware
       id: build
       shell: bash
