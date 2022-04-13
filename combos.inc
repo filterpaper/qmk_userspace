@@ -18,9 +18,6 @@ COMB(numb,     TG(NUM),  LT(NUM,KC_BSPC), KC_N)
 // volume control
 COMB(vol_up,   KC_VOLU,  KC_P, HM_QUOT)
 COMB(vol_dn,   KC_VOLD,  HM_QUOT, SLSH_TH)
-// vimac shortcuts
-COMB(vimacf,   HYPR(KC_F),  HM_D, HM_F)
-COMB(vimacj,   HYPR(KC_J),  HM_J, HM_K)
 // macros
 SUBS(vi_quit,  ":q!",  KC_Q, KC_W)
 SUBS(vi_save,  ":wq",  KC_Z, KC_X)
