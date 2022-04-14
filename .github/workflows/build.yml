@@ -14,35 +14,44 @@ jobs:
         keyboard:
         - 3w6
         - cradio
-        - macro3
-        - mark65
-        - technik
-        include:
-        - keyboard: corne
-          oled: LEFTCAT
-        - keyboard: corne
-          oled: RIGHTCAT
-        - keyboard: corne
-          oled: LUNA
+        - rp-cradio
+#        - macro3
+#        - mark65
+#        - technik
+#        include:
+#        - keyboard: corne
+#          oled: LEFTCAT
+#        - keyboard: corne
+#          oled: RIGHTCAT
+#        - keyboard: corne
+#          oled: LUNA
 
     steps:
-
-    - name: Checkout QMK
-      uses: actions/checkout@v2
+    - name: Checkout develop branch
+      if: ${{ (matrix.keyboard != 'rp-cradio') }}
+      uses: actions/checkout@v3
       with:
         repository: qmk/qmk_firmware
         ref: develop
         submodules: recursive
         persist-credentials: false
 
+    - name: Checkout RP2040 branch
+      if: ${{ (matrix.keyboard == 'rp-cradio') }}
+      uses: actions/checkout@v3
+      with:
+        repository: filterpaper/qmk_firmware
+        ref: myrp2040
+        submodules: recursive
+        persist-credentials: false
+
     - name: Checkout userspace
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         path: users/${{ github.actor }}
         persist-credentials: false
 
     - name: Update python dependencies
-      shell: bash
       run: /usr/bin/python3 -m pip install -r requirements.txt
 
     - name: Build firmware
@@ -60,10 +69,10 @@ jobs:
         echo "::set-output name=artifact-name::${OUTPUT}"
 
     - name: Archive firmware
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.build.outputs.artifact-name }}
-        retention-days: 2
+        retention-days: 3
         path: |
           *.hex
           *.bin
@@ -75,4 +84,4 @@ jobs:
     needs: build
     uses: filterpaper/scripts/.github/workflows/delete-workflow.yml@main
     with:
-      days: 7
+      days: 5
