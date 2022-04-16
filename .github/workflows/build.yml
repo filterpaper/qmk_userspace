@@ -57,13 +57,14 @@ jobs:
     - name: Build firmware
       id: build
       shell: bash
+      working-directory: users/${{ github.actor }}/keymaps
       run: |
         if [ ${{ matrix.keyboard }} == "corne" ]
         then
-          qmk compile -j 10 -e OLED=${{ matrix.oled }} users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json
+          qmk compile -j 10 -e OLED=${{ matrix.oled }} ${{ matrix.keyboard }}.json
           OUTPUT=${{ matrix.keyboard }}_${{ matrix.oled }}
         else
-          qmk compile -j 10 users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json
+          qmk compile -j 10 ${{ matrix.keyboard }}.json
           OUTPUT=${{ matrix.keyboard }}
         fi
         echo "::set-output name=artifact-name::${OUTPUT}"
