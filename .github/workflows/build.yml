@@ -34,7 +34,6 @@ jobs:
         repository: qmk/qmk_firmware
         ref: develop
         submodules: recursive
-        persist-credentials: false
 
     - name: Checkout RP2040 branch
       if: ${{ (matrix.keyboard == 'rp-cradio') }}
@@ -43,7 +42,6 @@ jobs:
         repository: filterpaper/qmk_firmware
         ref: myrp2040
         submodules: recursive
-        persist-credentials: false
 
     - name: Checkout userspace
       uses: actions/checkout@v3
