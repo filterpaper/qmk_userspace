@@ -8,7 +8,15 @@
 
 /*
 uint8_t jsf8(void) { // Bob Jenkin's fast prng
-	static uint8_t a = 161, b = 62, c = 21, d = 97, t;
+	#ifdef __AVR__
+		static uint8_t a = (TCNT0 + TCNT1) % 64;
+		static uint8_t b = (TCNT2 + TCNT3) % 64;
+		static uint8_t c = (TCNT3 + TCNT4) % 64;
+		static uint8_t d = (TCNT3 + TCNT4) % 64;
+		static uint8_t t;
+	#else
+		static uint8_t a = 161, b = 62, c = 21, d = 97, t;
+	#endif
 	t = a - ((b << 1)|(b >> 7));
 	a = b ^ ((c << 4)|(c >> 4));
 	b = c + d; c = d + t;
