@@ -14,17 +14,16 @@ jobs:
         keyboard:
         - 3w6
         - cradio
-        - rp-cradio
-#        - macro3
-#        - mark65
-#        - technik
-#        include:
-#        - keyboard: corne
-#          oled: LEFTCAT
-#        - keyboard: corne
-#          oled: RIGHTCAT
-#        - keyboard: corne
-#          oled: LUNA
+        - macro3
+        - mark65
+        - technik
+        include:
+        - keyboard: corne
+          oled: LEFTCAT
+        - keyboard: corne
+          oled: RIGHTCAT
+        - keyboard: corne
+          oled: LUNA
 
     steps:
     - name: Checkout develop branch
@@ -57,14 +56,8 @@ jobs:
       shell: bash
       working-directory: users/${{ github.actor }}/keymaps
       run: |
-        if [ ${{ matrix.keyboard }} == "corne" ]
-        then
-          qmk compile -j 10 -e OLED=${{ matrix.oled }} ${{ matrix.keyboard }}.json
-          OUTPUT=${{ matrix.keyboard }}_${{ matrix.oled }}
-        else
-          qmk compile -j 10 ${{ matrix.keyboard }}.json
-          OUTPUT=${{ matrix.keyboard }}
-        fi
+        qmk compile -j 10 $([ ! -z ${{ matrix.oled }} ] && echo "-e OLED=${{ matrix.oled }}") ${{ matrix.keyboard }}.json || true
+        OUTPUT=${{ matrix.keyboard }}$([ ! -z ${{ matrix.oled }} ] && echo "_${{ matrix.oled }}") || true
         echo "::set-output name=artifact-name::${OUTPUT}"
 
     - name: Archive firmware
