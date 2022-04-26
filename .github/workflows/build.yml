@@ -56,8 +56,8 @@ jobs:
       shell: bash
       working-directory: users/${{ github.actor }}/keymaps
       run: |
-        qmk compile -j 10 $([ ! -z ${{ matrix.oled }} ] && echo "-e OLED=${{ matrix.oled }}") ${{ matrix.keyboard }}.json || true
-        OUTPUT=${{ matrix.keyboard }}$([ ! -z ${{ matrix.oled }} ] && echo "_${{ matrix.oled }}") || true
+        qmk compile -j 10 $([ -n "${{ matrix.oled }}" ] && echo "-e OLED=${{ matrix.oled }}") ${{ matrix.keyboard }}.json || true
+        OUTPUT=${{ matrix.keyboard }}$([ -n "${{ matrix.oled }}" ] && echo "_${{ matrix.oled }}") || true
         echo "::set-output name=artifact-name::${OUTPUT}"
 
     - name: Archive firmware
