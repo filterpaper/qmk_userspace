@@ -316,19 +316,19 @@ Limitation: [Bootmagic lite](https://docs.qmk.fm/#/feature_bootmagic?id=bootmagi
 Simple `bash` and `zsh` shell function for flashing firmware (and optionally handedness) to Atmel DFU controller on MacOS. It requires `dfu-programmer` from [Homebrew](https://brew.sh/):
 ```sh
 dfu-flash() {
-  if [[ ! -f $1 || -z $1 ]]; then
+  if [ ! -f $1 ] || [ -z $1 ]; then
     echo "Usage: dfu-flash <firmware.hex> [left|right]"
     return 1
   fi
-  until [[ $(ioreg -p IOUSB | grep ATm32U4DFU) == *"DFU"* ]]; do
+  until [ -n "$(ioreg -p IOUSB | grep ATm32U4DFU)" ]; do
     echo "Waiting for ATm32U4DFU bootloader..."; sleep 3
   done
   dfu-programmer atmega32u4 erase --force
-  if [[ $2 == "left" ]]; then
+  if [ $2 = "left" ]; then
     echo -e "\nFlashing left EEPROM" && \
     echo -e ':0F000000000000000000000000000000000001F0\n:00000001FF' | \
     dfu-programmer atmega32u4 flash --force --suppress-validation --eeprom STDIN
-  elif [[ $2 == "right" ]]; then
+  elif [ $2 = "right" ]; then
     echo -e "\nFlashing right EEPROM" && \
     echo -e ':0F000000000000000000000000000000000000F1\n:00000001FF' | \
     dfu-programmer atmega32u4 flash --force --suppress-validation --eeprom STDIN
