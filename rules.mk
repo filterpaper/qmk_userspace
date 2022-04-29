@@ -34,7 +34,6 @@ COMBO_ENABLE = yes
 SRC += combos.c
 OPT_DEFS += -DCAPS_WORD
 SRC += caps_word.c
-#OPT_DEFS += -DUNILATERAL_MOD
 
 ifeq ($(MCU), $(filter $(MCU), atmega32u4))
 	LTO_ENABLE = yes
@@ -47,6 +46,7 @@ ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio cradio/kb2040))
 	# Autocorrection feature
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrection.c
+	OPT_DEFS += -DHRM_AUDIT
 endif
 
 # Boardsource's Mark65 and Technik

@@ -24,10 +24,10 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// If a modifier is active with a key press from the same half, disable
-// the modifier and resend its base keycode as a tap
-#ifdef UNILATERAL_MOD
-static bool process_unilateral_mod(keyrecord_t *record) {
+// Replace modifier with base key code on unintended activation
+// with keys on the same half
+#ifdef HRM_AUDIT
+static bool process_hrm_audit(keyrecord_t *record) {
 	// Create new keyrecord with basic keycode
 	// and send it as a process record tap event
 	void resend_key(uint8_t base_keycode) {
@@ -43,15 +43,15 @@ static bool process_unilateral_mod(keyrecord_t *record) {
 		process_record(&resend_key_record);
 	}
 
-	// Disable unilateral home row Alt
+	// Disable Alt roll with top row
 	switch(record->event.key.row) {
-	case 0 ... 2:
+	case 0:
 		if (get_mods() & MOD_BIT(KC_LALT)) {
 			unregister_mods(MOD_BIT(KC_LALT));
 			resend_key((uint8_t)HM_S);
 		}
 		break;
-	case 4 ... 6:
+	case 4:
 		if (get_mods() & MOD_BIT(KC_RALT)) {
 			unregister_mods(MOD_BIT(KC_RALT));
 			resend_key((uint8_t)HM_L);
@@ -80,8 +80,8 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		extern uint32_t tap_timer;
 		tap_timer = timer_read32(); // Reset OLED animation timer
 #endif
-#ifdef UNILATERAL_MOD
-		if (!process_unilateral_mod(record)) {
+#ifdef HRM_AUDIT
+		if (!process_hrm_audit(record)) {
 			return false;
 		}
 #endif
