@@ -53,27 +53,25 @@ jobs:
 
     - name: Build firmware
       id: build
-      shell: bash
       working-directory: users/${{ github.actor }}/keymaps
       run: |
-        qmk compile -j 10 $([ -n "${{ matrix.oled }}" ] && echo "-e OLED=${{ matrix.oled }}") ${{ matrix.keyboard }}.json || true
-        OUTPUT=${{ matrix.keyboard }}$([ -n "${{ matrix.oled }}" ] && echo "_${{ matrix.oled }}") || true
+        set -x
+        qmk compile -j3 $([ -n "${{ matrix.oled }}" ] && printf "%s" "-e OLED=${{ matrix.oled }}") ${{ matrix.keyboard }}.json || true
+        OUTPUT=${{ matrix.keyboard }}$([ -n "${{ matrix.oled }}" ] && printf "%s" "_${{ matrix.oled }}") || true
         echo "::set-output name=artifact-name::${OUTPUT}"
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
+      continue-on-error: true
       with:
-        name: ${{ steps.build.outputs.artifact-name }}
         retention-days: 3
+        name: ${{ steps.build.outputs.artifact-name }}
         path: |
           *.hex
           *.bin
           *.uf2
-      continue-on-error: true
 
   purge:
-    name: Purge
-    needs: build
     uses: filterpaper/scripts/.github/workflows/delete-workflow.yml@main
     with:
       days: 5

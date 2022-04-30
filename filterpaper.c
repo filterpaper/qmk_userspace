@@ -46,13 +46,13 @@ static bool process_hrm_audit(keyrecord_t *record) {
 	// Disable Alt roll with top row
 	switch(record->event.key.row) {
 	case 0:
-		if (get_mods() & MOD_BIT(KC_LALT)) {
+		if (get_mods() == MOD_BIT(KC_LALT)) {
 			unregister_mods(MOD_BIT(KC_LALT));
 			resend_key((uint8_t)HM_S);
 		}
 		break;
 	case 4:
-		if (get_mods() & MOD_BIT(KC_RALT)) {
+		if (get_mods() == MOD_BIT(KC_RALT)) {
 			unregister_mods(MOD_BIT(KC_RALT));
 			resend_key((uint8_t)HM_L);
 		}
