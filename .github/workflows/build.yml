@@ -17,6 +17,7 @@ jobs:
         - macro3
         - mark65
         - technik
+        - rp-cradio
         include:
         - keyboard: corne
           oled: LEFTCAT
