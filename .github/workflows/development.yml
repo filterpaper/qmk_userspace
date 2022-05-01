@@ -1,0 +1,53 @@
+name: Development Build
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: qmkfm/base_container
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - keyboard: rp-cradio
+          branch: rp2040
+        - keyboard: rp-cradio
+          branch: rp2040-mouse
+# git checkout -B rp2040
+# git remote add upstream https://github.com/qmk/qmk_firmware.git
+# git fetch upstream
+# git pull upstream pull/14877/head --no-edit
+# git pull upstream pull/16974/head --no-edit
+# git merge origin/cradio-rpi --no-edit
+
+    steps:
+    - name: Checkout ${{ matrix.branch }} branch
+      uses: actions/checkout@v3
+      with:
+        repository: filterpaper/qmk_firmware
+        ref: ${{ matrix.branch }}
+        submodules: recursive
+
+    - name: Checkout userspace
+      uses: actions/checkout@v3
+      with:
+        path: users/${{ github.actor }}
+        persist-credentials: false
+
+    - name: Update python dependencies
+      run: /usr/bin/python3 -m pip install -r requirements.txt
+
+    - name: Build development firmware
+      working-directory: users/${{ github.actor }}/keymaps
+      run: qmk compile -j3 ${{ matrix.keyboard }}.json || true
+
+    - name: Archive firmware
+      uses: actions/upload-artifact@v3
+      continue-on-error: true
+      with:
+        retention-days: 3
+        name: ${{ matrix.keyboard }}_${{ matrix.branch }}
+        path: |
+          *.hex
+          *.bin
+          *.uf2

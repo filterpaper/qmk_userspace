@@ -1,7 +1,5 @@
 name: Build QMK Userspace
-on:
-  push:
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   build:
@@ -17,7 +15,6 @@ jobs:
         - macro3
         - mark65
         - technik
-        - rp-cradio
         include:
         - keyboard: corne
           oled: LEFTCAT
@@ -27,20 +24,11 @@ jobs:
           oled: LUNA
 
     steps:
-    - name: Checkout develop branch
-      if: ${{ (matrix.keyboard != 'rp-cradio') }}
+    - name: Checkout QMK source
       uses: actions/checkout@v3
       with:
         repository: qmk/qmk_firmware
         ref: develop
-        submodules: recursive
-
-    - name: Checkout RP2040 branch
-      if: ${{ (matrix.keyboard == 'rp-cradio') }}
-      uses: actions/checkout@v3
-      with:
-        repository: filterpaper/qmk_firmware
-        ref: myrp2040
         submodules: recursive
 
     - name: Checkout userspace
@@ -55,11 +43,13 @@ jobs:
     - name: Build firmware
       id: build
       working-directory: users/${{ github.actor }}/keymaps
+      env:
+        build_option: $([ -n "${{ matrix.oled }}" ] && printf "%s" "-e OLED=${{ matrix.oled }}")
+        output_suffix: $([ -n "${{ matrix.oled }}" ] && printf "%s" "_${{ matrix.oled }}")
       run: |
         set -x
-        qmk compile -j3 $([ -n "${{ matrix.oled }}" ] && printf "%s" "-e OLED=${{ matrix.oled }}") ${{ matrix.keyboard }}.json || true
-        OUTPUT=${{ matrix.keyboard }}$([ -n "${{ matrix.oled }}" ] && printf "%s" "_${{ matrix.oled }}") || true
-        echo "::set-output name=artifact-name::${OUTPUT}"
+        qmk compile -j3 ${{ env.build_option }} ${{ matrix.keyboard }}.json || true
+        echo "::set-output name=artifact-name::${{ matrix.keyboard }}${{ env.output_suffix }}"
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
@@ -74,5 +64,3 @@ jobs:
 
   purge:
     uses: filterpaper/scripts/.github/workflows/delete-workflow.yml@main
-    with:
-      days: 5

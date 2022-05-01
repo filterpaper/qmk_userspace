@@ -1,7 +1,7 @@
 // Copyright 2021 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
-// OS X shortcuts
+// macOS shortcuts
 #define Z_UND	G(KC_Z)
 #define Z_CUT	G(KC_X)
 #define Z_CPY	G(KC_C)
@@ -54,7 +54,7 @@
 #define FNC 4
 
 
-// Default 3x6_3 layout
+// Default 3x6_3 split layout
 #define _BASE \
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	QK_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, KC_SCLN, \
@@ -96,7 +96,7 @@
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * |      |      |  4   |  5   |  6   | VOLD |                | LEFT | DOWN |  UP  | RGHT |  ;   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      | CAPS |  7   |  8   |  9   |  0   |                |      |      |      |      |      |      |
+ * |      | CAPS |  7   |  8   |  9   |  0   |                |      |RSA_DN|RSA_UP|      |      |      |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
  *                             |      |_FUNC | GESC |  |      |      |      |
  *                             `--------------------'  `--------------------'
@@ -217,8 +217,8 @@ KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_R
 	_______, _______,          _______, _______,          _______,          _______,          _______, _______, _______, _______, _______, _______
 
 // Mark 65 home row mod and tap hold wrapper
-#define HRM65(k) HRM65_SACG(k)
-#define HRM65_SACG( \
+#define HRM65(k) HRM65_TAPHOLD(k)
+#define HRM65_TAPHOLD( \
 	k000, k001, k002, k003, k004, k005, k006, k007, k008, k009, k010, k011, k012, k013, k014, k015, \
 	k100,       k102, k103, k104, k105, k106, k107, k108, k109, k110, k111, k112, k113, k114, k115, \
 	k200,       k202, k203, k204, k205, k206, k207, k208, k209, k210, k211, k212, k213,       k215, \
