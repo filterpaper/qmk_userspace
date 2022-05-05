@@ -1,7 +1,7 @@
 // Copyright 2021 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
-#include "filterpaper.h"
+#include "p4p3r.h"
 
 
 #ifdef TAPPING_FORCE_HOLD_PER_KEY

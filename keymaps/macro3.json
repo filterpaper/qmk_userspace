@@ -2,7 +2,7 @@
 	"author": "",
 	"documentation": "Wrapper based keymap",
 	"keyboard": "macro3",
-	"keymap": "filterpaper",
+	"keymap": "p4p3r",
 	"layout": "LAYOUT_macro3_w",
 	"layers": [
 		[ "MACRO3_0" ],

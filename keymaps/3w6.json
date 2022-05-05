@@ -2,11 +2,11 @@
 	"author": "",
 	"documentation": "Wrapper based keymap",
 	"keyboard": "3w6/rev2",
-	"keymap": "filterpaper",
+	"keymap": "p4p3r",
 	"layout": "LAYOUT_36key_w",
 	"layers": [
 		[ "C_36(HRM(_BASE))" ],
-		[ "C_36(HRM(_COLE))" ],
+		[ "C_36(HRM(_COLE_DH))" ],
 		[ "C_36(_NUMB)" ],
 		[ "C_36(_SYMB)" ],
 		[ "C_36(_FUNC)" ]

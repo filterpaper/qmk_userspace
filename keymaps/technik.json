@@ -2,11 +2,11 @@
 	"author": "",
 	"documentation": "Wrapper based keymap",
 	"keyboard": "boardsource/technik_o",
-	"keymap": "filterpaper",
+	"keymap": "p4p3r",
 	"layout": "LAYOUT_ortho_w",
 	"layers": [
 		[ "C_O(HRM(_BASE))" ],
-		[ "C_O(HRM(_COLE))" ],
+		[ "C_O(HRM(_COLE_DH))" ],
 		[ "C_O(_NUMB)" ],
 		[ "C_O(_SYMB)" ],
 		[ "C_O(_FUNC)" ]

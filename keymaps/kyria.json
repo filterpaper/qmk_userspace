@@ -1,0 +1,16 @@
+{
+	"author": "",
+	"documentation": "Wrapper based keymap",
+	"keyboard": "splitkb/kyria/rev1",
+	"keymap": "p4p3r",
+	"layout": "LAYOUT_kyria_w",
+	"layers": [
+		["C_K(HRM(_BASE))"],
+		["C_K(HRM(_COLE_DH))"],
+		["C_K(_NUMB)"],
+		["C_K(_SYMB)"],
+		["C_K(_FUNC)"]
+	],
+	"notes": "",
+	"version": 1
+}

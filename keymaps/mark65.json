@@ -2,7 +2,7 @@
 	"author": "",
 	"documentation": "Wrapper based keymap",
 	"keyboard": "boardsource/the_mark",
-	"keymap": "filterpaper",
+	"keymap": "p4p3r",
 	"layout": "LAYOUT_mrk65_w",
 	"layers": [
 		[ "HRM65(MARK_DEFAULT)" ],

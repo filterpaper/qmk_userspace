@@ -26,7 +26,7 @@ MOUSEKEY_ENABLE = yes
 BOOTMAGIC_ENABLE = yes
 
 # Main source file and source paths
-SRC += filterpaper.c
+SRC += p4p3r.c
 VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
 
 # Custom features
@@ -59,7 +59,7 @@ endif
 ifeq ($(KEYBOARD), crkbd/rev1)
 	ifeq ($(strip $(TINY)),)
 		RGB_MATRIX_ENABLE = yes
-		RGB_MATRIX_CUSTOM_USER = yes
+		RGB_MATRIX_CUSTOM_USER = no
 		SRC += rgb-matrix.c
 	endif
 	ifneq ($(strip $(OLED)),)
@@ -71,4 +71,26 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 			SRC += oled-icons.c oled-luna.c
 		endif
 	endif
+	BOOTLOADER = qmk-hid
+	BOOTLOADER_SIZE = 512
+endif
+
+# Splitkb Kyria
+ifeq ($(KEYBOARD), splitkb/kyria/rev1)
+	WPM_ENABLE=yes
+	ifneq ($(strip $(OLED)),)
+		OLED_ENABLE = yes
+		OPT_DEFS += -D${OLED}
+		ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT CAT))
+			SRC += oled-icons.c oled-bongocat.c
+		else ifeq ($(OLED), $(filter $(OLED), FELIX LUNA))
+			SRC += oled-icons.c oled-luna.c
+		endif
+	endif
+	ifeq ($(strip $(KB)), $(strip $(OLED)))
+		LTO_ENABLE = no
+	endif
+	RGBLIGHT_ENABLE = yes
+	BOOTLOADER = qmk-hid
+	BOOTLOADER_SIZE = 512
 endif

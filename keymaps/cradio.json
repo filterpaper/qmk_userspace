@@ -2,11 +2,11 @@
 	"author": "",
 	"documentation": "Wrapper based keymap",
 	"keyboard": "cradio",
-	"keymap": "filterpaper",
+	"keymap": "p4p3r",
 	"layout": "LAYOUT_34key_w",
 	"layers": [
 		[ "C_34(HRM(_BASE))" ],
-		[ "C_34(HRM(_COLE))" ],
+		[ "C_34(HRM(_COLE_DH))" ],
 		[ "C_34(_NUMB)" ],
 		[ "C_34(_SYMB)" ],
 		[ "C_34(_FUNC)" ]
