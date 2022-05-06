@@ -2,7 +2,8 @@ name: Development Build
 on: [push, workflow_dispatch]
 
 jobs:
-  build:
+  development:
+    name: Development build
     runs-on: ubuntu-latest
     container: qmkfm/base_container
     strategy:
@@ -12,7 +13,7 @@ jobs:
         - keyboard: rp-cradio
           branch: rp2040
         - keyboard: cradio
-          branch: quick_tap_test
+          branch: quick_tap_term
 # git checkout -B rp2040
 # git remote add upstream https://github.com/qmk/qmk_firmware.git
 # git fetch upstream
@@ -26,7 +27,7 @@ jobs:
       with:
         repository: filterpaper/qmk_firmware
         ref: ${{ matrix.branch }}
-        submodules: recursive
+        submodules: true
 
     - name: Checkout userspace
       uses: actions/checkout@v3
@@ -46,7 +47,7 @@ jobs:
       continue-on-error: true
       with:
         retention-days: 3
-        name: ${{ matrix.keyboard }}_${{ matrix.branch }}
+        name: development_${{ matrix.keyboard }}_${{ matrix.branch }}
         path: |
           *.hex
           *.bin

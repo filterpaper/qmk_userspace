@@ -30,7 +30,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef QUICK_TAP_TERM_PER_KEY
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
-	return record->event.key.row == MATRIX_ROWS - 1 ? QUICK_TAP_TERM-30 : QUICK_TAP_TERM;
+	return record->event.key.row == MATRIX_ROWS - 1 ? QUICK_TAP_TERM-50 : QUICK_TAP_TERM;
 }
 #endif
 
