@@ -40,7 +40,7 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 	return state;
 }
 
-
+/*
 void rgb_matrix_indicators_user(void) {
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
@@ -71,6 +71,7 @@ void rgb_matrix_indicators_user(void) {
 		}
 	}
 }
+*/
 
 /*
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
@@ -102,3 +103,28 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 		}
 	}
 }*/
+
+void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+	// Modifier keys indicator
+	if (get_mods() & MOD_MASK_CSAG) {
+    	for (uint8_t i = led_min; i <= led_max; i++) {
+			if (g_led_config.flags[i] & MOD_FLAG) {
+				rgb_matrix_set_color(i, RGB_MODS);
+			}
+		}
+	}
+	// Layer keys indicator, variation on the examples from the doc:
+	// https://github.com/qmk/qmk_firmware/blob/master/docs/feature_rgb_matrix.md#examples-idindicator-examples
+    uint8_t layer = get_highest_layer(layer_state);
+	if (layer > CMK) {
+		for (uint8_t i = led_min; i <= led_max; i++) {
+			if (HAS_FLAGS(g_led_config.flags[i], 0x01)) { // 0x01 == LED_FLAG_MODIFIER
+				switch(layer) {
+					case SYM: rgb_matrix_set_color(i, RGB_SPRINGGREEN); break;
+					case NUM: rgb_matrix_set_color(i, RGB_ORANGE); break;
+					case FNC: rgb_matrix_set_color(i, RGB_MAGENTA); break;
+				}		
+			}
+		}
+	}
+}
