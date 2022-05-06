@@ -12,7 +12,7 @@ jobs:
         - keyboard: rp-cradio
           branch: rp2040
         - keyboard: cradio
-          branch: quick-tap-term-test
+          branch: quick_tap_test
 # git checkout -B rp2040
 # git remote add upstream https://github.com/qmk/qmk_firmware.git
 # git fetch upstream

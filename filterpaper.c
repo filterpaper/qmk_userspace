@@ -16,8 +16,6 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 // Select hold function immediately when another key is pressed and released
 // Disable for non-Shift home row mod tap
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-//	return QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX &&
-//		MODTAP_BIT(keycode) == MOD_MASK_SHIFT ? true : false;
 	return MODTAP_BIT(keycode) == MOD_MASK_SHIFT ? true : false;
 }
 #endif
@@ -27,6 +25,12 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 // Enable for layer tap other than layer 0
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
+}
+#endif
+
+#ifdef QUICK_TAP_TERM_PER_KEY
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
+	return record->event.key.row == MATRIX_ROWS - 1 ? QUICK_TAP_TERM-30 : QUICK_TAP_TERM;
 }
 #endif
 
