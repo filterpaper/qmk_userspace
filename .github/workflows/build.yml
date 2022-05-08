@@ -1,4 +1,4 @@
-name: Build QMK Userspace
+name: Userspace Build
 on: [push, workflow_dispatch]
 
 jobs:
