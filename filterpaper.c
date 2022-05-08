@@ -22,7 +22,6 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 #ifdef QUICK_TAP_TERM_PER_KEY
-// PR #17007
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 	return record->event.key.row == MATRIX_ROWS - 1 ? QUICK_TAP_TERM - 50 : QUICK_TAP_TERM;
 }
