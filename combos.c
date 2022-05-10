@@ -10,7 +10,6 @@
 
    COMB are simple keycode shortcuts. Use two or more combo keys to activate
    a keycode, like volume up using Y+U: COMB(KC_VOLU, KC_VOLU, KC_Y, KC_U)
-   Keycodes can be used as names, they are prefixed to avoid conflict.
 
    SUBS are string substitution combos. It can be used to send strings like
    this W+H to send a string: SUBS(which, "which ", KC_W, KC_H)
@@ -27,12 +26,12 @@
 #define COMBOS_DEF "combos.inc"
 
 // Combo code building macros
-#define C_ENUM(name, val, ...) cmb_##name,
+#define C_ENUM(name, val, ...) name,
 #define C_DATA(name, val, ...) uint16_t const name##_combo[] PROGMEM = {__VA_ARGS__, COMBO_END};
-#define C_TYPE(name, val, ...) [cmb_##name] = COMBO(name##_combo, val),
-#define A_TYPE(name, val, ...) [cmb_##name] = COMBO_ACTION(name##_combo),
-#define P_SSTR(name, val, ...) case cmb_##name: if (pressed) { SEND_STRING(val); } break;
-#define P_ACTN(name, val, ...) case cmb_##name: if (pressed) { val; } break;
+#define C_TYPE(name, val, ...) [name] = COMBO(name##_combo, val),
+#define A_TYPE(name, val, ...) [name] = COMBO_ACTION(name##_combo),
+#define P_SSTR(name, val, ...) case name: if (pressed) { SEND_STRING(val); } break;
+#define P_ACTN(name, val, ...) case name: if (pressed) { val; } break;
 #define UNUSED(...)
 
 // Enumerate combo list with prefixed names
