@@ -70,28 +70,30 @@
 
 // Default 3x6_3 split layout
 #define _BASE \
-	PLP_SCR, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    Z_CUT, \
-	KC_BTN2, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    QUOT_GRAVE_TH, Z_CPY, \
-	KC_BTN1, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    COMM_MINUS_TH, DOT_UNDS_TH,  SLSH_EXLM_TH, Z_PST, \
-	              RCS_T(KC_ESC), MEH_T(KC_SPC), OSM_SFT,     OSM_CTL, TO(SYM), RSG_T(KC_BSPC)
+	PLP_SCR,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,          KC_O,         KC_P,            Z_CUT, \
+	KC_BTN2,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,          KC_L,         KC_QUOT,         Z_CPY, \
+	KC_BTN1,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    COMM_MINUS_TH, DOT_UNDS_TH,  SLSH_EXLM_TH,    Z_PST, \
+	               RCS_T(KC_ESC), MEH_T(KC_SPC), OSM_SFT,        OSM_GUI, TO(SYM), RSG_T(KC_BSPC)
 /* ,-----------------------------------------.                ,-----------------------------------------.
  * | PSCR |  Q   |  W   |  E   |  R   |  T   |                |  Y   |  U   |  I   |  O   |  P   | CUT  |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * | BTN2 |  A   |  S   |  D   |  F   |  G   |                |  H   |  J   |  K   |  L   | ' "  | CPY  |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * | BTN1 |  Z   |  X   |  C   |  V   |  B   |                |  N   |  M   | , <  | . >  | / ?  | PST  |
+ * |      |      |      |      |      |      |                |      |      |  -   |  _   |  !   |      |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
  *                             |RCS_T |MEH_T | OSM  |  | OSM  |      |RSG_T |
- *                             | ESC  | SPC  | SFT  |  | CTL  | SYM  | DEL  |
+ *                             | ESC  | SPC  | SFT  |  | GUI  | SYM  | DEL  |
  *                             `--------------------'  `--------------------'
  */
 #define _COLE_DH \
-	_______, KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,        KC_J,    KC_L,    KC_U,    KC_Y,    QUOT_GRAVE_TH, _______, \
-	_______, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,        KC_M,    KC_N,    KC_E,    KC_I,    KC_O,    _______, \
-	_______, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,        KC_K,    KC_H,    COMM_MINUS_TH, DOT_UNDS_TH,  SLSH_EXLM_TH, _______, \
-	            RCS_T(KC_ESC), MEH_T(KC_SPC),    OSM_SFT,     OSM_CTL, TO(SYM), RSG_T(KC_BSPC)
+	_______,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,        KC_J,    KC_L,    KC_U,          KC_Y,         QUOT_GRAVE_TH,    _______, \
+	_______,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G,        KC_M,    KC_N,    KC_E,          KC_I,         KC_O,             _______, \
+	_______,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,        KC_K,    KC_H,    COMM_MINUS_TH, DOT_UNDS_TH,  SLSH_EXLM_TH,     _______, \
+	               RCS_T(KC_ESC), MEH_T(KC_SPC), OSM_SFT,        OSM_GUI, TO(SYM), RSG_T(KC_BSPC)
 /* ,-----------------------------------------.                ,-----------------------------------------.
  * |      |  Q   |  W   |  F   |  P   |  B   |                |  J   |  L   |  U   |  Y   | ' "  |      |
+ * |      |      |      |      |      |      |                |      |      |      |      |  `   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
  * |      |  A   |  R   |  S   |  T   |  G   |                |  M   |  N   |  E   |  I   |  O   |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
@@ -101,48 +103,48 @@
  *                             `--------------------'  `--------------------'
  */
 #define _SYMB \
-	_______, QK_GESC, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,       KC_CIRC,  KC_AMPR, KC_ASTR, SCLN_COLN_TH, KC_BSPC, _______, \
-	_______, KC_TAB,  KC_EQL,  KC_PLUS, KC_MINS, KC_TILD,  KC_BSLS,  KC_LCBR, KC_RCBR, KC_PIPE,      KC_ENT,  _______, \
-	_______, KC_BTN1, KC_BTN2, PLP_SCR, KC_WH_U, KC_WH_D,       KC_LBRC,  KC_LPRN, KC_RPRN, KC_RBRC,      TO(FNC), _______, \
-	                           _______, TO(BSE), OSM_GUI,       OSM_ALT, TO(NUM), _______
+	_______,  KC_ESC,   KC_AT,  KC_HASH,   KC_DLR,  KC_PERC,        KC_CIRC,  KC_AMPR,  KC_ASTR,  SCLN_COLN_TH,  KC_BSPC,  _______, \
+	_______,  KC_TAB,  KC_EQL,  KC_PLUS,  KC_MINS, KC_GRAVE,        KC_BSLS,  KC_LCBR,  KC_RCBR,  KC_PIPE,        KC_ENT,  _______, \
+	_______, KC_BTN1, KC_BTN2,  PLP_SCR,  KC_WH_U,  KC_WH_D,        KC_LBRC,  KC_LPRN,  KC_RPRN,  KC_RBRC,       TO(FNC),  _______, \
+	                            _______,  TO(BSE),  OSM_SFT,        OSM_GUI,  TO(NUM),  _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
- * |      |      |  [   |  {   |  }   |      |                |  ^   |  (   |  )   |  ]   |  ~   |      |
+ * |      |  ESC |  @   |  #   |  $   |  %   |                |  ^   |  &   |  *   |  ; : |  DEL |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      |  !   |  @   |  #   |  $   |  %   |                |  *   |  -   |  =   |  \   |  `   |      |
+ * |      |  TAB |  =   |  +   |  -   |  `   |                |  \   |  {   |  }   |  |   |  ENT |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      | BTN1 | BTN2 | PSCR | WH_U | WH_D |                |  &   |  _   |  +   |  |   |      |      |
+ * |      | BTN1 | BTN2 | PSCR | WH_U | WH_D |                |  [   |  (   |  )   |  ]   | FUNC |      |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
- *                             |      |      |      |  |      |_FUNC |      |
+ *                             |      | BSE  |      |  |      | NUM  |      |
  *                             `--------------------'  `--------------------'
  */
 #define _NUMB \
-	_______, _______, DF(CMK), KC_VOLD, KC_VOLU, KC_PLUS,     KC_ASTR, KC_7,    KC_8,  KC_9, KC_BSPC, Z_UND, \
-	_______, PLP_RST, _______, _______, _______, KC_MINS,     KC_EQL,  KC_4,    KC_5,  KC_6, KC_ENT,  Z_RLD, \
-	_______, RESET,   _______, RGB_HUI, RGB_SAI, KC_DOT,      KC_0,    KC_1,    KC_2,  KC_3, TO(FNC), Z_FND, \
-	                           _______, TO(BSE), OSM_GUI,     OSM_ALT, TO(SYM), _______
+	_______,  QK_GESC,  XXXXXXX,  KC_VOLD,  KC_VOLU,  KC_PLUS,        KC_ASTR,    KC_7,    KC_8,    KC_9,    KC_BSPC,    Z_UND, \
+	_______,   KC_TAB,  XXXXXXX,  XXXXXXX,  XXXXXXX,  KC_MINS,        KC_EQL,     KC_4,    KC_5,    KC_6,    KC_ENT,     Z_RLD, \
+	_______,  XXXXXXX,  XXXXXXX,  RGB_HUI,  RGB_SAI,   KC_DOT,        KC_0,       KC_1,    KC_2,    KC_3,    TO(FNC),    Z_FND, \
+	                              _______,  TO(BSE),  OSM_SFT,        OSM_GUI,    TO(SYM), _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
- * |      |      |  1   |  2   |  3   | VOLU |                | HOME | PGDN | PGUP | END  |  :   |      |
+ * |      |  ESC |      | VOLU | VOLD |  +   |                |  *   |  7   |  8   |  9   |  DEL |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      |      |  4   |  5   |  6   | VOLD |                | LEFT | DOWN |  UP  | RGHT |  ;   |      |
+ * |      |  TAB |      |      |      |  -   |                |  =   |  4   |  5   |  6   |  ENT |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      | CAPS |  7   |  8   |  9   |  0   |                |      |RSA_DN|RSA_UP|      |      |      |
+ * |      |      |      | HUI  | SAI  |  .   |                |  0   |  1   |  2   |  3   | FUNC |      |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
- *                             |      |_FUNC | GESC |  |      |      |      |
+ *                             |      | BSE  |      |  |      | SYM  |      |
  *                             `--------------------'  `--------------------'
  */
 #define _FUNC \
-	_______,  KC_ESC,  KC_WH_L, KC_MS_U, KC_WH_R, DF(BSE),           DF(CMK), KC_HOME, KC_END, _______, KC_BSPC, _______, \
-	_______,  KC_TAB,  KC_MS_L, KC_MS_D, KC_MS_R, LGUI_T(KC_DEL),         KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_ENT,  _______, \
-	_______, KC_GRAVE, KC_BTN1, KC_WH_U, KC_WH_D, PLP_SCR,                KC_BTN2,  RSA_DN, RSA_UP,  _______, XXXXXXX, _______, \
-	                           _______, TO(BSE), OSM_GUI,                 OSM_ALT, TO(SYM), _______
+	_______,  QK_GESC,  KC_WH_L,  KC_MS_U,  KC_WH_R,  DF(BSE),             DF(CMK),  KC_HOME,  KC_END,  XXXXXXX,  KC_BSPC,  _______, \
+	_______,  PLP_RST,  KC_MS_L,  KC_MS_D,  KC_MS_R,  LGUI_T(KC_DEL),      KC_LEFT,  KC_DOWN,  KC_UP,   KC_RGHT,  KC_ENT,   _______, \
+	_______,    RESET,  KC_BTN1,  KC_WH_U,  KC_WH_D,  PLP_SCR,             KC_BTN2,  RSA_DN,   RSA_UP,  XXXXXXX,  XXXXXXX,  _______, \
+	                              _______,  TO(BSE),  OSM_CTL,             OSM_GUI,  TO(SYM),  _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
- * | PRST |BOOT  |  F1  |  F2  |  F3  | F10  |                |      | WH_U | WH_D | INS  |_COLE |      |
+ * |      | ESC  | WH_L | MS_U | MS_R | BSE  |                | CMK  | HOME |  END |      |  DEL |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      |      |  F4  |  F5  |  F6  | F11  |                | MS_L | MS_D | MS_U | MS_R |      |      |
+ * |      | PRST | MS_L | MS_D | MS_R | G_DEL|                | LEFT | DOWN |  UP  | RGHT |  ENT |      |
  * |------+------+------+------+------+------|                |------+------+------+------+------+------|
- * |      |SLEEP |  F7  |  F8  |  F9  | F12  |                |      | BTN2 | BTN1 | DEL  |      |      |
+ * |      | RST  | BTN1 | WH_U | WH_D | PSCR |                | BTN2 | RSA_D| RSA_U|      |      |      |
  * `------+------+------+------+------+------+------.  ,------+------+------+------+------+------+------'
- *                             |      |      |      |  |      |      |      |
+ *                             |      | BSE  |      |  |      | SYM  |      |
  *                             `--------------------'  `--------------------'
  */
 
