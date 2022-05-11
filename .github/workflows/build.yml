@@ -44,8 +44,8 @@ jobs:
       id: build
       working-directory: users/${{ github.actor }}/keymaps
       env:
-        build_option: $([ -n "${{ matrix.oled }}" ] && printf -- "-e OLED=${{ matrix.oled }}")
-        output_suffix: $([ -n "${{ matrix.oled }}" ] && printf -- "_${{ matrix.oled }}")
+        build_option: $([ -n "${{ matrix.oled }}" ] && printf " -e OLED=${{ matrix.oled }}")
+        output_suffix: $([ -n "${{ matrix.oled }}" ] && printf "_${{ matrix.oled }}")
       run: |
         set -x
         qmk compile -j3 ${{ env.build_option }} ${{ matrix.keyboard }}.json || true

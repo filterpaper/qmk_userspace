@@ -7,7 +7,6 @@
 #define TAP_CODE_DELAY 5
 #define TAP_HOLD_CAPS_DELAY 25
 #define GRAVE_ESC_SHIFT_OVERRIDE
-#define USB_SUSPEND_WAKEUP_DELAY 5000
 // Space saving options
 #undef LOCKING_SUPPORT_ENABLE
 #undef LOCKING_RESYNC_ENABLE
@@ -20,6 +19,9 @@
 #define TAPPING_FORCE_HOLD_PER_KEY
 #define PERMISSIVE_HOLD
 #define PERMISSIVE_HOLD_PER_KEY
+#ifdef __AVR__
+#	define USB_SUSPEND_WAKEUP_DELAY 3000
+#endif
 
 #define QUICK_TAP_TERM 100
 #define QUICK_TAP_TERM_PER_KEY
@@ -47,7 +49,7 @@
 #endif
 
 #ifdef MOUSEKEY_ENABLE
-#	ifdef __AVR__
+#	ifndef MK_KINETIC_SPEED
 #		define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
 #		define MOUSEKEY_INTERVAL 15		// Time between cursor movements in milliseconds
 #		define MOUSEKEY_MOVE_DELTA 10	// Step size for acceleration
@@ -58,18 +60,17 @@
 #		define MOUSEKEY_WHEEL_MAX_SPEED 10
 #		define MOUSEKEY_WHEEL_TIME_TO_MAX 95
 #	else
-#		define MK_KINETIC_SPEED 
 #		define MOUSEKEY_DELAY 0
-#		define MOUSEKEY_INTERVAL 15
-#		define MOUSEKEY_MOVE_DELTA 10
-#		define MOUSEKEY_INITIAL_SPEED 10 // Initial speed of the cursor in pixel per second
-#		define MOUSEKEY_BASE_SPEED 10    // Maximum cursor speed at which acceleration stops
-#		define MOUSEKEY_ACCELERATED_SPEED 3000 //
-#		define MOUSEKEY_DECELERATED_SPEED  400
-#		define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 500
-#		define MOUSEKEY_WHEEL_BASE_MOVEMENTS 1000
-#		define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS 400
-#		define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 3000
+#		define MOUSEKEY_INTERVAL 10
+#		define MOUSEKEY_MOVE_DELTA 20
+#		define MOUSEKEY_INITIAL_SPEED 100 // Initial speed of the cursor in pixel per second
+#		define MOUSEKEY_BASE_SPEED   10000 // Maximum cursor speed at which acceleration stops
+#		define MOUSEKEY_DECELERATED_SPEED  500
+#		define MOUSEKEY_ACCELERATED_SPEED 10000
+#		define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 16
+#		define MOUSEKEY_WHEEL_BASE_MOVEMENTS    32
+#		define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS  8
+#		define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 48
 #	endif
 #endif
 

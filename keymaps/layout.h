@@ -9,6 +9,7 @@
 #define Z_LOCK	C(G(KC_Q))
 #define Z_SLEEP	A(G(KC_PWR))
 #define Z_SHUT	C(A(G(KC_PWR)))
+#define Z_SSAVE	HYPR(KC_S)
 
 // Tap hold macros
 #define M_TH	LT(0,KC_M)
@@ -119,7 +120,7 @@
 #define _FUNC \
 	_______, QK_BOOT, KC_F1,   KC_F2,   KC_F3,   KC_F10,      _______, KC_WH_U, KC_WH_D, KC_INS,  TG(CMK), _______, \
 	_______, _______, KC_F4,   KC_F5,   KC_F6,   KC_F11,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______, \
-	_______, Z_SLEEP, KC_F7,   KC_F8,   KC_F9,   KC_F12,      _______, KC_BTN2, KC_BTN1, KC_DEL,  _______, _______, \
+	_______, Z_SLEEP, KC_F7,   KC_F8,   KC_F9,   KC_F12,      _______, KC_BTN2, KC_BTN1, KC_DEL,  Z_SSAVE, _______, \
 	                           _______, _______, _______,     _______,	 _______, _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
  * |      |BOOT  |  F1  |  F2  |  F3  | F10  |                |      | WH_U | WH_D | INS  |_COLE |      |

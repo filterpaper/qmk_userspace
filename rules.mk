@@ -32,7 +32,7 @@ VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
 # Custom features
 COMBO_ENABLE = yes
 SRC += combos.c
-OPT_DEFS += -DCAPS_WORD
+OPT_DEFS += -DCAPS_WRD
 SRC += caps_word.c
 OPT_DEFS += -DHRM_AUDIT
 

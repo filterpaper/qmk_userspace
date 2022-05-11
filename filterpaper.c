@@ -95,7 +95,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
-#ifdef CAPS_WORD
+#ifdef CAPS_WRD
 		extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
 		if (!process_caps_word(keycode, record)) {
 			return false;
