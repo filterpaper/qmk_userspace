@@ -47,20 +47,30 @@
 #endif
 
 #ifdef MOUSEKEY_ENABLE
-#	define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
-#	define MOUSEKEY_INTERVAL 15		// Time between cursor movements in milliseconds
-#	define MOUSEKEY_MOVE_DELTA 10	// Step size for acceleration
-#	define MOUSEKEY_MAX_SPEED 9
-#	define MOUSEKEY_TIME_TO_MAX 90
-#	define MOUSEKEY_WHEEL_DELAY 16
-#	define MOUSEKEY_WHEEL_INTERVAL 30
-#	define MOUSEKEY_WHEEL_MAX_SPEED 10
-#	define MOUSEKEY_WHEEL_TIME_TO_MAX 95
-// Kinetic Mode
-//#	define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 500
-//#	define MOUSEKEY_WHEEL_BASE_MOVEMENTS 1000
-//#	define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS 400
-//#	define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 3000
+#	ifdef __AVR__
+#		define MOUSEKEY_DELAY 0			// Delay between pressing a key and cursor movement
+#		define MOUSEKEY_INTERVAL 15		// Time between cursor movements in milliseconds
+#		define MOUSEKEY_MOVE_DELTA 10	// Step size for acceleration
+#		define MOUSEKEY_MAX_SPEED 9
+#		define MOUSEKEY_TIME_TO_MAX 90
+#		define MOUSEKEY_WHEEL_DELAY 16
+#		define MOUSEKEY_WHEEL_INTERVAL 30
+#		define MOUSEKEY_WHEEL_MAX_SPEED 10
+#		define MOUSEKEY_WHEEL_TIME_TO_MAX 95
+#	else
+#		define MK_KINETIC_SPEED 
+#		define MOUSEKEY_DELAY 0
+#		define MOUSEKEY_INTERVAL 15
+#		define MOUSEKEY_MOVE_DELTA 10
+#		define MOUSEKEY_INITIAL_SPEED 10 // Initial speed of the cursor in pixel per second
+#		define MOUSEKEY_BASE_SPEED 10    // Maximum cursor speed at which acceleration stops
+#		define MOUSEKEY_ACCELERATED_SPEED 3000 //
+#		define MOUSEKEY_DECELERATED_SPEED  400
+#		define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 500
+#		define MOUSEKEY_WHEEL_BASE_MOVEMENTS 1000
+#		define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS 400
+#		define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 3000
+#	endif
 #endif
 
 #ifdef RGB_MATRIX_ENABLE
