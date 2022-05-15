@@ -14,7 +14,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
 // Select hold function immediately when another key is pressed and released
-// Disable for non-Shift home row mod tap
+// Enable for home row Shift and layer taps
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return MODTAP_BIT(keycode) == MOD_MASK_SHIFT ||
 	(QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX) ? true : false;
@@ -95,9 +95,9 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
-#ifdef CAPS_WRD
-		extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
-		if (!process_caps_word(keycode, record)) {
+#ifdef CAPS_UNLOCK
+		extern bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
+		if (!process_caps_unlock(keycode, record)) {
 			return false;
 		}
 #endif

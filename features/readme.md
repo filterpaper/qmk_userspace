@@ -1,7 +1,7 @@
 # Word Processing Features
 
-## Caps Word
-It is a lean code function that switches off caps lock at a word boundary. It is a convenient feature for handling a single capital word that is the typical use-case for caps lock.
+## Caps Unlock
+It is a lean code function that switches off caps lock at a word boundary. It is a convenient feature for handling a single capital word—the typical use-case for caps lock.
 
 ## Autocorrections
 Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection) source with the following additions:
@@ -18,7 +18,7 @@ Run `python3 make_autocorrection_data.py [dictionary.txt]` to generate trie dict
 ## QMK Integration
 Add the following line into `rules.mk` to build both files:
 ```c
-SRC += autocorrection.c caps_word.c
+SRC += autocorrection.c caps_unlock.c
 ```
 Add the following `process_record_user` code block into `keymap.c` or userspace source file to process every key press:
 ```c
@@ -28,8 +28,8 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
         if (!process_autocorrection(keycode, record)) {
             return false;
         }
-        extern bool process_caps_word(uint16_t keycode, keyrecord_t *record);
-        if (!process_caps_word(keycode, record)) {
+        extern bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
+        if (!process_caps_unlock(keycode, record)) {
             return false;
         }
     }

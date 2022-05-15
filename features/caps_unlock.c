@@ -1,10 +1,10 @@
 // Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
-// Lean caps word code using caps lock
+// Lead caps lock toggle
 
 #include QMK_KEYBOARD_H
 
-bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
+bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	// Skip processing if caps lock is off or for one-shot key.
 	if (host_keyboard_led_state().caps_lock == false
 #ifndef NO_ACTION_ONESHOT
@@ -34,12 +34,11 @@ bool process_caps_word(uint16_t keycode, keyrecord_t *record) {
 	case KC_MINS:
 	case KC_UNDS:
 		// Retain caps lock for listed keycodes if
-		// there are no active non-Shift modifiers.
+		// there are no active non-Shift modifiers
 		if ((mods & ~MOD_MASK_SHIFT) == false) {
 			break;
 		}
-	// Fall-through when a modifier other than Shift
-	// is active.
+		// Fall-through everything else to unlock caps.
 	default:
 		tap_code(KC_CAPS); // Toggle caps lock
 	}

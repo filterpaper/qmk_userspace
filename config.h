@@ -13,7 +13,7 @@
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
-#define TAPPING_TERM 210
+#define TAPPING_TERM 220
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_FORCE_HOLD
 #define TAPPING_FORCE_HOLD_PER_KEY
@@ -62,12 +62,12 @@
 #	else
 #		define MOUSEKEY_DELAY 0
 #		define MOUSEKEY_INTERVAL 10
-#		define MOUSEKEY_MOVE_DELTA 20
+#		define MOUSEKEY_MOVE_DELTA 16
 #		define MOUSEKEY_INITIAL_SPEED 100 // Initial speed of the cursor in pixel per second
-#		define MOUSEKEY_BASE_SPEED   10000 // Maximum cursor speed at which acceleration stops
+#		define MOUSEKEY_BASE_SPEED   5000 // Maximum cursor speed at which acceleration stops
 #		define MOUSEKEY_DECELERATED_SPEED  500
-#		define MOUSEKEY_ACCELERATED_SPEED 10000
-#		define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 16
+#		define MOUSEKEY_ACCELERATED_SPEED 5000
+#		define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS  8
 #		define MOUSEKEY_WHEEL_BASE_MOVEMENTS    32
 #		define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS  8
 #		define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 48

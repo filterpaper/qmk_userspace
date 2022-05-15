@@ -32,8 +32,8 @@ VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
 # Custom features
 COMBO_ENABLE = yes
 SRC += combos.c
-OPT_DEFS += -DCAPS_WRD
-SRC += caps_word.c
+OPT_DEFS += -DCAPS_UNLOCK
+SRC += caps_unlock.c
 OPT_DEFS += -DHRM_AUDIT
 
 ifeq ($(MCU), $(filter $(MCU), atmega32u4))
