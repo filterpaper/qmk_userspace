@@ -43,7 +43,6 @@ endif
 
 # Small split keyboards
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio cradio/kb2040))
-	SWAP_HANDS_ENABLE = yes
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrection.c
 endif
