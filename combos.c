@@ -34,7 +34,7 @@
 #define P_ACTN(name, val, ...) case name: if (pressed) { val; } break;
 #define UNUSED(...)
 
-// Enumerate combo list with prefixed names
+// Enumerate combo list with names
 #undef COMB
 #undef SUBS
 #undef ACTN
@@ -67,7 +67,7 @@ combo_t key_combos[] = {
 	#include COMBOS_DEF
 };
 
-// Fill combo event function with send string or function calls
+// Fill combo event with send string or function calls
 #undef COMB
 #undef SUBS
 #undef ACTN

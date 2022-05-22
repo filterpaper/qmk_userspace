@@ -38,7 +38,7 @@ mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : (kc >> 8) & 0xf
 */
 
 // Return left or right mod tap bits
-#define MODTAP_BITS(kc) (kc & 0x1000) ? ((kc>>8)&0xf)<<4 : (kc>>8)&0xf
+#define MODTAP_BITS(kc) (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : (kc >> 8) & 0xf
 // Return coarse mod tap bit
 #define MODTAP_BIT(kc) ((kc >> 8) & 0x0f)
 #define OSMMOD_BIT(kc) (kc & 0x0f)

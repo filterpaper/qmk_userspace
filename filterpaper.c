@@ -14,20 +14,17 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
 // Select hold function immediately when another key is pressed and released
-// Enable for home row Shift and layer taps
+// Enable for Shift mod tap
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return MODTAP_BIT(keycode) == MOD_MASK_SHIFT ||
-	(QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX) ? true : false;
+	return MODTAP_BIT(keycode) == MOD_MASK_SHIFT ? true : false;
 }
 #endif
 
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 // Select hold function immediately when another key is pressed
-// Enable for layer tap other than layer 0
+// Enable for layer 1 and higher tap 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
-	return MODTAP_BIT(keycode) == MOD_MASK_SHIFT ||
-	(QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX) ? true : false;
 }
 #endif
 

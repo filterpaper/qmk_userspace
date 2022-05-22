@@ -1,6 +1,6 @@
 // Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
-// Lead caps lock toggle
+// Lean caps lock toggle function
 
 #include QMK_KEYBOARD_H
 

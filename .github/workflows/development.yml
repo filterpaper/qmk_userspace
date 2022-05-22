@@ -2,8 +2,7 @@ name: Development Build
 on: [push, workflow_dispatch]
 
 jobs:
-  development:
-    name: Development build
+  build:
     runs-on: ubuntu-latest
     container: qmkfm/base_container
     strategy:
@@ -13,7 +12,7 @@ jobs:
         - keyboard: rp-cradio
           branch: rp2040
         - keyboard: cradio
-          branch: quick_tap_term
+          branch: avr_dev
 # git checkout -B rp2040
 # git remote add upstream https://github.com/qmk/qmk_firmware.git
 # git fetch upstream
@@ -37,7 +36,7 @@ jobs:
     - name: Update python dependencies
       run: /usr/bin/python3 -m pip install -r requirements.txt
 
-    - name: Build development firmware
+    - name: Build ${{ matrix.keyboard }} firmware
       working-directory: users/${{ github.actor }}/keymaps
       run: qmk compile -j3 ${{ matrix.keyboard }}.json || true
 
