@@ -1,6 +1,4 @@
 {
-	"author": "",
-	"documentation": "Wrapper based keymap",
 	"keyboard": "boardsource/the_mark",
 	"keymap": "filterpaper",
 	"layout": "LAYOUT_mrk65_w",
@@ -8,7 +6,5 @@
 		[ "HRM65(MARK_DEFAULT)" ],
 		[ "HRM65(MARK_COLEMAK)" ],
 		[ "MARK_LAYER2" ]
-	],
-	"notes": "",
-	"version": 1
+	]
 }

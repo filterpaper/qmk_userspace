@@ -1,6 +1,4 @@
 {
-	"author": "",
-	"documentation": "Wrapper based keymap",
 	"keyboard": "cradio",
 	"keymap": "filterpaper",
 	"layout": "LAYOUT_34key_w",
@@ -10,7 +8,5 @@
 		[ "C_34(_NUMB)" ],
 		[ "C_34(_SYMB)" ],
 		[ "C_34(_FUNC)" ]
-	],
-	"notes": "",
-	"version": 1
+	]
 }

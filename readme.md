@@ -167,19 +167,15 @@ Next, a wrapper aliases to the layout used by the keyboard is also defined in `l
 Both of them come together in the keyboard's JSON file in the following format:
 ```c
 {
-    "author": "",
-    "documentation": "Wrapper based keymap",
     "keyboard": "crkbd/rev1",
     "keymap": "filterpaper",
+    "layout": "LAYOUT_corne_w",
     "layers": [
         [ "_BASE" ],
         [ "_NUMB" ],
         [ "_SYMB" ],
         [ "_FUNC" ]
-    ],
-    "layout": "LAYOUT_corne_w",
-    "notes": "",
-    "version": 1
+    ]
 }
 ```
 Add `#include layout.h` into `config.h`. The build process will construct a transient `keymap.c` from JSON file that includes `config.h`, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure in the compile process.

@@ -1,6 +1,4 @@
 {
-	"author": "",
-	"documentation": "Wrapper based keymap",
 	"keyboard": "3w6/rev2",
 	"keymap": "filterpaper",
 	"layout": "LAYOUT_36key_w",
@@ -10,7 +8,5 @@
 		[ "C_36(_NUMB)" ],
 		[ "C_36(_SYMB)" ],
 		[ "C_36(_FUNC)" ]
-	],
-	"notes": "",
-	"version": 1
+	]
 }

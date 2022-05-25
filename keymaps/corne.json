@@ -1,6 +1,4 @@
 {
-	"author": "",
-	"documentation": "Wrapper based keymap",
 	"keyboard": "crkbd/rev1",
 	"keymap": "filterpaper",
 	"layout": "LAYOUT_corne_w",
@@ -10,7 +8,5 @@
 		[ "_NUMB" ],
 		[ "_SYMB" ],
 		[ "_FUNC" ]
-	],
-	"notes": "",
-	"version": 1
+	]
 }

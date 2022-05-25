@@ -1,6 +1,4 @@
 {
-	"author": "",
-	"documentation": "Wrapper based keymap",
 	"keyboard": "boardsource/technik_o",
 	"keymap": "filterpaper",
 	"layout": "LAYOUT_ortho_w",
@@ -10,7 +8,5 @@
 		[ "C_O(_NUMB)" ],
 		[ "C_O(_SYMB)" ],
 		[ "C_O(_FUNC)" ]
-	],
-	"notes": "",
-	"version": 1
+	]
 }
