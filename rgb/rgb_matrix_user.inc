@@ -23,7 +23,7 @@ uint8_t jsf8(void) { // Bob Jenkin's fast prng
 	return d = t + a;
 }*/
 
-#ifdef RGB_MATRIX_KEYREACTIVE_ENABLED
+
 
 #ifdef ENABLE_RGB_MATRIX_CANDY_TAP
 RGB_MATRIX_EFFECT(CANDY_TAP)
@@ -47,6 +47,7 @@ static bool CANDY_TAP(effect_params_t* params) {
 #endif // ENABLE_RGB_MATRIX_CANDY_TAP
 
 
+
 #ifdef ENABLE_RGB_MATRIX_CANDY_SPLASH
 RGB_MATRIX_EFFECT(CANDY_SPLASH)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
@@ -62,12 +63,10 @@ static bool CANDY_SPLASH(effect_params_t* params) {
 #	endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // ENABLE_RGB_MATRIX_CANDY_SPLASH
 
-#endif // RGB_MATRIX_KEYREACTIVE_ENABLED
-
 
 
 #ifdef ENABLE_RGB_MATRIX_CANDY_RAIN
-RGB_MATRIX_EFFECT(CANDY_RAIN) // 278 bytes
+RGB_MATRIX_EFFECT(CANDY_RAIN)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 RGB random_hsv_to_rgb(void) {
 	return hsv_to_rgb((HSV){random8(), qadd8(random8() >> 1, 127), rgb_matrix_config.hsv.v});
@@ -138,8 +137,7 @@ static bool CANDY_FRACTAL(effect_params_t* params) {
 
 
 #ifdef ENABLE_RGB_MATRIX_CANDY_FLOW
-RGB_MATRIX_EFFECT(CANDY_FLOW) // 390 bytes
-
+RGB_MATRIX_EFFECT(CANDY_FLOW)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_FLOW(effect_params_t* params) {
 	// LED state array
