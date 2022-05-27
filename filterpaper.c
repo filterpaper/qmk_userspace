@@ -22,7 +22,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 // Select hold function immediately when another key is pressed
-// Enable for layer 1 and higher tap 
+// Enable for layer 1 and higher tap
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
 }
@@ -122,6 +122,12 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 
 
 #ifdef ENCODER_ENABLE
+#	ifdef ENCODER_MAP_ENABLE
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
+	[0] = { ENCODER_CCW_CW(KC_VOLU, KC_VOLD), ENCODER_CCW_CW(KC_MNXT, KC_MPRV) },
+	[1] = { ENCODER_CCW_CW(KC_VOLU, KC_VOLD), ENCODER_CCW_CW(KC_PGDN, KC_PGUP) },
+};
+#	else
 bool encoder_update_user(uint8_t index, bool clockwise) {
 	if (get_highest_layer(layer_state|default_layer_state)) {
 		if (index == 0) {
@@ -138,4 +144,5 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 	}
 	return false;
 }
+#	endif // ifdef ENCODER_MAP_ENABLE
 #endif
