@@ -5,25 +5,16 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 * Use shared `rules.mk`, `config.h` and source files in this space.
 * See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
 
-
-
-# Supported Keyboards
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
-
-* [3w6](https://github.com/qmk/qmk_firmware/tree/master/keyboards/3w6/rev2)
-* [Cradio](https://github.com/qmk/qmk_firmware/tree/master/keyboards/cradio)
-* [Corne (CRKBD)](https://github.com/qmk/qmk_firmware/tree/master/keyboards/crkbd/rev1)
-* [Technik](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/technik_o)
-* [The Mark: 65](https://github.com/qmk/qmk_firmware/tree/master/keyboards/boardsource/the_mark)
 
 
 
 # Building Userspace
-This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) within a `users` folder by running `qmk compile` on the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with the [build.yml](.github/workflows/build.yml) workflow.
+This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) in the `users` folder by running `qmk compile` on the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with the [build.yml](.github/workflows/build.yml) workflow.
 
 
 
-# Code Features
+# Features
 * Shared [layout](keymaps/) wrapper macros
 * [Combos](#combo-helper-macros) simplified with preprocessors
 * [Tap-hold](#tap-hold-macros) clipboard shortcuts
