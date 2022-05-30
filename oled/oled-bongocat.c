@@ -44,6 +44,7 @@
 #define TAP_INTERVAL  FRAME_DURATION*2
 #define PAWS_INTERVAL FRAME_DURATION*8
 
+// Timer duration between key presses
 uint32_t tap_timer = 0;
 
 // Run-length encoded animation frames
@@ -90,7 +91,7 @@ static unsigned char const idle3[] PROGMEM = {140,
 	0x08,0x02,0x05,0x02,0x09,0x05,0x10,0x82,0x11,0x0f,0x02,0x01,0x36,0x00,0x05,0x80,
 	0x05,0x40,0x05,0x20,0x05,0x10,0x05,0x08,0x05,0x04,0x82,0x02,0x03,0x02,0x02,0x06,
 	0x01,0x02,0x02,0x02,0x04,0x05,0x08,0x01,0x07,0x3d,0x00};
-static unsigned char const *idle_anim[IDLE_FRAMES] = {
+static unsigned char const *idle[IDLE_FRAMES] = {
 	idle0, idle0, idle1, idle2, idle3 };
 
 static unsigned char const paws[] PROGMEM = {150,
@@ -129,7 +130,7 @@ static unsigned char const tap1[] PROGMEM = {153,
 	0x02,0x04,0x01,0x36,0x00,0x05,0x80,0x05,0x40,0x05,0x20,0x05,0x10,0x05,0x08,0x05,
 	0x04,0x82,0x02,0x03,0x02,0x7a,0x04,0x79,0x82,0x39,0x31,0x02,0x02,0x02,0x04,0x03,
 	0x08,0x02,0x88,0x82,0x87,0x80,0x3c,0x00};
-static unsigned char const *tap_anim[TAP_FRAMES] = {
+static unsigned char const *tap[TAP_FRAMES] = {
 	tap0, tap1 };
 #endif // #ifndef LEFTCAT
 
@@ -175,7 +176,7 @@ static unsigned char const left_idle3[] PROGMEM = {138,
 	0x1b,0x03,0x18,0x07,0x00,0x84,0x06,0x19,0x70,0x80,0x6d,0x00,0x01,0x07,0x05,0x08,
 	0x02,0x04,0x02,0x02,0x06,0x01,0x02,0x02,0x82,0x03,0x02,0x05,0x04,0x05,0x08,0x05,
 	0x10,0x05,0x20,0x05,0x40,0x05,0x80,0x11,0x00};
-static unsigned char const *left_idle_anim[IDLE_FRAMES] = {
+static unsigned char const *left_idle[IDLE_FRAMES] = {
 	left_idle0, left_idle0, left_idle1, left_idle2, left_idle3 };
 
 static unsigned char const left_paws[] PROGMEM = {148,
@@ -214,14 +215,14 @@ static unsigned char const left_tap1[] PROGMEM = {151,
 	0x80,0x6c,0x00,0x82,0x80,0x87,0x02,0x88,0x03,0x08,0x02,0x04,0x02,0x02,0x82,0x31,
 	0x39,0x04,0x79,0x02,0x7a,0x82,0x03,0x02,0x05,0x04,0x05,0x08,0x05,0x10,0x05,0x20,
 	0x05,0x40,0x05,0x80,0x11,0x00};
-static unsigned char const *left_tap_anim[TAP_FRAMES] = {
+static unsigned char const *left_tap[TAP_FRAMES] = {
 	left_tap0, left_tap1 };
 #endif // #ifndef RIGHTCAT
 
 
 // RLE decoding loop that reads count from frame index
-// if count < 0x80, next byte is repeated by count
-// if count >= 0x80, next (count - 128) bytes are unique
+// If count >= 0x80, next (count - 128) bytes are unique
+// If count < 0x80, next byte is repeated by count
 static void decode_frame(unsigned char const *frame) {
 	uint16_t cursor = 0;
 	uint8_t size    = pgm_read_byte(frame);
@@ -253,11 +254,11 @@ static void render_cat_idle(void) {
 	index = index < IDLE_FRAMES - 1 ? index + 1 : 0;
 
 #if defined(LEFTCAT)
-	decode_frame(left_idle_anim[index]);
+	decode_frame(left_idle[index]);
 #elif defined(RIGHTCAT)
-	decode_frame(idle_anim[index]);
+	decode_frame(idle[index]);
 #else
-	is_keyboard_left() ? decode_frame(left_idle_anim[index]) : decode_frame(idle_anim[index]);
+	decode_frame(is_keyboard_left() ? left_idle[index] : idle[index]);
 #endif
 }
 
@@ -268,7 +269,7 @@ static void render_cat_paws(void) {
 #elif defined(RIGHTCAT)
 	decode_frame(paws);
 #else
-	is_keyboard_left() ? decode_frame(left_paws) : decode_frame(paws);
+	decode_frame(is_keyboard_left() ? left_paws : paws);
 #endif
 }
 
@@ -278,17 +279,17 @@ static void render_cat_tap(void) {
 	index = (index + 1) & 1;
 
 #if defined(LEFTCAT)
-	decode_frame(left_tap_anim[index]);
+	decode_frame(left_tap[index]);
 #elif defined(RIGHTCAT)
-	decode_frame(tap_anim[index]);
+	decode_frame(tap[index]);
 #else
-	is_keyboard_left() ? decode_frame(left_tap_anim[index]) : decode_frame(tap_anim[index]);
+	decode_frame(is_keyboard_left() ? left_tap[index] : tap[index]);
 #endif
 }
 
 
 static void render_bongocat(void) {
-	// Animation timer
+	// Timer duration between animation frames
 	static uint16_t anim_timer = 0;
 
 #ifdef WPM_ENABLE

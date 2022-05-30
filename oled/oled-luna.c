@@ -234,11 +234,16 @@ static void render_luna_status(void) {
 #endif
 
 	void animate_luna(void) {
+		uint8_t mods = get_mods();
+#ifndef NO_ACTION_ONESHOT
+		mods |= get_oneshot_mods();
+#endif
+
 		render_logo();
 		oled_set_cursor(0,8);
-		if (get_mods() & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock) {
+		if (mods & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock) {
 			luna_action(bark);
-		} else if (get_mods() & MOD_MASK_CAG) {
+		} else if (mods & MOD_MASK_CAG) {
 			luna_action(sneak);
 		} else if (timer_elapsed32(tap_timer) < RUN_INTERVAL) {
 			luna_action(run);
