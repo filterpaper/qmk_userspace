@@ -5,7 +5,7 @@ jobs:
   build:
     name: Userspace build
     runs-on: ubuntu-latest
-    container: qmkfm/base_container
+    container: qmkfm/qmk_cli
     strategy:
       fail-fast: false
       matrix:
@@ -36,9 +36,6 @@ jobs:
       with:
         path: users/${{ github.actor }}
         persist-credentials: false
-
-    - name: Update python dependencies
-      run: /usr/bin/python3 -m pip install -r requirements.txt
 
     - name: Build firmware
       id: build
