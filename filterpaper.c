@@ -129,17 +129,17 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 };
 #	else
 bool encoder_update_user(uint8_t index, bool clockwise) {
-	if (get_highest_layer(layer_state|default_layer_state)) {
+	if (get_highest_layer(layer_state|default_layer_state) == 0) {
 		if (index == 0) {
 			clockwise ? tap_code(KC_VOLU) : tap_code(KC_VOLD);
-		} else if (index == 1) {
-			clockwise ? tap_code(KC_PGDN) : tap_code(KC_PGUP);
-		}
-	} else { // Base layer
-		if (index == 0) {
-			clockwise ? tap_code(KC_VOLU) : tap_code(KC_VOLD);
-		} else if (index == 1) {
+		} else {
 			clockwise ? tap_code(KC_MNXT) : tap_code(KC_MPRV);
+		}
+	} else {
+		if (index == 0) {
+			clockwise ? tap_code(KC_VOLU) : tap_code(KC_VOLD);
+		} else {
+			clockwise ? tap_code(KC_PGDN) : tap_code(KC_PGUP);
 		}
 	}
 	return false;
