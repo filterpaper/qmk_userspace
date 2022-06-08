@@ -31,8 +31,9 @@ jobs:
         persist-credentials: false
 
     - name: Build ${{ matrix.keyboard }} firmware
+      continue-on-error: true
       working-directory: users/${{ github.actor }}/keymaps
-      run: qmk compile -j3 ${{ matrix.keyboard }}.json || true
+      run: qmk compile -j3 ${{ matrix.keyboard }}.json
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
