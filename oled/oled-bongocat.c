@@ -27,8 +27,8 @@
      keymap.c to trigger animation tap timer with key presses:
         bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
-                extern uint32_t tap_timer;
-                tap_timer = timer_read32();
+                extern uint32_t oled_tap_timer;
+                oled_tap_timer = timer_read32();
             }
             return true;
         }
@@ -45,7 +45,7 @@
 #define PAWS_INTERVAL FRAME_DURATION*8
 
 // Timer duration between key presses
-uint32_t tap_timer = 0;
+uint32_t oled_tap_timer = 0;
 
 // Run-length encoded animation frames
 #ifndef LEFTCAT // Right aligned Bongocat
@@ -294,24 +294,24 @@ static void render_bongocat(void) {
 
 #ifdef WPM_ENABLE
 	static uint8_t prev_wpm = 0;
-	// Update tap_timer with sustained WPM
+	// Update oled_tap_timer with sustained WPM
 	if (get_current_wpm() > prev_wpm) {
-		tap_timer = timer_read32();
+		oled_tap_timer = timer_read32();
 	}
 	prev_wpm = get_current_wpm();
 #endif
 
 	void animate_cat(void) {
-		if (timer_elapsed32(tap_timer) < TAP_INTERVAL) {
+		if (timer_elapsed32(oled_tap_timer) < TAP_INTERVAL) {
 			render_cat_tap();
-		} else if (timer_elapsed32(tap_timer) < PAWS_INTERVAL) {
+		} else if (timer_elapsed32(oled_tap_timer) < PAWS_INTERVAL) {
 			render_cat_paws();
 		} else {
 			render_cat_idle();
 		}
 	}
 
-	if (timer_elapsed32(tap_timer) > OLED_TIMEOUT) {
+	if (timer_elapsed32(oled_tap_timer) > OLED_TIMEOUT) {
 		oled_off();
 	} else if (timer_elapsed(anim_timer) > FRAME_DURATION) {
 		anim_timer = timer_read();

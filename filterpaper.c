@@ -1,7 +1,35 @@
-// Copyright 2021 @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 #include "filterpaper.h"
+
+
+#ifdef TAPPING_TERM_PER_KEY
+static uint16_t tap_timer = 0;
+// Increase tapping term on short key presses to avoid false
+// trigger while typing
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+	return timer_elapsed(tap_timer) < 300 ? TAPPING_TERM + 100 : TAPPING_TERM;
+}
+#endif
+
+
+#ifdef PERMISSIVE_HOLD_PER_KEY
+// Select hold function immediately when another key is pressed and released
+// Enable for Shift mod tap
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+	return MODTAP_BIT(keycode) == MOD_MASK_SHIFT ? true : false;
+}
+#endif
+
+
+#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+// Select hold function immediately when another key is pressed
+// Enable for layer 1 and higher tap
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
+}
+#endif
 
 
 #ifdef TAPPING_FORCE_HOLD_PER_KEY
@@ -12,23 +40,8 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 }
 #endif
 
-#ifdef PERMISSIVE_HOLD_PER_KEY
-// Select hold function immediately when another key is pressed and released
-// Enable for Shift mod tap
-bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return MODTAP_BIT(keycode) == MOD_MASK_SHIFT ? true : false;
-}
-#endif
-
-#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-// Select hold function immediately when another key is pressed
-// Enable for layer 1 and higher tap
-bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
-}
-#endif
-
 #ifdef QUICK_TAP_TERM_PER_KEY
+// Quick Tap Term PR 17007
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 	return record->event.key.row == MATRIX_ROWS - 1 ? QUICK_TAP_TERM - 50 : QUICK_TAP_TERM;
 }
@@ -87,9 +100,12 @@ static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
+#ifdef TAPPING_TERM_PER_KEY
+		tap_timer = timer_read();
+#endif
 #if defined(OLED_ENABLE) && !defined(WPM_ENABLE)
-		extern uint32_t tap_timer;
-		tap_timer = timer_read32(); // Reset OLED animation timer
+		extern uint32_t oled_tap_timer;
+		oled_tap_timer = timer_read32(); // Reset OLED animation timer
 #endif
 #ifdef HRM_AUDIT
 		if (!process_hrm_audit(record)) {

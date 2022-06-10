@@ -20,8 +20,8 @@ These modules are coded for Corne (CRKBD)'s 128x32 and can be integrated as stan
    ```c
    bool process_record_user(uint16_t keycode, keyrecord_t *record) {
        if (record->event.pressed) {
-           extern uint32_t tap_timer;
-           tap_timer = timer_read32();
+           extern uint32_t oled_tap_timer;
+           oled_tap_timer = timer_read32();
        }
    }
    ```

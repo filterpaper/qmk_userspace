@@ -23,8 +23,8 @@
      keymap.c to trigger animation tap timer with key presses:
         bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
-                extern uint32_t tap_timer;
-                tap_timer = timer_read32();
+                extern uint32_t oled_tap_timer;
+                oled_tap_timer = timer_read32();
             }
             return true;
         }
@@ -43,7 +43,7 @@
 #define RUN_INTERVAL  LUNA_FRAME_DURATION*2
 #define WALK_INTERVAL LUNA_FRAME_DURATION*8
 
-uint32_t tap_timer = 0;
+uint32_t oled_tap_timer = 0;
 
 #ifdef LUNA // Outlined Luna frames
 static char const sit[][LUNA_SIZE] PROGMEM = { {
@@ -226,9 +226,9 @@ static void render_luna_status(void) {
 
 #ifdef WPM_ENABLE
 	static uint8_t prev_wpm = 0;
-	// Update tap_timer with sustained WPM
+	// Update oled_tap_timer with sustained WPM
 	if (get_current_wpm() > prev_wpm || get_mods()) {
-		tap_timer = timer_read32();
+		oled_tap_timer = timer_read32();
 	}
 	prev_wpm = get_current_wpm();
 #endif
@@ -245,16 +245,16 @@ static void render_luna_status(void) {
 			luna_action(bark);
 		} else if (mods & MOD_MASK_CAG) {
 			luna_action(sneak);
-		} else if (timer_elapsed32(tap_timer) < RUN_INTERVAL) {
+		} else if (timer_elapsed32(oled_tap_timer) < RUN_INTERVAL) {
 			luna_action(run);
-		} else if (timer_elapsed32(tap_timer) < WALK_INTERVAL) {
+		} else if (timer_elapsed32(oled_tap_timer) < WALK_INTERVAL) {
 			luna_action(walk);
 		} else {
 			luna_action(sit);
 		}
 	}
 
-	if (timer_elapsed32(tap_timer) > OLED_TIMEOUT) {
+	if (timer_elapsed32(oled_tap_timer) > OLED_TIMEOUT) {
 		oled_off();
 	} else if (timer_elapsed(anim_timer) > LUNA_FRAME_DURATION) {
 		anim_timer = timer_read();
