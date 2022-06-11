@@ -17,16 +17,13 @@
    4 Add the font file reference into `config.h`:
         #define OLED_FONT_H "oledfont.c"
    5 Add your layer numbers for NUM, SYM, and FNC. Example:
-        #define NUM 2
-        #define SYM 3
-        #define FNC 4
+        #define NUM 1
+        #define SYM 2
+        #define FNC 3
 */
 
 #include QMK_KEYBOARD_H
 
-#ifndef CMK
-#	define CMK 1
-#endif
 
 static void render_logo(void) {
 	static char const corne_logo[] PROGMEM = {
@@ -37,7 +34,7 @@ static void render_logo(void) {
 		0x20, 0xd1, 0xd2, 0xd3, 0x20, 0};
 
 	oled_write_P(corne_logo, false);
-	oled_write_P(layer_state_is(CMK) ? PSTR("corne") : katakana, false);
+	oled_write_P(layer_state_is(0) ? katakana : PSTR("corne"), false);
 }
 
 
