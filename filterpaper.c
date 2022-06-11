@@ -6,26 +6,26 @@
 
 #ifdef TAPPING_TERM_PER_KEY
 static uint16_t tap_timer = 0;
-// Increase tapping term on short key presses to avoid false
+// Increase tapping term in between short key presses to avoid false
 // trigger while typing
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return timer_elapsed(tap_timer) < 300 ? TAPPING_TERM + 100 : TAPPING_TERM;
+	return timer_elapsed(tap_timer) < TAPPING_TERM * 2 ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 #endif
 
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
-// Select hold function immediately when another key is pressed and released
+// Select hold immediately when another key is pressed and released
 // Enable for Shift mod tap
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return MODTAP_BIT(keycode) == MOD_MASK_SHIFT ? true : false;
+	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT ? true : false;
 }
 #endif
 
 
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-// Select hold function immediately when another key is pressed
-// Enable for layer 1 and higher tap
+// Select hold immediately when another key is pressed
+// Enable for layer tap 1 and higher
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
 }
@@ -44,46 +44,6 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 // Quick Tap Term PR 17007
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 	return record->event.key.row == MATRIX_ROWS - 1 ? QUICK_TAP_TERM - 50 : QUICK_TAP_TERM;
-}
-#endif
-
-
-// Replace modifier with base key code on unintended activation
-// with keys on the same half
-#ifdef HRM_AUDIT
-static bool process_hrm_audit(keyrecord_t *record) {
-	// Create new keyrecord with basic keycode
-	// and send it as a process record tap event
-	void resend_key(uint8_t base_keycode) {
-		keyrecord_t resend_key_record;
-		resend_key_record.keycode = base_keycode;
-
-		resend_key_record.event.pressed = true;
-		process_record(&resend_key_record);
-#	if TAP_CODE_DELAY > 0
-		wait_ms(TAP_CODE_DELAY);
-#	endif
-		resend_key_record.event.pressed = false;
-		process_record(&resend_key_record);
-	}
-
-	// Disable Alt roll with top row
-	switch(record->event.key.row) {
-	case 0:
-		if (get_mods() == MOD_BIT(KC_LALT)) {
-			unregister_mods(MOD_BIT(KC_LALT));
-			resend_key((uint8_t)HM_S);
-		}
-		break;
-	case 4:
-		if (get_mods() == MOD_BIT(KC_RALT)) {
-			unregister_mods(MOD_BIT(KC_RALT));
-			resend_key((uint8_t)HM_L);
-		}
-		break;
-	}
-
-	return true;
 }
 #endif
 
@@ -108,6 +68,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		oled_tap_timer = timer_read32(); // Reset OLED animation timer
 #endif
 #ifdef HRM_AUDIT
+		extern bool process_hrm_audit(keyrecord_t *record);
 		if (!process_hrm_audit(record)) {
 			return false;
 		}
@@ -135,30 +96,3 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 
 	return true; // Continue with unmatched keycodes
 }
-
-
-#ifdef ENCODER_ENABLE
-#	ifdef ENCODER_MAP_ENABLE
-const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
-	[0] = { ENCODER_CCW_CW(KC_VOLU, KC_VOLD), ENCODER_CCW_CW(KC_MNXT, KC_MPRV) },
-	[1] = { ENCODER_CCW_CW(KC_VOLU, KC_VOLD), ENCODER_CCW_CW(KC_PGDN, KC_PGUP) },
-};
-#	else
-bool encoder_update_user(uint8_t index, bool clockwise) {
-	if (get_highest_layer(layer_state|default_layer_state) == 0) {
-		if (index == 0) {
-			clockwise ? tap_code(KC_VOLU) : tap_code(KC_VOLD);
-		} else {
-			clockwise ? tap_code(KC_MNXT) : tap_code(KC_MPRV);
-		}
-	} else {
-		if (index == 0) {
-			clockwise ? tap_code(KC_VOLU) : tap_code(KC_VOLD);
-		} else {
-			clockwise ? tap_code(KC_PGDN) : tap_code(KC_PGUP);
-		}
-	}
-	return false;
-}
-#	endif // ifdef ENCODER_MAP_ENABLE
-#endif

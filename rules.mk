@@ -35,6 +35,7 @@ SRC += combos.c
 OPT_DEFS += -DCAPS_UNLOCK
 SRC += caps_unlock.c
 #OPT_DEFS += -DHRM_AUDIT
+#SRC += hrm_audit.c
 
 ifeq ($(MCU), $(filter $(MCU), atmega32u4))
 	LTO_ENABLE = yes

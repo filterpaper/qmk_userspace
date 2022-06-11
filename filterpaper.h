@@ -34,12 +34,12 @@ MOD_BIT(KC_RALT) = 0x0040
 Mod-tap are 5-bits wide with LR flag above.
 To convert mod-tap bits to mod_bits, check for the R
 flag and shift 4 bits left with ternary:
-mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : (kc >> 8) & 0xf
+mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : ((kc >> 8) & 0xf)
 */
 
 // Return left or right mod tap bits
-#define MODTAP_BITS(kc) (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : (kc >> 8) & 0xf
-// Return coarse mod tap bit
+#define MODTAP_BITS(kc) (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : ((kc >> 8) & 0xf)
+// Return coarse (left) mod tap bits
 #define MODTAP_BIT(kc) ((kc >> 8) & 0x0f)
 #define OSMMOD_BIT(kc) (kc & 0x0f)
 

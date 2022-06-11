@@ -12,7 +12,6 @@ jobs:
         keyboard:
         - 3w6
         - cradio
-        - macro3
         - mark65
         - technik
         include:
