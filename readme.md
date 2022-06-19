@@ -1,16 +1,14 @@
 # Summary
-This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` files inside keyboard sub-directories. All firmware customisations are configured within this space in the following manner:
-
-* Save [QMK Configurator](https://config.qmk.fm/#/) layout or wrapper macro keymaps in JSON format.
-* Use shared `rules.mk`, `config.h` and source files in this space.
-* See my [standalone userspace](https://filterpaper.github.io/qmk/userspace) guide for more details.
+This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` files into the QMK source folders.
+* Keyboard keymaps are saved as [QMK Configurator](https://config.qmk.fm/#/) JSON format
+* Shared source files build with `rules.mk`.
 
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
 
 
 # Building Userspace
-This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) in the `users` folder by running `qmk compile` on the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with the [build.yml](.github/workflows/build.yml) workflow.
+This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) with `users` folder by running `qmk compile` on the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with the [build.yml](.github/workflows/build.yml) workflow.
 
 
 
@@ -35,13 +33,13 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 # Modular Corne (CRKBD) Build
 Corne keyboard is configured with a few modular build options using [rules.mk](rules.mk):
 ## RGB Matrix default
-Default build will be compiled with RGB matrix support as default:
+Default build will be compiled with RGB matrix support:
 ```
 qmk compile corne.json
 ```
 
 ## Compiling for OLED display
-The `-e OLED=` option will build support for pet animation on primary OLED with status icons on the secondary. Animation are key stroke driven by `tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes` to the compile commands:
+The `-e OLED=` option will include pet animation on primary OLED with status icons on secondary. Animation are key stroke driven by `oled_tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes`.
 ### Bongocat
 Build and flash each side with the corresponding options for left and right aligned Bongocat:
 ```
@@ -57,7 +55,7 @@ qmk compile -e OLED=FELIX corne.json
 ```
 
 ## Minimal build
-Minimal firmware with no OLED and RGB support will be compiled with `-e TINY=yes`:
+Minimal with no OLED and RGB support:
 ```
 qmk compile -e TINY=yes corne.json
 ```
@@ -241,6 +239,52 @@ The JSON layout for 34-key Cradio keyboard uses that `C_34(k)` macro in the foll
 
 
 
+# Tap Hold Configuration
+Home row mods are made usable with these settings:
+
+## Ignore Mod Tap Interrupt
+```c
+#define IGNORE_MOD_TAP_INTERRUPT
+```
+Allow rolling of tap hold keys as default.
+
+## Increase tapping term while typing
+```c
+#define TAPPING_TERM 200
+#define TAPPING_TERM_PER_KEY
+
+static uint16_t tap_timer;
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    return timer_elapsed(tap_timer) < TAPPING_TERM * 2 ? TAPPING_TERM * 2 : TAPPING_TERM;
+}
+#endif
+```
+The `tap_timer` variable is updated by key presses in `process_record_user`. Tapping term will be increased to 400ms between short `tap_timer` key presses to avoid false trigger while typing.
+
+## Permissive hold shift
+```c
+#define PERMISSIVE_HOLD
+#define PERMISSIVE_HOLD_PER_KEY
+
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT ? true : false;
+}
+```
+Nested key presses will hold Shift mod tap for easy capitalization.
+
+## Hold on layer tap
+```c
+#define HOLD_ON_OTHER_KEY_PRESS
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
+}
+```
+Layer taps are not placed on home row and will trigger immediately with another key press.
+
+
+
 # STeMcell notes
 
 STM32F411 replacement [controller](https://github.com/megamind4089/STeMCell) with Pro micro footprint, [v1.0.1](https://github.com/megamind4089/STeMCell/releases/tag/v1.0.1). Runs on [tinyuf2 bootloader](https://megamind4089.github.io/STeMCell/software/).
@@ -289,21 +333,6 @@ avrdude -c usbasp -P usb -p atmega32u4 \
 -U flash:w:bootloader_atmega32u4_1.0.0.hex:i \
 -U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xF3:m
 ```
-
-## NanoBoot
-Clone [@sigprof](https://github.com/sigprof)'s [nanoBoot fork](https://github.com/sigprof/nanoBoot), and run `git checkout string-descriptors` followed by `make` to build the updated boot loader. Replace the current boot loader with nanoBoot using the following command and fuses:
-```c
-avrdude -c usbasp -P usb -p atmega32u4 \
--U flash:w:nanoBoot.hex:i \
--U lfuse:w:0xFF:m -U hfuse:w:0xD6:m -U efuse:w:0xC7:m
-```
-Use the following `rules.mk` options for nanoBoot:
-```c
-BOOTLOADER = qmk-hid
-BOOTLOADER_SIZE = 512
-```
-Limitation: [Bootmagic lite](https://docs.qmk.fm/#/feature_bootmagic?id=bootmagic-lite) will not work.
-
 
 ## Command Line Flashing
 Simple `bash` and `zsh` shell function for flashing firmware (and optionally handedness) to Atmel DFU controller on MacOS. It requires `dfu-programmer` from [Homebrew](https://brew.sh/):
