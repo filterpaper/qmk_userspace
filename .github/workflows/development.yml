@@ -9,13 +9,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-#        - keyboard: cradio
-#          branch: avr-dev
+        - keyboard: cradio
+          branch: avr-dev
         - keyboard: cradio
           branch: rp2040
-#        - keyboard: rp-cradio
-#          branch: rp2040
 # git clone -b cradio-rpi git@github.com:filterpaper/qmk_firmware.git;cd qmk_firmware;git checkout -B rp2040;
+# git clone -b convert-kb2040 git@github.com:filterpaper/qmk_firmware.git;cd qmk_firmware;git checkout -B rp2040;
 # git remote add src https://github.com/qmk/qmk_firmware.git; git fetch src; git pull src pull/14877/head --no-edit;
 
     steps:
