@@ -6,10 +6,16 @@
 
 #ifdef TAPPING_TERM_PER_KEY
 static uint16_t tap_timer = 0;
-// Increase tapping term in between short key presses to avoid false
-// trigger while typing
+// Reduce tapping term for clipboard shortcuts and Shift mod tap,
+// increase in between short key presses to avoid false trigger
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return timer_elapsed(tap_timer) < TAPPING_TERM * 2 ? TAPPING_TERM * 2 : TAPPING_TERM;
+	if ((keycode & 0xff00) == QK_LAYER_TAP_0 || MODTAP_BIT(keycode) & MOD_MASK_SHIFT) {
+		return TAPPING_TERM - 20;
+	} else if (timer_elapsed(tap_timer) < TAPPING_TERM * 2) {
+		return TAPPING_TERM * 2;
+	} else {
+		return TAPPING_TERM;
+	}
 }
 #endif
 

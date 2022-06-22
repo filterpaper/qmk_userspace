@@ -119,7 +119,7 @@
  */
 #define _FUNC \
 	_______, QK_BOOT, KC_F1,   KC_F2,   KC_F3,   KC_F10,      _______, KC_WH_U, KC_WH_D, _______, TG(CMK), _______, \
-	_______, _______, KC_F4,   KC_F5,   KC_F6,   KC_F11,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______, \
+	_______, QK_RBT,  KC_F4,   KC_F5,   KC_F6,   KC_F11,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______, \
 	_______, Z_SLEEP, KC_F7,   KC_F8,   KC_F9,   KC_F12,      _______, KC_BTN2, KC_BTN1, _______, Z_SSAVE, _______, \
 	                           _______, _______, _______,     _______,	 _______, _______
 /* ,-----------------------------------------.                ,-----------------------------------------.
@@ -234,14 +234,3 @@ KC_DEL, KC_VOLD, KC_VOLU, k37, k38, k39, k40, k41, KC_LEFT, KC_DOWN, KC_UP, KC_R
 
 // Mark 65 layout alias
 #define LAYOUT_mrk65_w(...) LAYOUT_all(__VA_ARGS__)
-
-
-
-// Macro3
-#define MACRO3_0 \
-	KC_MUTE, KC_MSTP, KC_MRWD, KC_MFFD, \
-	G(KC_V), G(KC_C), G(KC_X), LT(1,KC_MPLY)
-#define MACRO3_1 \
-	QK_BOOT, _______, KC_SLEP, KC_PWR,  \
-	TG(1),   _______, _______, _______
-#define LAYOUT_macro3_w(...) LAYOUT(__VA_ARGS__)
