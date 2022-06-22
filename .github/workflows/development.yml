@@ -9,10 +9,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
+#        - keyboard: cradio
+#          branch: avr-dev
         - keyboard: cradio
-          branch: avr_dev
-        - keyboard: rp-cradio
           branch: rp2040
+#        - keyboard: rp-cradio
+#          branch: rp2040
 # git clone -b cradio-rpi git@github.com:filterpaper/qmk_firmware.git;cd qmk_firmware;git checkout -B rp2040;
 # git remote add src https://github.com/qmk/qmk_firmware.git; git fetch src; git pull src pull/14877/head --no-edit;
 
@@ -33,7 +35,9 @@ jobs:
     - name: Build ${{ matrix.keyboard }} firmware
       continue-on-error: true
       working-directory: users/${{ github.actor }}/keymaps
-      run: qmk compile -j3 ${{ matrix.keyboard }}.json
+      env:
+        build_option: $([ "${{ matrix.branch }}" = "rp2040" ] && printf " -e CONVERT_TO=kb2040")
+      run: qmk compile -j3 ${{ env.build_option }} ${{ matrix.keyboard }}.json
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
