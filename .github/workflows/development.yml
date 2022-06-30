@@ -11,11 +11,10 @@ jobs:
         include:
         - keyboard: cradio
           branch: avr-dev
+        - keyboard: rp-cradio
+          branch: cradio-kb2040
         - keyboard: cradio
-          branch: rp2040
-# git clone -b cradio-rpi git@github.com:filterpaper/qmk_firmware.git;cd qmk_firmware;git checkout -B rp2040;
-# git clone -b convert-kb2040 git@github.com:filterpaper/qmk_firmware.git;cd qmk_firmware;git checkout -B rp2040;
-# git remote add src https://github.com/qmk/qmk_firmware.git; git fetch src; git pull src pull/14877/head --no-edit;
+          branch: convert-kb2040
 
     steps:
     - name: Checkout ${{ matrix.branch }} branch
@@ -35,7 +34,7 @@ jobs:
       continue-on-error: true
       working-directory: users/${{ github.actor }}/keymaps
       env:
-        build_option: $([ "${{ matrix.branch }}" = "rp2040" ] && printf " -e CONVERT_TO=kb2040")
+        build_option: $([ "${{ matrix.branch }}" = "convert-kb2040" ] && printf " -e CONVERT_TO=kb2040")
       run: qmk compile -j3 ${{ env.build_option }} ${{ matrix.keyboard }}.json
 
     - name: Archive firmware
