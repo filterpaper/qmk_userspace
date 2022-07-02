@@ -41,12 +41,12 @@ jobs:
       continue-on-error: true
       working-directory: users/${{ github.actor }}/keymaps
       env:
-        build_option: $([ -n "${{ matrix.oled }}" ] && printf " -e OLED=${{ matrix.oled }}")
-        output_suffix: $([ -n "${{ matrix.oled }}" ] && printf "_${{ matrix.oled }}")
+        oled_option: $([ -n "${{ matrix.oled }}" ] && printf " -e OLED=${{ matrix.oled }}")
+        oled_suffix: $([ -n "${{ matrix.oled }}" ] && printf "_${{ matrix.oled }}")
       run: |
         set -x
-        qmk compile -j3 ${{ env.build_option }} ${{ matrix.keyboard }}.json
-        echo "::set-output name=artifact-name::${{ matrix.keyboard }}${{ env.output_suffix }}"
+        qmk compile -j3 ${{ env.build_flag }} ${{ env.oled_option }} ${{ matrix.keyboard }}.json
+        echo "::set-output name=artifact-name::${{ matrix.keyboard }}${{ env.oled_suffix }}"
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
