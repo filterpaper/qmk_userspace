@@ -128,12 +128,6 @@ For advance usage, setup the following macros to call both pins with GPIO functi
 ```
 Initialise LEDs with the `*_INIT` macro on startup inside `matrix_scan_user(void)`. Subsequently, LEDs can be used as indicators with the `*_ON` and `*_OFF` macros that follows.
 
-## macOS / Windows Shortcuts
-[Magic Keycodes](https://docs.qmk.fm/#/keycodes_magic?id=magic-keycodes) swap key `MAGIC_TOGGLE_CTL_GUI` can be used as OS toggle, allowing QMK to read its status from the following variable to swap clipboard shortcuts:
-```c
-paste_keycode = keymap_config.swap_lctl_lgui ? C(KC_V) : G(KC_V);
-```
-
 
 
 # Layout wrapper macros
@@ -255,22 +249,16 @@ Allow rolling of tap hold keys as default.
 
 static uint16_t tap_timer;
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    return timer_elapsed(tap_timer) < TAPPING_TERM * 2 ? TAPPING_TERM * 2 : TAPPING_TERM;
-}
-#endif
-```
-The `tap_timer` variable is updated by key presses in `process_record_user`. Tapping term will be increased to 400ms between short `tap_timer` key presses to avoid false trigger while typing.
-
-## Permissive hold shift
-```c
-#define PERMISSIVE_HOLD
-#define PERMISSIVE_HOLD_PER_KEY
-
-bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT ? true : false;
+	if ((keycode & 0xff00) == QK_LAYER_TAP_0 || MODTAP_BIT(keycode) & MOD_MASK_SHIFT) {
+        return TAPPING_TERM - 20;
+    } else if (timer_elapsed(tap_timer) < TAPPING_TERM * 2) {
+        return TAPPING_TERM * 2;
+    } else {
+        return TAPPING_TERM;
+    }
 }
 ```
-Nested key presses will hold Shift mod tap for easy capitalization.
+Function reduces tapping term slightly for clipboard tap hold short cuts and Shift mod tap. `tap_timer` is updated by key presses in `process_record_user`. Second option doubles tapping term between short key presses to avoid false trigger while typing.
 
 ## Hold on layer tap
 ```c
@@ -278,7 +266,7 @@ Nested key presses will hold Shift mod tap for easy capitalization.
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
+    return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
 }
 ```
 Layer taps are not placed on home row and will trigger immediately with another key press.

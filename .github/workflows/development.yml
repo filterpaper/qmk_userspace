@@ -11,10 +11,9 @@ jobs:
         include:
         - keyboard: cradio
           branch: avr-dev
-        - keyboard: rp-cradio
-          branch: cradio-kb2040
         - keyboard: cradio
           branch: convert-kb2040
+# git remote add src https://github.com/qmk/qmk_firmware.git; git fetch src; git pull src pull/17514/head --no-edit
 
     steps:
     - name: Checkout ${{ matrix.branch }} branch
