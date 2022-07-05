@@ -10,9 +10,14 @@ jobs:
       matrix:
         include:
         - keyboard: cradio
+        - keyboard: cradio
           branch: avr-dev
         - keyboard: cradio
           branch: convert-kb2040
+          hand: LEFT
+        - keyboard: cradio
+          branch: convert-kb2040
+          hand: RIGHT
 # git remote add src https://github.com/qmk/qmk_firmware.git; git fetch src; git pull src pull/17514/head --no-edit
 
     steps:
@@ -29,19 +34,29 @@ jobs:
         path: users/${{ github.actor }}
         persist-credentials: false
 
+    - name: Setup build variables
+      id: vars
+      env:
+        branch_option: $([ "${{ matrix.branch }}" = "convert-kb2040" ] && printf " -e CONVERT_TO=kb2040")
+        branch_suffix: $([ -n "${{ matrix.branch}}" ] && printf "_${{ matrix.branch }}")
+        hand_option: $([ -n "${{ matrix.hand }}" ] && printf " -e INIT_EE_HANDS_${{ matrix.hand }}")
+        hand_suffix: $([ -n "${{ matrix.hand }}" ] && printf "_${{ matrix.hand }}")
+      run: |
+        set -x
+        echo "::set-output name=build-args::${{ env.branch_option }} ${{ env.hand_option }}"
+        echo "::set-output name=artifact-name::${{ matrix.keyboard }}${{ env.branch_suffix }}${{ env.hand_suffix }}"
+
     - name: Build ${{ matrix.keyboard }} firmware
       continue-on-error: true
       working-directory: users/${{ github.actor }}/keymaps
-      env:
-        build_option: $([ "${{ matrix.branch }}" = "convert-kb2040" ] && printf " -e CONVERT_TO=kb2040")
-      run: qmk compile -j3 ${{ env.build_option }} ${{ matrix.keyboard }}.json
+      run: qmk compile -j3 ${{ steps.vars.outputs.build-args }} ${{ matrix.keyboard }}.json
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
       continue-on-error: true
       with:
         retention-days: 3
-        name: development_${{ matrix.keyboard }}_${{ matrix.branch }}
+        name: ${{ steps.vars.outputs.artifact-name }}
         path: |
           *.hex
           *.bin
