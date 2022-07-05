@@ -11,19 +11,21 @@ jobs:
       matrix:
         keyboard:
         - 3w6
-        - cradio
         - mark65
         - technik
         include:
+        - keyboard: cradio
+        - keyboard: cradio
+          conv: kb2040
+          hand: LEFT
+        - keyboard: cradio
+          conv: kb2040
+          hand: RIGHT
         - keyboard: corne
-          oled: LEFTCAT
-        - keyboard: corne
-          oled: RIGHTCAT
-        - keyboard: corne
-          oled: LUNA
+          conv: kb2040
 
     steps:
-    - name: Checkout QMK source
+    - name: Checkout QMK
       uses: actions/checkout@v3
       with:
         repository: qmk/qmk_firmware
@@ -36,24 +38,35 @@ jobs:
         path: users/${{ github.actor }}
         persist-credentials: false
 
-    - name: Build firmware
-      id: build
-      continue-on-error: true
-      working-directory: users/${{ github.actor }}/keymaps
+    - name: Setup variables
+      id: vars
       env:
-        oled_option: $([ -n "${{ matrix.oled }}" ] && printf " -e OLED=${{ matrix.oled }}")
-        oled_suffix: $([ -n "${{ matrix.oled }}" ] && printf "_${{ matrix.oled }}")
+        conv_option: $([ -n "${{ matrix.conv }}" ] && printf " -e CONVERT_TO=${{ matrix.conv }}")
+        conv_suffix: $([ -n "${{ matrix.conv }}" ] && printf "_${{ matrix.conv }}")
+        hand_option: $([ -n "${{ matrix.hand }}" ] && printf " -e HAND=${{ matrix.hand }}")
+        hand_suffix: $([ -n "${{ matrix.hand }}" ] && printf "_${{ matrix.hand }}")
       run: |
         set -x
-        qmk compile -j3 ${{ env.build_flag }} ${{ env.oled_option }} ${{ matrix.keyboard }}.json
-        echo "::set-output name=artifact-name::${{ matrix.keyboard }}${{ env.oled_suffix }}"
+        echo "::set-output name=build-args::${{ env.conv_option }}${{ env.hand_option }}"
+        echo "::set-output name=file-name::${{ matrix.keyboard }}${{ env.conv_suffix }}${{ env.hand_suffix }}"
+        echo "::set-output name=artifact-name::${{ matrix.keyboard }}${{ env.conv_suffix }}"
+
+    - name: Build
+      continue-on-error: true
+      working-directory: users/${{ github.actor }}/keymaps
+      run: qmk -v compile -j3 ${{ steps.vars.outputs.build-args }} ${{ matrix.keyboard }}.json
+
+    - name: Rename uf2
+      if: ${{ contains(matrix.conv,'kb2040') }}
+      continue-on-error: true
+      run: mv -v *.uf2 ${{ steps.vars.outputs.file-name }}.uf2
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
       continue-on-error: true
       with:
         retention-days: 3
-        name: ${{ steps.build.outputs.artifact-name }}
+        name: ${{ steps.vars.outputs.artifact-name }}
         path: |
           *.hex
           *.bin

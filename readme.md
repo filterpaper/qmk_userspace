@@ -31,7 +31,7 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 
 
 # Modular Corne (CRKBD) Build
-Corne keyboard is configured with a few modular build options using [rules.mk](rules.mk):
+Corne keyboard is configured with a few modular build options using [rules.mk](rules.mk) for AVR controllers (everything will be included for RP and STM32 MCUs):
 ## RGB Matrix default
 Default build will be compiled with RGB matrix support:
 ```

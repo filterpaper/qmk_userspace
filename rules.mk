@@ -42,8 +42,13 @@ ifeq ($(MCU), $(filter $(MCU), atmega32u4))
 	BOOTLOADER = atmel-dfu
 endif
 
+# Handedness for RP2040 and ARM
+ifeq ($(HAND), $(filter $(HAND), LEFT RIGHT))
+	OPT_DEFS += -DINIT_EE_HANDS_${HAND}
+endif
+
 # Small split keyboards
-ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio cradio/kb2040))
+ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio))
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrection.c
 endif
@@ -57,18 +62,26 @@ endif
 
 # Corne CRKBD
 ifeq ($(KEYBOARD), crkbd/rev1)
-	ifeq ($(strip $(TINY)),)
+	ifeq ($(QMK_MCU_FAMILY), $(filter $(QMK_MCU_FAMILY), RP STM32))
+		OPT_DEFS += -DAUTO_CORRECT
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
-		SRC += rgb-matrix.c
-	endif
-	ifneq ($(strip $(OLED)),)
 		OLED_ENABLE = yes
-		OPT_DEFS += -D${OLED}
-		ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT CAT))
-			SRC += oled-icons.c oled-bongocat.c
-		else ifeq ($(OLED), $(filter $(OLED), LUNA FELIX))
-			SRC += oled-icons.c oled-luna.c
+		SRC += autocorrection.c rgb-matrix.c oled-icons.c oled-bongocat.c
+	else
+		ifeq ($(strip $(TINY)),)
+			RGB_MATRIX_ENABLE = yes
+			RGB_MATRIX_CUSTOM_USER = yes
+			SRC += rgb-matrix.c
+		endif
+		ifneq ($(strip $(OLED)),)
+			OLED_ENABLE = yes
+			OPT_DEFS += -D${OLED}
+			ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT CAT))
+				SRC += oled-icons.c oled-bongocat.c
+			else ifeq ($(OLED), $(filter $(OLED), LUNA FELIX))
+				SRC += oled-icons.c oled-luna.c
+			endif
 		endif
 	endif
 endif
