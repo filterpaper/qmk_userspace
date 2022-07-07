@@ -42,8 +42,8 @@ ifeq ($(MCU), $(filter $(MCU), atmega32u4))
 	BOOTLOADER = atmel-dfu
 endif
 
-# Handedness for RP2040 and ARM
-ifeq ($(HAND), $(filter $(HAND), LEFT RIGHT))
+ifeq ($(QMK_MCU_FAMILY), $(filter $(QMK_MCU_FAMILY), RP STM32))
+	EEPROM_DRIVER = transient
 	OPT_DEFS += -DINIT_EE_HANDS_${HAND}
 endif
 
@@ -63,10 +63,10 @@ endif
 # Corne CRKBD
 ifeq ($(KEYBOARD), crkbd/rev1)
 	ifeq ($(QMK_MCU_FAMILY), $(filter $(QMK_MCU_FAMILY), RP STM32))
-		OPT_DEFS += -DAUTO_CORRECT
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_ENABLE = yes
+		OPT_DEFS += -DAUTO_CORRECT
 		SRC += autocorrection.c rgb-matrix.c oled-icons.c oled-bongocat.c
 	else
 		ifeq ($(strip $(TINY)),)

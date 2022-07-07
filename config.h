@@ -44,7 +44,7 @@
 #		define SPLIT_LAYER_STATE_ENABLE
 #	endif
 #	ifdef QMK_MCU_FAMILY_RP
-#		define SPLIT_USB_TIMEOUT 3500
+#		define SPLIT_USB_TIMEOUT 3000
 #		define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 1000U
 #	endif
 #	define EE_HANDS
@@ -99,7 +99,6 @@
 
 #ifdef OLED_ENABLE
 #	define OLED_TIMEOUT 10000
-#	define OLED_UPDATE_INTERVAL 50
 #	define OLED_BRIGHTNESS 180
 #	define OLED_FONT_H "oled/oledfont.c"
 #endif
