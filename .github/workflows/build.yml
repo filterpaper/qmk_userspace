@@ -9,20 +9,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard:
-        - 3w6
-        - mark65
-        - technik
+        keyboard: [cradio, corne]
+        conv: [kb2040]
+        hand: [LEFT, RIGHT]
         include:
         - keyboard: cradio
-        - keyboard: cradio
-          conv: kb2040
-          hand: LEFT
-        - keyboard: cradio
-          conv: kb2040
-          hand: RIGHT
-        - keyboard: corne
-          conv: kb2040
+          conv: ''
+        - keyboard: 3w6
+        - keyboard: mark65
+        - keyboard: technik
 
     steps:
     - name: Checkout QMK
