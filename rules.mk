@@ -1,22 +1,21 @@
 # Disable unused features
-VIA_ENABLE = no
-WPM_ENABLE = no
-NKRO_ENABLE = no
-AUDIO_ENABLE = no
+#VIA_ENABLE = no
+#WPM_ENABLE = no
+#NKRO_ENABLE = no
+#AUDIO_ENABLE = no
+#STENO_ENABLE = no
+#LEADER_ENABLE = no
+#COMMAND_ENABLE = no
+#TERMINAL_ENABLE = no
+#KEY_LOCK_ENABLE = no
+#SLEEP_LED_ENABLE = no
+#TAP_DANCE_ENABLE = no
+#VELOCIKEY_ENABLE = no
+#SWAP_HANDS_ENABLE = no
 MAGIC_ENABLE = no
-STENO_ENABLE = no
-LEADER_ENABLE = no
 CONSOLE_ENABLE = no
-COMMAND_ENABLE = no
 UNICODE_ENABLE = no
-MOUSEKEY_ENABLE = no
-TERMINAL_ENABLE = no
-KEY_LOCK_ENABLE = no
 RGBLIGHT_ENABLE = no
-SLEEP_LED_ENABLE = no
-TAP_DANCE_ENABLE = no
-VELOCIKEY_ENABLE = no
-SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
@@ -37,12 +36,12 @@ SRC += caps_unlock.c
 #OPT_DEFS += -DHRM_AUDIT
 #SRC += hrm_audit.c
 
-ifeq ($(MCU), $(filter $(MCU), atmega32u4))
+ifeq ($(MCU), atmega32u4)
 	LTO_ENABLE = yes
 	BOOTLOADER = atmel-dfu
 endif
 
-ifeq ($(QMK_MCU_FAMILY), $(filter $(QMK_MCU_FAMILY), RP STM32))
+ifeq ($(CONVERT_TO), kb2040)
 	EEPROM_DRIVER = transient
 	OPT_DEFS += -DINIT_EE_HANDS_${HAND}
 endif
@@ -62,7 +61,7 @@ endif
 
 # Corne CRKBD
 ifeq ($(KEYBOARD), crkbd/rev1)
-	ifeq ($(QMK_MCU_FAMILY), $(filter $(QMK_MCU_FAMILY), RP STM32))
+	ifeq ($(CONVERT_TO), kb2040)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_ENABLE = yes
