@@ -31,13 +31,7 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 
 
 # Modular Corne (CRKBD) Build
-Corne keyboard is configured with a few modular build options using [rules.mk](rules.mk) for AVR controllers (everything will be included for RP and STM32 MCUs):
-## RGB Matrix default
-Default build will be compiled with RGB matrix support:
-```
-qmk compile corne.json
-```
-
+Corne keyboard can be build with few modular to save space for AVR controllers:
 ## Compiling for OLED display
 The `-e OLED=` option will include pet animation on primary OLED with status icons on secondary. Animation are key stroke driven by `oled_tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes`.
 ### Bongocat
@@ -46,14 +40,12 @@ Build and flash each side with the corresponding options for left and right alig
 qmk compile -e OLED=LEFTCAT corne.json
 qmk compile -e OLED=RIGHTCAT corne.json
 ```
-
 ### Felix and Luna
 Build for Luna or Felix the dog:
 ```
 qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
 ```
-
 ## Minimal build
 Minimal with no OLED and RGB support:
 ```

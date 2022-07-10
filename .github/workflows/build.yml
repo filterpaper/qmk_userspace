@@ -36,15 +36,13 @@ jobs:
     - name: Setup variables
       id: vars
       env:
-        conv_option: $([ -n "${{ matrix.conv }}" ] && printf " -e CONVERT_TO=${{ matrix.conv }}")
-        conv_suffix: $([ -n "${{ matrix.conv }}" ] && printf "_${{ matrix.conv }}")
-        hand_option: $([ -n "${{ matrix.hand }}" ] && printf " -e HAND=${{ matrix.hand }}")
-        hand_suffix: $([ -n "${{ matrix.hand }}" ] && printf "_${{ matrix.hand }}")
+        conv_suffix: $([ ${{ matrix.conv }} ] && printf "_${{ matrix.conv }}")
+        hand_suffix: $([ ${{ matrix.hand }} ] && printf "_${{ matrix.hand }}")
       run: |
         set -x
-        echo "::set-output name=build-args::${{ env.conv_option }}${{ env.hand_option }}"
+        echo "::set-output name=build-args:: -e CONVERT_TO=${{ matrix.conv }} -e HAND=${{ matrix.hand }}"
         echo "::set-output name=file-name::${{ matrix.keyboard }}${{ env.conv_suffix }}${{ env.hand_suffix }}"
-        echo "::set-output name=artifact-name::${{ matrix.keyboard }}${{ env.conv_suffix }}"
+        echo "::set-output name=archive-name::${{ matrix.keyboard }}${{ env.conv_suffix }}"
 
     - name: Build
       continue-on-error: true
@@ -52,7 +50,7 @@ jobs:
       run: qmk -v compile -j3 ${{ steps.vars.outputs.build-args }} ${{ matrix.keyboard }}.json
 
     - name: Rename uf2
-      if: ${{ contains(matrix.conv,'kb2040') }}
+      if: ${{ matrix.hand != '' }}
       continue-on-error: true
       run: mv -v *.uf2 ${{ steps.vars.outputs.file-name }}.uf2
 
@@ -61,7 +59,7 @@ jobs:
       continue-on-error: true
       with:
         retention-days: 3
-        name: ${{ steps.vars.outputs.artifact-name }}
+        name: ${{ steps.vars.outputs.archive-name }}
         path: |
           *.hex
           *.bin
