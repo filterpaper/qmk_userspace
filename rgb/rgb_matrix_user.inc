@@ -74,12 +74,11 @@ RGB random_hsv_to_rgb(void) {
 
 static bool CANDY_RAIN(effect_params_t* params) {
 	static uint32_t wait_timer = 0;
-	if (wait_timer > g_rgb_timer) { return false; }
 
 	inline uint32_t interval(void) { return 500 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
 
-	bool rain_pixel(uint8_t i, effect_params_t* params, bool off) {
-		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) { return true; }
+	void rain_pixel(uint8_t i, effect_params_t* params, bool off) {
+		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) { return; }
 		if (off) {
 			rgb_matrix_set_color(i, RGB_OFF);
 		} else {
@@ -87,10 +86,14 @@ static bool CANDY_RAIN(effect_params_t* params) {
 			rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 		}
 		wait_timer = g_rgb_timer + interval();
-		return false;
+	//	return false;
 	}
 
-	return rain_pixel(mod8(random8(), DRIVER_LED_TOTAL), params, random8() & 2);
+	RGB_MATRIX_USE_LIMITS(led_min, led_max);
+	if (g_rgb_timer > wait_timer) {
+		rain_pixel(mod8(random8(), DRIVER_LED_TOTAL), params, random8() & 2);
+	}
+	return rgb_matrix_check_finished_leds(led_max);
 }
 #	endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // ENABLE_RGB_MATRIX_CANDY_RAIN
@@ -103,33 +106,34 @@ RGB_MATRIX_EFFECT(CANDY_FRACTAL)
 static bool CANDY_FRACTAL(effect_params_t* params) {
 	#define MID_COL MATRIX_COLS / 2
 	static bool led[MATRIX_ROWS][MATRIX_COLS];
-
 	static uint32_t wait_timer = 0;
-	if (wait_timer > g_rgb_timer) { return false; }
 
 	inline uint32_t interval(void) { return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16); }
 
-	RGB rgb = rgb_matrix_hsv_to_rgb(rgb_matrix_config.hsv);
-	for (uint8_t h = 0; h < MATRIX_ROWS; ++h) {
-		for (uint8_t l = 0; l < MID_COL-1; ++l) {
-			if (led[h][l]) { rgb_matrix_set_color(g_led_config.matrix_co[h][l], rgb.r, rgb.g, rgb.b); }
-			else { rgb_matrix_set_color(g_led_config.matrix_co[h][l], 0, 0, 0); }
-			led[h][l] = led[h][l+1];
+	RGB_MATRIX_USE_LIMITS(led_min, led_max);
+	if (g_rgb_timer > wait_timer) {
+		RGB rgb = rgb_matrix_hsv_to_rgb(rgb_matrix_config.hsv);
+		for (uint8_t h = 0; h < MATRIX_ROWS; ++h) {
+			for (uint8_t l = 0; l < MID_COL-1; ++l) {
+				if (led[h][l]) { rgb_matrix_set_color(g_led_config.matrix_co[h][l], rgb.r, rgb.g, rgb.b); }
+				else { rgb_matrix_set_color(g_led_config.matrix_co[h][l], 0, 0, 0); }
+				led[h][l] = led[h][l+1];
+			}
+			for (uint8_t r = MATRIX_COLS-1; r > MID_COL; --r) {
+				if (led[h][r]) { rgb_matrix_set_color(g_led_config.matrix_co[h][r], rgb.r, rgb.g, rgb.b); }
+				else { rgb_matrix_set_color(g_led_config.matrix_co[h][r], 0, 0, 0); }
+				led[h][r] = led[h][r-1];
+			}
+			if (led[h][MID_COL]) { rgb_matrix_set_color(g_led_config.matrix_co[h][MID_COL], rgb.r, rgb.g, rgb.b); }
+			else { rgb_matrix_set_color(g_led_config.matrix_co[h][MID_COL], 0, 0, 0); }
+			if (led[h][MID_COL-1]) { rgb_matrix_set_color(g_led_config.matrix_co[h][MID_COL-1], rgb.r, rgb.g, rgb.b); }
+			else { rgb_matrix_set_color(g_led_config.matrix_co[h][MID_COL-1], 0, 0, 0); }
+			led[h][MID_COL] = led[h][MID_COL-1] = (random8() & 3) ? false : true;
 		}
-		for (uint8_t r = MATRIX_COLS-1; r > MID_COL; --r) {
-			if (led[h][r]) { rgb_matrix_set_color(g_led_config.matrix_co[h][r], rgb.r, rgb.g, rgb.b); }
-			else { rgb_matrix_set_color(g_led_config.matrix_co[h][r], 0, 0, 0); }
-			led[h][r] = led[h][r-1];
-		}
-		if (led[h][MID_COL]) { rgb_matrix_set_color(g_led_config.matrix_co[h][MID_COL], rgb.r, rgb.g, rgb.b); }
-		else { rgb_matrix_set_color(g_led_config.matrix_co[h][MID_COL], 0, 0, 0); }
-		if (led[h][MID_COL-1]) { rgb_matrix_set_color(g_led_config.matrix_co[h][MID_COL-1], rgb.r, rgb.g, rgb.b); }
-		else { rgb_matrix_set_color(g_led_config.matrix_co[h][MID_COL-1], 0, 0, 0); }
-		led[h][MID_COL] = led[h][MID_COL-1] = (random8() & 3) ? false : true;
-	}
 
-	wait_timer = g_rgb_timer + interval();
-	return false;
+		wait_timer = g_rgb_timer + interval();
+	}
+	return rgb_matrix_check_finished_leds(led_max);
 }
 #	endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 #endif // ENABLE_RGB_MATRIX_RACTAL

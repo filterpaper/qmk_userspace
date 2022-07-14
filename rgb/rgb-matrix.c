@@ -40,7 +40,7 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 	return state;
 }
 
-
+/*
 void rgb_matrix_indicators_user(void) {
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
@@ -71,8 +71,8 @@ void rgb_matrix_indicators_user(void) {
 		}
 	}
 }
+*/
 
-/*
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
@@ -101,4 +101,4 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 			}
 		}
 	}
-}*/
+}
