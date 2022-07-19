@@ -10,7 +10,7 @@ static uint16_t tap_timer = 0;
 // increase in between short key presses to avoid false trigger
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	if ((keycode & 0xff00) == QK_LAYER_TAP_0 || MODTAP_BIT(keycode) & MOD_MASK_SHIFT) {
-		return TAPPING_TERM - 20;
+		return TAPPING_TERM * 0.9;
 	} else if (timer_elapsed(tap_timer) < TAPPING_TERM * 2) {
 		return TAPPING_TERM * 2;
 	} else {
@@ -45,6 +45,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 	return record->event.key.row == MATRIX_ROWS - 1 ? true : false;
 }
 #endif
+
 
 #ifdef QUICK_TAP_TERM_PER_KEY
 // Quick Tap Term PR 17007
