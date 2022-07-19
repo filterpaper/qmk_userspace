@@ -12,16 +12,13 @@ jobs:
         - keyboard: cradio
           branch: develop
         - keyboard: cradio
-          branch: bicombo
-        - keyboard: cradio
-          branch: bicombo
+          branch: develop
           conv: kb2040
           hand: LEFT
         - keyboard: cradio
-          branch: bicombo
+          branch: develop
           conv: kb2040
           hand: RIGHT
-# git pull upstream pull/17715/head --no-edit
 
     steps:
     - name: Checkout ${{ matrix.branch }} branch

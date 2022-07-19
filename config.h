@@ -1,4 +1,4 @@
-// Copyright 2021 @filterpaper
+// Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 #pragma once
@@ -14,7 +14,7 @@
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
 #define IGNORE_MOD_TAP_INTERRUPT
-#define TAPPING_TERM 210
+#define TAPPING_TERM 200
 #define TAPPING_TERM_PER_KEY
 //#define PERMISSIVE_HOLD
 //#define PERMISSIVE_HOLD_PER_KEY
@@ -22,17 +22,10 @@
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define TAPPING_FORCE_HOLD
 #define TAPPING_FORCE_HOLD_PER_KEY
-
-// PR 17715
-#define BILATERAL_COMBINATIONS
-#define BILATERAL_COMBINATIONS_PER_KEY
-//#define QUICK_TAP_TERM 100
-//#define QUICK_TAP_TERM_PER_KEY
-
 #define USB_SUSPEND_WAKEUP_DELAY 3000
 
 #ifdef QMK_MCU_FAMILY_RP
-#	define SPLIT_USB_TIMEOUT 3000
+#	define SPLIT_USB_TIMEOUT 1000
 #	define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 1000U
 #endif
 
@@ -107,6 +100,7 @@
 
 #ifdef COMBO_ENABLE
 #	define COMBO_TERM 25
+#   define COMBO_TERM_PER_COMBO
 #	define COMBO_ONLY_FROM_LAYER 0
 #endif
 

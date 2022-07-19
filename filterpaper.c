@@ -3,16 +3,16 @@
 
 #include "filterpaper.h"
 
+#if defined(TAPPING_TERM_PER_KEY) || defined(COMBO_TERM_PER_COMBO)
+static uint16_t tap_timer = 0;
+#endif
+
 
 #ifdef TAPPING_TERM_PER_KEY
-static uint16_t tap_timer = 0;
-// Reduce tapping term for clipboard shortcuts and Shift mod tap,
-// increase in between short key presses to avoid false trigger
+// Increase tapping term in between short key presses to avoid false trigger
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	if ((keycode & 0xff00) == QK_LAYER_TAP_0 || MODTAP_BIT(keycode) & MOD_MASK_SHIFT) {
-		return TAPPING_TERM * 0.9;
-	} else if (timer_elapsed(tap_timer) < TAPPING_TERM * 2) {
-		return TAPPING_TERM * 2;
+	if (!(MODTAP_BIT(keycode) & MOD_MASK_SHIFT) && timer_elapsed(tap_timer) < TAPPING_TERM * 3) {
+		return TAPPING_TERM * 3;
 	} else {
 		return TAPPING_TERM;
 	}
@@ -21,8 +21,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
-// Select hold immediately when another key is pressed and released
-// Enable for Shift mod tap
+// Select Shift mod tap immediately when another key is pressed and released 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT ? true : false;
 }
@@ -30,8 +29,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-// Select hold immediately when another key is pressed
-// Enable for layer tap 1 and higher
+// Select hold immediately with another key for layer tap 1 and higher
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
 }
@@ -47,24 +45,10 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 
-#ifdef QUICK_TAP_TERM_PER_KEY
-// Quick Tap Term PR 17007
-uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
-	return record->event.key.row == MATRIX_ROWS - 1 ? QUICK_TAP_TERM - 50 : QUICK_TAP_TERM;
-}
-#endif
-
-
-#ifdef BILATERAL_COMBINATIONS_PER_KEY
-// Disable mod-tap keys on the same hand with keys on top row
-bool get_enable_bilateral_combinations_per_key(uint16_t keycode, keyrecord_t *record) {
-	if (record->event.key.row == 3 || record->event.key.row == MATRIX_ROWS - 1) {
-		return false;
-	} else if (record->event.key.row == 0 || record->event.key.row == 4) {
-		return true;
-	} else {
-		return false;
-	}
+#ifdef COMBO_TERM_PER_COMBO
+// Zero combo term in between short key presses to avoid false trigger
+uint16_t get_combo_term(uint16_t index, combo_t *combo) {
+	return timer_elapsed(tap_timer) < TAPPING_TERM * 3 ? 0 : COMBO_TERM;
 }
 #endif
 
@@ -81,7 +65,7 @@ static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
-#ifdef TAPPING_TERM_PER_KEY
+#if defined(TAPPING_TERM_PER_KEY) || defined(COMBO_TERM_PER_COMBO)
 		tap_timer = timer_read();
 #endif
 #if defined(OLED_ENABLE) && !defined(WPM_ENABLE)

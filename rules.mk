@@ -65,7 +65,7 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_ENABLE = yes
-		OPT_DEFS += -DAUTO_CORRECT
+		OPT_DEFS += -DAUTO_CORRECT -D${HAND}CAT
 		SRC += autocorrection.c rgb-matrix.c oled-icons.c oled-bongocat.c
 	else
 		ifeq ($(strip $(TINY)),)
