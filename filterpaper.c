@@ -55,6 +55,20 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 
+#ifdef BILATERAL_COMBINATIONS_PER_KEY
+// Disable mod-tap keys on the same hand with keys on top row
+bool get_enable_bilateral_combinations_per_key(uint16_t keycode, keyrecord_t *record) {
+	if (record->event.key.row == 3 || record->event.key.row == MATRIX_ROWS - 1) {
+		return false;
+	} else if (record->event.key.row == 0 || record->event.key.row == 4) {
+		return true;
+	} else {
+		return false;
+	}
+}
+#endif
+
+
 // Send custom hold keycode for mod tap
 static bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 	if (!record->tap.count) {

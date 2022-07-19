@@ -12,7 +12,16 @@ jobs:
         - keyboard: cradio
           branch: develop
         - keyboard: cradio
-          branch: avr-dev
+          branch: bicombo
+        - keyboard: cradio
+          branch: bicombo
+          conv: kb2040
+          hand: LEFT
+        - keyboard: cradio
+          branch: bicombo
+          conv: kb2040
+          hand: RIGHT
+# git pull upstream pull/17715/head --no-edit
 
     steps:
     - name: Checkout ${{ matrix.branch }} branch
@@ -38,7 +47,7 @@ jobs:
         set -x
         echo "::set-output name=build-args:: -e CONVERT_TO=${{ matrix.conv }} -e HAND=${{ matrix.hand }}"
         echo "::set-output name=file-name::${{ matrix.keyboard }}${{ env.branch_suffix }}${{ env.conv_suffix }}${{ env.hand_suffix }}"
-        echo "::set-output name=archive-name::${{ matrix.keyboard }}${{ env.conv_suffix }}"
+        echo "::set-output name=archive-name::${{ matrix.keyboard }}${{ env.branch_suffix }}${{ env.conv_suffix }}"
 
     - name: Build ${{ matrix.keyboard }} firmware
       continue-on-error: true
