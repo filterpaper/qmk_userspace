@@ -11,11 +11,11 @@
 #SLEEP_LED_ENABLE = no
 #TAP_DANCE_ENABLE = no
 #VELOCIKEY_ENABLE = no
-#SWAP_HANDS_ENABLE = no
 MAGIC_ENABLE = no
 CONSOLE_ENABLE = no
 UNICODE_ENABLE = no
 RGBLIGHT_ENABLE = no
+SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
@@ -33,8 +33,6 @@ COMBO_ENABLE = yes
 SRC += combos.c
 OPT_DEFS += -DCAPS_UNLOCK
 SRC += caps_unlock.c
-#OPT_DEFS += -DHRM_AUDIT
-#SRC += hrm_audit.c
 
 ifeq ($(MCU), atmega32u4)
 	LTO_ENABLE = yes
@@ -49,7 +47,7 @@ endif
 # Small split keyboards
 ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio))
 	OPT_DEFS += -DAUTO_CORRECT
-	SRC += autocorrection.c
+	SRC += autocorrect.c
 endif
 
 # Boardsource's Mark65 and Technik
@@ -66,7 +64,7 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_ENABLE = yes
 		OPT_DEFS += -DAUTO_CORRECT -D${HAND}CAT
-		SRC += autocorrection.c rgb-matrix.c oled-icons.c oled-bongocat.c
+		SRC += autocorrect.c rgb-matrix.c oled-icons.c oled-bongocat.c
 	else
 		ifeq ($(strip $(TINY)),)
 			RGB_MATRIX_ENABLE = yes

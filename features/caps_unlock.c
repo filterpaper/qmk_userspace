@@ -33,14 +33,14 @@ bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	case KC_BSPC:
 	case KC_MINS:
 	case KC_UNDS:
-		// Retain caps lock for listed keycodes if
+		// Retain caps lock for these keycodes if
 		// there are no active non-Shift modifiers
 		if ((mods & ~MOD_MASK_SHIFT) == false) {
 			break;
 		}
-		// Fall-through everything else to unlock caps.
+	// Fall-through everything else to unlock caps.
 	default:
-		tap_code(KC_CAPS); // Toggle caps lock
+		tap_code(KC_CAPS);
 	}
 
 	return true;

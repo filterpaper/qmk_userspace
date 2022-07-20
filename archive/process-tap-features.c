@@ -98,3 +98,63 @@ void process_unilateral_taps(uint16_t keycode, keyrecord_t *record) {
 		}
 	}
 }
+
+
+
+
+// Replace modifier with base key code on unintended activation
+// with keys on the same half
+bool process_hrm_audit(keyrecord_t *record) {
+	// Create new keyrecord with basic keycode
+	// and send it as a process record tap event
+	void resend_key(uint8_t base_keycode) {
+		keyrecord_t resend_key_record;
+		resend_key_record.keycode = base_keycode;
+
+		resend_key_record.event.pressed = true;
+		process_record(&resend_key_record);
+#	if TAP_CODE_DELAY > 0
+		wait_ms(TAP_CODE_DELAY);
+#	endif
+		resend_key_record.event.pressed = false;
+		process_record(&resend_key_record);
+	}
+
+	// Disable Alt roll with top row
+	switch(record->event.key.row) {
+	case 0:
+		if (get_mods() == MOD_BIT(KC_LALT)) {
+			unregister_mods(MOD_BIT(KC_LALT));
+			resend_key((uint8_t)HM_S);
+		}
+		break;
+	case 4:
+		if (get_mods() == MOD_BIT(KC_RALT)) {
+			unregister_mods(MOD_BIT(KC_RALT));
+			resend_key((uint8_t)HM_L);
+		}
+		break;
+	}
+
+	return true;
+}
+
+
+
+
+// Faux quick_tap
+static bool process_fast_tap(uint16_t keycode, keyrecord_t *record) {
+	// Record non-mod tap keycodes or tapped mod taps
+	if (!(QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) ||
+	(record->event.pressed && record->tap.count && timer_elapsed(tap_timer) >= TAPPING_TERM)) {	
+		tap_timer = timer_read();
+		return true;
+	}
+	// Tap base keycode of mod tap that follows another key within fast tap term
+	if (record->event.pressed && timer_elapsed(tap_timer) < FAST_TAP_TERM) {
+		tap_code(keycode &= 0xff);
+		tap_timer = timer_read();
+		return false;
+	}
+	return true;
+}

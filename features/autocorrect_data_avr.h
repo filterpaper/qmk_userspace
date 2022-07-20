@@ -607,6 +607,8 @@ youself        -> yourself
 #define DICTIONARY_MIN_LENGTH  4  // "bcak"
 #define DICTIONARY_MAX_LENGTH 14  // "pronounciation"
 
+#define DICTIONARY_SIZE 9396
+
 static const uint8_t dictionary[9396] PROGMEM = {108, 67, 0, 4, 201, 2, 6, 6, 3,
   7, 98, 3, 8, 185, 5, 9, 170, 14, 10, 234, 14, 11, 15, 17, 12, 190, 17, 14,
   199, 17, 15, 246, 17, 16, 184, 19, 17, 10, 20, 18, 38, 23, 19, 76, 23, 21, 86,
