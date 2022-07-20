@@ -122,6 +122,52 @@ Initialise LEDs with the `*_INIT` macro on startup inside `matrix_scan_user(void
 
 
 
+# Tap Hold Configuration
+Home row mods are made usable with these settings:
+
+## Ignore Mod Tap Interrupt
+```c
+#define IGNORE_MOD_TAP_INTERRUPT
+```
+Allow rolling of tap hold keys as default.
+
+## Increase tapping term while typing
+```c
+#define TAPPING_TERM 200
+#define TAPPING_TERM_PER_KEY
+
+static uint16_t tap_timer;
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    if (timer_elapsed(tap_timer) < TAPPING_TERM * 2) {
+        return TAPPING_TERM * 2;
+    } else {
+        return TAPPING_TERM;
+    }
+}
+```
+Set the timer in `process_record_user` with `tap_timer = timer_read();`. This function increases tapping term between short key presses to avoid accidentally trigger of mod taps while typing.
+
+## Permissive hold for thumb shift
+```c
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    return ((keycode >> 8) & 0x0f) & MOD_MASK_SHIFT ? true : false;
+}
+```
+Activate Shift mod tap with another nested key press.
+
+## Hold on layer tap
+```c
+#define HOLD_ON_OTHER_KEY_PRESS
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+#define QK_LAYER_TAP_1 0x4100
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
+}
+```
+Trigger layer taps immediately with another key press.
+
+
+
 # Layout wrapper macros
 
 ## Basic setup
@@ -222,47 +268,6 @@ The JSON layout for 34-key Cradio keyboard uses that `C_34(k)` macro in the foll
     "version": 1
 }
 ```
-
-
-
-# Tap Hold Configuration
-Home row mods are made usable with these settings:
-
-## Ignore Mod Tap Interrupt
-```c
-#define IGNORE_MOD_TAP_INTERRUPT
-```
-Allow rolling of tap hold keys as default.
-
-## Increase tapping term while typing
-```c
-#define TAPPING_TERM 200
-#define TAPPING_TERM_PER_KEY
-
-static uint16_t tap_timer;
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	if ((keycode & 0xff00) == QK_LAYER_TAP_0 || MODTAP_BIT(keycode) & MOD_MASK_SHIFT) {
-        return TAPPING_TERM - 20;
-    } else if (timer_elapsed(tap_timer) < TAPPING_TERM * 2) {
-        return TAPPING_TERM * 2;
-    } else {
-        return TAPPING_TERM;
-    }
-}
-```
-Function reduces tapping term slightly for clipboard tap hold short cuts and Shift mod tap. `tap_timer` is updated by key presses in `process_record_user`. Second option doubles tapping term between short key presses to avoid false trigger while typing.
-
-## Hold on layer tap
-```c
-#define HOLD_ON_OTHER_KEY_PRESS
-#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-
-bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
-}
-```
-Layer taps are not placed on home row and will trigger immediately with another key press.
-
 
 
 # STeMcell notes
