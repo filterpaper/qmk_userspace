@@ -38,22 +38,9 @@ mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : ((kc >> 8) & 0xf)
 */
 
 // Return left or right mod tap bits
-#define MODTAP_BITS(kc) (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : ((kc >> 8) & 0xf)
+#define MODTAP_BITS(kc) ((kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : ((kc >> 8) & 0xf))
 // Return coarse (left) mod tap bits
 #define MODTAP_BIT(kc) ((kc >> 8) & 0x0f)
-#define OSMMOD_BIT(kc) (kc & 0x0f)
 
-
-// Macro for LT(0,kc) mod tap. Return true for kc on tap
-// send custom tap code on hold after TAPPING_TERM
-#define TAP_HOLD(_hold_) \
-	if (record->tap.count) return true; \
-	else if (record->event.pressed) tap_code16(_hold_); \
-	return false
-
-// Macro to send oneshot mod on tap with mod tap keys
-// like LT(1,MOD_LSFT)
-#define MT_OSM(_mod_) \
-	if (record->tap.count && record->event.pressed) { \
-		add_oneshot_mods(_mod_); return false; \
-	}
+#define IS_MOD_TAP(kc) (QK_MOD_TAP <= kc && kc <= QK_MOD_TAP_MAX)
+#define IS_LAYER_TAP(kc) (QK_LAYER_TAP_1 <= kc && kc <= QK_LAYER_TAP_MAX)

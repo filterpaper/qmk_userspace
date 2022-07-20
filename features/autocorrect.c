@@ -6,14 +6,15 @@
 #include QMK_KEYBOARD_H
 #include <string.h>
 #ifdef __AVR__
-#	include "autocorrection_data_avr.h"
+#	include "autocorrect_data_avr.h"
 #else
-#	include "autocorrection_data.h"
+#	include "autocorrect_data.h"
 #endif
 
-bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
+bool process_autocorrect(uint16_t keycode, keyrecord_t* record) {
 	static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint8_t buffer_size = 0;
+
 	uint8_t mods = get_mods();
 #ifndef NO_ACTION_ONESHOT
 	mods |= get_oneshot_mods();
@@ -98,7 +99,7 @@ bool process_autocorrection(uint16_t keycode, keyrecord_t* record) {
 		// Read first byte of the next node.
 		code = pgm_read_byte(dictionary + state);
 
-		if (code & 128) {  // A typo was found! Apply autocorrection.
+		if (code & 128) {  // A typo was found! Apply correction.
 			uint8_t const backspaces = code & 63;
 			for (uint8_t i = 0; i < backspaces; ++i) {
 				tap_code(KC_BSPC);

@@ -24,8 +24,8 @@ Add the following `process_record_user` code block into `keymap.c` or userspace 
 ```c
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        extern bool process_autocorrection(uint16_t keycode, keyrecord_t* record);
-        if (!process_autocorrection(keycode, record)) {
+        extern bool process_autocorrect(uint16_t keycode, keyrecord_t* record);
+        if (!process_autocorrect(keycode, record)) {
             return false;
         }
         extern bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);

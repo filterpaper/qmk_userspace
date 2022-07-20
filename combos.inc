@@ -11,14 +11,18 @@
 	COMB(swap_l,  SH_TG,  KC_X, KC_C, KC_V)
 	COMB(swap_r,  SH_TG,  M_TH, COMM_TH, DOT_TH)
 #endif
-
 // layer toggles
-COMB(func,     TG(FNC),  LT(SYM,KC_TAB),  KC_B)
-COMB(numb,     TG(NUM),  LT(NUM,KC_BSPC), KC_N)
+//COMB(func,    TG(FNC), LT(SYM,KC_TAB),  KC_B)
+//COMB(numb,    TG(NUM), LT(NUM,KC_BSPC), KC_N)
 // volume control
-COMB(vol_up,   KC_VOLU,  KC_P, HM_QUOT)
-COMB(vol_dn,   KC_VOLD,  HM_QUOT, SLSH_TH)
+COMB(vol_up,  KC_VOLU, KC_P,    HM_QUOT)
+COMB(vol_dn,  KC_VOLD, HM_QUOT, SLSH_TH)
 // macros
-SUBS(vi_quit,  ":q!",  KC_Q, KC_W)
-SUBS(vi_save,  ":wq",  KC_Z, KC_X)
-SUBS(dir_up,   "../", DOT_TH, SLSH_TH)
+SUBS(vi_quit, ":q!",   KC_Q,     KC_W)
+SUBS(vi_save, ":wq",   KC_Z,     KC_X)
+SUBS(dir_up,  "../",   DOT_TH,   SLSH_TH)
+// navigation
+COMB(nav_dn,  RSA_DN,  M_TH,    COMM_TH)
+COMB(nav_up,  RSA_UP,  COMM_TH, DOT_TH)
+// caps lock
+COMB(caps_l,  KC_CAPS, HM_A, HM_QUOT)
