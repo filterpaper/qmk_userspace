@@ -12,10 +12,10 @@
 #define Z_SSAVE	HYPR(KC_S)
 
 // Tap hold macros
-#define M_TH	LT(0,KC_M)
-#define COMM_TH	LT(0,KC_COMM)
-#define DOT_TH	LT(0,KC_DOT)
-#define SLSH_TH	LT(0,KC_SLSH)
+#define TH_M	LT(0,KC_M)
+#define TH_COMM	LT(0,KC_COMM)
+#define TH_DOT	LT(0,KC_DOT)
+#define TH_SLSH	LT(0,KC_SLSH)
 #define TH(k1,k2,k3,k4) LT(0,k1),LT(0,k2),LT(0,k3),LT(0,k4)
 
 // Home row mod-tap macros

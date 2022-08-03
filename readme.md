@@ -69,7 +69,7 @@ if (get_highest_layer(layer_state); > COLEMAK) {
     for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
         for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
             if (g_led_config.matrix_co[row][col] != NO_LED &&
-                keymap_key_to_keycode(layer, (keypos_t){col, row}) != KC_TRNS) {
+            keymap_key_to_keycode(layer, (keypos_t){col, row}) != KC_TRNS) {
                 rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_LAYER);
             }
         }
@@ -80,11 +80,11 @@ Code loops through every row and column on a per-key RGB board, scanning for con
 
 ## Tap hold macros
 ```c
-#define W_TH LT(0, KC_W)
+#define TH_W LT(0, KC_W)
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-    case W_TH:
+    case TH_W:
         // Unmatched return on tap
         if (record->tap.count) { return true; }
         // Send macro string on hold
