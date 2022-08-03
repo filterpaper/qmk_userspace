@@ -8,16 +8,17 @@
    SUBS(name, "string to send", combo_sequence...)
    ACTN(name, function_calls(), combo_sequence...)
 
-   COMB are simple keycode shortcuts. Use two or more combo keys to activate
-   a keycode, like volume up using Y+U: COMB(KC_VOLU, KC_VOLU, KC_Y, KC_U)
+   Use COMB for simple keycode shortcuts with two or more combo keys to activate
+   a keycode. E.g. volume up with Y+U: COMB(vol_up, KC_VOLU, KC_Y, KC_U).
 
-   SUBS are string substitution combos. It can be used to send strings like
-   this W+H to send a string: SUBS(which, "which ", KC_W, KC_H)
+   SUBS is a string substitution macro that can be used to send strings.
+   E.g. SUBS(which, "which ", KC_W, KC_H).
 
-   ACTN function call triggers. Multiple functions can be separated by semi-
-   colons. Code structure without commas may work.
+   Use ACTN for internal callback functions that can be semicolon separated.
+   E.g. ACTN(rgb_tog, rgb_matrix_toggle(), KC_Z, KC_X)
 
    Usage: Save macros in 'combos.inc' and add the following to rules.mk:
+   COMBO_ENABLE = yes
    SRC += combos.c
  */
 

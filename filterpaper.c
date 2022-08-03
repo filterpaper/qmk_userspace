@@ -7,15 +7,15 @@
 #ifdef TAPPING_TERM_PER_KEY
 static uint16_t tap_timer = 0;
 #	define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.5)
-// Increase tapping term in between short key presses to avoid false trigger
+// Increase tapping term in between short key presses to avoid false trigger.
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return MODTAP_BIT(keycode) & MOD_MASK_CAG && IS_MOD_TAP(keycode) && IS_TYPING() ? TAPPING_TERM * 1.5 : TAPPING_TERM;
+	return MODTAP_BIT(keycode) & MOD_MASK_CAG && IS_TYPING() ? TAPPING_TERM * 1.5 : TAPPING_TERM;
 }
 #endif
 
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
-// Select Shift mod tap immediately when another key is pressed and released 
+// Select Shift mod tap immediately when another key is pressed and released.
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT ? true : false;
 }
@@ -23,7 +23,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-// Select hold immediately with another key for layer tap 1 and higher
+// Select hold immediately with another key for layer tap 1 and higher.
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return IS_LAYER_TAP(keycode) ? true : false;
 }
@@ -31,15 +31,15 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 
 #ifdef TAPPING_FORCE_HOLD_PER_KEY
-// Force hold on tap-hold key when held after tapping
-// Enable for (right split) bottom row key
+// Force hold on tap-hold key when held after tapping,
+// enable for (right split) bottom row key.
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 	return record->event.key.row == MATRIX_ROWS - 1 ? true : false;
 }
 #endif
 
 
-// Send custom hold keycode for mod tap
+// Send custom hold keycode for mod tap.
 static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
 	if (!record->tap.count) {
 		tap_code16(hold_keycode);
@@ -70,12 +70,12 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
-		// LT(0,kc) clipboard shortcuts
+		// Clipboard shortcuts.
 		switch(keycode) {
-			case SLSH_TH: return process_tap_hold(Z_UND, record);
-			case DOT_TH:  return process_tap_hold(Z_CUT, record);
-			case COMM_TH: return process_tap_hold(Z_CPY, record);
-			case M_TH:    return process_tap_hold(Z_PST, record);
+			case TH_SLSH: return process_tap_hold(Z_UND, record);
+			case TH_DOT:  return process_tap_hold(Z_CUT, record);
+			case TH_COMM: return process_tap_hold(Z_CPY, record);
+			case TH_M:    return process_tap_hold(Z_PST, record);
 		}
 	}
 	return true;
