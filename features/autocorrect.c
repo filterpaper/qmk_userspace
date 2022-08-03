@@ -22,25 +22,25 @@ bool process_autocorrect(uint16_t keycode, keyrecord_t* record) {
 
 	// Exclude matched modifiers and quantum keycodes.
 	switch(keycode) {
-	case KC_LSFT:
-	case KC_RSFT:
-	case KC_CAPS:
-	case QK_SWAP_HANDS ... QK_SWAP_HANDS_MAX:
-	case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:
-		return true;
-	case QK_MOD_TAP ... QK_MOD_TAP_MAX:
-	case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
-		// Exclude hold keycode
-		if (!record->tap.count) {
+		case KC_LSFT:
+		case KC_RSFT:
+		case KC_CAPS:
+		case QK_SWAP_HANDS ... QK_SWAP_HANDS_MAX:
+		case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:
 			return true;
-		}
-		break;
-	default:
-		// Reset if modifier other than Shift is active.
-		if (mods & ~MOD_MASK_SHIFT) {
-			buffer_size = 0;
-			return true;
-		}
+		case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+		case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+			// Exclude hold keycode
+			if (!record->tap.count) {
+				return true;
+			}
+			break;
+		default:
+			// Reset if modifier other than Shift is active.
+			if (mods & ~MOD_MASK_SHIFT) {
+				buffer_size = 0;
+				return true;
+			}
 	}
 
 	// Handle non-alpha keycodes.
