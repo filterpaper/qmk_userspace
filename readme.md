@@ -123,7 +123,7 @@ Initialise LEDs with the `*_INIT` macro on startup inside `matrix_scan_user(void
 
 
 # Tap Hold Configuration
-Home row mods are made usable with these settings:
+Home row mods are more usable personally with these settings:
 
 ## Ignore Mod Tap Interrupt
 ```c
@@ -138,8 +138,8 @@ Allow rolling of tap hold keys as default.
 
 static uint16_t tap_timer;
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    if (timer_elapsed(tap_timer) < TAPPING_TERM * 2) {
-        return TAPPING_TERM * 2;
+    if (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3) {
+        return TAPPING_TERM * 1.3;
     } else {
         return TAPPING_TERM;
     }

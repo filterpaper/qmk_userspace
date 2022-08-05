@@ -268,7 +268,7 @@ def write_generated_code(autocorrections: List[Tuple[str, str]],
 
 def main(argv):
   dict_file = argv[1] if len(argv) > 1 else 'dictionary.txt'
-  out_file  = argv[2] if len(argv) > 2 else 'autocorrection_data.h'
+  out_file  = argv[2] if len(argv) > 2 else 'autocorrect_data.h'
   autocorrections = parse_file(dict_file)
   trie = make_trie(autocorrections)
   data = serialize_trie(autocorrections, trie)
