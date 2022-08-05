@@ -1851,7 +1851,7 @@ larrry              -> larry
 lattitude           -> latitude
 launhed             -> launched
 lavae               -> larvae
-layed               -> laid
+:layed              -> laid
 lazyness            -> laziness
 learnign            -> learning
 leathal             -> lethal

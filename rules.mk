@@ -39,7 +39,7 @@ ifeq ($(MCU), atmega32u4)
 	BOOTLOADER = atmel-dfu
 endif
 
-ifeq ($(CONVERT_TO), kb2040)
+ifneq ($(strip $(CONVERT_TO)),)
 	EEPROM_DRIVER = transient
 	OPT_DEFS += -DINIT_EE_HANDS_${HAND}
 endif
@@ -59,7 +59,7 @@ endif
 
 # Corne CRKBD
 ifeq ($(KEYBOARD), crkbd/rev1)
-	ifeq ($(CONVERT_TO), kb2040)
+	ifneq ($(strip $(CONVERT_TO)),)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_ENABLE = yes
