@@ -23,12 +23,12 @@
 #define HM_S	LALT_T(KC_S)
 #define HM_D	LCTL_T(KC_D)
 #define HM_F	LGUI_T(KC_F)
-#define HM_J	RGUI_T(KC_J)
-#define HM_K	RCTL_T(KC_K)
-#define HM_L	RALT_T(KC_L)
-#define HM_QUOT	RSFT_T(KC_QUOT)
+#define HM_J	LGUI_T(KC_J)
+#define HM_K	LCTL_T(KC_K)
+#define HM_L	LALT_T(KC_L)
+#define HM_QUOT	LSFT_T(KC_QUOT)
 #define HRML(k1,k2,k3,k4) LSFT_T(k1),LALT_T(k2),LCTL_T(k3),LGUI_T(k4)
-#define HRMR(k1,k2,k3,k4) RGUI_T(k1),RCTL_T(k2),RALT_T(k3),RSFT_T(k4)
+#define HRMR(k1,k2,k3,k4) LGUI_T(k1),LCTL_T(k2),LALT_T(k3),LSFT_T(k4)
 
 // One shot mods
 #ifdef NO_ACTION_ONESHOT
@@ -60,7 +60,7 @@
 	KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
 	QK_GESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, KC_SCLN, \
 	OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,  \
-	        RSA_T(KC_ESC), LT(SYM,KC_TAB), LCA_T(KC_ENT),     LSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
+	        RSA_T(KC_ESC), LT(SYM,KC_TAB), LCA_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC), RAG_T(KC_DEL)
 /* ,-----------------------------------------.                ,-----------------------------------------.
    | TAB  |  Q   |  W   |  E   |  R   |  T   |                |  Y   |  U   |  I   |  O   |  P   | BSPC |
    |------+------+------+------+------+------|                |------+------+------+------+------+------|
