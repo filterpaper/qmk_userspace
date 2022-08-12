@@ -41,7 +41,7 @@ endif
 
 ifneq ($(strip $(CONVERT_TO)),)
 	EEPROM_DRIVER = transient
-	OPT_DEFS += -DINIT_EE_HANDS_${HAND}
+	OPT_DEFS += -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
 endif
 
 # Small split keyboards
@@ -63,7 +63,7 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_CUSTOM_USER = yes
 		OLED_ENABLE = yes
-		OPT_DEFS += -DAUTO_CORRECT -D${HAND}CAT
+		OPT_DEFS += -DAUTO_CORRECT -D$(shell echo ${SPLIT}|tr a-z A-Z)CAT
 		SRC += autocorrect.c rgb-matrix.c oled-icons.c oled-bongocat.c
 	else
 		ifeq ($(strip $(TINY)),)
@@ -72,6 +72,7 @@ ifeq ($(KEYBOARD), crkbd/rev1)
 			SRC += rgb-matrix.c
 		endif
 		ifneq ($(strip $(OLED)),)
+			override OLED := $(shell echo ${OLED}|tr a-z A-Z)
 			OLED_ENABLE = yes
 			OPT_DEFS += -D${OLED}
 			ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT CAT))

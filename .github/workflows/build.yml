@@ -11,7 +11,7 @@ jobs:
       matrix:
         keyboard: [cradio, corne]
         conv: [kb2040]
-        hand: [LEFT, RIGHT]
+        split: [left, right]
         include:
         - keyboard: cradio
           conv: ''
@@ -37,11 +37,11 @@ jobs:
       id: vars
       env:
         conv_suffix: $([ ${{ matrix.conv }} ] && printf "_${{ matrix.conv }}")
-        hand_suffix: $([ ${{ matrix.hand }} ] && printf "_${{ matrix.hand }}")
+        split_suffix: $([ ${{ matrix.split }} ] && printf "_${{ matrix.split }}")
       run: |
         set -x
-        echo "::set-output name=build-args:: -e CONVERT_TO=${{ matrix.conv }} -e HAND=${{ matrix.hand }}"
-        echo "::set-output name=file-name::${{ matrix.keyboard }}${{ env.conv_suffix }}${{ env.hand_suffix }}"
+        echo "::set-output name=build-args:: -e CONVERT_TO=${{ matrix.conv }} -e SPLIT=${{ matrix.split }}"
+        echo "::set-output name=file-suffix::${{ env.conv_suffix }}${{ env.split_suffix }}"
         echo "::set-output name=archive-name::${{ matrix.keyboard }}${{ env.conv_suffix }}"
 
     - name: Build
@@ -50,9 +50,9 @@ jobs:
       run: qmk -v compile -j 3 ${{ steps.vars.outputs.build-args }} ${{ matrix.keyboard }}.json
 
     - name: Rename uf2
-      if: ${{ matrix.hand != '' }}
+      if: ${{ matrix.conv != '' }}
       continue-on-error: true
-      run: mv -v *.uf2 ${{ steps.vars.outputs.file-name }}.uf2
+      run: for file in *.uf2; do mv -v $file ${file%.*}${{ steps.vars.outputs.file-suffix }}.uf2; done
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3

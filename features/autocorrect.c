@@ -6,6 +6,7 @@
 #include QMK_KEYBOARD_H
 #include <string.h>
 #ifdef __AVR__
+#	pragma message "Compiling AVR-sized autocorrect dictionary"
 #	include "autocorrect_data_avr.h"
 #else
 #	include "autocorrect_data.h"
