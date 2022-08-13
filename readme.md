@@ -30,28 +30,20 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 
 
 
-# Modular Corne (CRKBD) Build
-Corne keyboard can be build with few modular to save space for AVR controllers:
-## Compiling for OLED display
-The `-e OLED=` option will include pet animation on primary OLED with status icons on secondary. Animation are key stroke driven by `oled_tap_timer`. To use WPM (at the expense of size), add `-e WPM_ENABLE=yes`.
-### Bongocat
+# Corne (CRKBD) OLED display
+Corne keyboard can be build with few OLED display options. The `-e OLED=` option will include pet animation on primary OLED with status icons on secondary. Animation are key stroke driven by `oled_tap_timer`. To use WPM, add `-e WPM_ENABLE=yes`.
+## Bongocat
 Build and flash each side with the corresponding options for left and right aligned Bongocat:
 ```
 qmk compile -e OLED=LEFTCAT corne.json
 qmk compile -e OLED=RIGHTCAT corne.json
 ```
-### Felix and Luna
+## Felix and Luna
 Build for Luna or Felix the dog:
 ```
 qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
 ```
-## Minimal build
-Minimal with no OLED and RGB support:
-```
-qmk compile -e TINY=yes corne.json
-```
-
 ## Logo file
 Images in `glcdfont.c` can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
@@ -271,7 +263,6 @@ The JSON layout for 34-key Cradio keyboard uses that `C_34(k)` macro in the foll
 
 
 # STeMcell notes
-
 STM32F411 replacement [controller](https://github.com/megamind4089/STeMCell) with Pro micro footprint, [v1.0.1](https://github.com/megamind4089/STeMCell/releases/tag/v1.0.1). Runs on [tinyuf2 bootloader](https://megamind4089.github.io/STeMCell/software/).
 
 * Reset new STMC to `stm-dfu`:
