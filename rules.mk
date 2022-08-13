@@ -34,7 +34,7 @@ SRC += combos.c
 OPT_DEFS += -DCAPS_UNLOCK
 SRC += caps_unlock.c
 
-ifeq ($(MCU), atmega32u4)
+ifeq ($(strip $(MCU)), atmega32u4)
 	LTO_ENABLE = yes
 	BOOTLOADER = atmel-dfu
 endif
@@ -45,12 +45,12 @@ ifneq ($(strip $(CONVERT_TO)),)
 endif
 
 # Small split keyboards
-ifeq ($(KEYBOARD), $(filter $(KEYBOARD), 3w6/rev2 cradio))
+ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), 3w6/rev2 cradio))
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrect.c
 endif
 
-# Boardsource's Mark65 and Technik
+# The Mark65 and Technik
 ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
@@ -58,28 +58,15 @@ ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
 endif
 
 # Corne CRKBD
-ifeq ($(KEYBOARD), crkbd/rev1)
-	ifneq ($(strip $(CONVERT_TO)),)
-		RGB_MATRIX_ENABLE = yes
-		RGB_MATRIX_CUSTOM_USER = yes
-		OLED_ENABLE = yes
+ifeq ($(strip $(KEYBOARD)), crkbd/rev1)
+	RGB_MATRIX_ENABLE = yes
+	RGB_MATRIX_CUSTOM_USER = yes
+	OLED_ENABLE = yes
+	ifeq ($(strip $(OLED)), LUNA FELIX)
+		OPT_DEFS += -DAUTO_CORRECT -D${OLED}
+		SRC += autocorrect.c rgb-matrix.c oled-icons.c oled-luna.c
+	else
 		OPT_DEFS += -DAUTO_CORRECT -D$(shell echo ${SPLIT}|tr a-z A-Z)CAT
 		SRC += autocorrect.c rgb-matrix.c oled-icons.c oled-bongocat.c
-	else
-		ifeq ($(strip $(TINY)),)
-			RGB_MATRIX_ENABLE = yes
-			RGB_MATRIX_CUSTOM_USER = yes
-			SRC += rgb-matrix.c
-		endif
-		ifneq ($(strip $(OLED)),)
-			override OLED := $(shell echo ${OLED}|tr a-z A-Z)
-			OLED_ENABLE = yes
-			OPT_DEFS += -D${OLED}
-			ifeq ($(OLED), $(filter $(OLED), LEFTCAT RIGHTCAT CAT))
-				SRC += oled-icons.c oled-bongocat.c
-			else ifeq ($(OLED), $(filter $(OLED), LUNA FELIX))
-				SRC += oled-icons.c oled-luna.c
-			endif
-		endif
 	endif
 endif
