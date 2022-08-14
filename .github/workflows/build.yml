@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         keyboard: [cradio, corne]
-        conv: [kb2040]
+        conv: [kb2040, stemcell]
         split: [left, right]
         include:
         - keyboard: cradio

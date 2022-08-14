@@ -8,17 +8,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-        - keyboard: cradio
-          branch: develop
-        - keyboard: cradio
-          branch: develop
-          conv: kb2040
-          split: left
-        - keyboard: cradio
-          branch: develop
-          conv: kb2040
-          split: right
+        keyboard: [cradio]
+        branch: [develop]
+        conv: [stemcell, '']
+        split: [left, right]
+#        include:
+#        - keyboard: cradio
+#          branch: develop
+#        - keyboard: cradio
+#          branch: develop
+#          conv: stemcell
+#          split: left
+#        - keyboard: cradio
+#          branch: develop
+#          conv: stemcell
+#          split: right
 
     steps:
     - name: Checkout ${{ matrix.branch }} branch
