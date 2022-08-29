@@ -115,7 +115,21 @@ Initialise LEDs with the `*_INIT` macro on startup inside `matrix_scan_user(void
 
 
 # Tap Hold Configuration
-Home row mods are more usable personally with these settings:
+Home row mods using mod tap is finicky with typing habits. They are a bit more usable with the use of a tap timer to reduce false positives while typing:
+
+## Tap timer
+Setup a tap timer to detect recent key presses in `process_record_user` and a boolean macro for "typing interval" when the last key press is within 1.3 times `TAPPING_TERM`:
+```c
+static uint16_t tap_timer = 0;
+#define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
+
+bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        tap_timer = timer_read();
+    }
+    return true;
+}
+```
 
 ## Ignore Mod Tap Interrupt
 ```c
@@ -127,33 +141,41 @@ Allow rolling of tap hold keys as default.
 ```c
 #define TAPPING_TERM 200
 #define TAPPING_TERM_PER_KEY
+#define IS_MOD_TAP(kc) (QK_MOD_TAP <= kc && kc <= QK_MOD_TAP_MAX)
 
-static uint16_t tap_timer;
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    if (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3) {
-        return TAPPING_TERM * 1.3;
-    } else {
-        return TAPPING_TERM;
+    if (IS_MOD_TAP(keycode) && IS_TYPING()) {
+      return TAPPING_TERM * 1.3;
     }
+    return TAPPING_TERM;
 }
 ```
-Set the timer in `process_record_user` with `tap_timer = timer_read();`. This function increases tapping term between short key presses to avoid accidentally trigger of mod taps while typing.
+Increases tapping term within typing interval to avoid accidentally trigger of mod taps while typing.
 
 ## Permissive hold for thumb shift
 ```c
+#define PERMISSIVE_HOLD_PER_KEY
+#define MODTAP_BIT(kc) ((kc >> 8) & 0x0f)
+
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    return ((keycode >> 8) & 0x0f) & MOD_MASK_SHIFT ? true : false;
+    if (MODTAP_BIT(keycode) & MOD_MASK_SHIFT && !IS_TYPING()) {
+      return true;
+    }
+    return false;
 }
 ```
-Activate Shift mod tap with another nested key press.
+Activate Shift mod tap with another nested key press when not within typing interval.
 
 ## Hold on layer tap
 ```c
-#define HOLD_ON_OTHER_KEY_PRESS
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define QK_LAYER_TAP_1 0x4100
+
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    return QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX ? true : false;
+    if (QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX) {
+      return true;
+    }
+    return false;
 }
 ```
 Trigger layer taps immediately with another key press.
