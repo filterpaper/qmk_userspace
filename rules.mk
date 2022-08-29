@@ -19,6 +19,7 @@ SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
+LTO_ENABLE = yes
 WAIT_FOR_USB = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
@@ -35,7 +36,6 @@ OPT_DEFS += -DCAPS_UNLOCK
 SRC += caps_unlock.c
 
 ifeq ($(strip $(MCU)), atmega32u4)
-	LTO_ENABLE = yes
 	BOOTLOADER = atmel-dfu
 endif
 
