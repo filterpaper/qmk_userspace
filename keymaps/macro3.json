@@ -1,9 +1,0 @@
-{
-	"keyboard": "macro3",
-	"keymap": "filterpaper",
-	"layout": "LAYOUT_macro3_w",
-	"layers": [
-		[ "MACRO3_0" ],
-		[ "MACRO3_1" ]
-	]
-}
