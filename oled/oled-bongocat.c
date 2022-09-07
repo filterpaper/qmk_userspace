@@ -19,10 +19,7 @@
    2 Add the following lines into rules.mk:
         OLED_ENABLE = yes
         SRC += oled-bongocat.c
-   3 Left and right aligned Bongocat is default. To save space:
-      * Add 'OPT_DEFS += -DLEFTCAT' into rules.mk
-      * Or 'OPT_DEFS += -DRIGHTCAT' into rules.mk
-   4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
+   3 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
      Otherwise add the following 'process_record_user()' code block into
      keymap.c to trigger animation tap timer with key presses:
         bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -32,7 +29,7 @@
             }
             return true;
         }
-   5 The 'oled_task_user()' calls 'render_mod_status()' from "oled-icons.c"
+   4 The 'oled_task_user()' calls 'render_mod_status()' from "oled-icons.c"
      for secondary OLED. Review that file for usage guide or replace
 	 'render_mod_status()' with your own function.
  */
@@ -49,8 +46,7 @@
 uint32_t oled_tap_timer = 0;
 
 // Run-length encoded animation frames
-#ifndef LEFTCAT // Right aligned Bongocat
-#pragma message "Building right aligned Bongocat"
+// Right frames
 static unsigned char const idle0[] PROGMEM = {144,
 	0x3a,0x00,0x01,0x80,0x02,0x40,0x04,0x20,0x05,0x10,0x02,0x08,0x03,0x04,0x84,0x08,
 	0x30,0x40,0x80,0x2e,0x00,0x03,0x80,0x31,0x00,0x83,0x18,0x64,0x82,0x05,0x02,0x01,
@@ -134,10 +130,9 @@ static unsigned char const tap1[] PROGMEM = {153,
 	0x08,0x02,0x88,0x82,0x87,0x80,0x3c,0x00};
 static unsigned char const *tap[TAP_FRAMES] = {
 	tap0, tap1 };
-#endif // #ifndef LEFTCAT
 
-#ifndef RIGHTCAT // Left aligned Bongocat
-#pragma message "Building left aligned Bongocat"
+
+// Left frames
 static unsigned char const left_idle0[] PROGMEM = {142,
 	0x03,0x80,0x2e,0x00,0x84,0x80,0x40,0x30,0x08,0x03,0x04,0x02,0x08,0x05,0x10,0x04,
 	0x20,0x02,0x40,0x01,0x80,0x3d,0x00,0x04,0x01,0x04,0x02,0x05,0x04,0x05,0x08,0x04,
@@ -220,7 +215,6 @@ static unsigned char const left_tap1[] PROGMEM = {151,
 	0x05,0x40,0x05,0x80,0x11,0x00};
 static unsigned char const *left_tap[TAP_FRAMES] = {
 	left_tap0, left_tap1 };
-#endif // #ifndef RIGHTCAT
 
 
 // RLE decoding loop that reads count from frame index
@@ -252,42 +246,19 @@ static void decode_frame(unsigned char const *frame) {
 }
 
 
-static void render_cat_idle(void) {
-	static uint8_t index = 0;
-	index = index < IDLE_FRAMES - 1 ? index + 1 : 0;
+void animate_cat(void) {
+	static uint8_t tap_index = 0;
+	static uint8_t idle_index = 0;
 
-#if defined(LEFTCAT)
-	decode_frame(left_idle[index]);
-#elif defined(RIGHTCAT)
-	decode_frame(idle[index]);
-#else
-	decode_frame(is_keyboard_left() ? left_idle[index] : idle[index]);
-#endif
-}
-
-
-static void render_cat_paws(void) {
-#if defined(LEFTCAT)
-	decode_frame(left_paws);
-#elif defined(RIGHTCAT)
-	decode_frame(paws);
-#else
-	decode_frame(is_keyboard_left() ? left_paws : paws);
-#endif
-}
-
-
-static void render_cat_tap(void) {
-	static uint8_t index = 0;
-	index = (index + 1) & 1;
-
-#if defined(LEFTCAT)
-	decode_frame(left_tap[index]);
-#elif defined(RIGHTCAT)
-	decode_frame(tap[index]);
-#else
-	decode_frame(is_keyboard_left() ? left_tap[index] : tap[index]);
-#endif
+	if (timer_elapsed32(oled_tap_timer) < TAP_INTERVAL) {
+		tap_index = (tap_index + 1) & 1;
+		decode_frame(is_keyboard_left() ? left_tap[tap_index] : tap[tap_index]);
+	} else if (timer_elapsed32(oled_tap_timer) < PAWS_INTERVAL) {
+		decode_frame(is_keyboard_left() ? left_paws : paws);
+	} else {
+		idle_index = idle_index < IDLE_FRAMES - 1 ? idle_index + 1 : 0;
+		decode_frame(is_keyboard_left() ? left_idle[idle_index] : idle[idle_index]);
+	}
 }
 
 
@@ -304,16 +275,6 @@ static void render_bongocat(void) {
 	prev_wpm = get_current_wpm();
 #endif
 
-	void animate_cat(void) {
-		if (timer_elapsed32(oled_tap_timer) < TAP_INTERVAL) {
-			render_cat_tap();
-		} else if (timer_elapsed32(oled_tap_timer) < PAWS_INTERVAL) {
-			render_cat_paws();
-		} else {
-			render_cat_idle();
-		}
-	}
-
 	if (timer_elapsed32(oled_tap_timer) > OLED_TIMEOUT) {
 		oled_off();
 	} else if (timer_elapsed(anim_timer) > FRAME_DURATION) {
@@ -326,17 +287,12 @@ static void render_bongocat(void) {
 // Init and rendering calls
 oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 	if (is_keyboard_master()) {
-#if defined(LEFTCAT)
-		return rotation;
-#elif defined(RIGHTCAT)
-		return OLED_ROTATION_180;
-#else
 		return is_keyboard_left() ? rotation : OLED_ROTATION_180;
-#endif
 	} else {
 		return OLED_ROTATION_270;
 	}
 }
+
 
 bool oled_task_user(void) {
 	extern void render_mod_status(void);

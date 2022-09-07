@@ -20,7 +20,7 @@ SPACE_CADET_ENABLE = no
 
 # Common features
 LTO_ENABLE = yes
-WAIT_FOR_USB = yes
+#WAIT_FOR_USB = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTMAGIC_ENABLE = yes
@@ -40,6 +40,7 @@ ifeq ($(strip $(MCU)), atmega32u4)
 endif
 
 ifneq ($(strip $(CONVERT_TO)),)
+	NO_USB_STARTUP_CHECK = yes
 	EEPROM_DRIVER = transient
 	OPT_DEFS += -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
 endif
@@ -66,7 +67,7 @@ ifeq ($(strip $(KEYBOARD)), crkbd/rev1)
 		OPT_DEFS += -DAUTO_CORRECT -D${OLED}
 		SRC += autocorrect.c rgb-matrix.c oled-icons.c oled-luna.c
 	else
-		OPT_DEFS += -DAUTO_CORRECT -D$(shell echo ${SPLIT}|tr a-z A-Z)CAT
+		OPT_DEFS += -DAUTO_CORRECT
 		SRC += autocorrect.c rgb-matrix.c oled-icons.c oled-bongocat.c
 	endif
 endif

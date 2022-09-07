@@ -31,21 +31,16 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 
 
 # Corne (CRKBD) OLED display
-Corne keyboard can be build with few OLED display options. The `-e OLED=` option will include pet animation on primary OLED with status icons on secondary. Animation are key stroke driven by `oled_tap_timer`. To use WPM, add `-e WPM_ENABLE=yes`.
-## Bongocat
-Build and flash each side with the corresponding options for left and right aligned Bongocat:
-```
-qmk compile -e OLED=LEFTCAT corne.json
-qmk compile -e OLED=RIGHTCAT corne.json
-```
-## Felix and Luna
-Build for Luna or Felix the dog:
+
+Corne keyboard can be build with few OLED display options. The `-e OLED=` option can select pet animation on primary OLED with status icons on secondary. Animation are key stroke driven by `oled_tap_timer`. To use WPM, add `-e WPM_ENABLE=yes`.
+## Bongocat or Luna and Felix
+Bongocat animation will be build as the default pet. Use the following option to select Luna or Felix:
 ```
 qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
 ```
 ## Logo file
-Images in `glcdfont.c` can be viewed and edited with:
+Icons used to render keyboard state is stored in `glcdfont.`. Images in that file can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
 * [QMK Logo Editor](https://joric.github.io/qle/)
 * [image2cpp](https://javl.github.io/image2cpp/)
@@ -185,9 +180,9 @@ Trigger layer taps immediately with another key press.
 # Layout wrapper macros
 
 ## Basic setup
-A single key map layout can be created once and shared with multiple keyboards using C preprocessors macros. The macros can be placed into the keyboard JSON file and the build process will expand them into a transient `keymap.c` file during compile time.
+A single key map layout is shared with multiple keyboards using C preprocessors macros. They are referenced in the keyboard JSON files and the build process will expand them into a transient `keymap.c` file during compile time.
 
-The `split_3x6_3` layout is used as the base and they are defined in `layout.h` file. This is an example of the number layer:
+The `split_3x6_3` layout is used as the base and defined in `layout.h` file. This is an example of the number layer:
 ```c
 #define _NUMB \
     _______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
@@ -195,11 +190,11 @@ The `split_3x6_3` layout is used as the base and they are defined in `layout.h` 
     _______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_INS,  _______, _______, _______, _______, _______, \
                                _______, MO(FNC), _______,     _______, _______, _______
 ```
-Next, a wrapper aliases to the layout used by the keyboard is also defined in `layout.h` file. Example for the CRKBD:
+Next, a wrapper aliases to the layout used by the keyboard is also defined in `layout.h` file, e.g. for CRKBD:
 ```c
 #define LAYOUT_corne_w(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 ```
-Both of them come together in the keyboard's JSON file in the following format:
+Both macros are referenced in the keyboard's JSON file with the following format:
 ```c
 {
     "keyboard": "crkbd/rev1",
@@ -213,15 +208,15 @@ Both of them come together in the keyboard's JSON file in the following format:
     ]
 }
 ```
-Add `#include layout.h` into `config.h`. The build process will construct a transient `keymap.c` from JSON file that includes `config.h`, and C preprocessor will use macros defined in `layout.h` to expand them into the real layout structure in the compile process.
+Append `#include layout.h` to `config.h`. The build process will construct a transient `keymap.c` from JSON and build it with `config.h`. C preprocessor will reference macros in `layout.h` to expand them into the real layout structure.
 
 ## Wrapping home row modifiers
-[Home row mods](https://precondition.github.io/home-row-mods) can be wrapped over the layout macros. Order of home row modifiers are created as 4-letter macros:
+[Home row mods](https://precondition.github.io/home-row-mods) can be wrapped over the layout macros. Order of home row modifiers are defined with these two macros:
 ```c
 #define HRML(k1,k2,k3,k4) LSFT_T(k1),LALT_T(k2),LCTL_T(k3),LGUI_T(k4)
 #define HRMR(k1,k2,k3,k4) RGUI_T(k1),RCTL_T(k2),RALT_T(k3),RSFT_T(k4)
 ```
-Both of them are then placed within the `HRM` macro below that wraps 4-keys on each half of `split_3x6_3` base:
+Both of them are then placed within the `HRM` macro for the `split_3x6_3` base:
 ```c
 #define HRM(k) HRM_TAPHOLD(k)
 #define HRM_TAPHOLD( \
@@ -235,7 +230,7 @@ Both of them are then placed within the `HRM` macro below that wraps 4-keys on e
     k25,      k26, k27, k28, k29,  k30,    k31,   TH(k32, k33, k34, k35), k36, \
                         k37, k38,  k39,    k40, k41, k42
 ```
-They come together in the JSON file, by wrapping `HRM()` on the layers that require them, like the following snippet:
+They come together in the JSON file, by wrapping `HRM()` on the layers that require them, e.g.:
 ```c
 "layers": [
     [ "HRM(_BASE)" ],
@@ -247,7 +242,7 @@ They come together in the JSON file, by wrapping `HRM()` on the layers that requ
 ```
 
 ## Adapting layouts
-The same base layout is adapted for other split keyboards by trimming them with macros. Corne's 42-key 3x6_3 (6-column, 3-thumb) is reduced to a split 34-key 3x5_2 (5-column, 2-thumb) with the following wrapper macro to exclude outer columns and thumb keys:
+The same base layout is shared and adapted for other split keyboards by trimming them with macros. Corne's 42-key 3x6_3 (6-column, 3-thumb) is reduced to a split 34-key 3x5_2 (5-column, 2-thumb) with the following wrapper macro to exclude outer columns and thumb keys:
 ```c
 #define LAYOUT_34key_w(...) LAYOUT(__VA_ARGS__)
 // Corne to 34-key layout conversion
@@ -263,23 +258,19 @@ The same base layout is adapted for other split keyboards by trimming them with 
          k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
                         k38, k39, k40, k41
 ```
-The JSON layout for 34-key Cradio keyboard uses that `C_34(k)` macro in the following format:
+The JSON layout for 34-key Cradio keyboard uses that `C_34()` macro in the following format:
 ```c
 {
-    "author": "",
-    "documentation": "Wrapper based keymap",
     "keyboard": "Cradio",
     "keymap": "filterpaper",
+    "layout": "LAYOUT_34key_w",
     "layers": [
         [ "C_34(HRM(_BASE))" ],
         [ "C_34(HRM(_COLE))" ],
         [ "C_34(_NUMB)" ],
         [ "C_34(_SYMB)" ],
         [ "C_34(_FUNC)" ]
-    ],
-    "layout": "LAYOUT_34key_w",
-    "notes": "",
-    "version": 1
+    ]
 }
 ```
 

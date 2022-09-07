@@ -4,7 +4,7 @@
 #include "filterpaper.h"
 
 #if defined(TAPPING_TERM_PER_KEY) || defined(PERMISSIVE_HOLD_PER_KEY)
-#	define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.2)
+#	define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
 #	define IS_HOME_ROW() (record->event.key.row == 1 || record->event.key.row == 5)
 static uint16_t tap_timer = 0;
 #endif
@@ -13,7 +13,7 @@ static uint16_t tap_timer = 0;
 #ifdef TAPPING_TERM_PER_KEY
 // Increase tapping term in between short key presses to avoid false trigger.
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_HOME_ROW() && IS_TYPING() ? TAPPING_TERM * 1.2 : TAPPING_TERM;
+	return IS_HOME_ROW() && IS_TYPING() ? TAPPING_TERM * 1.3 : TAPPING_TERM;
 }
 #endif
 
