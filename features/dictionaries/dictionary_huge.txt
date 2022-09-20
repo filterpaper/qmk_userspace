@@ -2185,7 +2185,7 @@ opthalmologist      -> ophthalmologist
 opthamologist       -> ophthalmologist
 optmizations        -> optimizations
 optomism            -> optimism
-orded               -> ordered
+:orded              -> ordered
 organim             -> organism
 organistion         -> organisation
 organiztion         -> organization
