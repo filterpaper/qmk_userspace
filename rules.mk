@@ -20,7 +20,6 @@ SPACE_CADET_ENABLE = no
 
 # Common features
 LTO_ENABLE = yes
-#WAIT_FOR_USB = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTMAGIC_ENABLE = yes
@@ -40,8 +39,8 @@ ifeq ($(strip $(MCU)), atmega32u4)
 endif
 
 ifneq ($(strip $(CONVERT_TO)),)
+#	EEPROM_DRIVER = transient
 	NO_USB_STARTUP_CHECK = yes
-	EEPROM_DRIVER = transient
 	OPT_DEFS += -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
 endif
 

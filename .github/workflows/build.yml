@@ -10,8 +10,8 @@ jobs:
       fail-fast: false
       matrix:
         keyboard: [cradio, corne]
-        conv: [kb2040, stemcell]
-        split: [left, right]
+        conv: [kb2040]
+#        split: [left, right]
         include:
         - keyboard: cradio
           conv: ''
@@ -58,7 +58,7 @@ jobs:
       uses: actions/upload-artifact@v3
       continue-on-error: true
       with:
-        retention-days: 3
+        retention-days: 60
         name: ${{ steps.vars.outputs.archive-name }}
         path: |
           *.hex
