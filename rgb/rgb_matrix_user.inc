@@ -91,7 +91,7 @@ static bool CANDY_RAIN(effect_params_t* params) {
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	if (g_rgb_timer > wait_timer) {
-		rain_pixel(mod8(random8(), DRIVER_LED_TOTAL), params, random8() & 2);
+		rain_pixel(mod8(random8(), RGB_MATRIX_LED_COUNT), params, random8() & 2);
 	}
 	return rgb_matrix_check_finished_leds(led_max);
 }
@@ -201,7 +201,7 @@ RGB_MATRIX_EFFECT(CANDY_FLOW)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_FLOW(effect_params_t* params) {
 	// LED state array
-	static RGB led[DRIVER_LED_TOTAL];
+	static RGB led[RGB_MATRIX_LED_COUNT];
 
 	static uint32_t wait_timer = 0;
 	if (wait_timer > g_rgb_timer) {
