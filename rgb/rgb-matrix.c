@@ -40,7 +40,7 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 void rgb_matrix_indicators_user(void) {
 	// Caps lock indicator
 	if (host_keyboard_led_state().caps_lock) {
-		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
+		for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
 			if (g_led_config.flags[i] & CAP_FLAG) {
 				rgb_matrix_set_color(i, RGB_CAPS);
 			}
@@ -48,7 +48,7 @@ void rgb_matrix_indicators_user(void) {
 	}
 	// Modifier keys indicator
 	if (get_mods() & MOD_MASK_CSAG) {
-		for (uint8_t i = 0; i < DRIVER_LED_TOTAL; ++i) {
+		for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
 			if (g_led_config.flags[i] & MOD_FLAG) {
 				rgb_matrix_set_color(i, RGB_MODS);
 			}
