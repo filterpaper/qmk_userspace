@@ -9,57 +9,58 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: [cradio, corne]
-        conv: [kb2040]
-#        split: [left, right]
+        keyboard: [cradio]
+        conv: [kb2040, elite_pi]
+        split: [left, right]
         include:
         - keyboard: cradio
-          conv: ''
+          conv: kb2040
+          split: ''
+        - keyboard: cradio
+          conv: elite_pi
+          split: ''
         - keyboard: 3w6
-        - keyboard: mark65
         - keyboard: technik
 
     steps:
     - name: Checkout QMK
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3.1.0
       with:
         repository: qmk/qmk_firmware
         ref: develop
         submodules: true
 
     - name: Checkout userspace
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3.1.0
       with:
         path: users/${{ github.actor }}
         persist-credentials: false
 
     - name: Setup variables
-      id: vars
       env:
         conv_suffix: $([ ${{ matrix.conv }} ] && printf "_${{ matrix.conv }}")
         split_suffix: $([ ${{ matrix.split }} ] && printf "_${{ matrix.split }}")
       run: |
-        set -x
-        echo "::set-output name=build-args:: -e CONVERT_TO=${{ matrix.conv }} -e SPLIT=${{ matrix.split }}"
-        echo "::set-output name=file-suffix::${{ env.conv_suffix }}${{ env.split_suffix }}"
-        echo "::set-output name=archive-name::${{ matrix.keyboard }}${{ env.conv_suffix }}"
+        echo "build_args=-e CONVERT_TO=${{ matrix.conv }} -e SPLIT=${{ matrix.split }}" >> $GITHUB_ENV
+        echo "file_suffix=${{ env.conv_suffix }}${{ env.split_suffix }}" >> $GITHUB_ENV
+        echo "archive_name=${{ matrix.keyboard }}${{ env.conv_suffix }}" >> $GITHUB_ENV
 
     - name: Build
       continue-on-error: true
       working-directory: users/${{ github.actor }}/keymaps
-      run: qmk -v compile -j 3 ${{ steps.vars.outputs.build-args }} ${{ matrix.keyboard }}.json
+      run: qmk -v compile -j 3 ${{ env.build_args }} ${{ matrix.keyboard }}.json
 
     - name: Rename uf2
       if: ${{ matrix.conv != '' }}
       continue-on-error: true
-      run: for file in *.uf2; do mv -v $file ${file%.*}${{ steps.vars.outputs.file-suffix }}.uf2; done
+      run: for file in *.uf2; do mv -v $file ${file%.*}${{ env.file_suffix }}.uf2; done
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
       continue-on-error: true
       with:
         retention-days: 60
-        name: ${{ steps.vars.outputs.archive-name }}
+        name: ${{ env.archive_name }}
         path: |
           *.hex
           *.bin
