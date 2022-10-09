@@ -19,39 +19,29 @@ SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
-LTO_ENABLE = yes
+COMBO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTMAGIC_ENABLE = yes
 
-# Main source file and source paths
-SRC += filterpaper.c
 VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
-
-# Custom features
-COMBO_ENABLE = yes
-SRC += combos.c
+OPT_DEFS += -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
 OPT_DEFS += -DCAPS_UNLOCK
-SRC += caps_unlock.c
+SRC += filterpaper.c caps_unlock.c combos.c
 
 ifeq ($(strip $(MCU)), atmega32u4)
+	LTO_ENABLE = yes
 	BOOTLOADER = atmel-dfu
 endif
 
-ifneq ($(strip $(CONVERT_TO)),)
-#	EEPROM_DRIVER = transient
-	NO_USB_STARTUP_CHECK = yes
-	OPT_DEFS += -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
-endif
-
-# Small split keyboards
+# Small split
 ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), 3w6/rev2 cradio))
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrect.c
 endif
 
-# The Mark65 and Technik
-ifeq ($(findstring boardsource/, $(KEYBOARD)), boardsource/)
+# RGB boards
+ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), technik_o crkbd/rev1))
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
@@ -59,14 +49,12 @@ endif
 
 # Corne CRKBD
 ifeq ($(strip $(KEYBOARD)), crkbd/rev1)
-	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = yes
 	OLED_ENABLE = yes
 	ifeq ($(strip $(OLED)), LUNA FELIX)
 		OPT_DEFS += -DAUTO_CORRECT -D${OLED}
-		SRC += autocorrect.c rgb-matrix.c oled-icons.c oled-luna.c
+		SRC += autocorrect.c oled-icons.c oled-luna.c
 	else
 		OPT_DEFS += -DAUTO_CORRECT
-		SRC += autocorrect.c rgb-matrix.c oled-icons.c oled-bongocat.c
+		SRC += autocorrect.c oled-icons.c oled-bongocat.c
 	endif
 endif
