@@ -1,5 +1,5 @@
 name: Development Build
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 
 jobs:
   build:
@@ -9,63 +9,51 @@ jobs:
       fail-fast: false
       matrix:
         keyboard: [cradio, corne]
-        branch: [develop]
-        conv: [stemcell, kb2040]
+        conv: [stemcell, kb2040, elite_pi]
         split: [left, right]
-#        include:
-#        - keyboard: cradio
-#          branch: develop
-#        - keyboard: cradio
-#          branch: develop
-#          conv: stemcell
-#          split: left
-#        - keyboard: cradio
-#          branch: develop
-#          conv: stemcell
-#          split: right
+        branch: [develop]
 
     steps:
     - name: Checkout ${{ matrix.branch }} branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3.1.0
       with:
         repository: filterpaper/qmk_firmware
         ref: ${{ matrix.branch }}
         submodules: true
 
     - name: Checkout userspace
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3.1.0
       with:
         path: users/${{ github.actor }}
         persist-credentials: false
 
     - name: Setup variables
-      id: vars
+      shell: sh -x {0}
       env:
-        branch_suffix: $([ -n "${{ matrix.branch}}" ] && printf "_${{ matrix.branch }}")
         conv_suffix: $([ -n "${{ matrix.conv }}" ] && printf "_${{ matrix.conv }}")
         split_suffix: $([ -n "${{ matrix.split }}" ] && printf "_${{ matrix.split }}")
+        branch_suffix: $([ -n "${{ matrix.branch}}" ] && printf "_${{ matrix.branch }}")
       run: |
-        set -x
-        echo "::set-output name=build-args:: -e CONVERT_TO=${{ matrix.conv }} -e SPLIT=${{ matrix.split }}"
-        echo "::set-output name=file-suffix::${{ env.conv_suffix }}${{ env.split_suffix }}"
-        echo "::set-output name=archive-name::${{ matrix.keyboard }}${{ env.branch_suffix }}${{ env.conv_suffix }}"
+        echo "build_args=-e CONVERT_TO=${{ matrix.conv }} -e SPLIT=${{ matrix.split }}" >> $GITHUB_ENV
+        echo "file_suffix=${{ env.conv_suffix }}${{ env.split_suffix }}" >> $GITHUB_ENV
+        echo "archive_name=${{ matrix.keyboard }}${{ env.conv_suffix }}" >> $GITHUB_ENV
 
     - name: Build ${{ matrix.keyboard }} firmware
       continue-on-error: true
       working-directory: users/${{ github.actor }}/keymaps
-      run: qmk -v compile -j 3 ${{ steps.vars.outputs.build-args }} ${{ matrix.keyboard }}.json
+      run: qmk -v compile -j 3 ${{ env.build_args }} ${{ matrix.keyboard }}.json
 
     - name: Rename uf2
       if: ${{ matrix.conv != '' }}
       continue-on-error: true
-      run: for file in *.uf2; do mv -v $file ${file%.*}${{ steps.vars.outputs.file-suffix }}.uf2; done
+      run: for file in *.uf2; do mv -v $file ${file%.*}${{ env.file_suffix }}.uf2; done
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
       continue-on-error: true
       with:
         retention-days: 3
-        name: ${{ steps.vars.outputs.archive-name }}
+        name: ${{ env.archive_name }}
         path: |
           *.hex
           *.bin

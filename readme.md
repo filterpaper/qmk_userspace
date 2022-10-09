@@ -361,11 +361,10 @@ dfu-flash() {
 * [Data in Program Space](https://www.nongnu.org/avr-libc/user-manual/pgmspace.html)
 * [Autocorrections with QMK](https://getreuer.info/posts/keyboards/autocorrection/index.html)
 ## Hardware Parts
-* [Elite-C](https://boardsource.xyz/store/5ef67ea66786dc1e65a80708)
 * [Pro Micro C](https://www.aliexpress.com/item/1005003230811462.html)
 * [Adafruit KB2040](https://www.adafruit.com/product/5302)
-* Mill-Max [315-43-112-41-003000](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) low sockets for Elite-C
-* Mill-Max [315-43-164-41-001000](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-001000/1212142) sockets for Pro Micro
+* Mill-Max [315-43-112-41-003000](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) low profile sockets
+* Mill-Max [315-43-164-41-001000](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-001000/1212142) mid profile sockets
 * Mill-Max [connector pins](https://www.digikey.com/product-detail/en/3320-0-00-15-00-00-03-0/ED1134-ND/4147392)
 * [PJ320A](https://www.aliexpress.com/item/1005001928651798.html) jack
 * [TRRS](https://www.aliexpress.com/item/32961128759.html) cable
