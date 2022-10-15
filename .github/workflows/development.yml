@@ -1,5 +1,8 @@
 name: Development Build
-on: [workflow_dispatch]
+on:
+  schedule:
+  - cron: '0 10 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,12 +15,15 @@ jobs:
         conv: [stemcell, kb2040, elite_pi]
         split: [left, right]
         branch: [develop]
+        include:
+        - keyboard: 3w6
+        - keyboard: technik
 
     steps:
     - name: Checkout ${{ matrix.branch }} branch
       uses: actions/checkout@v3.1.0
       with:
-        repository: filterpaper/qmk_firmware
+        repository: qmk/qmk_firmware
         ref: ${{ matrix.branch }}
         submodules: true
 
@@ -28,7 +34,6 @@ jobs:
         persist-credentials: false
 
     - name: Setup variables
-      shell: sh -x {0}
       env:
         conv_suffix: $([ -n "${{ matrix.conv }}" ] && printf "_${{ matrix.conv }}")
         split_suffix: $([ -n "${{ matrix.split }}" ] && printf "_${{ matrix.split }}")
@@ -58,3 +63,6 @@ jobs:
           *.hex
           *.bin
           *.uf2
+
+  purge:
+    uses: filterpaper/scripts/.github/workflows/delete-workflow.yml@main
