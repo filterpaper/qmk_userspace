@@ -110,7 +110,13 @@ Initialise LEDs with the `*_INIT` macro on startup inside `matrix_scan_user(void
 
 
 # Tap Hold Configuration
-Home row mods using mod tap is finicky with typing habits. They are a bit more usable with the use of a tap timer to reduce false positives while typing:
+Home row mods with mod tap can be finicky with different typing habits. They are more usable with the use of a tap timer to reduce false positives while typing:
+
+## Ignore Mod Tap Interrupt
+```c
+#define IGNORE_MOD_TAP_INTERRUPT
+```
+Allow rolling of tap hold keys as default.
 
 ## Tap timer
 Setup a tap timer to detect recent key presses in `process_record_user` and a boolean macro for "typing interval" when the last key press is within 1.3 times `TAPPING_TERM`:
@@ -126,12 +132,6 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 }
 ```
 
-## Ignore Mod Tap Interrupt
-```c
-#define IGNORE_MOD_TAP_INTERRUPT
-```
-Allow rolling of tap hold keys as default.
-
 ## Increase tapping term while typing
 ```c
 #define TAPPING_TERM 200
@@ -145,7 +145,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     return TAPPING_TERM;
 }
 ```
-Increases tapping term within typing interval to avoid accidentally trigger of mod taps while typing.
+Use the previous tap timer to increase tapping term while typing to avoid accidental mod tap activation.
 
 ## Permissive hold for thumb shift
 ```c

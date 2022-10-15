@@ -3,10 +3,10 @@
 
 #include "filterpaper.h"
 
+#define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
+#define IS_HOME_ROW() (record->event.key.row == 1 || record->event.key.row == 5)
 #if defined(TAPPING_TERM_PER_KEY) || defined(PERMISSIVE_HOLD_PER_KEY)
-#	define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
-#	define IS_HOME_ROW() (record->event.key.row == 1 || record->event.key.row == 5)
-static uint16_t tap_timer = 0;
+static uint_fast16_t tap_timer = 0;
 #endif
 
 

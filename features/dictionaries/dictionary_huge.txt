@@ -2542,7 +2542,7 @@ purposedly          -> purposely
 purpotedly          -> purportedly
 pursuade            -> persuade
 pususading          -> persuading
-puting              -> putting
+:puting             -> putting
 pwoer               -> power
 pyscic              -> psychic
 
