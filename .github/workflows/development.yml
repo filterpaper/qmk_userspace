@@ -16,7 +16,6 @@ jobs:
         split: [left, right]
         branch: [develop]
         include:
-        - keyboard: 3w6
         - keyboard: technik
 
     steps:

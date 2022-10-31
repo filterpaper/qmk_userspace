@@ -29,16 +29,12 @@
 
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
-//#	define SPLIT_USB_TIMEOUT 2000
+#	define SPLIT_USB_TIMEOUT 2500
 #	if defined(OLED_ENABLE) || defined(RGB_MATRIX_ENABLE)
 #		define SPLIT_OLED_ENABLE
 #		define SPLIT_MODS_ENABLE
 #		define SPLIT_LED_STATE_ENABLE
 #		define SPLIT_LAYER_STATE_ENABLE
-#	endif
-#	ifdef __AVR__
-#		define SPLIT_MAX_CONNECTION_ERRORS 0
-#		define SPLIT_CONNECTION_CHECK_TIMEOUT 0
 #	endif
 #endif
 
@@ -58,8 +54,6 @@
 #	include "rgb/rgb-disable.h"
 #	undef RGB_DISABLE_WHEN_USB_SUSPENDED
 #	define RGB_DISABLE_WHEN_USB_SUSPENDED
-#	undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
-#	define RGB_MATRIX_MAXIMUM_BRIGHTNESS 150
 #	define RGB_DISABLE_TIMEOUT 180000
 #	define RGB_MATRIX_STARTUP_HUE 208
 #	define RGB_MATRIX_STARTUP_SAT 135
@@ -80,4 +74,4 @@
 #endif
 
 // Layout macros
-#include "keymaps/layout.h"
+#include "layout.h"
