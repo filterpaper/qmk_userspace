@@ -1,6 +1,6 @@
 # Summary
-This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` files into the QMK source folders.
-* Keyboard keymaps are saved as [QMK Configurator](https://config.qmk.fm/#/) JSON format
+This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` files within keyboard sub-folders.
+* Keymaps are saved in [QMK Configurator](https://config.qmk.fm/#/) JSON format.
 * Shared source files build with `rules.mk`.
 
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
@@ -8,14 +8,17 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 
 
 # Building Userspace
-This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) with `users` folder by running `qmk compile` on the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with the [build.yml](.github/workflows/build.yml) workflow.
+This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) within `users` folder by executing `qmk compile` on the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with the [build.yml](.github/workflows/build.yml) workflow.
 
 
 
 # Features
-* Shared [layout](keymaps/) wrapper macros
+* Shared [layout](layout.h) wrapper macros
 * [Combos](#combo-helper-macros) simplified with preprocessors
 * [Tap-hold](#tap-hold-macros) clipboard shortcuts
+* [Word](features/) processing features
+  * Caps Unlock to toggle caps lock following a word
+  * Autocorrection for typos
 * [OLED](oled/) indicators and animation
   * [Bongocat](oled/oled-bongocat.c) with compressed RLE frames
   * [Luna](oled/oled-luna.c) (and Felix) the dog
@@ -24,9 +27,6 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 * [RGB](rgb/) matrix lighting and effects
   * Custom "candy" matrix effect
   * [Layer indicators](#light-configured-layers-keys) of active keys
-* [Word](features/) processing features
-  * Caps Unlock to toggle caps lock following a word
-  * Autocorrection for typos
 
 
 
@@ -182,24 +182,24 @@ Trigger layer taps immediately with another key press.
 ## Basic setup
 A single key map layout is shared with multiple keyboards using C preprocessors macros. They are referenced in the keyboard JSON files and the build process will expand them into a transient `keymap.c` file during compile time.
 
-The `split_3x6_3` layout is used as the base and defined in `layout.h` file. This is an example of the number layer:
+The `split_3x5_2` layout is used as the base and defined in `layout.h` file, example:
 ```c
-#define _NUMB \
-    _______, _______, KC_1,    KC_2,    KC_3,    _______,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_DQUO, _______, \
-    _______, _______, KC_4,    KC_5,    KC_6,    _______,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_QUOT, _______, \
-    _______, _______, KC_7,    KC_8,    KC_9,    KC_0,        KC_INS,  _______, _______, _______, _______, _______, \
-                               _______, MO(FNC), _______,     _______, _______, _______
+#define _BASE \
+    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
+    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, \
+    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
+                  LT(SYM,KC_TAB), LCA_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC)
 ```
-Next, a wrapper aliases to the layout used by the keyboard is also defined in `layout.h` file, e.g. for CRKBD:
+Next, a wrapper aliases to the layout used by the keyboard is also defined in `layout.h` file, e.g. for Cradio:
 ```c
-#define LAYOUT_corne_w(...) LAYOUT_split_3x6_3(__VA_ARGS__)
+#define LAYOUT_34key_w(...) LAYOUT_split_3x5_2(__VA_ARGS__)
 ```
 Both macros are referenced in the keyboard's JSON file with the following format:
 ```c
 {
-    "keyboard": "crkbd/rev1",
+    "keyboard": "cradio",
     "keymap": "filterpaper",
-    "layout": "LAYOUT_corne_w",
+    "layout": "LAYOUT_34key_w",
     "layers": [
         [ "_BASE" ],
         [ "_NUMB" ],
@@ -208,7 +208,7 @@ Both macros are referenced in the keyboard's JSON file with the following format
     ]
 }
 ```
-Append `#include layout.h` to `config.h`. The build process will construct a transient `keymap.c` from JSON and build it with `config.h`. C preprocessor will reference macros in `layout.h` to expand them into the real layout structure.
+Append `#include layout.h` to `config.h`. The build process will construct a transient `keymap.c` using the C preprocessor macros referenced by JSON.
 
 ## Wrapping home row modifiers
 [Home row mods](https://precondition.github.io/home-row-mods) can be wrapped over the layout macros. Order of home row modifiers are defined with these two macros:
@@ -216,21 +216,21 @@ Append `#include layout.h` to `config.h`. The build process will construct a tra
 #define HRML(k1,k2,k3,k4) LSFT_T(k1),LALT_T(k2),LCTL_T(k3),LGUI_T(k4)
 #define HRMR(k1,k2,k3,k4) RGUI_T(k1),RCTL_T(k2),RALT_T(k3),RSFT_T(k4)
 ```
-Both of them are then placed within the `HRM` macro for the `split_3x6_3` base:
+Both are then placed within the `HRM` macro for the `split_3x5_2` base:
 ```c
 #define HRM(k) HRM_TAPHOLD(k)
 #define HRM_TAPHOLD( \
-          k01, k02, k03, k04, k05, k06,    k07, k08, k09, k10, k11, k12, \
-          k13, k14, k15, k16, k17, k18,    k19, k20, k21, k22, k23, k24, \
-          k25, k26, k27, k28, k29, k30,    k31, k32, k33, k34, k35, k36, \
-                         k37, k38, k39,    k40, k41, k42 \
+    l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05, \
+    l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10, \
+    l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15, \
+                   l16, l17,    r16, r17                 \
 ) \
-    k01,      k02, k03, k04, k05,  k06,    k07,      k08, k09, k10, k11,  k12, \
-    k13, HRML(k14, k15, k16, k17), k18,    k19, HRMR(k20, k21, k22, k23), k24, \
-    k25,      k26, k27, k28, k29,  k30,    k31,   TH(k32, k33, k34, k35), k36, \
-                        k37, k38,  k39,    k40, k41, k42
+      l01, l02, l03, l04, l05,  r01, r02, r03, r04, r05,       \
+HRML(l06, l07, l08, l09), l10,  r06, HRMR(r07, r08, r09, r10), \
+      l11, l12, l13, l14, l15,  r11, r12, r13, r14, r15,       \
+                     l16, l17,  r16, r17
 ```
-They come together in the JSON file, by wrapping `HRM()` on the layers that require them, e.g.:
+They come together in the JSON file, by wrapping `HRM()` on layers that require them, e.g.:
 ```c
 "layers": [
     [ "HRM(_BASE)" ],
@@ -242,34 +242,34 @@ They come together in the JSON file, by wrapping `HRM()` on the layers that requ
 ```
 
 ## Adapting layouts
-The same base layout is shared and adapted for other split keyboards by trimming them with macros. Corne's 42-key 3x6_3 (6-column, 3-thumb) is reduced to a split 34-key 3x5_2 (5-column, 2-thumb) with the following wrapper macro to exclude outer columns and thumb keys:
+The base layout is shared and adapted for other split keyboards by expanding them with macros. The following example expands Cradio's 34-key to Corne's 42-key 3x6_3 (6-column, 3-thumb) using the following wrapper macro to add additional keys to outer columns:
 ```c
-#define LAYOUT_34key_w(...) LAYOUT(__VA_ARGS__)
-// Corne to 34-key layout conversion
-#define C_34(k) SPLIT_3x6_3_TO_3x5_2(k)
-#define SPLIT_3x6_3_TO_3x5_2( \
-    k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, k12, \
-    k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, k24, \
-    k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, k36, \
-                   k37, k38, k39, k40, k41, k42 \
+#define LAYOUT_corne_w(...) LAYOUT_split_3x6_3(__VA_ARGS__)
+// 3x5_2 to 42-key conversion
+#define C_42(k) CONV_42(k)
+#define CONV_42( \
+         l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05, \
+         l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10, \
+         l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15, \
+                        l16, l17,    r16, r17                 \
 ) \
-         k02, k03, k04, k05, k06, k07, k08, k09, k10, k11, \
-         k14, k15, k16, k17, k18, k19, k20, k21, k22, k23, \
-         k26, k27, k28, k29, k30, k31, k32, k33, k34, k35, \
-                        k38, k39, k40, k41
+KC_TAB,  l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05, KC_BSPC, \
+QK_GESC, l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10, KC_SCLN, \
+KC_LSFT, l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15, KC_ENT,  \
+         RSA_T(KC_ESC), l16, l17,    r16, r17, RAG_T(KC_DEL)
 ```
-The JSON layout for 34-key Cradio keyboard uses that `C_34()` macro in the following format:
+The JSON file for 42-key Corne uses the `C_42()` macro in the following format:
 ```c
 {
-    "keyboard": "Cradio",
+    "keyboard": "crkbd/rev1",
     "keymap": "filterpaper",
-    "layout": "LAYOUT_34key_w",
+    "layout": "LAYOUT_corne_w",
     "layers": [
-        [ "C_34(HRM(_BASE))" ],
-        [ "C_34(HRM(_COLE))" ],
-        [ "C_34(_NUMB)" ],
-        [ "C_34(_SYMB)" ],
-        [ "C_34(_FUNC)" ]
+        [ "C_42(HRM(_BASE))" ],
+        [ "C_42(HRM(_COLE))" ],
+        [ "C_42(_NUMB)" ],
+        [ "C_42(_SYMB)" ],
+        [ "C_42(_FUNC)" ]
     ]
 }
 ```
@@ -353,16 +353,15 @@ dfu-flash() {
 # Useful Links
 * [Seniply](https://stevep99.github.io/seniply/) 34 key layout
 * [Callum-style](https://github.com/callum-oakley/qmk_firmware/tree/master/users/callum) mods
-* [Architeuthis dux](https://github.com/tapioki/cephalopoda/tree/main/Architeuthis%20dux) PCB
-* [Hypergolic](https://github.com/davidphilipbarr/hypergolic) PCB
+* [Paroxysm](https://github.com/davidphilipbarr/paroxysm) PCB
 * [Split Keyboard](https://golem.hu/boards/) database
 * [Sockets](https://github.com/joric/nrfmicro/wiki/Sockets)
 * [Git Purr](https://girliemac.com/blog/2017/12/26/git-purr/)
 * [Data in Program Space](https://www.nongnu.org/avr-libc/user-manual/pgmspace.html)
 * [Autocorrections with QMK](https://getreuer.info/posts/keyboards/autocorrection/index.html)
 ## Hardware Parts
-* [Pro Micro C](https://www.aliexpress.com/item/1005003230811462.html)
 * [Adafruit KB2040](https://www.adafruit.com/product/5302)
+* [Elite-Pi](https://keeb.io/collections/diy-parts/products/elite-pi-usb-c-pro-micro-replacement-rp2040)
 * Mill-Max [315-43-112-41-003000](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) low profile sockets
 * Mill-Max [315-43-164-41-001000](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-001000/1212142) mid profile sockets
 * Mill-Max [connector pins](https://www.digikey.com/product-detail/en/3320-0-00-15-00-00-03-0/ED1134-ND/4147392)

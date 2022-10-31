@@ -19,7 +19,7 @@ SUBS(vi_quit, ":q!",   KC_Q,     KC_W)
 SUBS(vi_save, ":wq",   KC_Z,     KC_X)
 SUBS(dir_up,  "../",   TH_DOT,   TH_SLSH)
 // navigation
-COMB(nav_dn,  RSA_DN,  TH_M,    TH_COMM)
-COMB(nav_up,  RSA_UP,  TH_COMM, TH_DOT)
+COMB(nav_dn,  SA_DN,   TH_M,    TH_COMM)
+COMB(nav_up,  SA_UP,   TH_COMM, TH_DOT)
 // caps lock
 COMB(caps_l,  KC_CAPS, HM_A, HM_QUOT)

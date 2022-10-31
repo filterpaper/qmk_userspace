@@ -3,10 +3,10 @@
 	"keymap": "filterpaper",
 	"layout": "LAYOUT_34key_w",
 	"layers": [
-		[ "C_34(HRM(_BASE))" ],
-		[ "C_34(HRM(_COLE))" ],
-		[ "C_34(_NUMB)" ],
-		[ "C_34(_SYMB)" ],
-		[ "C_34(_FUNC)" ]
+		[ "HRM(_BASE)" ],
+		[ "HRM(_COLE)" ],
+		[ "_NUMB" ],
+		[ "_SYMB" ],
+		[ "_FUNC" ]
 	]
 }
