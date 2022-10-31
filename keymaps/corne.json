@@ -1,12 +1,12 @@
 {
 	"keyboard": "crkbd/rev1",
 	"keymap": "filterpaper",
-	"layout": "LAYOUT_corne_w",
+	"layout": "LAYOUT_crkbd_w",
 	"layers": [
-		[ "HRM(_BASE)" ],
-		[ "HRM(_COLE)" ],
-		[ "_NUMB" ],
-		[ "_SYMB" ],
-		[ "_FUNC" ]
+		[ "C_42(HRM(_BASE))" ],
+		[ "C_42(HRM(_COLE))" ],
+		[ "C_42(_NUMB)" ],
+		[ "C_42(_SYMB)" ],
+		[ "C_42(_FUNC)" ]
 	]
 }

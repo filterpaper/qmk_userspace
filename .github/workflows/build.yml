@@ -19,7 +19,8 @@ jobs:
         - keyboard: cradio
           conv: elite_pi
           split: ''
-        - keyboard: 3w6
+        - keyboard: cradio
+          conv: ''
         - keyboard: technik
 
     steps:
@@ -67,4 +68,4 @@ jobs:
           *.uf2
 
   purge:
-    uses: filterpaper/scripts/.github/workflows/delete-workflow.yml@main
+    uses: filterpaper/scripts/.github/workflows/delete-completed.yml@main
