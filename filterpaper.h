@@ -41,4 +41,7 @@ mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : ((kc >> 8) & 0xf)
 #define MODTAP_BITS(kc) ((kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : ((kc >> 8) & 0xf))
 // Return coarse (left) mod tap bits
 #define MODTAP_BIT(kc) ((kc >> 8) & 0x0f)
+// Keycode range macros
 #define IS_MOD_TAP(kc) (QK_MOD_TAP <= kc && kc <= QK_MOD_TAP_MAX)
+#define IS_LAYER_TAP(kc) (QK_LAYER_TAP_1 <= kc && kc <= QK_LAYER_TAP_MAX)
+#define IS_HOME_ROW() (record->event.key.row == 1 || record->event.key.row == 5)

@@ -16,7 +16,6 @@ SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
-LTO_ENABLE = yes
 COMBO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
@@ -27,6 +26,7 @@ OPT_DEFS += -DCAPS_UNLOCK -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
 SRC += filterpaper.c caps_unlock.c combos.c
 
 ifeq ($(strip $(MCU)), atmega32u4)
+	LTO_ENABLE = yes
 	BOOTLOADER = atmel-dfu
 endif
 
