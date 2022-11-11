@@ -1,6 +1,6 @@
 # Summary
-This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is setup as a self-contained folder that avoids placing `keymap.c` files within keyboard sub-folders.
-* Keymaps are saved in [QMK Configurator](https://config.qmk.fm/#/) JSON format.
+This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is set up as a self-contained folder that avoids placing `keymap.c` files within keyboard sub-folders.
+* Keymaps are saved as [QMK Configurator](https://config.qmk.fm/#/) JSON files.
 * Shared source files build with `rules.mk`.
 
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
@@ -81,13 +81,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true; // continue with unmatched keycodes
 }
 ```
-Tap hold shortcuts using layer tap (`LT()`) uses less firmware space than [tap dance ](https://docs.qmk.fm/#/feature_tap_dance) (~35 bytes per shortcut). Macro `W_TH` replaces `KC_W` on the key map (`keymap[]`), and the code will intercept hold function of `LT()` to send the macro string. There are more examples in QMK's [Intercepting Mod Taps](https://docs.qmk.fm/#/mod_tap?id=intercepting-mod-taps).
+Tap hold shortcuts with layer tap (`LT()`) uses less firmware space than [tap dance](https://docs.qmk.fm/#/feature_tap_dance) (~35 bytes per shortcut). Macro `W_TH` replaces `KC_W` on the key map, and the code will intercept hold function of `LT()` to send the macro string. There are more examples in QMK's [Intercepting Mod Taps](https://docs.qmk.fm/#/mod_tap?id=intercepting-mod-taps).
 
 ## Combo helper macros
-The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) code file `combos.c` is modified from [Jane Bernhardt's helper macros](http://combos.gboards.ca/) to simplify combo management. New shortcuts are added to `combos.inc` as one-liners and preprocessor macros will generate required QMK combo source codes at compile time.
+The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) code file `combos.c` is modified from [Jane Bernhardt's helper macros](http://combos.gboards.ca/) to simplify management. New shortcuts are added to `combos.inc` as one-liners and preprocessor macros will generate required QMK combo source codes at compile time.
 
 ## Pro Micro RX/TX LEDs
-Data LEDs on Pro Micro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) on Atmega32u4. To use them with QMK's [LED Indicators](https://github.com/qmk/qmk_firmware/docs/feature_led_indicators.md), flag the pin in `config.h`:
+Data LEDs on Pro Micro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) on Atmega32u4. To use them with QMK's [LED Indicators](https://docs.qmk.fm/#/feature_led_indicators), flag the pin in `config.h`:
 ```c
 #define LED_CAPS_LOCK_PIN B0
 #define LED_PIN_ON_STATE 0
@@ -105,12 +105,12 @@ For advance usage, setup the following macros to call both pins with GPIO functi
 #define RXLED_OFF  writePinHigh(RXLED)
 #define TXLED_OFF  writePinHigh(TXLED)
 ```
-Initialise LEDs with the `*_INIT` macro on startup inside `matrix_scan_user(void)`. Subsequently, LEDs can be used as indicators with the `*_ON` and `*_OFF` macros that follows.
+Initialise LEDs with the `*_INIT` macro on startup inside `matrix_init_user(void)`. Subsequently, LEDs can be used as indicators with the `*_ON` and `*_OFF` macros that follows.
 
 
 
-# Tap Hold Configuration
-Home row mods with mod tap can be finicky with different typing habits. They are more usable with the use of a tap timer to reduce false positives while typing:
+# Tap Hold Customisations
+Custom mod tap settings to avoid false positives with home row mods.
 
 ## Ignore Mod Tap Interrupt
 ```c
@@ -133,6 +133,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 ```
 
 ## Increase tapping term while typing
+Use the previous tap timer to increase tapping term while typing to avoid accidental mod tap activation.
 ```c
 #define TAPPING_TERM 200
 #define TAPPING_TERM_PER_KEY
@@ -145,9 +146,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     return TAPPING_TERM;
 }
 ```
-Use the previous tap timer to increase tapping term while typing to avoid accidental mod tap activation.
 
 ## Permissive hold for thumb shift
+Activate Shift mod tap with another nested key press when not within typing interval.
 ```c
 #define PERMISSIVE_HOLD_PER_KEY
 #define MODTAP_BIT(kc) ((kc >> 8) & 0x0f)
@@ -159,9 +160,9 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     return false;
 }
 ```
-Activate Shift mod tap with another nested key press when not within typing interval.
 
 ## Hold on layer tap
+Trigger layer taps immediately with another key press.
 ```c
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define QK_LAYER_TAP_1 0x4100
@@ -173,7 +174,6 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     return false;
 }
 ```
-Trigger layer taps immediately with another key press.
 
 
 

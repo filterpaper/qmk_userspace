@@ -4,8 +4,7 @@
 #include "filterpaper.h"
 
 #define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
-#define IS_HOME_ROW() (record->event.key.row == 1 || record->event.key.row == 5)
-#define IS_LAYER_TAP(kc) (QK_LAYER_TAP_1 <= kc && kc <= QK_LAYER_TAP_MAX)
+
 
 #if defined(TAPPING_TERM_PER_KEY) || defined(PERMISSIVE_HOLD_PER_KEY)
 static uint_fast16_t tap_timer = 0;
