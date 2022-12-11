@@ -114,7 +114,8 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		//case DOT_TH:  return process_tap_hold(Z_CUT, record);
 		//case COMM_TH: return process_tap_hold(Z_CPY, record);
 		//case M_TH:    return process_tap_hold(Z_PST, record);
-		case QUOT_GRAVE_TH: return process_tap_hold(KC_GRAVE, record);
+		case QUOT_COLN_TH: return process_tap_hold(KC_COLN, record);
+		case P_COLN_TH: return process_tap_hold(KC_COLN, record);
 		case DOT_UNDS_TH: return process_tap_hold(KC_UNDS, record);
 		case COMM_MINUS_TH: return process_tap_hold(KC_MINUS, record);
 		case SLSH_EXLM_TH: return process_tap_hold(KC_EXLM, record);
