@@ -3,11 +3,9 @@
 
 #include "filterpaper.h"
 
-#define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
-
-
 #if defined(TAPPING_TERM_PER_KEY) || defined(PERMISSIVE_HOLD_PER_KEY)
 static uint_fast16_t tap_timer = 0;
+#	define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
 #endif
 
 
@@ -15,6 +13,14 @@ static uint_fast16_t tap_timer = 0;
 // Increase tapping term in between short key presses to avoid false trigger.
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	return IS_HOME_ROW() && IS_TYPING() ? TAPPING_TERM * 1.3 : TAPPING_TERM;
+}
+#endif
+
+
+#ifdef QUICK_TAP_TERM_PER_KEY
+// Reduce quick tap term for thumb keys
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
+	return IS_THUMB_ROW() ? QUICK_TAP_TERM * 0.5 : QUICK_TAP_TERM;
 }
 #endif
 
@@ -31,15 +37,6 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 // Select hold immediately with another key for layer tap 1 and higher.
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return IS_LAYER_TAP(keycode) ? true : false;
-}
-#endif
-
-
-#ifdef TAPPING_FORCE_HOLD_PER_KEY
-// Force hold on tap-hold key when held after tapping,
-// enable for (right split) bottom row key.
-bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
-	return record->event.key.row == MATRIX_ROWS - 1 ? true : false;
 }
 #endif
 

@@ -20,14 +20,14 @@ jobs:
 
     steps:
     - name: Checkout ${{ matrix.branch }} branch
-      uses: actions/checkout@v3.1.0
+      uses: actions/checkout@v3.2.0
       with:
         repository: qmk/qmk_firmware
         ref: ${{ matrix.branch }}
         submodules: true
 
     - name: Checkout userspace
-      uses: actions/checkout@v3.1.0
+      uses: actions/checkout@v3.2.0
       with:
         path: users/${{ github.actor }}
         persist-credentials: false
