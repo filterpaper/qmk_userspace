@@ -3,10 +3,20 @@
 
 #include "rgb-matrix.h"
 
-
-void matrix_init_user(void) {
-	rgb_matrix_mode_noeeprom(DEF_MODE);
-}
+#if defined(CONVERT_TO_KB2040) && defined(KEYBOARD_cradio)
+led_config_t g_led_config = { {
+	// Assign left keys to left KB2040 LED
+	{ 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
+	// Assign right keys to right KB2040 LED
+	{ 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 },
+	{ 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }
+}, {
+	{111, 48}, {113, 48}
+}, {
+	255, 255
+} };
+#endif
 
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
