@@ -30,10 +30,16 @@ ifeq ($(strip $(MCU)), atmega32u4)
 	BOOTLOADER = atmel-dfu
 endif
 
-ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), cradio crkbd/rev1))
+ifeq ($(strip $(KEYBOARD)), cradio)
 #	EEPROM_DRIVER = transient
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrect.c
+	ifeq ($(strip $(CONVERT_TO)), kb2040)
+		RGB_MATRIX_ENABLE = yes
+		RGB_MATRIX_DRIVER = WS2812
+		RGB_MATRIX_CUSTOM_USER = yes
+		SRC += rgb-matrix.c
+	endif
 endif
 
 # RGB boards
