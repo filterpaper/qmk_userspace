@@ -5,8 +5,9 @@
 #include QMK_KEYBOARD_H
 
 bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
-	// Skip processing if caps lock is off or for one-shot key.
+	// Skip caps or one-shot key, or if caps lock is off
 	if (host_keyboard_led_state().caps_lock == false
+	|| (uint8_t)keycode == KC_CAPS
 #ifndef NO_ACTION_ONESHOT
 	|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX)
 #endif
