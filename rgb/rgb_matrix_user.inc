@@ -7,20 +7,22 @@
 //uint16_t tick = scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 5);
 
 /*
+https://www.pcg-random.org/posts/bob-jenkins-small-prng-passes-practrand.html
+#define rot(x,k) (((x)<<(k))|((x)>>(8-(k))))
 uint8_t jsf8(void) { // Bob Jenkin's fast prng
-	#ifdef __AVR__
-		static uint8_t a = (TCNT0 + TCNT1) % 64;
-		static uint8_t b = (TCNT2 + TCNT3) % 64;
-		static uint8_t c = (TCNT3 + TCNT4) % 64;
-		static uint8_t d = (TCNT3 + TCNT4) % 64;
-		static uint8_t t;
-	#else
-		static uint8_t a = 161, b = 62, c = 21, d = 97, t;
-	#endif
-	t = a - ((b << 1)|(b >> 7));
-	a = b ^ ((c << 4)|(c >> 4));
-	b = c + d; c = d + t;
-	return d = t + a;
+	static uint_fast8_t a = 161, b = 62, c = 21, d = 97, t;
+	t = a - rot(b, 1);
+	a = b ^ rot(c, 4);
+	b = c + d;
+	c = d + t;
+	d = t + a;
+	return d;
+}
+uint8_t jsf8_max(uint_fast8_t max) {
+	return (jsf8() * max) >> 8;
+}
+uint8_t jsf8_min_max(uint_fast8_t min, uint_fast8_t max) {
+	return (jsf8_max(max - min) + min);
 }
 */
 
@@ -40,11 +42,9 @@ RGB_MATRIX_EFFECT(CANDY_TAP)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_TAP(effect_params_t* params) {
 	inline HSV CANDY_TAP_math(HSV hsv, uint16_t offset) {
-		return (HSV){
-			scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 6),
-			qadd8(scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 5) & 127, 127),
-			scale8(255 - offset, hsv.v)
-		};
+		hsv.h = scale16by8(g_rgb_timer, qadd8(rgb_matrix_config.speed, 8) >> 4);
+		hsv.v = scale8(255 - offset, hsv.v);
+		return hsv;
 	}
 	return effect_runner_reactive(params, &CANDY_TAP_math);
 }
@@ -58,11 +58,9 @@ RGB_MATRIX_EFFECT(CANDY_SPLASH)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_SPLASH(effect_params_t* params) {
 	inline HSV CANDY_WIDE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
-		uint_fast16_t effect = tick + dist * 5;
-		if (effect > 255) {
-			effect = 255;
-		}
-		hsv.h = scale16by8(g_rgb_timer, add8(rgb_matrix_config.speed, 1) >> 6); 
+		uint16_t effect = tick + dist * 5;
+		if (effect > 255) effect = 255;
+		hsv.h = scale16by8(g_rgb_timer, qadd8(rgb_matrix_config.speed, 8) >> 4);
 		hsv.v = qadd8(hsv.v, 255 - effect);
 		return hsv;
 	}
@@ -76,22 +74,48 @@ static bool CANDY_SPLASH(effect_params_t* params) {
 #ifdef ENABLE_RGB_MATRIX_CANDY_RAIN
 RGB_MATRIX_EFFECT(CANDY_RAIN)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+
+#ifdef __AVR__
+// Use lib8tion random function
+#	define prng() random8()
+#	define prng_init(x) random16_set_seed(x)
+#	define prng_max(x) random8_max(x)
+#	define prng_min_max(x,y) random8_min_max(x,y)
+#else
+#	define prng() jsf8()
+#	define prng_init(x) jsf8_init(x)
+#	define prng_max(x) jsf8_max(x)
+#	define prng_min_max(x,y) jsf8_min_max(x,y)
+
+static uint_fast8_t a, b, c, d, t;
+static uint8_t jsf8(void) {
+#	define rot(x,k) (((x)<<(k))|((x)>>(8-(k))))
+	t = a - rot(b, 1); a = b ^ rot(c, 4);
+	b = c + d; c = d + t; d = t + a;
+	return d;
+}
+static void jsf8_init(uint_fast8_t seed) {
+	a = 161, b = c = d = seed;
+	for (uint_fast8_t i = 0; i < 32; ++i) (void)jsf8();
+}
+#	define jsf8_max(max) ((mul8(jsf8(), (max))) >> (8))
+#	define jsf8_min_max(min,max) (jsf8_max((min) - (max)) + (min))
+
+#endif // __AVR__
+
 static bool CANDY_RAIN(effect_params_t* params) {
 	static uint_fast32_t wait_timer = 0;
+#	define interval() (320 - rgb_matrix_config.speed)
 
-	inline uint_fast32_t interval(void) {
-		return 500 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16);
-	}
+	if (params->init) prng_init(timer_read());
 
 	inline void rain_candy(uint_fast8_t i, effect_params_t* params, bool off) {
-		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) {
-			return;
-		}
+		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) return;
 		if (off) {
 			rgb_matrix_set_color(i, RGB_OFF);
 		} else {
-			HSV hsv = (HSV){random8(), qadd8(random8() >> 1, 127), rgb_matrix_config.hsv.v};
-			RGB rgb = hsv_to_rgb(hsv);
+			HSV hsv = {prng(), prng_min_max(127, 255), rgb_matrix_config.hsv.v};
+			RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
 			rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 		}
 		wait_timer = g_rgb_timer + interval();
@@ -99,7 +123,7 @@ static bool CANDY_RAIN(effect_params_t* params) {
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	if (g_rgb_timer > wait_timer) {
-		rain_candy(mod8(random8(), RGB_MATRIX_LED_COUNT), params, random8() & 2);
+		rain_candy(prng_max(RGB_MATRIX_LED_COUNT), params, prng() & 2);
 	}
 	return rgb_matrix_check_finished_leds(led_max);
 }
@@ -114,10 +138,10 @@ RGB_MATRIX_EFFECT(CANDY_FRACTAL)
 static bool CANDY_FRACTAL(effect_params_t* params) {
 	#define MID_COL MATRIX_COLS / 2
 	static bool led[MATRIX_ROWS][MATRIX_COLS];
-	static uint32_t wait_timer = 0;
+	static uint_fast32_t wait_timer = 0;
 
-	inline uint32_t interval(void) {
-		return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16);
+	inline uint_fast32_t interval(void) {
+		return 512 - rgb_matrix_config.speed;
 	}
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
@@ -166,17 +190,17 @@ RGB_MATRIX_EFFECT(PIXEL_FRACTAL2)
 #    ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
 static bool PIXEL_FRACTAL2(effect_params_t* params) {
-#        define MID_COL (MATRIX_COLS / 2)
-    static bool led[MATRIX_ROWS][MID_COL];
-    static uint32_t wait_timer = 0;
+#	define MID_COL (MATRIX_COLS / 2)
+	static bool led[MATRIX_ROWS][MID_COL];
+	static uint32_t wait_timer = 0;
 
-    inline uint32_t interval(void) {
-        return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16);
-    }
+	inline uint32_t interval(void) {
+		return 512 - rgb_matrix_config.speed;
+	}
 
-    if (params->init) {
-        rgb_matrix_set_color_all(0, 0, 0);
-    }
+	if (params->init) {
+		rgb_matrix_set_color_all(0, 0, 0);
+	}
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	if (g_rgb_timer > wait_timer) {
@@ -245,7 +269,7 @@ static bool CANDY_FLOW(effect_params_t* params) {
 			led[j] = led[j+1];  // Shift LED state forward
 		}
 		// Fill last LED
-		led[led_max-1] = (random8() & 3) ? (RGB){0,0,0} : hsv_to_rgb((HSV){random8(), qadd8(random8() >> 1, 127), rgb_matrix_config.hsv.v});
+		led[led_max-1] = (random8() & 3) ? (RGB){0,0,0} : hsv_to_rgb((HSV){random8(), random8_min_max(127, 255), rgb_matrix_config.hsv.v});
 		// Set pulse timer
 		wait_timer = g_rgb_timer + interval();
 	}
