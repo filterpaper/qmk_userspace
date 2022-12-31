@@ -19,10 +19,10 @@ uint8_t jsf8(void) { // Bob Jenkin's fast prng
 	return d;
 }
 uint8_t jsf8_max(uint_fast8_t max) {
-	return (jsf8() * max) >> 8;
+	return jsf8() % max;
 }
 uint8_t jsf8_min_max(uint_fast8_t min, uint_fast8_t max) {
-	return (jsf8_max(max - min) + min);
+	return jsf8_max(max - min) + min;
 }
 */
 
@@ -77,19 +77,22 @@ RGB_MATRIX_EFFECT(CANDY_RAIN)
 
 #ifdef __AVR__
 // Use lib8tion random function
-#	define prng() random8()
-#	define prng_init(x) random16_set_seed(x)
-#	define prng_max(x) random8_max(x)
+#	define prng()            random8()
+#	define prng_init(x)      random16_set_seed(x)
+#	define prng_max(x)       random8_max(x)
 #	define prng_min_max(x,y) random8_min_max(x,y)
 #else
-#	define prng() jsf8()
-#	define prng_init(x) jsf8_init(x)
-#	define prng_max(x) jsf8_max(x)
+#	define prng()            jsf8()
+#	define prng_init(x)      jsf8_init(x)
+#	define prng_max(x)       jsf8_max(x)
 #	define prng_min_max(x,y) jsf8_min_max(x,y)
+
+#	define jsf8_max(max)         (mod8(jsf8(), (max)))
+#	define jsf8_min_max(min,max) (jsf8_max((max) - (min)) + (min))
+#	define rot(x,k) (((x)<<(k))|((x)>>(8-(k))))
 
 static uint_fast8_t a, b, c, d, t;
 static uint8_t jsf8(void) {
-#	define rot(x,k) (((x)<<(k))|((x)>>(8-(k))))
 	t = a - rot(b, 1); a = b ^ rot(c, 4);
 	b = c + d; c = d + t; d = t + a;
 	return d;
@@ -98,14 +101,11 @@ static void jsf8_init(uint_fast8_t seed) {
 	a = 161, b = c = d = seed;
 	for (uint_fast8_t i = 0; i < 32; ++i) (void)jsf8();
 }
-#	define jsf8_max(max) ((mul8(jsf8(), (max))) >> (8))
-#	define jsf8_min_max(min,max) (jsf8_max((min) - (max)) + (min))
-
 #endif // __AVR__
 
 static bool CANDY_RAIN(effect_params_t* params) {
-	static uint_fast32_t wait_timer = 0;
 #	define interval() (320 - rgb_matrix_config.speed)
+	static uint_fast32_t wait_timer = 0;
 
 	if (params->init) prng_init(timer_read());
 
