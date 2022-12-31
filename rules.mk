@@ -20,6 +20,7 @@ COMBO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTMAGIC_ENABLE = yes
+DEBOUNCE_TYPE = sym_eager_pk
 
 VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
 OPT_DEFS += -DCAPS_UNLOCK -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
@@ -34,6 +35,9 @@ ifeq ($(strip $(KEYBOARD)), cradio)
 #	EEPROM_DRIVER = transient
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrect.c
+	ifneq ($(strip $(MCU)), atmega32u4)
+		DEBOUNCE_TYPE = asym_eager_defer_pk
+	endif
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_DRIVER = WS2812
@@ -45,7 +49,7 @@ endif
 # RGB boards
 ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), crkbd/rev1 boardsource/technik_o))
 	RGB_MATRIX_ENABLE = yes
-	RGB_MATRIX_CUSTOM_USER = no
+	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
 endif
 
