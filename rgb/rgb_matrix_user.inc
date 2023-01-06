@@ -82,6 +82,7 @@ RGB_MATRIX_EFFECT(CANDY_RAIN)
 #	define prng_max(x)       random8_max(x)
 #	define prng_min_max(x,y) random8_min_max(x,y)
 #else
+// Use Jenkins pseudorandom function
 #	define prng()            jsf8()
 #	define prng_init(x)      jsf8_init(x)
 #	define prng_max(x)       jsf8_max(x)
@@ -89,7 +90,7 @@ RGB_MATRIX_EFFECT(CANDY_RAIN)
 
 #	define jsf8_max(max)         (mod8(jsf8(), (max)))
 #	define jsf8_min_max(min,max) (jsf8_max((max) - (min)) + (min))
-#	define rot(x,k) (((x)<<(k))|((x)>>(8-(k))))
+#	define rot(x,k) ( ((x) << (k)) | ((x) >> (8 - (k))) )
 
 static uint_fast8_t a, b, c, d, t;
 static uint8_t jsf8(void) {
@@ -107,23 +108,24 @@ static bool CANDY_RAIN(effect_params_t* params) {
 #	define interval() (320 - rgb_matrix_config.speed)
 	static uint_fast32_t wait_timer = 0;
 
-	if (params->init) prng_init(timer_read());
-
-	inline void rain_candy(uint_fast8_t i, effect_params_t* params, bool off) {
-		if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) return;
-		if (off) {
-			rgb_matrix_set_color(i, RGB_OFF);
+	inline void rain_candy(uint_fast8_t led_index) {
+		if (!HAS_ANY_FLAGS(g_led_config.flags[led_index], params->flags)) {
+			return;
+		} else if (prng() & 2) {
+			rgb_matrix_set_color(led_index, RGB_OFF);
 		} else {
 			HSV hsv = {prng(), prng_min_max(127, 255), rgb_matrix_config.hsv.v};
 			RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
-			rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+			rgb_matrix_set_color(led_index, rgb.r, rgb.g, rgb.b);
 		}
 		wait_timer = g_rgb_timer + interval();
 	}
 
+	if (params->init) prng_init(timer_read());
+
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	if (g_rgb_timer > wait_timer) {
-		rain_candy(prng_max(RGB_MATRIX_LED_COUNT), params, prng() & 2);
+		rain_candy(prng_max(RGB_MATRIX_LED_COUNT));
 	}
 	return rgb_matrix_check_finished_leds(led_max);
 }
@@ -136,13 +138,10 @@ static bool CANDY_RAIN(effect_params_t* params) {
 RGB_MATRIX_EFFECT(CANDY_FRACTAL)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_FRACTAL(effect_params_t* params) {
-	#define MID_COL MATRIX_COLS / 2
+#	define interval() (512 - rgb_matrix_config.speed)
+#	define MID_COL MATRIX_COLS / 2
 	static bool led[MATRIX_ROWS][MATRIX_COLS];
 	static uint_fast32_t wait_timer = 0;
-
-	inline uint_fast32_t interval(void) {
-		return 512 - rgb_matrix_config.speed;
-	}
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	if (g_rgb_timer > wait_timer) {
@@ -187,20 +186,15 @@ static bool CANDY_FRACTAL(effect_params_t* params) {
 
 #ifdef ENABLE_RGB_MATRIX_PIXEL_FRACTAL2
 RGB_MATRIX_EFFECT(PIXEL_FRACTAL2)
-#    ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
 static bool PIXEL_FRACTAL2(effect_params_t* params) {
+#	define interval() (512 - rgb_matrix_config.speed)
 #	define MID_COL (MATRIX_COLS / 2)
 	static bool led[MATRIX_ROWS][MID_COL];
 	static uint32_t wait_timer = 0;
 
-	inline uint32_t interval(void) {
-		return 512 - rgb_matrix_config.speed;
-	}
-
-	if (params->init) {
-		rgb_matrix_set_color_all(0, 0, 0);
-	}
+	if (params->init) rgb_matrix_set_color_all(0, 0, 0);
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	if (g_rgb_timer > wait_timer) {
@@ -232,8 +226,8 @@ static bool PIXEL_FRACTAL2(effect_params_t* params) {
 	}
 	return rgb_matrix_check_finished_leds(led_max);
 }
-#    endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#endif     // ENABLE_RGB_MATRIX_PIXEL_FRACTAL
+#	endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // ENABLE_RGB_MATRIX_PIXEL_FRACTAL
 
 
 
@@ -241,6 +235,7 @@ static bool PIXEL_FRACTAL2(effect_params_t* params) {
 RGB_MATRIX_EFFECT(CANDY_FLOW)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_FLOW(effect_params_t* params) {
+#	define interval() (3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16))
 	// LED state array
 	static RGB led[RGB_MATRIX_LED_COUNT];
 	static uint32_t wait_timer = 0;
@@ -249,13 +244,7 @@ static bool CANDY_FLOW(effect_params_t* params) {
 		return false;
 	}
 
-	inline uint32_t interval(void) {
-		return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16);
-	}
-
-	if (params->init) {
-		rgb_matrix_set_color_all(0, 0, 0);
-	}
+	if (params->init) rgb_matrix_set_color_all(0, 0, 0);
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	// Light LEDs based on state array
@@ -266,14 +255,13 @@ static bool CANDY_FLOW(effect_params_t* params) {
 
 	if (!rgb_matrix_check_finished_leds(led_max)) {
 		for (uint8_t j = 0; j < led_max-1; ++j) {
-			led[j] = led[j+1];  // Shift LED state forward
+			led[j] = led[j+1]; // Shift LED state forward
 		}
 		// Fill last LED
 		led[led_max-1] = (random8() & 3) ? (RGB){0,0,0} : hsv_to_rgb((HSV){random8(), random8_min_max(127, 255), rgb_matrix_config.hsv.v});
 		// Set pulse timer
 		wait_timer = g_rgb_timer + interval();
 	}
-
 	return rgb_matrix_check_finished_leds(led_max);
 }
 #	endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
