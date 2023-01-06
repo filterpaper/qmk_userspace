@@ -16,7 +16,7 @@ COMB(vol_dn,  KC_VOLD, HM_QUOT, TH_SLSH)
 
 // macros
 SUBS(vi_quit, ":q!",   KC_Q,    KC_W)
-SUBS(vi_save, ":wq",   KC_Z,    KC_X)
+SUBS(vi_save, ":x",    KC_Z,    KC_X)
 SUBS(dir_up,  "../",   TH_DOT,  TH_SLSH)
 
 // navigation
