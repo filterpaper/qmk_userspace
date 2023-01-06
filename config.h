@@ -30,10 +30,8 @@
 
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
-#	define NO_USB_STARTUP_CHECK
 #	ifdef QMK_MCU_RP2040
 #		define SPLIT_WATCHDOG_ENABLE
-#		define USB_SUSPEND_WAKEUP_DELAY 2000
 #	endif
 #	ifdef CONVERT_TO_ELITE_PI
 #		define USB_VBUS_PIN 19U
