@@ -31,7 +31,7 @@ bool process_autocorrect(uint16_t keycode, keyrecord_t* record) {
 		case QK_MOD_TAP ... QK_MOD_TAP_MAX:
 		case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
 			// Exclude hold keycode
-			if (!record->tap.count) {
+			if (record->tap.count == 0) {
 				return true;
 			}
 			break;

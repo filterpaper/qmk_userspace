@@ -190,7 +190,7 @@ The `split_3x5_2` layout is used as the base and defined in `layout.h` file, exa
     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
                   LT(SYM,KC_TAB), LCA_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC)
 ```
-Next, a wrapper aliases to the layout used by the keyboard is also defined in `layout.h` file, e.g. for Cradio:
+Next, a wrapper alias to the layout used by the keyboard is also defined in `layout.h` file, e.g. for Cradio:
 ```c
 #define LAYOUT_34key_w(...) LAYOUT_split_3x5_2(__VA_ARGS__)
 ```
@@ -208,7 +208,7 @@ Both macros are referenced in the keyboard's JSON file with the following format
     ]
 }
 ```
-Append `#include layout.h` to `config.h`. The build process will construct a transient `keymap.c` using the C preprocessor macros referenced by JSON.
+Append `#include layout.h` to `config.h`. The build process will construct a transient `keymap.c` using the C preprocessor macros referenced by JSON. Wrapper aliases are necessary because `LAYOUT_34key_w(_BASE)` contains a single variable and both macros are replaced (expanded) in the build process concurrently.
 
 ## Wrapping home row modifiers
 [Home row mods](https://precondition.github.io/home-row-mods) can be wrapped over the layout macros. Order of home row modifiers are defined with these two macros:

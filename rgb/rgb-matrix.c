@@ -4,7 +4,7 @@
 #include "rgb-matrix.h"
 
 // Assign left and right keys to KB2040 LEDs on each side
-#if defined(CONVERT_TO_KB2040) && defined(KEYBOARD_cradio)
+#ifdef CONVERT_TO_KB2040
 led_config_t g_led_config = { {
 	{ 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
