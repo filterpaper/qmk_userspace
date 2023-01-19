@@ -5,7 +5,7 @@
 #include QMK_KEYBOARD_H
 
 bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
-	// Skip caps or one-shot key, or if caps lock is off
+	// Skip if caps lock is off, caps lock key or one-shot key
 	if (host_keyboard_led_state().caps_lock == false
 	|| (uint8_t)keycode == KC_CAPS
 #ifndef NO_ACTION_ONESHOT
@@ -20,12 +20,13 @@ bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	mods |= get_oneshot_mods();
 #endif
 
-	// Ignore hold key and mask base keycode from a tap.
 	if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX)
 	|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) {
-		if (!record->tap.count) {
+		// Ignore hold key
+		if (record->tap.count == 0) {
 			return true;
 		}
+		// Mask tap base keycode
 		keycode &= 0xff;
 	}
 
