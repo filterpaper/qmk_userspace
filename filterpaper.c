@@ -3,7 +3,7 @@
 
 #include "filterpaper.h"
 
-#if defined(TAPPING_TERM_PER_KEY) || defined(PERMISSIVE_HOLD_PER_KEY)
+#if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
 static uint_fast16_t tap_timer = 0;
 #	define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
 #endif
@@ -53,10 +53,10 @@ static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) 
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
-#if defined(TAPPING_TERM_PER_KEY) || defined(PERMISSIVE_HOLD_PER_KEY)
+#if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
 		tap_timer = timer_read();
 #endif
-#if defined(OLED_ENABLE) && !defined(WPM_ENABLE)
+#if (defined OLED_ENABLE && !defined WPM_ENABLE)
 		extern uint32_t oled_tap_timer;
 		oled_tap_timer = timer_read32();
 #endif

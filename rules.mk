@@ -12,7 +12,6 @@ SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
-LTO_ENABLE = yes
 COMBO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
@@ -23,14 +22,14 @@ OPT_DEFS += -DCAPS_UNLOCK -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
 SRC += filterpaper.c caps_unlock.c combos.c
 
 ifeq ($(strip $(MCU)), atmega32u4)
+	LTO_ENABLE = yes
+	TOP_SYMBOLS = yes
 	BOOTLOADER = atmel-dfu
-endif
-
-ifeq ($(strip $(KEYBOARD)), cradio)
-#	EEPROM_DRIVER = transient
+else
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrect.c
 	DEBOUNCE_TYPE = asym_eager_defer_pk
+#	EEPROM_DRIVER = transient
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_DRIVER = WS2812

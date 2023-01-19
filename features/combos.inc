@@ -9,8 +9,8 @@
 	COMB(swap_r,  SH_TG,  TH_M, TH_COMM, TH_DOT)
 #endif
 
-COMB(tog_fnc, TG(FNC), LT(SYM,KC_TAB),  KC_B)
-COMB(tog_num, TG(NUM), LT(NUM,KC_BSPC), KC_N)
+COMB(tog_fnc, TG(FNC), LT(SYM,KC_TAB),  KC_B, KC_V)
+COMB(tog_num, TG(NUM), LT(NUM,KC_BSPC), KC_N, TH_M)
 COMB(vol_up,  KC_VOLU, KC_P,    HM_QUOT)
 COMB(vol_dn,  KC_VOLD, HM_QUOT, TH_SLSH)
 
