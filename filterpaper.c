@@ -5,7 +5,7 @@
 
 #if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
 static uint_fast16_t tap_timer = 0;
-#	define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
+#	define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM)
 #endif
 
 
