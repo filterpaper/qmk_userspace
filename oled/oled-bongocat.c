@@ -246,9 +246,8 @@ static void decode_frame(unsigned char const *frame) {
 }
 
 
-void animate_cat(void) {
-	static uint8_t tap_index = 0;
-	static uint8_t idle_index = 0;
+static void animate_cat(void) {
+	static uint8_t tap_index = 0, idle_index = 0;
 
 	if (timer_elapsed32(oled_tap_timer) < TAP_INTERVAL) {
 		tap_index = (tap_index + 1) & 1;
@@ -263,7 +262,6 @@ void animate_cat(void) {
 
 
 static void render_bongocat(void) {
-	// Timer duration between animation frames
 	static uint16_t anim_timer = 0;
 
 #ifdef WPM_ENABLE

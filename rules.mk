@@ -48,7 +48,7 @@ endif
 # OLED
 ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), crkbd/rev1))
 	OLED_ENABLE = yes
-	ifeq ($(strip $(OLED)), LUNA FELIX)
+	ifeq ($(strip $(OLED)), $(filter $(OLED), LUNA FELIX))
 		OPT_DEFS += -D${OLED}
 		SRC += oled-icons.c oled-luna.c
 	else
