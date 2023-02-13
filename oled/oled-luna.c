@@ -221,8 +221,30 @@ static void luna_action(char const action[][LUNA_SIZE]) {
 }
 
 
+static void animate_luna(void) {
+	uint8_t mods = get_mods();
+#ifndef NO_ACTION_ONESHOT
+	mods |= get_oneshot_mods();
+#endif
+
+	render_logo();
+	oled_set_cursor(0,8);
+
+	if (mods & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock) {
+		luna_action(bark);
+	} else if (mods & MOD_MASK_CAG) {
+		luna_action(sneak);
+	} else if (timer_elapsed32(oled_tap_timer) < RUN_INTERVAL) {
+		luna_action(run);
+	} else if (timer_elapsed32(oled_tap_timer) < WALK_INTERVAL) {
+		luna_action(walk);
+	} else {
+		luna_action(sit);
+	}
+}
+
+
 static void render_luna_status(void) {
-	// Animation timer
 	static uint16_t anim_timer = 0;
 
 #ifdef WPM_ENABLE
@@ -233,27 +255,6 @@ static void render_luna_status(void) {
 	}
 	prev_wpm = get_current_wpm();
 #endif
-
-	void animate_luna(void) {
-		uint8_t mods = get_mods();
-#ifndef NO_ACTION_ONESHOT
-		mods |= get_oneshot_mods();
-#endif
-
-		render_logo();
-		oled_set_cursor(0,8);
-		if (mods & MOD_MASK_SHIFT || host_keyboard_led_state().caps_lock) {
-			luna_action(bark);
-		} else if (mods & MOD_MASK_CAG) {
-			luna_action(sneak);
-		} else if (timer_elapsed32(oled_tap_timer) < RUN_INTERVAL) {
-			luna_action(run);
-		} else if (timer_elapsed32(oled_tap_timer) < WALK_INTERVAL) {
-			luna_action(walk);
-		} else {
-			luna_action(sit);
-		}
-	}
 
 	if (timer_elapsed32(oled_tap_timer) > OLED_TIMEOUT) {
 		oled_off();
