@@ -62,6 +62,16 @@ bool rgb_matrix_indicators_user(void) {
 			}
 		}
 	}
+#	ifdef SWAP_HANDS_ENABLE
+	extern bool swap_hands;
+	if (swap_hands) {
+		for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
+			if (g_led_config.flags[i] & CAP_FLAG) {
+				rgb_matrix_set_color(i, RGB_DPINK);
+			}
+		}
+	}
+#	endif
 	return false;
 }
 
@@ -104,6 +114,17 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 			}
 		}
 	}
+#	ifdef SWAP_HANDS_ENABLE
+	extern bool swap_hands;
+	if (swap_hands) {
+		RGB rgb = glow_hsv_to_rgb((HSV){HSV_GREEN});
+		for (uint8_t i = led_min; i <= led_max; ++i) {
+			if (g_led_config.flags[i] & CAP_FLAG) {
+				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+			}
+		}
+	}
+#	endif
 	return false;
 }
 

@@ -8,7 +8,6 @@
 MAGIC_ENABLE = no
 CONSOLE_ENABLE = no
 UNICODE_ENABLE = no
-SWAP_HANDS_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Common features
@@ -26,6 +25,7 @@ ifeq ($(strip $(MCU)), atmega32u4)
 	TOP_SYMBOLS = yes
 	BOOTLOADER = atmel-dfu
 else
+	SWAP_HANDS_ENABLE = yes
 	OPT_DEFS += -DAUTO_CORRECT
 	SRC += autocorrect.c
 	DEBOUNCE_TYPE = asym_eager_defer_pk
