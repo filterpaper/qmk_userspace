@@ -40,7 +40,7 @@ qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
 ```
 ## Logo file
-Icons used to render keyboard state is stored in `glcdfont.`. Images in that file can be viewed and edited with:
+Icons used to render keyboard state is stored in `glcdfont.c`. Images in that file can be viewed and edited with:
 * [Helix Font Editor](https://helixfonteditor.netlify.app/)
 * [QMK Logo Editor](https://joric.github.io/qle/)
 * [image2cpp](https://javl.github.io/image2cpp/)
@@ -119,10 +119,9 @@ Custom mod tap settings to avoid false positives with home row mods.
 Allow rolling of tap hold keys as default.
 
 ## Tap timer
-Setup a tap timer to detect recent key presses in `process_record_user` and a boolean macro for "typing interval" when the last key press is within 1.3 times `TAPPING_TERM`:
+Setup a tap timer to detect recent key presses in `process_record_user`:
 ```c
 static uint16_t tap_timer = 0;
-#define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM * 1.3)
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
     if (record->event.pressed) {
@@ -133,17 +132,18 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 ```
 
 ## Increase tapping term while typing
-Use the previous tap timer to increase tapping term while typing to avoid accidental mod tap activation.
+Time elapsed of tap_timer from previous section is used to:
+* Return true for "typing" if elapsed time is less than `TAPPING_TERM`
+* Inverse scale of `IS_TYPING_TERM` with `TAPPING_TERM`
 ```c
-#define TAPPING_TERM 200
-#define TAPPING_TERM_PER_KEY
 #define IS_MOD_TAP(kc) (QK_MOD_TAP <= kc && kc <= QK_MOD_TAP_MAX)
-
+#define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM)
+#define IS_TYPING_TERM ((TAPPING_TERM * 2.1) - timer_elapsed(tap_timer))
+```
+The following function will return an increased tapping term on short typing intervals to avoid accidental activation of mod taps:
+```c
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    if (IS_MOD_TAP(keycode) && IS_TYPING()) {
-      return TAPPING_TERM * 1.3;
-    }
-    return TAPPING_TERM;
+    return IS_MOD_TAP() && IS_TYPING() ? IS_TYPING_TERM : TAPPING_TERM;
 }
 ```
 
@@ -155,7 +155,7 @@ Activate Shift mod tap with another nested key press when not within typing inte
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     if (MODTAP_BIT(keycode) & MOD_MASK_SHIFT && !IS_TYPING()) {
-      return true;
+        return true;
     }
     return false;
 }
@@ -169,7 +169,7 @@ Trigger layer taps immediately with another key press.
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     if (QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX) {
-      return true;
+        return true;
     }
     return false;
 }

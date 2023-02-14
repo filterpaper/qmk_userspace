@@ -5,14 +5,13 @@
 
 #if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
 static uint_fast16_t tap_timer = 0;
-#	define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM)
 #endif
 
 
 #ifdef TAPPING_TERM_PER_KEY
-// Increase tapping term in between short key presses to avoid false trigger.
+// Scale tapping term to short key press interval to avoid false trigger.
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_HOME_ROW() && IS_TYPING() ? TAPPING_TERM * 1.3 : TAPPING_TERM;
+	return IS_HOME_ROW() && IS_TYPING() ? IS_TYPING_TERM : TAPPING_TERM;
 }
 #endif
 
@@ -20,7 +19,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef QUICK_TAP_TERM_PER_KEY
 // Reduce quick tap term for thumb keys
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_THUMB_ROW() ? QUICK_TAP_TERM * 0.5 : QUICK_TAP_TERM;
+	return IS_THUMB_ROW() ? QUICK_TAP_TERM / 2 : QUICK_TAP_TERM;
 }
 #endif
 
