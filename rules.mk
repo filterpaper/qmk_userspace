@@ -26,8 +26,6 @@ ifeq ($(strip $(MCU)), atmega32u4)
 	BOOTLOADER = atmel-dfu
 else
 	SWAP_HANDS_ENABLE = yes
-	OPT_DEFS += -DAUTO_CORRECT
-	SRC += autocorrect.c
 	DEBOUNCE_TYPE = asym_eager_defer_pk
 #	EEPROM_DRIVER = transient
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
@@ -36,6 +34,12 @@ else
 		RGB_MATRIX_CUSTOM_USER = yes
 		SRC += rgb-matrix.c
 	endif
+endif
+
+# Split boards
+ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), cradio crkbd/rev1))
+	OPT_DEFS += -DAUTO_CORRECT
+	SRC += autocorrect.c
 endif
 
 # RGB boards

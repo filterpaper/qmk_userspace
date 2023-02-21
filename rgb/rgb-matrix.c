@@ -63,11 +63,10 @@ bool rgb_matrix_indicators_user(void) {
 		}
 	}
 #	ifdef SWAP_HANDS_ENABLE
-	extern bool swap_hands;
-	if (swap_hands) {
+	if (is_swap_hands_on()) {
 		for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
 			if (g_led_config.flags[i] & CAP_FLAG) {
-				rgb_matrix_set_color(i, RGB_DPINK);
+				rgb_matrix_set_color(i, RGB_TEAL);
 			}
 		}
 	}
@@ -78,7 +77,7 @@ bool rgb_matrix_indicators_user(void) {
 #else
 
 #	include "lib/lib8tion/lib8tion.h"
-static inline RGB glow_hsv_to_rgb(HSV hsv) {
+static inline RGB hsv_to_rgb_glow(HSV hsv) {
 	hsv.v = scale8(abs8(sin8(scale16by8(g_rgb_timer, rgb_matrix_config.speed / 8)) - 128) * 2, hsv.v);
 	return hsv_to_rgb(hsv);
 }
@@ -86,7 +85,7 @@ static inline RGB glow_hsv_to_rgb(HSV hsv) {
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 	// Caps lock
 	if (host_keyboard_led_state().caps_lock) {
-		RGB rgb = glow_hsv_to_rgb((HSV){HSV_RED});
+		RGB rgb = hsv_to_rgb_glow((HSV){HSV_RED});
 		for (uint8_t i = led_min; i <= led_max; ++i) {
 			if (g_led_config.flags[i] & CAP_FLAG) {
 				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
@@ -101,7 +100,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 			}
 		}
 	}
-	// Layer keys indicator by @rgoulter
+	// Layer active keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
 		uint8_t layer = get_highest_layer(layer_state);
 		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
@@ -115,9 +114,8 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 		}
 	}
 #	ifdef SWAP_HANDS_ENABLE
-	extern bool swap_hands;
-	if (swap_hands) {
-		RGB rgb = glow_hsv_to_rgb((HSV){HSV_GREEN});
+	if (is_swap_hands_on()) {
+		RGB rgb = hsv_to_rgb_glow((HSV){HSV_TEAL});
 		for (uint8_t i = led_min; i <= led_max; ++i) {
 			if (g_led_config.flags[i] & CAP_FLAG) {
 				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
