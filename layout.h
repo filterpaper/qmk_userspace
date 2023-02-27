@@ -1,6 +1,8 @@
 // Copyright 2021 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
+#include "quantum/keycodes.h"
+
 // macOS shortcuts
 #define Z_UND	G(KC_Z)
 #define Z_CUT	G(KC_X)
@@ -35,11 +37,7 @@
 #define SA_DN S(A(KC_DOWN))
 
 // Layers
-#define BSE 0
-#define CMK 1
-#define NUM 2
-#define SYM 3
-#define FNC 4
+enum layers { BSE, CMK, NUM, SYM, FNC };
 
 // Default 3x5_2 split layout
 #define _BASE \
@@ -109,8 +107,8 @@
 /*                            ╰────────┴────────╯   ╰────────┴────────╯ */
 
 // Mod-tap wrapper
-#define HRM(k) HRM_TAPHOLD(k)
-#define HRM_TAPHOLD( \
+#define HRM(k) HR_MODTAP(k)
+#define HR_MODTAP( \
 	  l01, l02, l03, l04, l05,   r01, r02, r03, r04, r05, \
 	  l06, l07, l08, l09, l10,   r06, r07, r08, r09, r10, \
 	  l11, l12, l13, l14, l15,   r11, r12, r13, r14, r15, \

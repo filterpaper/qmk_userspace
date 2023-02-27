@@ -91,4 +91,6 @@
 #endif
 
 // Layout macros
-#include "layout.h"
+#ifndef __ASSEMBLER__
+#	include "layout.h"
+#endif
