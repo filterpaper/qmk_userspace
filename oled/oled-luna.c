@@ -44,8 +44,6 @@
 #define RUN_INTERVAL  LUNA_FRAME_DURATION*2
 #define WALK_INTERVAL LUNA_FRAME_DURATION*8
 
-uint32_t oled_tap_timer = 0;
-
 #ifdef FELIX // Filled Felix frames
 static char const sit[][LUNA_SIZE] PROGMEM = { {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xe0,0xfc,
@@ -221,7 +219,7 @@ static void luna_action(char const action[][LUNA_SIZE]) {
 }
 
 
-static void animate_luna(void) {
+static void animate_luna(uint32_t interval) {
 	uint8_t mods = get_mods();
 #ifndef NO_ACTION_ONESHOT
 	mods |= get_oneshot_mods();
@@ -234,9 +232,9 @@ static void animate_luna(void) {
 		luna_action(bark);
 	} else if (mods & MOD_MASK_CAG) {
 		luna_action(sneak);
-	} else if (timer_elapsed32(oled_tap_timer) < RUN_INTERVAL) {
+	} else if (interval < RUN_INTERVAL) {
 		luna_action(run);
-	} else if (timer_elapsed32(oled_tap_timer) < WALK_INTERVAL) {
+	} else if (interval < WALK_INTERVAL) {
 		luna_action(walk);
 	} else {
 		luna_action(sit);
@@ -245,22 +243,24 @@ static void animate_luna(void) {
 
 
 static void render_luna_status(void) {
-	static uint16_t anim_timer = 0;
-
+	static uint16_t frame_timer = 0;
 #ifdef WPM_ENABLE
-	static uint8_t prev_wpm = 0;
-	// Update oled_tap_timer with sustained WPM
+	static uint32_t input_timer = 0;
+	static uint8_t  prev_wpm    = 0;
+	// Update input_timer with sustained WPM
 	if (get_current_wpm() > prev_wpm || get_mods()) {
-		oled_tap_timer = timer_read32();
+		input_timer = timer_read32();
 	}
 	prev_wpm = get_current_wpm();
+#else
+	uint32_t input_timer = last_input_activity_time();
 #endif
 
-	if (timer_elapsed32(oled_tap_timer) > OLED_TIMEOUT) {
+	if (timer_elapsed32(input_timer) > OLED_TIMEOUT) {
 		oled_off();
-	} else if (timer_elapsed(anim_timer) > LUNA_FRAME_DURATION) {
-		anim_timer = timer_read();
-		animate_luna();
+	} else if (timer_elapsed(frame_timer) > LUNA_FRAME_DURATION) {
+		frame_timer = timer_read();
+		animate_luna(timer_elapsed32(input_timer));
 	}
 }
 
