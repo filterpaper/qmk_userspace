@@ -42,9 +42,6 @@
 #define TAP_INTERVAL  FRAME_DURATION*2
 #define PAWS_INTERVAL FRAME_DURATION*8
 
-// Timer duration between key presses
-uint32_t oled_tap_timer = 0;
-
 // Run-length encoded animation frames
 // Right frames
 static unsigned char const idle0[] PROGMEM = {144,
@@ -246,13 +243,13 @@ static void decode_frame(unsigned char const *frame) {
 }
 
 
-static void animate_cat(void) {
+static void animate_cat(uint32_t interval) {
 	static uint8_t tap_index = 0, idle_index = 0;
 
-	if (timer_elapsed32(oled_tap_timer) < TAP_INTERVAL) {
+	if (interval < TAP_INTERVAL) {
 		tap_index = (tap_index + 1) & 1;
 		decode_frame(is_keyboard_left() ? left_tap[tap_index] : tap[tap_index]);
-	} else if (timer_elapsed32(oled_tap_timer) < PAWS_INTERVAL) {
+	} else if (interval < PAWS_INTERVAL) {
 		decode_frame(is_keyboard_left() ? left_paws : paws);
 	} else {
 		idle_index = idle_index < IDLE_FRAMES - 1 ? idle_index + 1 : 0;
@@ -262,22 +259,24 @@ static void animate_cat(void) {
 
 
 static void render_bongocat(void) {
-	static uint16_t anim_timer = 0;
-
+	static uint16_t frame_timer = 0;
 #ifdef WPM_ENABLE
-	static uint8_t prev_wpm = 0;
-	// Update oled_tap_timer with sustained WPM
-	if (get_current_wpm() > prev_wpm) {
-		oled_tap_timer = timer_read32();
+	static uint32_t input_timer = 0;
+	static uint8_t  prev_wpm    = 0;
+	// Update input_timer with sustained WPM
+	if (get_current_wpm() > prev_wpm || get_mods()) {
+		input_timer = timer_read32();
 	}
 	prev_wpm = get_current_wpm();
+#else
+	uint32_t input_timer = last_input_activity_time();
 #endif
 
-	if (timer_elapsed32(oled_tap_timer) > OLED_TIMEOUT) {
+	if (timer_elapsed32(input_timer) > OLED_TIMEOUT) {
 		oled_off();
-	} else if (timer_elapsed(anim_timer) > FRAME_DURATION) {
-		anim_timer = timer_read();
-		animate_cat();
+	} else if (timer_elapsed(frame_timer)> FRAME_DURATION) {
+		frame_timer = timer_read();
+		animate_cat(timer_elapsed32(input_timer));
 	}
 }
 

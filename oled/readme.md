@@ -11,16 +11,7 @@ These modules are coded for Corne (CRKBD)'s 128x32 and can be integrated as stan
    (Substitute `oled-bongocat.c` with `oled-luna.c` for Luna the dog)
 3. Animation can be driven by WPM feature or input keystrokes:
    * To animate with WPM, add `WPM_ENABLE = yes` into `rules.mk`.
-   * To animate with keystrokes, add the following 'process_record_user()' code block to the `keymap.c` file to trigger animation tap timer:
-   ```c
-   bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-       if (record->event.pressed) {
-           extern uint32_t oled_tap_timer;
-           oled_tap_timer = timer_read32();
-       }
-       return true;
-   }
-   ```
+   * Otherwise input detection will be based on `last_input_activity_time()`.
 4. Add the following directives into `config.h` to transmit state information to the secondary half for the status icons:
    ```c
    #define SPLIT_MODS_ENABLE
