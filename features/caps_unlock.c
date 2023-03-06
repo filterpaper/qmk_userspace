@@ -9,7 +9,7 @@ bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	if (host_keyboard_led_state().caps_lock == false
 	|| (uint8_t)keycode == KC_CAPS
 #ifndef NO_ACTION_ONESHOT
-	|| (QK_ONE_SHOT_MOD <= keycode && keycode <= QK_ONE_SHOT_MOD_MAX)
+	|| IS_QK_ONE_SHOT_MOD(keycode)
 #endif
 	) {
 		return true;
@@ -20,8 +20,7 @@ bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	mods |= get_oneshot_mods();
 #endif
 
-	if ((QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX)
-	|| (QK_LAYER_TAP <= keycode && keycode <= QK_LAYER_TAP_MAX)) {
+	if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
 		// Ignore hold key
 		if (record->tap.count == 0) {
 			return true;
