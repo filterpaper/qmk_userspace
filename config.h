@@ -16,7 +16,7 @@
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
 #define IGNORE_MOD_TAP_INTERRUPT
-#define TAPPING_TERM 200
+#define TAPPING_TERM 220
 #define TAPPING_TERM_PER_KEY
 #define QUICK_TAP_TERM 110
 #define QUICK_TAP_TERM_PER_KEY
