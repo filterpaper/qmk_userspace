@@ -19,15 +19,7 @@
    3 Animation defaults to Luna, an outlined dog. Add
      'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.
    4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
-     Otherwise add the following 'process_record_user()' code block into
-     keymap.c to trigger animation tap timer with key presses:
-        bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-            if (record->event.pressed) {
-                extern uint32_t oled_tap_timer;
-                oled_tap_timer = timer_read32();
-            }
-            return true;
-        }
+     Otherwise 'last_input_activity_time()' will be used as default.
    5 The 'oled_task_user()' calls 'render_mod_status()' from "oled-icons.c"
      for secondary OLED. Review that file for usage guide or replace
 	 'render_mod_status()' with your own function.
