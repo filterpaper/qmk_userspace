@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         keyboard: [cradio, corne]
-        conv: [stemcell, kb2040, elite_pi]
+        conv: [stemcell, elite_pi]
         split: [left, right]
         branch: [develop]
         include:

@@ -11,7 +11,7 @@ These modules are coded for Corne (CRKBD)'s 128x32 and can be integrated as stan
    (Substitute `oled-bongocat.c` with `oled-luna.c` for Luna the dog)
 3. Animation can be driven by WPM feature or input keystrokes:
    * To animate with WPM, add `WPM_ENABLE = yes` into `rules.mk`.
-   * Otherwise input detection will be based on `last_input_activity_time()`.
+     Otherwise 'last_input_activity_time()' will be used as default.
 4. Add the following directives into `config.h` to transmit state information to the secondary half for the status icons:
    ```c
    #define SPLIT_MODS_ENABLE
