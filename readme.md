@@ -132,20 +132,19 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 ```
 
 ## Increase tapping term while typing
-Elapsed time of tap_timer from previous section is used to:
+Elapsed time of `tap_timer` in aforementioned is used in the following macros to:
 * Return true for "typing" if less than `TAPPING_TERM`
-* Inverse scale of `IS_TYPING_TERM` with `TAPPING_TERM`
+* Inverse the value of `IS_TYPING_TERM` to `TAPPING_TERM`
 ```c
 #define IS_MOD_TAP(kc) (QK_MOD_TAP <= kc && kc <= QK_MOD_TAP_MAX)
 #define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM)
 #define IS_TYPING_TERM ((TAPPING_TERM * 2) - timer_elapsed(tap_timer))
 ```
-The following function will return an increased tapping term on short typing intervals to avoid accidental activation of mod taps:
+Use `get_tapping_term()` to return an increased tapping term on short typing intervals to avoid accidental activation of mod taps:
 ```c
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     return IS_MOD_TAP() && IS_TYPING() ? IS_TYPING_TERM : TAPPING_TERM;
 }
-```
 ```
 
 ## Permissive hold for thumb shift
