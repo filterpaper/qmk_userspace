@@ -26,6 +26,10 @@
 
 #define COMBOS_DEF "combos.inc"
 
+#ifdef AUTOCORRECT
+	extern void autocorrect_toggle(void);
+#endif
+
 // Combo code building macros
 #define C_ENUM(name, val, ...) name,
 #define C_DATA(name, val, ...) uint16_t const name##_combo[] PROGMEM = {__VA_ARGS__, COMBO_END};

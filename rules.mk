@@ -38,7 +38,7 @@ endif
 
 # Split boards
 ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), cradio crkbd/rev1))
-	OPT_DEFS += -DAUTO_CORRECT
+	OPT_DEFS += -DAUTOCORRECT
 	SRC += autocorrect.c
 endif
 

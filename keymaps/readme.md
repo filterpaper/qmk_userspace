@@ -1,8 +1,4 @@
-# QMK keymaps
-
-Keymap JSON file content are preprocessors to macros in `layout.h`. They can be compiled directly with `qmk compile <keyboard>.json` command.
-
-## 34-key Split Layout
+# Base 34-key Split Layout
 ```
 ╭──────┬──────┬──────┬──────┬──────╮                ╭──────┬──────┬──────┬──────┬──────╮
 │  Q   │  W   │  E   │  R   │  T   │                │  Y   │  U   │  I   │  O   │  P   │
