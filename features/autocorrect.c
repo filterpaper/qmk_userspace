@@ -11,6 +11,12 @@
 #	include "autocorrect_data.h"
 #endif
 
+static bool autocorrect_on = true;
+
+void autocorrect_toggle(void) {
+	autocorrect_on = !autocorrect_on;
+}
+
 bool process_autocorrect(uint16_t keycode, keyrecord_t* record) {
 	static uint_fast8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
 	static uint_fast8_t buffer_size = 0;
@@ -19,6 +25,11 @@ bool process_autocorrect(uint16_t keycode, keyrecord_t* record) {
 #ifndef NO_ACTION_ONESHOT
 	mods |= get_oneshot_mods();
 #endif
+
+	if (autocorrect_on == false) {
+		buffer_size = 0;
+		return true;
+	}
 
 	// Exclude matched modifiers and quantum keycodes.
 	switch(keycode) {
