@@ -9,6 +9,10 @@
 	COMB(swap_r,  SH_TG,  TH_M, TH_COMM, TH_DOT)
 #endif
 
+#ifdef AUTOCORRECT
+	ACTN(ac_tog, autocorrect_toggle(), KC_U, KC_I, KC_O)
+#endif
+
 COMB(tog_fnc, TG(FNC), LT(SYM,KC_TAB),  KC_B, KC_V)
 COMB(tog_num, TG(NUM), LT(NUM,KC_BSPC), KC_N, TH_M)
 COMB(vol_up,  KC_VOLU, KC_P,    HM_QUOT)

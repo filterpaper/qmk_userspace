@@ -7,7 +7,6 @@
 bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	// Skip if caps lock is off, caps lock key or one-shot key
 	if (host_keyboard_led_state().caps_lock == false
-	|| (uint8_t)keycode == KC_CAPS
 #ifndef NO_ACTION_ONESHOT
 	|| IS_QK_ONE_SHOT_MOD(keycode)
 #endif
@@ -30,6 +29,8 @@ bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	}
 
 	switch(keycode) {
+		case KC_CAPS:
+			break;
 		case KC_A ... KC_0:
 		case KC_BSPC:
 		case KC_MINS:
