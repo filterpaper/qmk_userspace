@@ -19,7 +19,7 @@ jobs:
         - keyboard: technik
 
     steps:
-    - name: Disable git safe directory checks
+    - name: Configure safe directory
       run : git config --global --add safe.directory '*'
 
     - name: Checkout ${{ matrix.branch }} branch
@@ -45,12 +45,12 @@ jobs:
         echo "file_suffix=${{ env.conv_suffix }}${{ env.split_suffix }}" >> $GITHUB_ENV
         echo "archive_name=${{ matrix.keyboard }}${{ env.conv_suffix }}" >> $GITHUB_ENV
 
-    - name: Build ${{ matrix.keyboard }} firmware
+    - name: Build
       continue-on-error: true
       working-directory: users/${{ github.actor }}/keymaps
       run: qmk -v compile -j 3 ${{ env.build_args }} ${{ matrix.keyboard }}.json
 
-    - name: Rename uf2
+    - name: Rename firmware
       if: ${{ matrix.conv != '' }}
       continue-on-error: true
       run: for file in *.uf2; do mv -v $file ${file%.*}${{ env.file_suffix }}.uf2; done
