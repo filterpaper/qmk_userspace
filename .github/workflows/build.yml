@@ -14,17 +14,11 @@ jobs:
         split: [left, right]
         include:
         - keyboard: cradio
-          conv: kb2040
-          split: ''
-        - keyboard: cradio
-          conv: elite_pi
-          split: ''
-        - keyboard: cradio
           conv: ''
         - keyboard: technik
 
     steps:
-    - name: Disable git safe directory checks
+    - name: Configure safe directory
       run : git config --global --add safe.directory '*'
 
     - name: Checkout QMK
@@ -54,7 +48,7 @@ jobs:
       working-directory: users/${{ github.actor }}/keymaps
       run: qmk -v compile -j 3 ${{ env.build_args }} ${{ matrix.keyboard }}.json
 
-    - name: Rename uf2
+    - name: Rename firmware
       if: ${{ matrix.conv != '' }}
       continue-on-error: true
       run: for file in *.uf2; do mv -v $file ${file%.*}${{ env.file_suffix }}.uf2; done
