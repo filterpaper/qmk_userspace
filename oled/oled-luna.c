@@ -1,7 +1,7 @@
 // Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
-/* Graphical Luna / Felix animation, driven by key press timer or WPM.
+/* Graphical Luna / Felix animation
    Frames are 4x3 on OLED and oriented for OLED_ROTATION_270.
 
    Modified from @HellSingCoder's Luna dog
@@ -18,9 +18,7 @@
         SRC += oled-luna.c
    3 Animation defaults to Luna, an outlined dog. Add
      'OPT_DEFS += -DFELIX' into rules.mk for "filled" version.
-   4 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
-     Otherwise 'last_input_activity_time()' will be used as default.
-   5 The 'oled_task_user()' calls 'render_mod_status()' from "oled-icons.c"
+   4 The 'oled_task_user()' calls 'render_mod_status()' from "oled-icons.c"
      for secondary OLED. Review that file for usage guide or replace
 	 'render_mod_status()' with your own function.
 */
@@ -236,17 +234,7 @@ static void animate_luna(uint32_t interval) {
 
 static void render_luna_status(void) {
 	static uint16_t frame_timer = 0;
-#ifdef WPM_ENABLE
-	static uint32_t input_timer = 0;
-	static uint8_t  prev_wpm    = 0;
-	// Update input_timer with sustained WPM
-	if (get_current_wpm() > prev_wpm || get_mods()) {
-		input_timer = timer_read32();
-	}
-	prev_wpm = get_current_wpm();
-#else
-	uint32_t input_timer = last_input_activity_time();
-#endif
+	uint32_t input_timer = last_matrix_activity_time();
 
 	if (timer_elapsed32(input_timer) > OLED_TIMEOUT) {
 		oled_off();
@@ -261,6 +249,7 @@ static void render_luna_status(void) {
 oled_rotation_t oled_init_user(oled_rotation_t const rotation) {
 	return OLED_ROTATION_270;
 }
+
 
 bool oled_task_user(void) {
 	extern void render_mod_status(void);

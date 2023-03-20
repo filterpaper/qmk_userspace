@@ -32,7 +32,7 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 
 # Corne (CRKBD) OLED display
 
-Corne keyboard can be build with few OLED display options. The `-e OLED=` option can select pet animation on primary OLED with status icons on secondary. Animation are key stroke driven by `oled_tap_timer`. To use WPM, add `-e WPM_ENABLE=yes`.
+Corne keyboard can be build with few OLED display options. The `-e OLED=` option can select pet animation on primary OLED with status icons on secondary.
 ## Bongocat or Luna and Felix
 Bongocat animation will be build as the default pet. Use the following option to select Luna or Felix:
 ```

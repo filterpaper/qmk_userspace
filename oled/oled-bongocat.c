@@ -1,7 +1,7 @@
 // Copyright 2021 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
-/* Graphical bongocat animation, driven by key press timer or WPM.
+/* Graphical bongocat animation
    It has left and right aligned cats optimized for both OLEDs.
    This code uses run-length encoded frames that saves space by
    encoding frames into repeated or unique byte count.
@@ -19,9 +19,7 @@
    2 Add the following lines into rules.mk:
         OLED_ENABLE = yes
         SRC += oled-bongocat.c
-   3 To animate with WPM, add 'WPM_ENABLE = yes' into rules.mk.
-     Otherwise 'last_input_activity_time()' will be used as default.
-   4 The 'oled_task_user()' calls 'render_mod_status()' from "oled-icons.c"
+   3 The 'oled_task_user()' calls 'render_mod_status()' from "oled-icons.c"
      for secondary OLED. Review that file for usage guide or replace
 	 'render_mod_status()' with your own function.
  */
@@ -252,17 +250,7 @@ static void animate_cat(uint32_t interval) {
 
 static void render_bongocat(void) {
 	static uint16_t frame_timer = 0;
-#ifdef WPM_ENABLE
-	static uint32_t input_timer = 0;
-	static uint8_t  prev_wpm    = 0;
-	// Update input_timer with sustained WPM
-	if (get_current_wpm() > prev_wpm || get_mods()) {
-		input_timer = timer_read32();
-	}
-	prev_wpm = get_current_wpm();
-#else
-	uint32_t input_timer = last_input_activity_time();
-#endif
+	uint32_t input_timer = last_matrix_activity_time();
 
 	if (timer_elapsed32(input_timer) > OLED_TIMEOUT) {
 		oled_off();
