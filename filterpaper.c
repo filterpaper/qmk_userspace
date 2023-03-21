@@ -9,9 +9,12 @@ static uint_fast16_t tap_timer = 0;
 
 
 #ifdef TAPPING_TERM_PER_KEY
-// Scale tapping term to short key press interval to avoid false trigger.
+// Scale tapping term to short key press interval
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_HOME_ROW() && IS_TYPING() ? IS_TYPING_TERM : TAPPING_TERM;
+	if (IS_HOME_ROW(record) && IS_TYPING) {
+		return MODTAP_BIT(keycode) & MOD_MASK_SHIFT ? TYPING_TERM - 30 : TYPING_TERM;
+	}
+	return TAPPING_TERM;
 }
 #endif
 
@@ -19,21 +22,21 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef QUICK_TAP_TERM_PER_KEY
 // Reduce quick tap term for thumb keys
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_THUMB_ROW() ? QUICK_TAP_TERM / 2 : QUICK_TAP_TERM;
+	return IS_THUMB_ROW(record) ? QUICK_TAP_TERM - 30 : QUICK_TAP_TERM;
 }
 #endif
 
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
-// Select Shift mod tap immediately when another key is pressed and released.
+// Select Shift hold immediately when another key is pressed and released.
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT && !IS_TYPING() ? true : false;
+	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT && !IS_TYPING ? true : false;
 }
 #endif
 
 
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-// Select hold immediately with another key for layer tap 1 and higher.
+// Select hold immediately with another key for layer tap
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return IS_LAYER_TAP(keycode) ? true : false;
 }
@@ -42,7 +45,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 // Send custom hold keycode for mod tap.
 static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
-	if (!record->tap.count) {
+	if (record->tap.count == 0) {
 		tap_code16(hold_keycode);
 		return false;
 	}
@@ -69,10 +72,10 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 #endif
 		// Clipboard shortcuts.
 		switch(keycode) {
-			case TH_SLSH: return process_tap_hold(Z_UND, record);
-			case TH_DOT:  return process_tap_hold(Z_CUT, record);
-			case TH_COMM: return process_tap_hold(Z_CPY, record);
 			case TH_M:    return process_tap_hold(Z_PST, record);
+			case TH_COMM: return process_tap_hold(Z_CPY, record);
+			case TH_DOT:  return process_tap_hold(Z_CUT, record);
+			case TH_SLSH: return process_tap_hold(Z_UND, record);
 		}
 	}
 	return true;

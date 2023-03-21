@@ -26,30 +26,28 @@ bool process_autocorrect(uint16_t keycode, keyrecord_t* record) {
 	mods |= get_oneshot_mods();
 #endif
 
-	if (autocorrect_on == false) {
+	// Reset with non-Shift modifiers or when feature is off.
+	if (mods & ~MOD_MASK_SHIFT || autocorrect_on == false) {
 		buffer_size = 0;
 		return true;
 	}
 
-	// Exclude matched modifiers and quantum keycodes.
+	// Handle modifiers and quantum keycodes.
 	switch(keycode) {
 		case KC_LSFT:
 		case KC_RSFT:
 		case KC_CAPS:
+#ifdef SWAP_HANDS_ENABLE
 		case QK_SWAP_HANDS ... QK_SWAP_HANDS_MAX:
+#endif
+#ifndef NO_ACTION_ONESHOT
 		case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:
+#endif
 			return true;
 		case QK_MOD_TAP ... QK_MOD_TAP_MAX:
 		case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
 			// Exclude hold keycode
 			if (record->tap.count == 0) {
-				return true;
-			}
-			break;
-		default:
-			// Reset if modifier other than Shift is active.
-			if (mods & ~MOD_MASK_SHIFT) {
-				buffer_size = 0;
 				return true;
 			}
 	}
