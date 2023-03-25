@@ -25,10 +25,6 @@
 
 #include QMK_KEYBOARD_H
 
-#ifndef CMK
-#	define CMK 1
-#endif
-
 #define LUNA_SIZE 96
 #define LUNA_FRAME_DURATION 200 // milliseconds
 #define RUN_INTERVAL  LUNA_FRAME_DURATION*2
@@ -198,7 +194,7 @@ static void render_logo(void) {
 		0x20, 0xd1, 0xd2, 0xd3, 0x20, 0};
 
 	oled_write_P(corne_logo, false);
-	oled_write_P(layer_state_is(CMK) ? PSTR("corne") : katakana, false);
+	oled_write_P(layer_state_is(0) ? katakana : PSTR("corne"), false);
 }
 
 
