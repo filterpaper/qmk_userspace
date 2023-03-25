@@ -16,10 +16,6 @@
         render_mod_status();
    4 Add the font file reference into `config.h`:
         #define OLED_FONT_H "oledfont.c"
-   5 Add your layer numbers for NUM, SYM, and FNC. Example:
-        #define NUM 1
-        #define SYM 2
-        #define FNC 3
 */
 
 #include QMK_KEYBOARD_H
@@ -57,10 +53,10 @@ static void render_layer_state(uint8_t const state) {
 		0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
 
 	switch(state) {
-		case FNC: oled_write_P(func_layer, false); break;
-		case SYM: oled_write_P(symb_layer, false); break;
-		case NUM: oled_write_P(numb_layer, false); break;
-		default:  oled_write_P(base_layer, false);
+		case 1:  oled_write_P(numb_layer, false); break;
+		case 2:  oled_write_P(symb_layer, false); break;
+		case 3:  oled_write_P(func_layer, false); break;
+		default: oled_write_P(base_layer, false);
 	}
 }
 

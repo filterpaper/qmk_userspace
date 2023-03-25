@@ -209,8 +209,7 @@ static unsigned char const *left_tap[TAP_FRAMES] = {
 // If count < 0x80, next byte is repeated by count
 static void decode_frame(unsigned char const *frame) {
 	uint16_t cursor = 0;
-	uint8_t size    = pgm_read_byte(frame);
-	uint8_t i       = 1;
+	uint8_t i = 1, size = pgm_read_byte(frame);
 
 	oled_set_cursor(0,0);
 	while (i < size) {
@@ -254,7 +253,7 @@ static void render_bongocat(void) {
 
 	if (timer_elapsed32(input_timer) > OLED_TIMEOUT) {
 		oled_off();
-	} else if (timer_elapsed(frame_timer)> FRAME_DURATION) {
+	} else if (timer_elapsed(frame_timer) > FRAME_DURATION) {
 		frame_timer = timer_read();
 		animate_cat(timer_elapsed32(input_timer));
 	}
