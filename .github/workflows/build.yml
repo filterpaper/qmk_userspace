@@ -40,18 +40,19 @@ jobs:
         split_suffix: $([ ${{ matrix.split }} ] && printf "_${{ matrix.split }}")
       run: |
         echo "build_args=-e CONVERT_TO=${{ matrix.conv }} -e SPLIT=${{ matrix.split }}" >> $GITHUB_ENV
-        echo "file_suffix=${{ env.conv_suffix }}${{ env.split_suffix }}" >> $GITHUB_ENV
+        echo "target=-e TARGET=${{ matrix.keyboard }}${{ env.conv_suffix }}${{ env.split_suffix }}" >> $GITHUB_ENV
         echo "archive_name=${{ matrix.keyboard }}${{ env.conv_suffix }}" >> $GITHUB_ENV
+        echo "file_suffix=${{ env.conv_suffix }}${{ env.split_suffix }}" >> $GITHUB_ENV
 
     - name: Build
       continue-on-error: true
       working-directory: users/${{ github.actor }}/keymaps
-      run: qmk -v compile -j 3 ${{ env.build_args }} ${{ matrix.keyboard }}.json
+      run: qmk -v compile -j 3 ${{ env.build_args }} ${{ matrix.keyboard }}.json ${{ env.target }}
 
     - name: Rename firmware
       if: ${{ matrix.conv != '' }}
       continue-on-error: true
-      run: for file in *.uf2; do mv -v $file ${file%.*}${{ env.file_suffix }}.uf2; done
+      run: for file in *.uf2; do [ -e "$file" ] && mv -v $file ${file%.*}${{ env.file_suffix }}.uf2; done
 
     - name: Archive firmware
       uses: actions/upload-artifact@v3
