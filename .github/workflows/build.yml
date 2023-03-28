@@ -22,14 +22,14 @@ jobs:
       run : git config --global --add safe.directory '*'
 
     - name: Checkout QMK
-      uses: actions/checkout@v3.4.0
+      uses: actions/checkout@v3.5.0
       with:
         repository: qmk/qmk_firmware
         ref: develop
         submodules: true
 
     - name: Checkout userspace
-      uses: actions/checkout@v3.4.0
+      uses: actions/checkout@v3.5.0
       with:
         path: users/${{ github.actor }}
         persist-credentials: false
