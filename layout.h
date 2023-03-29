@@ -20,17 +20,17 @@
 #define TH_SLSH	LT(0,KC_SLSH)
 #define TH(k1,k2,k3,k4) LT(0,k1),LT(0,k2),LT(0,k3),LT(0,k4)
 
-// Home row mod-tap macros
+// Mod tap macros
 #define HM_A	LSFT_T(KC_A)
 #define HM_S	LALT_T(KC_S)
 #define HM_D	LCTL_T(KC_D)
 #define HM_F	LGUI_T(KC_F)
-#define HM_J	LGUI_T(KC_J)
-#define HM_K	LCTL_T(KC_K)
-#define HM_L	LALT_T(KC_L)
-#define HM_QUOT	LSFT_T(KC_QUOT)
+#define HM_J	RGUI_T(KC_J)
+#define HM_K	RCTL_T(KC_K)
+#define HM_L	RALT_T(KC_L)
+#define HM_QUOT	RSFT_T(KC_QUOT)
 #define HRML(k1,k2,k3,k4) LSFT_T(k1),LALT_T(k2),LCTL_T(k3),LGUI_T(k4)
-#define HRMR(k1,k2,k3,k4) LGUI_T(k1),LCTL_T(k2),LALT_T(k3),LSFT_T(k4)
+#define HRMR(k1,k2,k3,k4) RGUI_T(k1),RCTL_T(k2),RALT_T(k3),RSFT_T(k4)
 
 // Navigation shortcuts
 #define SA_UP S(A(KC_UP))
@@ -51,7 +51,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
 /* │  Z     │  X     │  C     │  V     │  B     │   │  N     │  M     │ , <    │ . >    │ / ?    │ */\
 	KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    \
 /* ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯ */\
-	              LT(SYM,KC_TAB), LCA_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC)
+	              LT(SYM,KC_TAB), LCA_T(KC_ENT),     LSFT_T(KC_SPC), LT(NUM,KC_BSPC)
 /*                            ╰────────┴────────╯   ╰────────┴────────╯ */
 #define _COLE \
 /* ╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮ */\
@@ -124,7 +124,6 @@ HRML(l06, l07, l08, l09), l10,   r06, HRMR(r07, r08, r09, r10), \
 // Layout aliases for json keymap
 #define LAYOUT_34key_w(...) LAYOUT_split_3x5_2(__VA_ARGS__)
 #define LAYOUT_crkbd_w(...) LAYOUT_split_3x6_3(__VA_ARGS__)
-#define LAYOUT_ortho_w(...) LAYOUT_ortho_4x12(__VA_ARGS__)
 
 
 // Convert 3x5_2 to 42-key
@@ -139,16 +138,3 @@ KC_TAB,  l01, l02, l03, l04, l05,   r01, r02, r03, r04, r05, KC_BSPC, \
 QK_GESC, l06, l07, l08, l09, l10,   r06, r07, r08, r09, r10, KC_SCLN, \
 KC_LSFT, l11, l12, l13, l14, l15,   r11, r12, r13, r14, r15, KC_ENT,  \
 	     RSA_T(KC_ESC), l16, l17,   r16, r17, RAG_T(KC_DEL)
-
-// Convert 3x5_2 to 4x12
-#define C_O(k) CONV_4x12(k)
-#define CONV_4x12( \
-	                      l01, l02, l03, l04, l05, r01, r02, r03, r04, r05, \
-	                      l06, l07, l08, l09, l10, r06, r07, r08, r09, r10, \
-	                      l11, l12, l13, l14, l15, r11, r12, r13, r14, r15, \
-	                                     l16, l17, r16, r17                 \
-) \
-                 KC_TAB,  l01, l02, l03, l04, l05, r01, r02, r03, r04, r05, KC_BSPC, \
-                 QK_GESC, l06, l07, l08, l09, l10, r06, r07, r08, r09, r10, KC_SCLN, \
-                 KC_LSFT, l11, l12, l13, l14, l15, r11, r12, r13, r14, r15, KC_ENT,  \
-KC_DEL, KC_VOLD, KC_VOLU, RSA_T(KC_ESC), l16, l17, r16, r17, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
