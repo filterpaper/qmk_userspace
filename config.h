@@ -4,6 +4,7 @@
 #pragma once
 
 // Common QMK settings
+#define DEBOUNCE 10
 #define TAP_CODE_DELAY 5
 #define TAP_HOLD_CAPS_DELAY 25
 #define GRAVE_ESC_SHIFT_OVERRIDE
@@ -13,7 +14,7 @@
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
-#define TAPPING_TERM 200U
+#define TAPPING_TERM 220U
 #define TAPPING_TERM_PER_KEY
 #define QUICK_TAP_TERM TAPPING_TERM / 2
 #define QUICK_TAP_TERM_PER_KEY
@@ -85,4 +86,15 @@
 // Layout macros
 #ifndef __ASSEMBLER__
 #	include "layout.h"
+#endif
+
+// Ika overrides
+#ifdef KEYBOARD_a_dux
+#	undef DIRECT_PINS_RIGHT
+#	define DIRECT_PINS_RIGHT { \
+	{ D3, B4, C6, F4, F7 }, \
+	{ D0, E6, D4, F5, B1 }, \
+	{ B5, D7, D2, F6, B3 }, \
+	{ B6, B2, NO_PIN, NO_PIN, NO_PIN } \
+}
 #endif

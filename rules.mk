@@ -1,24 +1,23 @@
 # Disable unused features
-#LEADER_ENABLE = no
-#COMMAND_ENABLE = no
-#TERMINAL_ENABLE = no
-#KEY_LOCK_ENABLE = no
-#SLEEP_LED_ENABLE = no
-#VELOCIKEY_ENABLE = no
 MAGIC_ENABLE = no
 CONSOLE_ENABLE = no
 UNICODE_ENABLE = no
 SPACE_CADET_ENABLE = no
 
-# Common features
+# Enable common features
 COMBO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTMAGIC_ENABLE = yes
 
 VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
-OPT_DEFS += -DCAPS_UNLOCK -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
-SRC += filterpaper.c caps_unlock.c combos.c
+OPT_DEFS += -DCAPS_UNLOCK -DAUTOCORRECT
+SRC += filterpaper.c combos.c caps_unlock.c autocorrect.c
+DEBOUNCE_TYPE = asym_eager_defer_pk
+
+ifeq ($(strip $(SPLIT)), $(filter $(SPLIT), left right))
+	OPT_DEFS += -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
+endif
 
 ifeq ($(strip $(MCU)), atmega32u4)
 	LTO_ENABLE = yes
@@ -26,8 +25,6 @@ ifeq ($(strip $(MCU)), atmega32u4)
 	BOOTLOADER = atmel-dfu
 else
 	SWAP_HANDS_ENABLE = yes
-	DEBOUNCE_TYPE = asym_eager_defer_pk
-#	EEPROM_DRIVER = transient
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_DRIVER = WS2812
@@ -36,21 +33,10 @@ else
 	endif
 endif
 
-# Split boards
-ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), cradio crkbd/rev1))
-	OPT_DEFS += -DAUTOCORRECT
-	SRC += autocorrect.c
-endif
-
-# RGB boards
-ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), crkbd/rev1 boardsource/technik_o))
+ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), crkbd/rev1))
 	RGB_MATRIX_ENABLE = yes
 	RGB_MATRIX_CUSTOM_USER = yes
 	SRC += rgb-matrix.c
-endif
-
-# OLED
-ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), crkbd/rev1))
 	OLED_ENABLE = yes
 	ifneq ($(strip $(OLED)),)
 		OPT_DEFS += -D${OLED}

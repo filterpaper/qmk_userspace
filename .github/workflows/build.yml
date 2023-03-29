@@ -11,16 +11,12 @@ jobs:
       matrix:
         keyboard: [cradio]
         conv: [kb2040, elite_pi]
-        split: [left, right]
+        split: [left, right, '']
         include:
         - keyboard: cradio
           conv: ''
-        - keyboard: technik
 
     steps:
-    - name: Configure safe directory
-      run : git config --global --add safe.directory '*'
-
     - name: Checkout QMK
       uses: actions/checkout@v3.5.0
       with:
@@ -34,32 +30,24 @@ jobs:
         path: users/${{ github.actor }}
         persist-credentials: false
 
-    - name: Setup variables
-      env:
-        conv_suffix: $([ ${{ matrix.conv }} ] && printf "_${{ matrix.conv }}")
-        split_suffix: $([ ${{ matrix.split }} ] && printf "_${{ matrix.split }}")
-      run: |
-        echo "build_args=-e CONVERT_TO=${{ matrix.conv }} -e SPLIT=${{ matrix.split }}" >> $GITHUB_ENV
-        echo "target=-e TARGET=${{ matrix.keyboard }}${{ env.conv_suffix }}${{ env.split_suffix }}" >> $GITHUB_ENV
-        echo "archive_name=${{ matrix.keyboard }}${{ env.conv_suffix }}" >> $GITHUB_ENV
-        echo "file_suffix=${{ env.conv_suffix }}${{ env.split_suffix }}" >> $GITHUB_ENV
+    - name: Setup safe directory
+      run: git config --global --add safe.directory '*'
 
     - name: Build
-      continue-on-error: true
-      working-directory: users/${{ github.actor }}/keymaps
-      run: qmk -v compile -j 3 ${{ env.build_args }} ${{ matrix.keyboard }}.json ${{ env.target }}
-
-    - name: Rename firmware
-      if: ${{ matrix.conv != '' }}
-      continue-on-error: true
-      run: for file in *.uf2; do [ -e "$file" ] && mv -v $file ${file%.*}${{ env.file_suffix }}.uf2; done
+      env:
+        conv: ${{ matrix.conv }}
+        split: ${{ matrix.split }}
+        path: users/${{ github.actor }}/keymaps
+      run: >
+        qmk -v compile -j 3 $path/${{ matrix.keyboard }}.json
+        ${conv:+-e CONVERT_TO=$conv} ${split:+-e SPLIT=$split}
+        -e TARGET=${{ matrix.keyboard }}${conv:+_$conv}${split:+_$split}
 
     - name: Archive firmware
-      uses: actions/upload-artifact@v3
-      continue-on-error: true
+      uses: actions/upload-artifact@v3.1.2
       with:
         retention-days: 60
-        name: ${{ env.archive_name }}
+        name: ${{ matrix.keyboard }}_${{ matrix.conv }}
         path: |
           *.hex
           *.bin
