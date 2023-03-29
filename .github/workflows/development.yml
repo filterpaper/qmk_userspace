@@ -15,52 +15,39 @@ jobs:
         conv: [stemcell, elite_pi]
         split: [left, right]
         branch: [develop]
-        include:
-        - keyboard: technik
 
     steps:
-    - name: Configure safe directory
-      run : git config --global --add safe.directory '*'
-
     - name: Checkout ${{ matrix.branch }} branch
-      uses: actions/checkout@v3.5.0
+      uses: actions/checkout@main
       with:
         repository: qmk/qmk_firmware
         ref: ${{ matrix.branch }}
         submodules: true
 
-    - name: Checkout userspace
-      uses: actions/checkout@v3.5.0
+    - name: Checkout ${{ github.actor }} userspace
+      uses: actions/checkout@main
       with:
         path: users/${{ github.actor }}
         persist-credentials: false
 
-    - name: Setup variables
-      env:
-        conv_suffix: $([ -n "${{ matrix.conv }}" ] && printf "_${{ matrix.conv }}")
-        split_suffix: $([ -n "${{ matrix.split }}" ] && printf "_${{ matrix.split }}")
-        branch_suffix: $([ -n "${{ matrix.branch}}" ] && printf "_${{ matrix.branch }}")
-      run: |
-        echo "build_args=-e CONVERT_TO=${{ matrix.conv }} -e SPLIT=${{ matrix.split }}" >> $GITHUB_ENV
-        echo "file_suffix=${{ env.conv_suffix }}${{ env.split_suffix }}" >> $GITHUB_ENV
-        echo "archive_name=${{ matrix.keyboard }}${{ env.conv_suffix }}" >> $GITHUB_ENV
+    - name: Configure safe directory
+      run: git config --global --add safe.directory '*'
 
     - name: Build
-      continue-on-error: true
-      working-directory: users/${{ github.actor }}/keymaps
-      run: qmk -v compile -j 3 ${{ env.build_args }} ${{ matrix.keyboard }}.json
-
-    - name: Rename firmware
-      if: ${{ matrix.conv != '' }}
-      continue-on-error: true
-      run: for file in *.uf2; do mv -v $file ${file%.*}${{ env.file_suffix }}.uf2; done
+      env:
+        conv: ${{ matrix.conv }}
+        split: ${{ matrix.split }}
+        path: users/${{ github.actor }}/keymaps
+      run: >
+        qmk -v compile -j 3 $path/${{ matrix.keyboard }}.json
+        ${conv:+-e CONVERT_TO=$conv} ${split:+-e SPLIT=$split}
+        -e TARGET=${{ matrix.keyboard }}${conv:+_$conv}${split:+_$split}
 
     - name: Archive firmware
-      uses: actions/upload-artifact@v3
-      continue-on-error: true
+      uses: actions/upload-artifact@main
       with:
         retention-days: 3
-        name: ${{ env.archive_name }}
+        name: ${{ matrix.keyboard }}_${{ matrix.conv }}
         path: |
           *.hex
           *.bin
