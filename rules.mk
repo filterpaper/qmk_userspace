@@ -5,22 +5,18 @@ UNICODE_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Enable common features
+LTO_ENABLE = yes
 COMBO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 BOOTMAGIC_ENABLE = yes
-
-VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
-OPT_DEFS += -DCAPS_UNLOCK -DAUTOCORRECT
-SRC += filterpaper.c combos.c caps_unlock.c autocorrect.c
 DEBOUNCE_TYPE = asym_eager_defer_pk
 
-ifeq ($(strip $(SPLIT)), $(filter $(SPLIT), left right))
-	OPT_DEFS += -DINIT_EE_HANDS_$(shell echo ${SPLIT}|tr a-z A-Z)
-endif
+VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
+SRC += filterpaper.c combos.c caps_unlock.c autocorrect.c
+OPT_DEFS += -DCAPS_UNLOCK -DAUTOCORRECT
 
 ifeq ($(strip $(MCU)), atmega32u4)
-	LTO_ENABLE = yes
 	TOP_SYMBOLS = yes
 	BOOTLOADER = atmel-dfu
 else
@@ -31,6 +27,9 @@ else
 		RGB_MATRIX_CUSTOM_USER = yes
 		SRC += rgb-matrix.c
 	endif
+	ifeq ($(strip $(SPLIT)), $(filter $(SPLIT), left right))
+		OPT_DEFS += -DINIT_EE_HANDS_$(shell echo $(SPLIT)|tr a-z A-Z)
+	endif
 endif
 
 ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), crkbd/rev1))
@@ -39,7 +38,7 @@ ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), crkbd/rev1))
 	SRC += rgb-matrix.c
 	OLED_ENABLE = yes
 	ifneq ($(strip $(OLED)),)
-		OPT_DEFS += -D${OLED}
+		OPT_DEFS += -D$(OLED)
 		SRC += oled-icons.c oled-luna.c
 	else
 		SRC += oled-icons.c oled-bongocat.c
