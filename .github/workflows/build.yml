@@ -9,9 +9,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: [cradio]
-        conv: [kb2040, elite_pi]
-        split: [left, right, '']
+        keyboard: [a_dux, cradio]
+        conv: [elite_pi, kb2040]
+        split: [left, right]
+        exclude:
+        - keyboard: a_dux
+          conv: kb2040
         include:
         - keyboard: cradio
           conv: ''
@@ -33,7 +36,7 @@ jobs:
     - name: Setup safe directory
       run: git config --global --add safe.directory '*'
 
-    - name: Build
+    - name: Compile
       env:
         conv: ${{ matrix.conv }}
         split: ${{ matrix.split }}
@@ -54,4 +57,8 @@ jobs:
           *.uf2
 
   purge:
-    uses: filterpaper/scripts/.github/workflows/delete-workflow.yml@main
+    uses: filterpaper/scripts/.github/workflows/purge-workflow.yml@main
+    with:
+      purge-age: 5
+      delete-all-completed: false
+      delete-all-incomplete: false

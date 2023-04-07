@@ -69,11 +69,11 @@
 #	endif
 #	ifdef CONVERT_TO_KB2040
 #		define RGBW
-#		define RGB_DI_PIN 17U
+#		define WS2812_DI_PIN 17U
 #		define RGB_MATRIX_LED_COUNT 2
 #		define RGB_MATRIX_SPLIT {1, 1}
 #		define SPLIT_TRANSPORT_MIRROR
-#		define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED RGB_DI_PIN
+#		define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED WS2812_DI_PIN
 #	endif
 #endif
 
@@ -88,7 +88,7 @@
 #	include "layout.h"
 #endif
 
-// Ika overrides
+// Ika asymmetry pins
 #ifdef KEYBOARD_a_dux
 #	undef DIRECT_PINS_RIGHT
 #	define DIRECT_PINS_RIGHT { \
