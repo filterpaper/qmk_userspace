@@ -51,11 +51,11 @@ bool rgb_matrix_indicators_user(void) {
 	}
 	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
-		uint8_t layer = get_highest_layer(layer_state);
+		uint8_t const layer = get_highest_layer(layer_state);
 		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
 			for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-				uint8_t  index_led     = g_led_config.matrix_co[row][col];
-				uint16_t index_keycode = keymap_key_to_keycode(layer, (keypos_t){col,row});
+				uint8_t  const index_led     = g_led_config.matrix_co[row][col];
+				uint16_t const index_keycode = keymap_key_to_keycode(layer, (keypos_t){col,row});
 				if (index_led != NO_LED && index_keycode > KC_TRNS) {
 					rgb_matrix_set_color(index_led, RGB_LAYER);
 				}
@@ -85,7 +85,7 @@ static inline RGB hsv_to_rgb_glow(HSV hsv) {
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 	// Caps lock
 	if (host_keyboard_led_state().caps_lock) {
-		RGB rgb = hsv_to_rgb_glow((HSV){HSV_RED});
+		RGB const rgb = hsv_to_rgb_glow((HSV){HSV_RED});
 		for (uint8_t i = led_min; i <= led_max; ++i) {
 			if (g_led_config.flags[i] & CAP_FLAG) {
 				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
@@ -102,11 +102,11 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 	}
 	// Layer active keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
-		uint8_t layer = get_highest_layer(layer_state);
+		uint8_t const layer = get_highest_layer(layer_state);
 		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
 			for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-				uint8_t  index_led     = g_led_config.matrix_co[row][col];
-				uint16_t index_keycode = keymap_key_to_keycode(layer, (keypos_t){col,row});
+				uint8_t  const index_led     = g_led_config.matrix_co[row][col];
+				uint16_t const index_keycode = keymap_key_to_keycode(layer, (keypos_t){col,row});
 				if (led_min <= index_led && index_led <= led_max && index_keycode > KC_TRNS) {
 					rgb_matrix_set_color(index_led, RGB_LAYER);
 				}
@@ -115,7 +115,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 	}
 #	ifdef SWAP_HANDS_ENABLE
 	if (is_swap_hands_on()) {
-		RGB rgb = hsv_to_rgb_glow((HSV){HSV_TEAL});
+		RGB const rgb = hsv_to_rgb_glow((HSV){HSV_TEAL});
 		for (uint8_t i = led_min; i <= led_max; ++i) {
 			if (g_led_config.flags[i] & CAP_FLAG) {
 				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
