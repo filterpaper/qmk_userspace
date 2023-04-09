@@ -5,7 +5,7 @@
 #include QMK_KEYBOARD_H
 
 bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
-	bool caps_lock = host_keyboard_led_state().caps_lock;
+	bool const caps_lock = host_keyboard_led_state().caps_lock;
 
 	if (caps_lock == false || (uint8_t)keycode == KC_CAPS) {
 		return true;

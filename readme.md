@@ -115,11 +115,11 @@ Custom mod tap settings to avoid false positives with home row mods.
 ## Tap timer
 Setup a tap timer to detect recent key presses in `process_record_user`:
 ```c
-static uint16_t tap_timer = 0;
+static fast_timer_t tap_timer = 0;
 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        tap_timer = timer_read();
+        tap_timer = timer_read_fast();
     }
     return true;
 }
@@ -130,8 +130,8 @@ Use elapsed time of aforementioned `tap_timer` in the following macros to:
 * Return true for "typing" if less than `TAPPING_TERM`
 * Inverse the value of `IS_TYPING_TERM` to `TAPPING_TERM`
 ```c
-#define IS_TYPING() (timer_elapsed(tap_timer) < TAPPING_TERM)
-#define TYPING_TERM ((TAPPING_TERM * 2) - timer_elapsed(tap_timer))
+#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM)
+#define TYPING_TERM ((TAPPING_TERM * 2) - timer_elapsed_fast(tap_timer))
 #define IS_MOD_TAP(kc) (QK_MOD_TAP <= kc && kc <= QK_MOD_TAP_MAX)
 ```
 Use `get_tapping_term()` to return higher tapping term on short typing intervals to avoid accidental activation of mod taps:

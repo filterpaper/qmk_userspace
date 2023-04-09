@@ -4,7 +4,7 @@
 #include "filterpaper.h"
 
 #if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
-static uint_fast16_t tap_timer = 0;
+static fast_timer_t tap_timer = 0;
 #endif
 
 
@@ -56,7 +56,7 @@ static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) 
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
 #if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
-		tap_timer = timer_read();
+		tap_timer = timer_read_fast();
 #endif
 #ifdef AUTOCORRECT
 		extern bool process_autocorrect(uint16_t keycode, keyrecord_t* record);
@@ -79,4 +79,22 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 		}
 	}
 	return true;
+}
+
+
+void housekeeping_task_user(void) {
+	// Restore state after 3 minutes
+	if (last_input_activity_elapsed() > TAPPING_TERM * 1000U) {
+		if (host_keyboard_led_state().caps_lock) {
+			tap_code(KC_CAPS);
+		}
+		if (get_highest_layer(layer_state|default_layer_state) > 0) {
+			layer_off(get_highest_layer(layer_state|default_layer_state));
+		}
+#ifdef SWAP_HANDS_ENABLE
+		if (is_swap_hands_on()) {
+			swap_hands_off();
+		}
+#endif
+	}
 }
