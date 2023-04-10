@@ -5,7 +5,6 @@ UNICODE_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Enable common features
-LTO_ENABLE = yes
 COMBO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
@@ -17,13 +16,13 @@ SRC += filterpaper.c combos.c caps_unlock.c autocorrect.c
 OPT_DEFS += -DCAPS_UNLOCK -DAUTOCORRECT
 
 ifeq ($(strip $(MCU)), atmega32u4)
+	LTO_ENABLE = yes
 	TOP_SYMBOLS = yes
 	BOOTLOADER = atmel-dfu
 endif
 
 ifneq ($(strip $(CONVERT_TO)),)
 	SWAP_HANDS_ENABLE = yes
-	DEBOUNCE_TYPE = sym_defer_pk
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_DRIVER = WS2812
@@ -31,8 +30,8 @@ ifneq ($(strip $(CONVERT_TO)),)
 		SRC += rgb-matrix.c
 		DEBOUNCE_TYPE = asym_eager_defer_pk
 	endif
-	ifeq ($(strip $(SPLIT)), $(filter $(SPLIT), left right))
-		OPT_DEFS += -DINIT_EE_HANDS_$(shell echo $(SPLIT)|tr a-z A-Z)
+	ifneq (,$(filter $(SPLIT), left right))
+		MAKECMDGOALS = uf2-split-$(SPLIT)
 	endif
 endif
 
