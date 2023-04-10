@@ -10,9 +10,10 @@
 #define RGB_DPINK	115, 20, 45
 #define RGB_DTEAL	5, 35, 35
 #define RGB_FLUOR	75, 122, 22
-#define RGB_CAPS	RGB_RED
-#define RGB_MODS	RGB_GREEN
 #define RGB_LAYER	RGB_BSTEEL
+#define RGB_MODS	RGB_GREEN
+#define HSV_CAPS	HSV_RED
+#define HSV_SWAP	HSV_TEAL
 
 // Custom effects
 #ifdef RGB_MATRIX_CUSTOM_USER
