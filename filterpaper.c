@@ -30,7 +30,7 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef PERMISSIVE_HOLD_PER_KEY
 // Select Shift hold immediately when another key is pressed and released.
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT && !IS_TYPING ? true : false;
+	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT && !IS_TYPING;
 }
 #endif
 
@@ -38,7 +38,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 // Select hold immediately with another key for layer tap
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	return IS_LAYER_TAP(keycode) ? true : false;
+	return IS_LAYER_TAP(keycode);
 }
 #endif
 
@@ -98,3 +98,10 @@ void housekeeping_task_user(void) {
 #endif
 	}
 }
+
+
+#ifdef COMBO_SHOULD_TRIGGER
+bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
+	return get_highest_layer(layer_state) <= CMK;
+}
+#endif

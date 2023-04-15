@@ -49,5 +49,5 @@ mod_bits = (kc & 0x1000) ? ((kc >> 8) & 0xf) << 4 : ((kc >> 8) & 0xf)
 
 // Typing interval macros
 #define IS_TYPING (timer_elapsed_fast(tap_timer) < TAPPING_TERM)
-//#define TYPING_TERM ((TAPPING_TERM * 2) - timer_elapsed(tap_timer)) // linear scale
 #define TYPING_TERM ((TAPPING_TERM * TAPPING_TERM) / timer_elapsed_fast(tap_timer))
+//#define TYPING_TERM ((TAPPING_TERM * 2) - timer_elapsed(tap_timer))

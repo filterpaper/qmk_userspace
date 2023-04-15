@@ -1,29 +1,19 @@
 # Summary
-This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is set up as a self-contained folder that avoids placing `keymap.c` files within keyboard sub-folders.
-* Keymaps are saved as [QMK Configurator](https://config.qmk.fm/#/) JSON files.
-* Shared source files build with `rules.mk`.
+This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is set up as a self-contained repository that avoids `keymap.c` files within keyboard sub-folders. It can by build by placing this repository within QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) folder and compiling with the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with [build.yml](.github/workflows/build.yml) workflow.
 
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
-
-
-
-# Building Userspace
-This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) within `users` folder by executing `qmk compile` on the JSON files. [Actions](https://docs.github.com/en/actions) can also be leveraged to do likewise on a GitHub container with the [build.yml](.github/workflows/build.yml) workflow.
-
-
 
 # Features
 * Shared [layout](layout.h) wrapper macros
 * [Combos](#combo-helper-macros) simplified with preprocessors
 * [Tap-hold](#tap-hold-macros) clipboard shortcuts
 * [Word](features/) processing features
-  * Caps Unlock to toggle caps lock following a word
   * Autocorrection for typos
+  * Caps Unlock that follows a word
 * [OLED](oled/) indicators and animation
   * [Bongocat](oled/oled-bongocat.c) with compressed RLE frames
   * [Luna](oled/oled-luna.c) (and Felix) the dog
   * Soundmonster [indicator](oled/oled-icons.c) icons
-  * Katakana コルネ font file
 * [RGB](rgb/) matrix lighting and effects
   * Custom "candy" matrix effect
   * [Layer indicators](#light-configured-layers-keys) of active keys
@@ -32,9 +22,9 @@ This repository can be built as QMK's [userspace](https://docs.qmk.fm/#/feature_
 
 # Corne (CRKBD) OLED display
 
-Corne keyboard can be build with few OLED display options. The `-e OLED=` option can select pet animation on primary OLED with status icons on secondary.
+Corne keyboard can be build with few OLED display options using `-e OLED=` environment variable to select pet animation on primary display:
 ## Bongocat or Luna and Felix
-Bongocat animation will be build as the default pet. Use the following option to select Luna or Felix:
+Bongocat animation is the default pet. Use the following option to select Luna or Felix:
 ```
 qmk compile -e OLED=LUNA corne.json
 qmk compile -e OLED=FELIX corne.json
@@ -81,10 +71,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true; // continue with unmatched keycodes
 }
 ```
-Tap hold shortcuts with layer tap (`LT()`) uses less firmware space than [tap dance](https://docs.qmk.fm/#/feature_tap_dance) (~35 bytes per shortcut). Macro `W_TH` replaces `KC_W` on the key map, and the code will intercept hold function of `LT()` to send the macro string. There are more examples in QMK's [Intercepting Mod Taps](https://docs.qmk.fm/#/mod_tap?id=intercepting-mod-taps).
+Tap hold shortcuts with layer tap (`LT()`) uses less firmware space than [tap dance](https://docs.qmk.fm/#/feature_tap_dance) (~35 bytes per shortcut). Macro `W_TH` replaces `KC_W` on the key map, and the code will intercept hold function of `LT()` to send the macro string. See QMK's [Intercepting Mod Taps](https://docs.qmk.fm/#/mod_tap?id=intercepting-mod-taps) for details.
 
 ## Combo helper macros
-The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) code file `combos.c` is modified from [Jane Bernhardt's helper macros](http://combos.gboards.ca/) to simplify management. New shortcuts are added to `combos.inc` as one-liners and preprocessor macros will generate required QMK combo source codes at compile time.
+The [QMK combo](https://docs.qmk.fm/#/feature_combo?id=combos) code file `combos.c` is modified from [Jane Bernhardt's helper macros](http://combos.gboards.ca/) to simplify management. Combos are simple one-liners in `combos.inc` and preprocessor macros will generate source codes at compile time.
 
 ## Pro Micro RX/TX LEDs
 Data LEDs on Pro Micro can be used as indicators with code. They are pins `B0` (RX) and `D5` (TX) on Atmega32u4. To use them with QMK's [LED Indicators](https://docs.qmk.fm/#/feature_led_indicators), flag the pin in `config.h`:
@@ -110,7 +100,7 @@ Initialise LEDs with the `*_INIT` macro on startup inside `matrix_init_user(void
 
 
 # Tap Hold Customisations
-Custom mod tap settings to avoid false positives with home row mods.
+This are some custom mod tap settings to avoid false positives with home row mods.
 
 ## Tap timer
 Setup a tap timer to detect recent key presses in `process_record_user`:
@@ -132,10 +122,11 @@ Use elapsed time of aforementioned `tap_timer` in the following macros to:
 ```c
 #define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM)
 #define TYPING_TERM ((TAPPING_TERM * 2) - timer_elapsed_fast(tap_timer))
-#define IS_MOD_TAP(kc) (QK_MOD_TAP <= kc && kc <= QK_MOD_TAP_MAX)
 ```
 Use `get_tapping_term()` to return higher tapping term on short typing intervals to avoid accidental activation of mod taps:
 ```c
+#define IS_MOD_TAP(kc) (QK_MOD_TAP <= kc && kc <= QK_MOD_TAP_MAX)
+
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     return IS_MOD_TAP() && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
 }
@@ -174,9 +165,9 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 # Layout wrapper macros
 
 ## Basic setup
-A single key map layout is shared with multiple keyboards using C preprocessors macros. They are referenced in the keyboard JSON files and the build process will expand them into a transient `keymap.c` file during compile time.
+A single key map layout can be shared with multiple keyboards using C preprocessors macros. They are referenced in the keyboard JSON files and the build process will expand them into a transient `keymap.c` file during compile time.
 
-The `split_3x5_2` layout is used as the base and defined in `layout.h` file, example:
+The `split_3x5_2` layout is used as the base layout and defined in `layout.h` file, e.g.:
 ```c
 #define _BASE \
     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
@@ -214,15 +205,15 @@ Both are then placed within the `HRM` macro for the `split_3x5_2` base:
 ```c
 #define HRM(k) HRM_TAPHOLD(k)
 #define HRM_TAPHOLD( \
-    l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05, \
-    l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10, \
-    l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15, \
-                   l16, l17,    r16, r17                 \
+      l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05, \
+      l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10, \
+      l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15, \
+                     l16, l17,    r16, r17                 \
 ) \
-      l01, l02, l03, l04, l05,  r01, r02, r03, r04, r05,       \
-HRML(l06, l07, l08, l09), l10,  r06, HRMR(r07, r08, r09, r10), \
-      l11, l12, l13, l14, l15,  r11, r12, r13, r14, r15,       \
-                     l16, l17,  r16, r17
+      l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05,       \
+HRML(l06, l07, l08, l09), l10,    r06, HRMR(r07, r08, r09, r10), \
+      l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15,       \
+                     l16, l17,    r16, r17
 ```
 They come together in the JSON file, by wrapping `HRM()` on layers that require them, e.g.:
 ```c
@@ -260,7 +251,6 @@ The JSON file for 42-key Corne uses the `C_42()` macro in the following format:
     "layout": "LAYOUT_corne_w",
     "layers": [
         [ "C_42(HRM(_BASE))" ],
-        [ "C_42(HRM(_COLE))" ],
         [ "C_42(_NUMB)" ],
         [ "C_42(_SYMB)" ],
         [ "C_42(_FUNC)" ]
@@ -361,5 +351,5 @@ dfu-flash() {
 * Mill-Max [connector pins](https://www.digikey.com/product-detail/en/3320-0-00-15-00-00-03-0/ED1134-ND/4147392)
 * [PJ320A](https://www.aliexpress.com/item/1005001928651798.html) jack
 * [TRRS](https://www.aliexpress.com/item/32961128759.html) cable
-* [Silicone bumper](https://www.aliexpress.com/item/32912066603.html) feet
+* [Silicone bumpers](https://www.aliexpress.com/item/32912066603.html) feet
 * Kailh [gchoc v1](https://www.aliexpress.com/item/4000907409650.html) switches

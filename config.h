@@ -24,6 +24,7 @@
 #ifdef COMBO_ENABLE
 #	define COMBO_TERM 30
 #	define COMBO_ONLY_FROM_LAYER 0
+#	define COMBO_SHOULD_TRIGGER
 #endif
 
 #ifdef SPLIT_KEYBOARD
@@ -31,6 +32,7 @@
 #	define SPLIT_WATCHDOG_ENABLE
 #	ifdef __AVR__
 #		define SPLIT_USB_DETECT
+#		define NO_SUSPEND_POWER_DOWN
 #	endif
 #	if (defined OLED_ENABLE || defined RGB_MATRIX_ENABLE)
 #		define SPLIT_OLED_ENABLE
