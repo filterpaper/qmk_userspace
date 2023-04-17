@@ -1,26 +1,27 @@
 // Copyright 2022 @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
-/* Adapted from Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
-   This file will build QMK's combo source with preprocessor substitution
-   using COMBOS_DEF file macros in the following format:
-   COMB(name, keycode_shortcut, combo_sequence...)
-   SUBS(name, "string to send", combo_sequence...)
-   ACTN(name, function_calls(), combo_sequence...)
+/*
+Adapted from Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
+This file will build QMK's combo source with preprocessor substitution
+using COMBOS_DEF file macros in the following format:
+COMB(name, keycode_shortcut, combo_sequence...)
+SUBS(name, "string to send", combo_sequence...)
+ACTN(name, function_calls(), combo_sequence...)
 
-   Use COMB for simple keycode shortcuts with two or more combo keys to activate
-   a keycode. E.g. volume up with Y+U: COMB(vol_up, KC_VOLU, KC_Y, KC_U).
+Use COMB for simple keycode shortcuts with two or more combo keys to activate
+a keycode. E.g. volume up with Y+U: COMB(vol_up, KC_VOLU, KC_Y, KC_U).
 
-   SUBS is a string substitution macro that can be used to send strings.
-   E.g. SUBS(which, "which ", KC_W, KC_H).
+SUBS is a string substitution macro that can be used to send strings.
+E.g. SUBS(which, "which ", KC_W, KC_H).
 
-   Use ACTN for internal callback functions that can be semicolon separated.
-   E.g. ACTN(rgb_tog, rgb_matrix_toggle(), KC_Z, KC_X)
+Use ACTN for internal callback functions that can be semicolon separated.
+E.g. ACTN(rgb_tog, rgb_matrix_toggle(), KC_Z, KC_X)
 
-   Usage: Save macros in 'combos.inc' and add the following to rules.mk:
-   COMBO_ENABLE = yes
-   SRC += combos.c
- */
+Usage: Save macros in 'combos.inc' and add the following to rules.mk:
+COMBO_ENABLE = yes
+SRC += combos.c
+*/
 
 #include QMK_KEYBOARD_H
 
@@ -84,3 +85,10 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 		#include COMBOS_DEF
 	}
 }
+
+
+#ifdef COMBO_SHOULD_TRIGGER
+bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
+	return get_highest_layer(layer_state) <= CMK;
+}
+#endif

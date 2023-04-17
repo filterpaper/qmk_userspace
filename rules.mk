@@ -22,7 +22,7 @@ ifeq ($(strip $(MCU)), atmega32u4)
 endif
 
 ifneq ($(strip $(CONVERT_TO)),)
-	SWAP_HANDS_ENABLE = yes
+	OPT = 2
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_DRIVER = WS2812
