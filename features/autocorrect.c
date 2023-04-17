@@ -37,9 +37,6 @@ bool process_autocorrect(uint16_t keycode, keyrecord_t* record) {
 		case KC_LSFT:
 		case KC_RSFT:
 		case KC_CAPS:
-#ifdef SWAP_HANDS_ENABLE
-		case QK_SWAP_HANDS ... QK_SWAP_HANDS_MAX:
-#endif
 #ifndef NO_ACTION_ONESHOT
 		case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:
 #endif

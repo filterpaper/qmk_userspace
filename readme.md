@@ -125,10 +125,10 @@ Use elapsed time of aforementioned `tap_timer` in the following macros to:
 ```
 Use `get_tapping_term()` to return higher tapping term on short typing intervals to avoid accidental activation of mod taps:
 ```c
-#define IS_MOD_TAP(kc) (QK_MOD_TAP <= kc && kc <= QK_MOD_TAP_MAX)
+#define TAPPING_TERM_PER_KEY
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    return IS_MOD_TAP() && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
+    return IS_QK_MOD_TAP(keycode) && IS_QK_MOD_TAP(keycode) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
 }
 ```
 
@@ -136,10 +136,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 Activate Shift mod tap with another nested key press when not within typing interval.
 ```c
 #define PERMISSIVE_HOLD_PER_KEY
-#define MODTAP_BIT(kc) ((kc >> 8) & 0x0f)
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    if (MODTAP_BIT(keycode) & MOD_MASK_SHIFT && !IS_TYPING()) {
+    if (IS_QK_MOD_TAP(keycode) && QK_MODS_GET_MODS(keycode) & MOD_MASK_SHIFT && !IS_TYPING()) {
         return true;
     }
     return false;
@@ -150,10 +149,9 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 Trigger layer taps immediately with another key press.
 ```c
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-#define QK_LAYER_TAP_1 0x4100
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    if (QK_LAYER_TAP_1 <= keycode && keycode <= QK_LAYER_TAP_MAX) {
+    if (IS_QK_LAYER_TAP(keycode)) {
         return true;
     }
     return false;
