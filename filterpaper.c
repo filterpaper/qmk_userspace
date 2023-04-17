@@ -11,8 +11,8 @@ static fast_timer_t tap_timer = 0;
 #ifdef TAPPING_TERM_PER_KEY
 // Scale tapping term to short key press interval
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	if (IS_HOME_ROW(record) && IS_TYPING) {
-		return MODTAP_BIT(keycode) & MOD_MASK_SHIFT ? TYPING_TERM - 30 : TYPING_TERM;
+	if (IS_HOME_ROW(record) && IS_TYPING()) {
+		return QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT ? TYPING_TERM - 30 : TYPING_TERM;
 	}
 	return TAPPING_TERM;
 }
@@ -30,7 +30,7 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef PERMISSIVE_HOLD_PER_KEY
 // Select Shift hold immediately when another key is pressed and released.
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return MODTAP_BIT(keycode) & MOD_MASK_SHIFT && !IS_TYPING;
+	return IS_QK_MOD_TAP(keycode) && (QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT) && !IS_TYPING();
 }
 #endif
 
@@ -38,7 +38,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 // Select hold immediately with another key for layer tap
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	return IS_LAYER_TAP(keycode);
+	return IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode) > 0;
 }
 #endif
 
@@ -53,7 +53,7 @@ static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) 
 }
 
 
-bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
 #if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
 		tap_timer = timer_read_fast();
@@ -98,10 +98,3 @@ void housekeeping_task_user(void) {
 #endif
 	}
 }
-
-
-#ifdef COMBO_SHOULD_TRIGGER
-bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-	return get_highest_layer(layer_state) <= CMK;
-}
-#endif
