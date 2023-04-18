@@ -11,10 +11,7 @@ static fast_timer_t tap_timer = 0;
 #ifdef TAPPING_TERM_PER_KEY
 // Scale tapping term to short key press interval
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	if (IS_HOME_ROW(record) && IS_TYPING()) {
-		return QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT ? TYPING_TERM - 30 : TYPING_TERM;
-	}
-	return TAPPING_TERM;
+	return IS_HOME_ROW(record) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
 }
 #endif
 

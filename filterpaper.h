@@ -21,5 +21,4 @@
 
 // Typing interval macros
 #define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM)
-#define TYPING_TERM ((TAPPING_TERM * TAPPING_TERM) / timer_elapsed_fast(tap_timer))
-//#define TYPING_TERM ((TAPPING_TERM * 2) - timer_elapsed_fast(tap_timer))
+#define TYPING_TERM (((uint16_t)TAPPING_TERM * (uint16_t)TAPPING_TERM) / timer_elapsed_fast(tap_timer))

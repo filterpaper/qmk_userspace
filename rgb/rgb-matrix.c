@@ -4,23 +4,23 @@
 #include "rgb-matrix.h"
 #include "lib/lib8tion/lib8tion.h"
 
-// Assign left and right keys to KB2040 LEDs on each side
 #ifdef CONVERT_TO_KB2040
+// Map keys to KB2040 LEDs on each side
 led_config_t g_led_config = { {
 	{ 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
 	{ 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 },
 	{ 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }
 }, {
-	{111, 48}, {113, 48}
+	{109, 48}, {115, 48}
 }, {
-	255, 255
+	0x0f, 0xf0
 } };
 #endif
 
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
-	rgb_matrix_mode_noeeprom(get_highest_layer(state) == CMK ? CMK_MODE : DEF_MODE);
+	rgb_matrix_mode_noeeprom(layer_state_is(CMK) ? CMK_MODE : DEF_MODE);
 	return state;
 }
 
@@ -35,7 +35,7 @@ bool rgb_matrix_indicators_user(void) {
 	// Caps lock
 	if (host_keyboard_led_state().caps_lock) {
 		RGB const rgb = hsv_to_rgb_glow((HSV){HSV_CAPS});
-		for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
+		for (uint_fast8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
 			if (g_led_config.flags[i] & CAP_FLAG) {
 				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 			}
@@ -49,21 +49,26 @@ bool rgb_matrix_indicators_user(void) {
 #endif
 	// Modifiers
 	if (get_mods() & MOD_MASK_CSAG) {
-		for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
-			if (g_led_config.flags[i] & MOD_FLAG) {
-				rgb_matrix_set_color(i, RGB_MODS);
+		uint_fast8_t const mods = get_mods();
+		HSV const hsv = {(mods >> 4 | mods) * 16, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
+		RGB const rgb = hsv_to_rgb(hsv);
+		for (uint_fast8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
+			if (g_led_config.flags[i] & mods) {
+				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 			}
 		}
 	}
 	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
-		uint8_t const layer = get_highest_layer(layer_state);
-		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-			for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-				uint8_t  const index_led     = g_led_config.matrix_co[row][col];
-				uint16_t const index_keycode = keymap_key_to_keycode(layer, (keypos_t){col,row});
-				if (index_led != NO_LED && index_keycode > KC_TRNS) {
-					rgb_matrix_set_color(index_led, RGB_LAYER);
+		uint_fast8_t const layer = get_highest_layer(layer_state);
+		HSV const hsv = {layer * 48, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
+		RGB const rgb = hsv_to_rgb(hsv);
+		for (uint_fast8_t row = 0; row < MATRIX_ROWS; ++row) {
+			for (uint_fast8_t col = 0; col < MATRIX_COLS; ++col) {
+				uint_fast8_t  const led = g_led_config.matrix_co[row][col];
+				uint_fast16_t const key = keymap_key_to_keycode(layer, (keypos_t){col, row});
+				if (led != NO_LED && key > KC_TRNS) {
+					rgb_matrix_set_color(led, rgb.r, rgb.g, rgb.b);
 				}
 			}
 		}

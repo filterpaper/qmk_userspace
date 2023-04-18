@@ -51,7 +51,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
 /* │  Z     │  X     │  C     │  V     │  B     │   │  N     │  M     │ , <    │ . >    │ / ?    │ */\
 	KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    \
 /* ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯ */\
-	              LT(SYM,KC_TAB), LCA_T(KC_ENT),     LSFT_T(KC_SPC), LT(NUM,KC_BSPC)
+	              LT(SYM,KC_TAB), LCA_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC)
 /*                            ╰────────┴────────╯   ╰────────┴────────╯ */
 #define _COLE \
 /* ╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮ */\
