@@ -17,7 +17,6 @@ OPT_DEFS += -DCAPS_UNLOCK -DAUTOCORRECT
 
 ifeq ($(strip $(MCU)), atmega32u4)
 	LTO_ENABLE = yes
-	TOP_SYMBOLS = yes
 	BOOTLOADER = atmel-dfu
 endif
 
@@ -28,7 +27,6 @@ ifneq ($(strip $(CONVERT_TO)),)
 		RGB_MATRIX_DRIVER = WS2812
 		RGB_MATRIX_CUSTOM_USER = yes
 		SRC += rgb-matrix.c
-		DEBOUNCE_TYPE = asym_eager_defer_pk
 	endif
 	ifneq (,$(filter $(SPLIT), left right))
 		MAKECMDGOALS = uf2-split-$(SPLIT)
