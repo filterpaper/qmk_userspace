@@ -58,9 +58,9 @@
 #endif
 
 #ifdef RGB_MATRIX_ENABLE
-#	include "rgb/rgb-disable.h"
-#	define RGB_DISABLE_WHEN_USB_SUSPENDED
+#	include "rgb/rgb-matrix.h"
 #	define RGB_MATRIX_TIMEOUT 180000
+#	define RGB_DISABLE_WHEN_USB_SUSPENDED
 #	define RGB_MATRIX_KEYPRESSES
 #	ifdef RGB_MATRIX_CUSTOM_USER
 #		define ENABLE_RGB_MATRIX_CANDY_TAP
@@ -91,15 +91,4 @@
 // Layout macros
 #ifndef __ASSEMBLER__
 #	include "layout.h"
-#endif
-
-// Ika asymmetry pins
-#ifdef KEYBOARD_a_dux
-#	undef DIRECT_PINS_RIGHT
-#	define DIRECT_PINS_RIGHT { \
-	{ D3, B4, C6, F4, F7 }, \
-	{ D0, E6, D4, F5, B1 }, \
-	{ B5, D7, D2, F6, B3 }, \
-	{ B6, B2, NO_PIN, NO_PIN, NO_PIN } \
-}
 #endif
