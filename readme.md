@@ -100,10 +100,10 @@ Initialise LEDs with the `*_INIT` macro on startup inside `matrix_init_user(void
 
 
 # Tap Hold Customisations
-This are some custom mod tap settings to avoid false positives with home row mods.
+These are some custom mod tap settings to avoid false positives with home row mods.
 
 ## Tap timer
-Setup a tap timer to detect recent key presses in `process_record_user`:
+Setup a tap timer to detect key presses with `process_record_user`:
 ```c
 static fast_timer_t tap_timer = 0;
 
@@ -118,17 +118,17 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 ## Increase tapping term while typing
 Use elapsed time of aforementioned `tap_timer` in the following macros to:
 * Return true for "typing" if less than `TAPPING_TERM`
-* Inverse the value of `IS_TYPING_TERM` to `TAPPING_TERM`
+* Inverse the value of `TYPING_TERM` to `TAPPING_TERM`
 ```c
 #define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM)
 #define TYPING_TERM ((TAPPING_TERM * 2) - timer_elapsed_fast(tap_timer))
 ```
-Use `get_tapping_term()` to return higher tapping term on short typing intervals to avoid accidental activation of mod taps:
+Use `get_tapping_term()` to return higher value on short typing interval to avoid false positive mods:
 ```c
 #define TAPPING_TERM_PER_KEY
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    return IS_QK_MOD_TAP(keycode) && IS_QK_MOD_TAP(keycode) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
+    return IS_QK_MOD_TAP(keycode) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
 }
 ```
 
@@ -151,10 +151,7 @@ Trigger layer taps immediately with another key press.
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    if (IS_QK_LAYER_TAP(keycode)) {
-        return true;
-    }
-    return false;
+    return IS_QK_LAYER_TAP(keycode) ? true : false;
 }
 ```
 
