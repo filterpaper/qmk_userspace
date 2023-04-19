@@ -1,47 +1,50 @@
-// Copyright 2022 @filterpaper
+// Copyright @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
-#include "filterpaper.h"
+#include QMK_KEYBOARD_H
+
+// 3x5_2 row identification
+#define IS_HOME_ROW(r)  (r->event.key.row == 1 || r->event.key.row == 5)
+#define IS_THUMB_ROW(r) (r->event.key.row == 3 || r->event.key.row == 7)
+
+#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM)
+#define TYPING_TERM (((uint16_t)TAPPING_TERM * (uint16_t)TAPPING_TERM) / timer_elapsed_fast(tap_timer))
 
 #if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
 static fast_timer_t tap_timer = 0;
 #endif
 
 
-#ifdef TAPPING_TERM_PER_KEY
-// Scale tapping term to short key press interval
+#ifdef TAPPING_TERM_PER_KEY // Increase tapping term for short key press interval
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	return IS_HOME_ROW(record) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
 }
 #endif
 
 
-#ifdef QUICK_TAP_TERM_PER_KEY
-// Reduce quick tap term for thumb keys
+#ifdef QUICK_TAP_TERM_PER_KEY // Reduce quick tap term for thumb keys
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 	return IS_THUMB_ROW(record) ? QUICK_TAP_TERM - 30 : QUICK_TAP_TERM;
 }
 #endif
 
 
-#ifdef PERMISSIVE_HOLD_PER_KEY
-// Select Shift hold immediately when another key is pressed and released.
+#ifdef PERMISSIVE_HOLD_PER_KEY // Select Shift hold immediately when another nested key
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return IS_QK_MOD_TAP(keycode) && (QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT) && !IS_TYPING();
+	return IS_QK_MOD_TAP(keycode) && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT && !IS_TYPING();
 }
 #endif
 
 
-#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-// Select hold immediately with another key for layer tap
+#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY // Select layer hold immediately with another key
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode) > 0;
 }
 #endif
 
 
-// Send custom hold keycode for mod tap.
 static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
+	// Send custom hold keycode for mod tap.
 	if (record->tap.count == 0) {
 		tap_code16(hold_keycode);
 		return false;
@@ -67,8 +70,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
-		// Clipboard shortcuts.
-		switch(keycode) {
+		switch(keycode) { // Clipboard shortcuts.
 			case TH_M:    return process_tap_hold(Z_PST, record);
 			case TH_COMM: return process_tap_hold(Z_CPY, record);
 			case TH_DOT:  return process_tap_hold(Z_CUT, record);
