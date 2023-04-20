@@ -1,8 +1,5 @@
 # Word Processing Features
 
-## Caps Unlock
-It is a lean code function that switches toggles caps lock at a capitalised word boundary.
-
 ## Autocorrection
 Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection) source with the following additions:
 * Support for normal, mod-tap and one-shot Shift key
@@ -14,6 +11,9 @@ Dictionary is encoded in a trie data structure and the code will send correction
 typo   -> correction
 ```
 Run `python3 make_autocorrection_data.py [dictionary.txt]` to generate trie dictionary array in `autocorrection_data.h`. The script will read from `dictionary.txt` as default without an input file argument.
+
+## Caps Unlock
+It is a simple code function that switches toggles caps lock at the end of a word.
 
 ## QMK Integration
 Include both source files in `rules.mk` to build them:

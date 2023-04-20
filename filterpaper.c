@@ -6,7 +6,7 @@
 // 3x5_2 row identification
 #define IS_HOME_ROW(r)  (r->event.key.row == 1 || r->event.key.row == 5)
 #define IS_THUMB_ROW(r) (r->event.key.row == 3 || r->event.key.row == 7)
-
+// Scaling tapping term macros
 #define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM)
 #define TYPING_TERM (((uint16_t)TAPPING_TERM * (uint16_t)TAPPING_TERM) / timer_elapsed_fast(tap_timer))
 
@@ -29,7 +29,7 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 
-#ifdef PERMISSIVE_HOLD_PER_KEY // Select Shift hold immediately when another nested key
+#ifdef PERMISSIVE_HOLD_PER_KEY // Select Shift hold immediately with a nested key
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	return IS_QK_MOD_TAP(keycode) && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT && !IS_TYPING();
 }

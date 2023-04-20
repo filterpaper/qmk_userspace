@@ -67,7 +67,7 @@
 #	define CMK_MODE ENABLE_RGB_MATRIX_PIXEL_RAIN
 #endif
 
-// Custom indicators
+// Indicator flags
 #ifdef KEYBOARD_crkbd_rev1
 #	define CAP_FLAG LED_FLAG_UNDERGLOW
 #	define MOD_FLAG LED_FLAG_UNDERGLOW

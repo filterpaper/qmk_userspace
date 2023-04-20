@@ -12,12 +12,10 @@ bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	}
 
 	if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
-		// Ignore hold key.
 		if (record->tap.count == 0) {
-			return true;
+			return true; // Ignore hold key.
 		}
-		// Mask base keycode.
-		keycode &= 0xff;
+		keycode &= 0xff; // Mask tap keycode.
 	}
 
 	uint8_t mods = get_mods();
@@ -35,7 +33,7 @@ bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 			if ((mods & ~MOD_MASK_SHIFT) == false) {
 				break;
 			}
-		// Fall-through everything else.
+		// Fall-through everything else to toggle caps.
 		default:
 			tap_code(KC_CAPS);
 	}
