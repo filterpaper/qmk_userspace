@@ -1,4 +1,4 @@
-// Copyright 2022 @filterpaper
+// Copyright @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 #include QMK_KEYBOARD_H
@@ -15,6 +15,7 @@ led_config_t g_led_config = { {
 }, {
 	{109, 48}, {115, 48}
 }, {
+	// Flags to match lower and higher mod bits
 	0x0f, 0xf0
 } };
 #endif
@@ -27,6 +28,7 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 
 
 static inline RGB hsv_to_rgb_glow(HSV hsv) {
+	// Return glowing RGB values
 	hsv.v = scale8(abs8(sin8(scale16by8(g_rgb_timer, rgb_matrix_config.speed / 8)) - 128) * 2, hsv.v);
 	return hsv_to_rgb(hsv);
 }
@@ -51,9 +53,11 @@ bool rgb_matrix_indicators_user(void) {
 	// Modifiers
 	if (get_mods() & MOD_MASK_CSAG) {
 		uint_fast8_t const mods = get_mods();
+		// Scale hue to mod bits
 		HSV const hsv = {(mods >> 4 | mods) * 16, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
 		RGB const rgb = hsv_to_rgb(hsv);
 		for (uint_fast8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
+			// Match left and right mods to lower and higher flag bits
 			if (g_led_config.flags[i] & mods) {
 				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 			}
@@ -62,12 +66,14 @@ bool rgb_matrix_indicators_user(void) {
 	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
 		uint_fast8_t const layer = get_highest_layer(layer_state);
+		// Scale hue to layer number
 		HSV const hsv = {layer * 48, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
 		RGB const rgb = hsv_to_rgb(hsv);
 		for (uint_fast8_t row = 0; row < MATRIX_ROWS; ++row) {
 			for (uint_fast8_t col = 0; col < MATRIX_COLS; ++col) {
 				uint_fast8_t  const led = g_led_config.matrix_co[row][col];
 				uint_fast16_t const key = keymap_key_to_keycode(layer, (keypos_t){col, row});
+				// Light up only LEDs with configured keycodes
 				if (led != NO_LED && key > KC_TRNS) {
 					rgb_matrix_set_color(led, rgb.r, rgb.g, rgb.b);
 				}

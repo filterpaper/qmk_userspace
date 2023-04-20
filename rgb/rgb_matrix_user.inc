@@ -1,4 +1,4 @@
-// Copyright 2021 @filterpaper
+// Copyright @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 // Timer codes
@@ -75,14 +75,12 @@ static bool CANDY_SPLASH(effect_params_t* params) {
 RGB_MATRIX_EFFECT(CANDY_RAIN)
 #	ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
-#ifdef __AVR__
-// Use lib8tion random function
+#ifdef __AVR__ // Use lib8tion random function
 #	define prng()            random8()
 #	define prng_seed(x)      random16_set_seed(x)
 #	define prng_max(x)       random8_max(x)
 #	define prng_min_max(x,y) random8_min_max(x,y)
-#else
-// Use Jenkins pseudorandom function
+#else // Use Jenkins pseudorandom function
 #	define prng()            jsf8()
 #	define prng_seed(x)      jsf8_seed(x)
 #	define prng_max(x)       (((uint16_t)jsf8() * (uint16_t)(x)) >> 8)
