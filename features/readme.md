@@ -13,7 +13,7 @@ typo   -> correction
 Run `python3 make_autocorrection_data.py [dictionary.txt]` to generate trie dictionary array in `autocorrection_data.h`. The script will read from `dictionary.txt` as default without an input file argument.
 
 ## Caps Unlock
-It is a simple code function that switches toggles caps lock at the end of a word.
+Automatically disable caps lock at a word boundary.
 
 ## QMK Integration
 Include both source files in `rules.mk` to build them:
