@@ -31,7 +31,8 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY // Select Shift hold immediately with a nested key
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return IS_QK_MOD_TAP(keycode) && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT && !IS_TYPING();
+//	return IS_QK_MOD_TAP(keycode) && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT && !IS_TYPING();
+	return IS_QK_MOD_TAP(keycode) && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT;
 }
 #endif
 
@@ -43,8 +44,39 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 
+static inline void process_mod_roll(keyrecord_t *record) {
+	// Replace activated mod with tap keycode
+	inline void replace_mod(uint8_t mod_bit, uint8_t tap_keycode) {
+		keyrecord_t replacement;
+		replacement.event.pressed = true;
+		replacement.keycode = tap_keycode;
+
+		unregister_mods(mod_bit);
+		process_record(&replacement);
+#if TAP_CODE_DELAY > 0
+		wait_ms(TAP_CODE_DELAY);
+#endif
+		replacement.event.pressed = false;
+		process_record(&replacement);
+	}
+
+	// Disable mod rolls with its upper row
+	if (record->event.key.row == 0) {
+		if (get_mods() == MOD_BIT_LALT) {
+			replace_mod(MOD_BIT_LALT, (uint8_t)HM_S);
+		} else if (get_mods() == MOD_BIT_LSHIFT) {
+			replace_mod(MOD_BIT_LSHIFT, (uint8_t)HM_A);
+		}
+	} else if (record->event.key.row == 4) {
+		if (get_mods() == MOD_BIT_RALT) {
+			replace_mod(MOD_BIT_RALT, (uint8_t)HM_L);
+		}
+	}
+}
+
+
 static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
-	// Send custom hold keycode for mod tap.
+	// Send custom hold keycode for mod tap
 	if (record->tap.count == 0) {
 		tap_code16(hold_keycode);
 		return false;
@@ -58,6 +90,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
 		tap_timer = timer_read_fast();
 #endif
+		process_mod_roll(record);
 #ifdef AUTOCORRECT
 		extern bool process_autocorrect(uint16_t keycode, keyrecord_t* record);
 		if (!process_autocorrect(keycode, record)) {
@@ -70,7 +103,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		}
 #endif
-		switch(keycode) { // Clipboard shortcuts.
+		switch(keycode) { // Clipboard shortcuts
 			case TH_M:    return process_tap_hold(Z_PST, record);
 			case TH_COMM: return process_tap_hold(Z_CPY, record);
 			case TH_DOT:  return process_tap_hold(Z_CUT, record);
