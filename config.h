@@ -75,6 +75,7 @@
 #	if (defined CONVERT_TO_KB2040 && defined SPLIT_KEYBOARD)
 #		define RGBW
 #		define WS2812_DI_PIN 17U
+#		define WS2812_PIO_USE_PIO1
 #		define RGB_MATRIX_LED_COUNT 2
 #		define RGB_MATRIX_SPLIT {1, 1}
 #		define SPLIT_TRANSPORT_MIRROR

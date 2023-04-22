@@ -23,6 +23,7 @@ endif
 ifneq ($(strip $(CONVERT_TO)),)
 	OPT = 2
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
+		WS2812_DRIVER = vendor
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_DRIVER = WS2812
 		RGB_MATRIX_CUSTOM_USER = yes
