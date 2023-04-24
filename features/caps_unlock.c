@@ -12,7 +12,7 @@ bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	mods |= get_oneshot_mods();
 #endif
 
-	// Ignore inactive state, caps lock key or Shifted state
+	// Ignore inactive state, caps lock or Shifted keys
 	if (caps_lock == false || (uint8_t)keycode == KC_CAPS ||
 		mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
 		return true;

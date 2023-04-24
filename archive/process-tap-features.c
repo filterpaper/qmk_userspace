@@ -102,41 +102,34 @@ void process_unilateral_taps(uint16_t keycode, keyrecord_t *record) {
 
 
 
-// Replace modifier with base key code on unintended activation
-// with keys on the same half
-bool process_hrm_audit(keyrecord_t *record) {
-	// Create new keyrecord with basic keycode
-	// and send it as a process record tap event
-	void resend_key(uint8_t base_keycode) {
-		keyrecord_t resend_key_record;
-		resend_key_record.keycode = base_keycode;
+static inline void process_mod_roll(keyrecord_t *record) {
+	// Replace activated mod with tap keycode
+	inline void replace_mod(uint8_t mod_bit, uint8_t tap_keycode) {
+		keyrecord_t replacement;
+		replacement.event.pressed = true;
+		replacement.keycode = tap_keycode;
 
-		resend_key_record.event.pressed = true;
-		process_record(&resend_key_record);
-#	if TAP_CODE_DELAY > 0
+		unregister_mods(mod_bit);
+		process_record(&replacement);
+#if TAP_CODE_DELAY > 0
 		wait_ms(TAP_CODE_DELAY);
-#	endif
-		resend_key_record.event.pressed = false;
-		process_record(&resend_key_record);
+#endif
+		replacement.event.pressed = false;
+		process_record(&replacement);
 	}
 
-	// Disable Alt roll with top row
-	switch(record->event.key.row) {
-	case 0:
-		if (get_mods() == MOD_BIT(KC_LALT)) {
-			unregister_mods(MOD_BIT(KC_LALT));
-			resend_key((uint8_t)HM_S);
+	// Disable mod rolls with its upper row
+	if (record->event.key.row == 0) {
+		if (get_mods() == MOD_BIT_LALT) {
+			replace_mod(MOD_BIT_LALT, (uint8_t)HM_S);
+		} else if (get_mods() == MOD_BIT_LSHIFT) {
+			replace_mod(MOD_BIT_LSHIFT, (uint8_t)HM_A);
 		}
-		break;
-	case 4:
-		if (get_mods() == MOD_BIT(KC_RALT)) {
-			unregister_mods(MOD_BIT(KC_RALT));
-			resend_key((uint8_t)HM_L);
+	} else if (record->event.key.row == 4) {
+		if (get_mods() == MOD_BIT_RALT) {
+			replace_mod(MOD_BIT_RALT, (uint8_t)HM_L);
 		}
-		break;
 	}
-
-	return true;
 }
 
 

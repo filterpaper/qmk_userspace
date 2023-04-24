@@ -3,35 +3,21 @@
 
 #include QMK_KEYBOARD_H
 
-// 3x5_2 row identification
-#define IS_HOME_ROW(r)  (r->event.key.row == 1 || r->event.key.row == 5)
-#define IS_THUMB_ROW(r) (r->event.key.row == 3 || r->event.key.row == 7)
-// Scaling tapping term macros
-#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM)
-#define TYPING_TERM (((uint16_t)TAPPING_TERM * (uint16_t)TAPPING_TERM) / timer_elapsed_fast(tap_timer))
 
-#if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
+#ifdef TAPPING_TERM_PER_KEY
 static fast_timer_t tap_timer = 0;
-#endif
-
-
-#ifdef TAPPING_TERM_PER_KEY // Increase tapping term for short key press interval
+#	define TYPING_TERM (TAPPING_TERM * 1.5)
+#	define IS_TYPING() (timer_elapsed_fast(tap_timer) < TYPING_TERM)
+#	define IS_HOME_ROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
+// Increase tapping term with short key press interval
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	return IS_HOME_ROW(record) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
 }
 #endif
 
 
-#ifdef QUICK_TAP_TERM_PER_KEY // Reduce quick tap term for thumb keys
-uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_THUMB_ROW(record) ? QUICK_TAP_TERM - 30 : QUICK_TAP_TERM;
-}
-#endif
-
-
 #ifdef PERMISSIVE_HOLD_PER_KEY // Select Shift hold immediately with a nested key
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-//	return IS_QK_MOD_TAP(keycode) && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT && !IS_TYPING();
 	return IS_QK_MOD_TAP(keycode) && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT;
 }
 #endif
@@ -42,37 +28,6 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode) > 0;
 }
 #endif
-
-
-static inline void process_mod_roll(keyrecord_t *record) {
-	// Replace activated mod with tap keycode
-	inline void replace_mod(uint8_t mod_bit, uint8_t tap_keycode) {
-		keyrecord_t replacement;
-		replacement.event.pressed = true;
-		replacement.keycode = tap_keycode;
-
-		unregister_mods(mod_bit);
-		process_record(&replacement);
-#if TAP_CODE_DELAY > 0
-		wait_ms(TAP_CODE_DELAY);
-#endif
-		replacement.event.pressed = false;
-		process_record(&replacement);
-	}
-
-	// Disable mod rolls with its upper row
-	if (record->event.key.row == 0) {
-		if (get_mods() == MOD_BIT_LALT) {
-			replace_mod(MOD_BIT_LALT, (uint8_t)HM_S);
-		} else if (get_mods() == MOD_BIT_LSHIFT) {
-			replace_mod(MOD_BIT_LSHIFT, (uint8_t)HM_A);
-		}
-	} else if (record->event.key.row == 4) {
-		if (get_mods() == MOD_BIT_RALT) {
-			replace_mod(MOD_BIT_RALT, (uint8_t)HM_L);
-		}
-	}
-}
 
 
 static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
@@ -86,11 +41,10 @@ static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) 
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-	if (record->event.pressed) {
-#if (defined TAPPING_TERM_PER_KEY || defined PERMISSIVE_HOLD_PER_KEY)
-		tap_timer = timer_read_fast();
+#ifdef TAPPING_TERM_PER_KEY
+	tap_timer = timer_read_fast();
 #endif
-		process_mod_roll(record);
+	if (record->event.pressed) {
 #ifdef AUTOCORRECT
 		extern bool process_autocorrect(uint16_t keycode, keyrecord_t* record);
 		if (!process_autocorrect(keycode, record)) {
