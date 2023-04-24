@@ -116,14 +116,12 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 ```
 
 ## Increase tapping term while typing
-Use elapsed time of aforementioned `tap_timer` in the following macros to:
-* Return true for "typing" if less than `TAPPING_TERM`
-* Inverse the value of `TYPING_TERM` to `TAPPING_TERM`
+Use the previous tap timer to detect typing interval that are shorter than `TAPPING_TERM * 1.5` with the following macros:
 ```c
-#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM)
-#define TYPING_TERM ((TAPPING_TERM * 2) - timer_elapsed_fast(tap_timer))
+#define TYPING_TERM (TAPPING_TERM * 1.5)
+#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TYPING_TERM)
 ```
-Use `get_tapping_term()` to return higher value on short typing interval to avoid false positive mods:
+Use `get_tapping_term()` to return higher value on short typing interval to avoid modifier activation:
 ```c
 #define TAPPING_TERM_PER_KEY
 
