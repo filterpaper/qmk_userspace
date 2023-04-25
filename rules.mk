@@ -13,7 +13,6 @@ SWAP_HANDS_ENABLE = yes
 
 VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
 SRC += filterpaper.c combos.c caps_unlock.c autocorrect.c
-OPT_DEFS += -DCAPS_UNLOCK -DAUTOCORRECT
 
 ifeq ($(strip $(MCU)), atmega32u4)
 	LTO_ENABLE = yes
@@ -21,9 +20,7 @@ ifeq ($(strip $(MCU)), atmega32u4)
 endif
 
 ifneq ($(strip $(CONVERT_TO)),)
-	OPT = 2
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
-		WS2812_DRIVER = vendor
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_DRIVER = WS2812
 		RGB_MATRIX_CUSTOM_USER = yes
