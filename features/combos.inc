@@ -9,25 +9,20 @@
 	ACTN(swap_r, swap_hands_toggle(), TH_M, TH_COMM, TH_DOT)
 #endif
 
-#ifdef AUTOCORRECT
-	ACTN(ac_tog, autocorrect_toggle(), KC_U, KC_I, KC_O)
-#endif
+ACTN(ac_tog, extern void autocorrect_toggle(void); autocorrect_toggle(), KC_U, KC_I, KC_O)
 
 COMB(tog_fnc, TG(FNC), LT(SYM,KC_TAB),  KC_B, KC_V)
 COMB(tog_num, TG(NUM), LT(NUM,KC_BSPC), KC_N, TH_M)
 COMB(vol_up,  KC_VOLU, KC_P,    HM_QUOT)
 COMB(vol_dn,  KC_VOLD, HM_QUOT, TH_SLSH)
 COMB(cap_lk,  KC_CAPS, HM_A, HM_QUOT)
-
 // macros
 SUBS(vi_quit, ":q!",   KC_Q,    KC_W)
 SUBS(vi_save, ":x",    KC_Z,    KC_X)
 SUBS(dir_up,  "../",   TH_DOT,  TH_SLSH)
-
 // navigation
-COMB(nav_dn,  SA_DN,   TH_M,    TH_COMM)
-COMB(nav_up,  SA_UP,   TH_COMM, TH_DOT)
-
+COMB(nav_dn, S(A(KC_DOWN)), TH_M,    TH_COMM)
+COMB(nav_up, S(A(KC_UP)),   TH_COMM, TH_DOT)
 // noop thumbs
 COMB(thmb_l,  KC_NO,   LT(SYM,KC_TAB), LCA_T(KC_ENT))
 COMB(thmb_r,  KC_NO,   RSFT_T(KC_SPC), LT(NUM,KC_BSPC))
