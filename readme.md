@@ -41,16 +41,22 @@ Icons used to render keyboard state is stored in `glcdfont.c`. Images in that fi
 
 ## Light configured layers keys
 ```c
-if (get_highest_layer(layer_state); > COLEMAK) {
-    uint8_t layer = get_highest_layer(layer_state);
-    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-        for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-            if (g_led_config.matrix_co[row][col] != NO_LED &&
-            keymap_key_to_keycode(layer, (keypos_t){col, row}) != KC_TRNS) {
-                rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_LAYER);
+bool rgb_matrix_indicators_user(void) {
+
+    if (get_highest_layer(layer_state) > 0) {
+        uint8_t layer = get_highest_layer(layer_state);
+        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+                uint_fast8_t  led = g_led_config.matrix_co[row][col];
+                uint_fast16_t key = keymap_key_to_keycode(layer, (keypos_t){col, row});
+                if (led != NO_LED && key!= KC_TRNS) {
+                    rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_BLUE);
+                }
             }
         }
     }
+
+    return false;
 }
 ```
 Code loops through every row and column on a per-key RGB board, scanning for configured keys (not `KC_TRANS`) and lighting that index location. It is configured to activate on non-default layers. This can be further customised using layer `switch` condition inside the last `if` statement.
@@ -62,11 +68,12 @@ Code loops through every row and column on a per-key RGB board, scanning for con
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case TH_W:
-        // Unmatched return on tap
-        if (record->tap.count) { return true; }
-        // Send macro string on hold
-        else if (record->event.pressed) { SEND_STRING(":wq"); }
-        return false;
+        if (record->event.pressed && record->tap.count == 0) {
+            // Send macro string on hold
+            SEND_STRING(":wq");
+            return false;
+        }
+        break;
     }
     return true; // continue with unmatched keycodes
 }
@@ -99,7 +106,7 @@ Initialise LEDs with the `*_INIT` macro on startup inside `matrix_init_user(void
 
 
 
-# Tap Hold Customisations
+# Tap Hold Mod Tweaks
 These are some custom mod tap settings to avoid false positives with home row mods.
 
 ## Tap timer
@@ -118,7 +125,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 ## Increase tapping term while typing
 Use the previous tap timer to detect typing interval that are shorter than `TAPPING_TERM * 1.5` with the following macros:
 ```c
-#define TYPING_TERM (TAPPING_TERM * 1.5)
+#define TYPING_TERM (TAPPING_TERM * 2)
 #define IS_TYPING() (timer_elapsed_fast(tap_timer) < TYPING_TERM)
 ```
 Use `get_tapping_term()` to return higher value on short typing interval to avoid modifier activation:
@@ -252,6 +259,41 @@ The JSON file for 42-key Corne uses the `C_42()` macro in the following format:
 ```
 
 
+# KB2040 Neopixel
+The neopixel LEDs can be enabled for RGB Matrix with the following:
+```c
+rules.mk:
+RGB_MATRIX_ENABLE = yes
+RGB_MATRIX_DRIVER = WS2812
+
+config.h:
+#define RGBW
+#define WS2812_DI_PIN 17U
+#define WS2812_PIO_USE_PIO1
+```
+Additional directives for a pair on split:
+```c
+config.h
+#define RGB_MATRIX_LED_COUNT 2
+#define RGB_MATRIX_SPLIT {1, 1}
+#define SPLIT_TRANSPORT_MIRROR
+
+keymap.c (or userspace source file):
+// Example for 3x5_2
+led_config_t g_led_config = { {
+    { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
+    { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 },
+    { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }
+}, {
+    {109, 48}, {115, 48}
+}, {
+    0x0f, 0xf0
+} };
+```
+
+
+
 # STeMcell notes
 STM32F411 replacement [controller](https://github.com/megamind4089/STeMCell) with Pro micro footprint, [v1.0.1](https://github.com/megamind4089/STeMCell/releases/tag/v1.0.1). Runs on [tinyuf2 bootloader](https://megamind4089.github.io/STeMCell/software/).
 
@@ -273,15 +315,16 @@ To wipe the entire STeMcell flash (wait up to 30s):
 dfu-util -a 0 -i 0 -s 0x08000000:mass-erase:force
 ```
 
-# ISP Flashing Notes
 
-## Hardware
+# Flashing Notes
+## ISP Flashing
+### Hardware
 * [USBasp Programmer](https://www.aliexpress.com/item/1005001658474778.html)
 * [Breadboard](https://www.aliexpress.com/item/1742546890.html)
 * [Jumper wires](https://www.aliexpress.com/item/32996173648.html)
 * [Sockets](https://www.aliexpress.com/item/32852480645.html) and [breadboard](https://www.aliexpress.com/item/1742546890.html)
 
-## USBasp wiring
+### USBasp wiring
 Connect the USBasp programmer to the target controller in this manner:
 ```
 USBasp GND  <-> Pro Micro GND
@@ -292,7 +335,7 @@ USBasp MISO <-> Pro Micro 14/B3 (MISO)
 USBasp MOSI <-> Pro Micro 16/B2 (MOSI)
 ```
 
-## Atmel DFU
+### Atmel DFU
 See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide). Replace the Pro Micro's default Caterina boot loader with [Atmel-DFU](https://github.com/qmk/qmk_firmware/blob/master/util/bootloader_atmega32u4_1.0.0.hex) using the following command for USBasp and fuses parameter:
 ```c
 avrdude -c usbasp -P usb -p atmega32u4 \
@@ -300,7 +343,7 @@ avrdude -c usbasp -P usb -p atmega32u4 \
 -U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xF3:m
 ```
 
-## Command Line Flashing
+## Command Line DFU
 Simple `bash` and `zsh` shell function for flashing firmware (and optionally handedness) to Atmel DFU controller on MacOS. It requires `dfu-programmer` from [Homebrew](https://brew.sh/):
 ```sh
 dfu-flash() {
