@@ -32,9 +32,9 @@
 
 #ifdef SPLIT_KEYBOARD
 #	define EE_HANDS
-#	define SPLIT_WATCHDOG_ENABLE
 #	ifdef __AVR__
 #		define SPLIT_USB_DETECT
+#		define SPLIT_WATCHDOG_ENABLE
 #		define NO_SUSPEND_POWER_DOWN
 #	endif
 #	if (defined OLED_ENABLE || defined RGB_MATRIX_ENABLE)
