@@ -14,16 +14,17 @@ jobs:
         keyboard: [a_dux, cradio, corne]
         conv: [elite_pi, kb2040, stemcell]
         split: [left, right]
-        branch: [develop]
+        repository: [filterpaper/qmk_firmware]
+        branch: [pre-quantum-user]
         exclude:
         - keyboard: corne
           conv: kb2040
 
     steps:
-    - name: Checkout ${{ matrix.branch }} branch
+    - name: Checkout ${{ matrix.repository }}/${{ matrix.branch }} branch
       uses: actions/checkout@main
       with:
-        repository: qmk/qmk_firmware
+        repository: ${{ matrix.repository }}
         ref: ${{ matrix.branch }}
         submodules: true
 
