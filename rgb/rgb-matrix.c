@@ -15,8 +15,7 @@ led_config_t g_led_config = { {
 }, {
 	{109, 48}, {115, 48}
 }, {
-	// Flags to match lower and higher mod bits
-	0x0f, 0xf0
+	0x0f, 0xf0 // Flags for masking mod bits
 } };
 #endif
 
@@ -35,7 +34,6 @@ static inline RGB hsv_to_rgb_glow(HSV hsv) {
 
 
 bool rgb_matrix_indicators_user(void) {
-	// Caps lock
 	if (host_keyboard_led_state().caps_lock) {
 		RGB const rgb = hsv_to_rgb_glow((HSV){HSV_CAPS});
 		for (uint_fast8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
@@ -50,20 +48,18 @@ bool rgb_matrix_indicators_user(void) {
 		rgb_matrix_set_color_all(rgb.r, rgb.g, rgb.b);
 	}
 #endif
-	// Modifiers
-	if (get_mods() & MOD_MASK_CSAG) {
+	if (get_mods()) {
 		uint_fast8_t const mods = get_mods();
 		// Scale hue to mod bits
 		HSV const hsv = {(mods >> 4 | mods) * 16, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
 		RGB const rgb = hsv_to_rgb(hsv);
 		for (uint_fast8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
-			// Match left and right mods to lower and higher flag bits
+			// Mask left and right mods
 			if (g_led_config.flags[i] & mods) {
 				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 			}
 		}
 	}
-	// Layer keys indicator by @rgoulter
 	if (get_highest_layer(layer_state) > CMK) {
 		uint_fast8_t const layer = get_highest_layer(layer_state);
 		// Scale hue to layer number
@@ -73,7 +69,7 @@ bool rgb_matrix_indicators_user(void) {
 			for (uint_fast8_t col = 0; col < MATRIX_COLS; ++col) {
 				uint_fast8_t  const led = g_led_config.matrix_co[row][col];
 				uint_fast16_t const key = keymap_key_to_keycode(layer, (keypos_t){col, row});
-				// Light up only LEDs with configured keycodes
+				// Match only LEDs with configured keycodes
 				if (led != NO_LED && key > KC_TRNS) {
 					rgb_matrix_set_color(led, rgb.r, rgb.g, rgb.b);
 				}
