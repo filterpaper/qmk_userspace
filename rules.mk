@@ -20,12 +20,12 @@ ifeq ($(strip $(MCU)), atmega32u4)
 endif
 
 ifneq ($(strip $(CONVERT_TO)),)
-	DEBOUNCE_TYPE = sym_defer_pr
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_DRIVER = WS2812
 		RGB_MATRIX_CUSTOM_USER = yes
 		SRC += rgb-matrix.c
+		DEBOUNCE_TYPE = sym_defer_pr
 	endif
 	ifneq (,$(filter $(SPLIT), left right))
 		MAKECMDGOALS = uf2-split-$(SPLIT)
