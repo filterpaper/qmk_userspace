@@ -11,8 +11,8 @@
 
 ACTN(ac_tog, extern void autocorrect_toggle(void); autocorrect_toggle(), KC_U, KC_I, KC_O)
 
-COMB(tog_fnc, TG(FNC), LT(SYM,KC_TAB),  KC_B, KC_V)
 COMB(tog_num, TG(NUM), LT(NUM,KC_BSPC), KC_N, TH_M)
+COMB(tog_fnc, TG(FNC), LT(SYM,KC_TAB),  KC_B, KC_V)
 COMB(vol_up,  KC_VOLU, KC_P,    HM_QUOT)
 COMB(vol_dn,  KC_VOLD, HM_QUOT, TH_SLSH)
 COMB(cap_lk,  KC_CAPS, HM_A, HM_QUOT)

@@ -12,13 +12,13 @@ static fast_timer_t tap_timer = 0;
 
 // Increase tapping term while typing
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_HOME_ROW(record) && !IS_MT_SHIFT(keycode) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
+	return IS_HOME_ROW(record) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
 }
 
 
 // Select Shift hold immediately with a nested key
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return IS_QK_MOD_TAP(keycode) && IS_MT_SHIFT(keycode) && !IS_TYPING();
+	return IS_HOME_ROW(record) && IS_MT_SHIFT(keycode);
 }
 
 

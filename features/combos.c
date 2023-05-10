@@ -55,7 +55,7 @@ uint16_t COMBO_LEN = COMBO_LENGTH;
 #define ACTN C_DATA
 #include COMBOS_DEF
 
-// Fill key array with combo type and shortcuts
+// Fill key array with combo type
 #undef COMB
 #undef SUBS
 #undef ACTN
@@ -81,6 +81,6 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 
 #ifdef COMBO_SHOULD_TRIGGER
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-	return get_highest_layer(layer_state) <= CMK;
+	return (tog_num <= combo_index && combo_index <= tog_fnc) || get_highest_layer(layer_state) <= CMK; 
 }
 #endif
