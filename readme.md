@@ -123,25 +123,18 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 ```
 
 ## Increase tapping term while typing
-Use the previous tap timer to detect typing interval that are shorter than `TAPPING_TERM * 1.5` with the following macros:
+Use the previous `tap_timer` with `get_tapping_term()` to return a higher `TAPPING_TERM` for short typing intervals:
 ```c
-#define TYPING_TERM (TAPPING_TERM * 2)
-#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TYPING_TERM)
-```
-Use `get_tapping_term()` to return higher value on short typing interval to avoid modifier activation:
-```c
-#define TAPPING_TERM_PER_KEY
+#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    return IS_QK_MOD_TAP(keycode) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
+    return IS_QK_MOD_TAP(keycode) && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 ```
 
-## Permissive hold for thumb shift
+## Permissive hold for Shift
 Activate Shift mod tap with another nested key press when not within typing interval.
 ```c
-#define PERMISSIVE_HOLD_PER_KEY
-
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     if (IS_QK_MOD_TAP(keycode) && QK_MODS_GET_MODS(keycode) & MOD_MASK_SHIFT && !IS_TYPING()) {
         return true;
@@ -153,8 +146,6 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 ## Hold on layer tap
 Trigger layer taps immediately with another key press.
 ```c
-#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     return IS_QK_LAYER_TAP(keycode) ? true : false;
 }
