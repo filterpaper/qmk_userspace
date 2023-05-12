@@ -4,15 +4,14 @@
 #include QMK_KEYBOARD_H
 
 static fast_timer_t tap_timer = 0;
-#define TYPING_TERM (TAPPING_TERM * 2)
-#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TYPING_TERM)
+#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
 #define IS_HOME_ROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
 #define IS_MT_SHIFT(k) (QK_MOD_TAP_GET_MODS(k) & MOD_MASK_SHIFT)
 
 
 // Increase tapping term while typing
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_HOME_ROW(record) && IS_TYPING() ? TYPING_TERM : TAPPING_TERM;
+	return IS_HOME_ROW(record) && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 
 
@@ -24,7 +23,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 // Select layer hold immediately with another key
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	return IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode) > 0;
+	return IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode) > 1;
 }
 
 
