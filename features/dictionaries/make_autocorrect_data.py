@@ -45,13 +45,14 @@ import textwrap
 from typing import Any, Dict, List, Tuple
 
 try:
-  from english_words import english_words_lower_alpha_set as CORRECT_WORDS
+  import english_words
+  correct_words = english_words.get_english_words_set(['web2'], lower=True, alpha=True)
 except ImportError:
   print('Autocorrection will falsely trigger when a typo is a substring of a '
         'correctly spelled word. To check for this, install the english_words '
-        'package and rerun this script:\n\n  pip install english_words\n')
+        'package and rerun this script:\n\n  pip3 install english_words\n')
   # Use a minimal word list as a fallback.
-  CORRECT_WORDS = ('information', 'available', 'international', 'language',
+  correct_words = ('information', 'available', 'international', 'language',
                    'loosest', 'reference', 'wealthier', 'entertainment',
                    'association', 'provides', 'technology', 'statehood')
 
@@ -115,21 +116,21 @@ def parse_file(file_name: str) -> List[Tuple[str, str]]:
         sys.exit(1)
 
       if typo.startswith(':') and typo.endswith(':'):
-        if typo[1:-1] in CORRECT_WORDS:
+        if typo[1:-1] in correct_words:
           print(f'Warning:{line_number}: Typo "{typo}" is a correctly spelled '
                 'dictionary word.')
       elif typo.startswith(':') and not typo.endswith(':'):
-        for word in CORRECT_WORDS:
+        for word in correct_words:
           if word.startswith(typo[1:]):
             print(f'Warning:{line_number}: Typo "{typo}" would falsely trigger '
                   f'on correctly spelled word "{word}".')
       elif not typo.startswith(':') and typo.endswith(':'):
-        for word in CORRECT_WORDS:
+        for word in correct_words:
           if word.endswith(typo[:-1]):
             print(f'Warning:{line_number}: Typo "{typo}" would falsely trigger '
                   f'on correctly spelled word "{word}".')
       elif not typo.startswith(':') and not typo.endswith(':'):
-        for word in CORRECT_WORDS:
+        for word in correct_words:
           if typo in word:
             print(f'Warning:{line_number}: Typo "{typo}" would falsely trigger '
                   f'on correctly spelled word "{word}".')
