@@ -3,25 +3,43 @@
 
 #include QMK_KEYBOARD_H
 
+static keypos_t next_key;
 static fast_timer_t tap_timer = 0;
-#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
-#define IS_HOME_ROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
+
+#define IS_TYPING()    (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
+#define IS_HOMEROW()   (record->event.key.row == 1 || record->event.key.row == 5)
 #define IS_MT_SHIFT(k) (QK_MOD_TAP_GET_MODS(k) & MOD_MASK_SHIFT)
 
+// Match mod-tap and subsequent key rows on opposite halves
+#define IS_BILATERAL_TAP() (                             \
+	(record->event.key.row == 1 && next_key.row > 3) ||  \
+	(record->event.key.row == 5 && next_key.row < 4) )
+// Match mod-tap and subsequent key rows on same halves
+#define IS_UNILATERAL_TAP() (                            \
+	(record->event.key.row == 1 && next_key.row < 4) ||  \
+	(record->event.key.row == 5 && next_key.row > 3) )
 
-// Increase tapping term while typing
+
+// Copy matrix position of subsequent key before quantum processing
+bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
+	next_key = record->event.key;
+	return true;
+}
+
+
+// Increase tapping term for unilateral tap and while typing
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_HOME_ROW(record) && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
+	return IS_UNILATERAL_TAP() || (IS_HOMEROW() && IS_TYPING()) ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 
 
-// Select Shift hold immediately with a nested key
+// Select Shift hold immediately with nested bilateral tap
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return IS_HOME_ROW(record) && IS_MT_SHIFT(keycode);
+	return IS_BILATERAL_TAP() && IS_MT_SHIFT(keycode);
 }
 
 
-// Select layer hold immediately with another key
+// Select layer hold immediately with another key tap
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	return IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode) > 1;
 }
