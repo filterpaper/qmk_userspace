@@ -7,34 +7,35 @@ static keypos_t next_key;
 static fast_timer_t tap_timer = 0;
 
 
-// Turn off caps lock at word boundary
+// Turn off caps lock after a word break
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	bool const caps_lock = host_keyboard_led_state().caps_lock;
 	uint8_t mods = get_mods();
 #ifndef NO_ACTION_ONESHOT
 	mods |= get_oneshot_mods();
 #endif
-	// Ignore inactive state, caps lock or Shifted keys
-	if (caps_lock == false || (uint8_t)keycode == KC_CAPS ||
-		mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
+	// Ignore the following state and caps lock
+	if (!caps_lock || keycode == KC_CAPS || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
 		return true;
 	}
+	// Filter mod-tap and layer-tap keys
 	if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
 		if (record->tap.count == 0) {
 			return true; // Ignore hold key
 		}
 		keycode &= 0xff; // Mask tap keycode
 	}
+	// Identify word break
 	switch(keycode) {
 		case KC_BSPC:
 		case KC_MINS:
 		case KC_UNDS:
 		case KC_A ... KC_0:
-			// Retain caps lock with no active mods
+		// Keep caps lock active when no other modifier keys are in use
 			if (mods == false) {
 				break;
 			}
-		// Fall-through everything as word boundary
+		// Consider everything as word break
 		default:
 			tap_code(KC_CAPS);
 	}
@@ -42,26 +43,26 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// Send custom hold keycode for tap-hold key
-static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
+// Process custom hold keycode
+static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 	if (record->tap.count == 0) {
-		tap_code16(hold_keycode);
+		tap_code16(keycode);
 		return false;
 	}
 	return true;
 }
 
 
-// Copy matrix position of subsequent key before quantum processing
+// Copy matrix position of event before quantum processing
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 	next_key = record->event.key;
 	return true;
 }
 
 
-// Increase tapping term for unilateral tap and while typing
+// Increase tapping term while typing
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_UNILATERAL_TAP() || (IS_HOMEROW() && IS_TYPING()) ? TAPPING_TERM * 2 : TAPPING_TERM;
+	return IS_HOMEROW() && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 
 

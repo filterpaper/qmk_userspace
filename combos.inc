@@ -16,13 +16,13 @@ COMB(tog_fnc, TG(FNC), LT(SYM,KC_TAB),  KC_B, KC_V)
 COMB(vol_up,  KC_VOLU, KC_P,    HM_QUOT)
 COMB(vol_dn,  KC_VOLD, HM_QUOT, TH_SLSH)
 COMB(cap_lk,  KC_CAPS, HM_A, HM_QUOT)
-// macros
+// Strings
 SUBS(vi_quit, ":q!",   KC_Q,    KC_W)
 SUBS(vi_save, ":x",    KC_Z,    KC_X)
 SUBS(dir_up,  "../",   TH_DOT,  TH_SLSH)
-// navigation
+// Navigation
 COMB(nav_dn, S(A(KC_DOWN)), TH_M,    TH_COMM)
 COMB(nav_up, S(A(KC_UP)),   TH_COMM, TH_DOT)
-// noop thumbs
+// Noop thumbs
 COMB(thmb_l,  KC_NO,   LT(SYM,KC_TAB), LCA_T(KC_ENT))
 COMB(thmb_r,  KC_NO,   RSFT_T(KC_SPC), LT(NUM,KC_BSPC))
