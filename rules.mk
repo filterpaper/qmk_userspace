@@ -21,7 +21,6 @@ ifeq ($(strip $(MCU)), atmega32u4)
 endif
 
 ifneq ($(strip $(CONVERT_TO)),)
-	DEBOUNCE_TYPE = sym_eager_pr
 	ifeq ($(strip $(CONVERT_TO)), kb2040)
 		RGB_MATRIX_ENABLE = yes
 		RGB_MATRIX_DRIVER = WS2812
