@@ -11,8 +11,9 @@ MOUSEKEY_ENABLE = yes
 BOOTMAGIC_ENABLE = yes
 SWAP_HANDS_ENABLE = yes
 
-VPATH += $(USER_PATH)/oled $(USER_PATH)/rgb $(USER_PATH)/features
-SRC += filterpaper.c combos.c caps_unlock.c autocorrect.c
+VPATH += $(USER_PATH)/autocorrect $(USER_PATH)/oled $(USER_PATH)/rgb
+INTROSPECTION_KEYMAP_C = filterpaper.c
+SRC += autocorrect.c
 
 ifeq ($(strip $(MCU)), atmega32u4)
 	LTO_ENABLE = yes
