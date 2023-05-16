@@ -1,5 +1,10 @@
 name: Userspace Build
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+    - '**.md'
+    - '**.py'
 
 jobs:
   build:

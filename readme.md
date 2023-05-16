@@ -6,18 +6,11 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 
 ## Features
 * Shared [layout](layout.h) wrapper macros
-* [Combos](#combo-helper-macros) simplified with preprocessors
+* [Combos](combos.h) simplified with preprocessors
 * [Contextual mod-taps](#Contextual-mod-taps)
-* [Word](features/) processing features
-  * Autocorrection for typos
-  * Caps unlock that follows a word
+* [Autocorrect](autocorrect/) word processing
 * [OLED](oled/) indicators and animation
-  * [Bongocat](oled/oled-bongocat.c) with RLE frames
-  * [Luna](oled/oled-luna.c) (and Felix) the dog
-  * Soundmonster [indicator](oled/oled-icons.c) icons
-* [RGB](rgb/) matrix lighting and effects
-  * Custom candy matrix effect
-  * [Layer indicators](#light-configured-layers-keys) of active keys
+* [RGB](rgb/) matrix lighting and custom effects
 
 &nbsp;
 
@@ -250,9 +243,6 @@ led_config_t g_led_config = { {
     0x0f, 0xf0
 } };
 ```
-
-## Combo helper macros
-The `combos.c` file is modified from [Jane Bernhardt's helper macros](http://combos.gboards.ca/) to simplify code management. Combos are defined as simple one-liners in `combos.inc` and preprocessor macros will generate the actual source codes at compile time.
 
 ## Pro Micro RX/TX LEDs
 The Data LEDs on Pro Micro can be used as indicators with code. They are located on pins `B0` (RX) and `D5` (TX) on the Atmega32u4 microcontroller. To use them with QMK's [LED Indicators](https://docs.qmk.fm/#/feature_led_indicators), flag the pin in the config.h file:
