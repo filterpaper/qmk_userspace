@@ -5,20 +5,20 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
 ## Features
-* Shared [layout](layout.h) wrapper macros
-* [Combos](combos.h) simplified with preprocessors
 * [Contextual mod-taps](#Contextual-mod-taps)
+* [Layout](layout.h) wrapper macros
+* [Combos](combos.h) with preprocessors
 * [Autocorrect](autocorrect/) word processing
 * [OLED](oled/) indicators and animation
-* [RGB](rgb/) matrix lighting and custom effects
+* [RGB](rgb/) matrix indicators and custom effects
 
 &nbsp;
 
 # Contextual Mod-Taps
 Mod-taps are very useful on the home row of small split keyboards. They can be triggered more accurately when the decision is based on the preceding and subsequent keys. The following contextual configuration will do just that, using input that comes before and after the mod-tap key.
 
-## Tap timer
-Setup a tap timer to register interval between key presses with `process_record_user`:
+## Typing interval
+A tap timer is set up within the `process_record_user` function to record the time of each key press. This information will be used to measure the interval between key presses to detect typing activity:
 ```c
 static fast_timer_t tap_timer = 0;
 
@@ -31,7 +31,7 @@ bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
 ```
 
 ## Next key record
-To capture every key record before they are passed to quantum processing, set up the following `pre_process_record_user` function. When action tapping is resolving a mod-tap, this function will copy the *subsequent* key record of an input that follows within that interval.
+Use the `pre_process_record_user` function to capture every key record before it is passed to quantum processing. While action tapping is resolving a mod-tap, this function will copy the next key record of an input that follows. That key record will be used to influence the decision of the mod-tap key that is currently undergoing quantum processing:
 ```c
 static keyrecord_t next_record;
 
@@ -40,34 +40,29 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 ```
-*(The function above extracts the entire keyrecord_t structure. However, if only one element of the structure is needed for decision-making, it is more efficient to copy that specific variable alone. For example: `uint8_t next_row = record->event.key.row;`)*
+> *The `next_record` extracts the entire keyrecord_t structure. However, if only one element of the structure is needed for decision-making, it is more efficient to copy that specific variable alone. For example: `uint8_t next_row = record->event.key.row;`*
 
 ## Decision macros
-Create the following boolean preprocessor macros. They will be used to make the mod-tap decision functions more concise and easier to read:
+Use boolean macros to make the mod-tap decision functions more concise and easier to read:
 ```c
-// Identify typing cadence with short key press interval
+// Identify typing activity with short key press interval
 #define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
 
 // Match the home rows on both sides of the keyboard
 #define IS_HOMEROW() (record->event.key.row == 1 || record->event.key.row == 5)
 
-// Mod-tap and the key that follows are on same side of the keyboard
-#define IS_UNILATERAL_TAP()                              \
-  ( (record->event.key.row == 1 && next_record.event.row < 4) ||  \
-    (record->event.key.row == 5 && next_record.event.row > 3) )
-
 // Mod-tap and the key that follows are on opposite sides of the keyboard
-#define IS_BILATERAL_TAP()                               \
+#define IS_BILATERAL_TAP()                                        \
   ( (record->event.key.row == 1 && next_record.event.row > 3) ||  \
     (record->event.key.row == 5 && next_record.event.row < 4) )
 ```
-*(Macros are setup for a `3x5_2 split` keyboard where rows are doubled on the matrix)*
+> *Macros are written for a `3x5_2` split keyboard where rows are doubled on the matrix*
 
-## Stringent unilateral tap
-Modifiers should not be triggered when one is rolling keys on the same hand or typing normally. To avoid mod activation on rolls, tapping term is increased when a subsequent tap record that *follows* the mod-tap key is on the same side. Likewise, tapping term is increased for short typing intervals that *precede* the mod-tap key. Both of these are implemented in the following `get_tapping_term` function using the macros listed above.
+## Strict taps
+Modifiers should not be accidentally activated while typing. To prevent this, tapping term is increased for mod-tap keys that are *preceded* by a short typing interval. This is implemented in the following `get_tapping_term` function using the macros listed above.
 ```c
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    if (IS_UNILATERAL_TAP() || (IS_HOMEROW() && IS_TYPING())) {
+    if (IS_HOMEROW() && IS_TYPING()) {
         return TAPPING_TERM * 2;
     }
     return TAPPING_TERM;
@@ -75,14 +70,12 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 ```
 
 ## Permissive bilateral hold
-Modifiers should be triggered when they are activated bilaterally with another key using both hands. This is implemented with `get_permissive_hold` function for the mod-tap key with a nested tap record that *follows* on the opposite side of the keyboard:
+Modifiers should be triggered when a mod-tap key is held down and another key is tapped on the opposite hand. This is implemented in the `get_permissive_hold` function for the mod-tap key with a nested key record that *follows* on the opposite side of the keyboard:
 ```c
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     return IS_BILATERAL_TAP();
 }
 ```
-
-*The data supplied in `keycode` and `record` parameters of the `pre_process_record_user` function can be used to implement a user space version of ZMK's [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions) feature in QMK*
 
 &nbsp;
 
@@ -103,7 +96,7 @@ Next, a wrapper alias to the layout used by the keyboard is also defined in the 
 ```c
 #define LAYOUT_34key_w(...) LAYOUT_split_3x5_2(__VA_ARGS__)
 ```
-Both macros are referenced in the keyboard's JSON file with the following format:
+Both macros are referenced in the keyboard JSON file as follows:
 ```c
 {
     "keyboard": "cradio",
@@ -208,8 +201,7 @@ bool rgb_matrix_indicators_user(void) {
     return false;
 }
 ```
-This code iterates over every row and column on a per-key RGB keyboard, searching for keys that have been configured (not `
-KC_TRANS`) and lighting the corresponding index location. It is set to activate on layers other than the default layer. This can be further customized by using a layer switch condition inside the last `if` statement.
+This code iterates over every row and column on a per-key RGB keyboard, searching for keys that have been configured (not `KC_TRANS`) and lighting the corresponding index location. It is set to activate on layers other than the default layer. This can be further customized by using a layer switch condition inside the last `if` statement.
 
 ## KB2040 NeoPixel
 The NeoPixel LED can be enabled for RGB Matrix with the following settings:
@@ -224,7 +216,7 @@ RGB_MATRIX_DRIVER = WS2812
 #define RGBW
 #define WS2812_DI_PIN 17U
 #define WS2812_PIO_USE_PIO1
-// Additional directives for a pair on split:
+// Additional directives for a pair on a split keyboard:
 #define RGB_MATRIX_LED_COUNT 2
 #define RGB_MATRIX_SPLIT {1, 1}
 #define SPLIT_TRANSPORT_MIRROR
@@ -250,7 +242,7 @@ The Data LEDs on Pro Micro can be used as indicators with code. They are located
 #define LED_CAPS_LOCK_PIN B0
 #define LED_PIN_ON_STATE 0
 ```
-For advance usage, setup the following macros to call both pins with GPIO functions:
+For advance usage, set up the following macros to call both pins with GPIO functions:
 ```c
 // Pro Micro data LED pins
 #define RXLED B0
@@ -283,7 +275,7 @@ The icons used to render keyboard state are stored in the `glcdfont.c` file. The
 
 # Hardware Notes
 
-## ISP Flashing
+## Pro Micro ISP Flashing
 ### Hardware
 * [USBasp Programmer](https://www.aliexpress.com/item/1005001658474778.html)
 * [Breadboard](https://www.aliexpress.com/item/1742546890.html)
@@ -369,6 +361,7 @@ dfu-util -a 0 -i 0 -s 0x08000000:mass-erase:force
 * [Git Purr](https://girliemac.com/blog/2017/12/26/git-purr/)
 * [Data in Program Space](https://www.nongnu.org/avr-libc/user-manual/pgmspace.html)
 * [Autocorrections with QMK](https://getreuer.info/posts/keyboards/autocorrection/index.html)
+
 ## Hardware Parts
 * [Adafruit KB2040](https://www.adafruit.com/product/5302)
 * [Elite-Pi](https://keeb.io/collections/diy-parts/products/elite-pi-usb-c-pro-micro-replacement-rp2040)
