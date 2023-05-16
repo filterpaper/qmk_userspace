@@ -1,23 +1,55 @@
 // Copyright @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
-#include QMK_KEYBOARD_H
+#include "filterpaper.h"
 
 static keypos_t next_key;
 static fast_timer_t tap_timer = 0;
 
-#define IS_TYPING()    (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
-#define IS_HOMEROW()   (record->event.key.row == 1 || record->event.key.row == 5)
-#define IS_MT_SHIFT(k) (QK_MOD_TAP_GET_MODS(k) & MOD_MASK_SHIFT)
 
-// Match mod-tap and subsequent key rows on opposite halves
-#define IS_BILATERAL_TAP() (                             \
-	(record->event.key.row == 1 && next_key.row > 3) ||  \
-	(record->event.key.row == 5 && next_key.row < 4) )
-// Match mod-tap and subsequent key rows on same halves
-#define IS_UNILATERAL_TAP() (                            \
-	(record->event.key.row == 1 && next_key.row < 4) ||  \
-	(record->event.key.row == 5 && next_key.row > 3) )
+// Turn off caps lock at word boundary
+static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
+	bool const caps_lock = host_keyboard_led_state().caps_lock;
+	uint8_t mods = get_mods();
+#ifndef NO_ACTION_ONESHOT
+	mods |= get_oneshot_mods();
+#endif
+	// Ignore inactive state, caps lock or Shifted keys
+	if (caps_lock == false || (uint8_t)keycode == KC_CAPS ||
+		mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
+		return true;
+	}
+	if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
+		if (record->tap.count == 0) {
+			return true; // Ignore hold key
+		}
+		keycode &= 0xff; // Mask tap keycode
+	}
+	switch(keycode) {
+		case KC_BSPC:
+		case KC_MINS:
+		case KC_UNDS:
+		case KC_A ... KC_0:
+			// Retain caps lock with no active mods
+			if (mods == false) {
+				break;
+			}
+		// Fall-through everything as word boundary
+		default:
+			tap_code(KC_CAPS);
+	}
+	return true;
+}
+
+
+// Send custom hold keycode for tap-hold key
+static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
+	if (record->tap.count == 0) {
+		tap_code16(hold_keycode);
+		return false;
+	}
+	return true;
+}
 
 
 // Copy matrix position of subsequent key before quantum processing
@@ -45,24 +77,12 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// Send custom hold keycode for mod tap
-static inline bool process_tap_hold(uint16_t hold_keycode, keyrecord_t *record) {
-	if (record->tap.count == 0) {
-		tap_code16(hold_keycode);
-		return false;
-	}
-	return true;
-}
-
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
 		tap_timer = timer_read_fast();
-		extern bool process_autocorrect(uint16_t keycode, keyrecord_t* record);
 		if (!process_autocorrect(keycode, record)) {
 			return false;
 		}
-		extern bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
 		if (!process_caps_unlock(keycode, record)) {
 			return false;
 		}

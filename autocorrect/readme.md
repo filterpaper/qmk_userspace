@@ -1,6 +1,4 @@
-# Word Processing Features
-
-## Autocorrection
+# Autocorrection
 Code is adapted from Pascal Getreuer's [Autocorrection](https://getreuer.info/posts/keyboards/autocorrection) source with the following additions:
 * Support for normal, mod-tap and one-shot Shift key
 * Support for layer tap keys
@@ -12,24 +10,17 @@ typo   -> correction
 ```
 Run `python3 make_autocorrection_data.py [dictionary.txt]` to generate trie dictionary array in `autocorrection_data.h`. The script will read from `dictionary.txt` as default without an input file argument.
 
-## Caps Unlock
-Automatically disable caps lock at a word boundary.
-
 ## QMK Integration
-Include both source files in `rules.mk` to build them:
+Include source file in `rules.mk`:
 ```c
-SRC += autocorrection.c caps_unlock.c
+SRC += autocorrection.c
 ```
-Add the following into `process_record_user` to process every key press:
+Add the following into `process_record_user` to handle every key press:
 ```c
 bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         extern bool process_autocorrect(uint16_t keycode, keyrecord_t* record);
         if (!process_autocorrect(keycode, record)) {
-            return false;
-        }
-        extern bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
-        if (!process_caps_unlock(keycode, record)) {
             return false;
         }
     }

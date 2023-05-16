@@ -1,4 +1,4 @@
-// Copyright 2022 @filterpaper
+// Copyright @filterpaper
 // SPDX-License-Identifier: GPL-2.0+
 
 /*
@@ -17,17 +17,11 @@ E.g. SUBS(which, "which ", KC_W, KC_H).
 
 Use ACTN for internal callback function(s).
 E.g. ACTN(rgb_tog, rgb_matrix_toggle(), KC_Z, KC_X)
-
-Usage: Place macros in 'combos.inc' and add the following into rules.mk:
-COMBO_ENABLE = yes
-SRC += combos.c
 */
-
-#include QMK_KEYBOARD_H
 
 #define COMBOS_DEF "combos.inc"
 
-// Combo code building macros
+// Code building macros
 #define C_ENUM(name, val, ...) name,
 #define C_DATA(name, val, ...) uint16_t const name##_combo[] PROGMEM = {__VA_ARGS__, COMBO_END};
 #define C_TYPE(name, val, ...) [name] = COMBO(name##_combo, val),
@@ -42,11 +36,9 @@ SRC += combos.c
 #define ACTN C_ENUM
 enum combos {
 	#include COMBOS_DEF
-	COMBO_LENGTH
 };
-uint16_t COMBO_LEN = COMBO_LENGTH;
 
-// Create name arrays with key sequences
+// Create name arrays of key sequences
 #undef COMB
 #undef SUBS
 #undef ACTN
@@ -66,7 +58,7 @@ combo_t key_combos[] = {
 	#include COMBOS_DEF
 };
 
-// Add send string or callbacks to event function
+// Fill event handling function
 #undef COMB
 #undef SUBS
 #undef ACTN

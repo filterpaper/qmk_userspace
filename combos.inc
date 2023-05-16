@@ -9,7 +9,7 @@
 	ACTN(swap_r, swap_hands_toggle(), TH_M, TH_COMM, TH_DOT)
 #endif
 
-ACTN(ac_tog, extern void autocorrect_toggle(void); autocorrect_toggle(), KC_U, KC_I, KC_O)
+ACTN(ac_tog, autocorrect_toggle(), KC_U, KC_I, KC_O)
 
 COMB(tog_num, TG(NUM), LT(NUM,KC_BSPC), KC_N, TH_M)
 COMB(tog_fnc, TG(FNC), LT(SYM,KC_TAB),  KC_B, KC_V)
