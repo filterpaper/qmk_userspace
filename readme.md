@@ -1,16 +1,19 @@
 # Summary
 
-This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is set up as a self-contained repository that does not require user files to be stored in keyboard sub-folders. To build it, place this repository within QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) folder and compile with the JSON files. Alternatively, you can use GitHub [Actions](https://docs.github.com/en/actions) to build it on a container with a [build.yml](.github/workflows/build.yml) workflow.
+This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is set up as a self-contained repository that does not require user files to be stored in keyboard sub-folders. To build it, place this repository within QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) folder and compile with the JSON files. Alternatively, you can use GitHub [Actions](https://docs.github.com/en/actions) to build it on a container with the [build.yml](.github/workflows/build.yml) workflow.
 
 ![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
 
 ## Features
-* [Contextual mod-taps](#Contextual-mod-taps)
+* [Contextual](#Contextual-mod-taps) mod-taps
 * [Layout](layout.h) wrapper macros
 * [Combos](combos.h) with preprocessors
 * [Autocorrect](autocorrect/) word processing
 * [OLED](oled/) indicators and animation
 * [RGB](rgb/) matrix indicators and custom effects
+
+
+
 
 &nbsp;
 
@@ -22,7 +25,7 @@ A tap timer is set up within the `process_record_user` function to record the ti
 ```c
 static fast_timer_t tap_timer = 0;
 
-bool process_record_user(uint16_t const keycode, keyrecord_t *record) {
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         tap_timer = timer_read_fast();
     }
@@ -40,42 +43,90 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 ```
-> *The `next_record` extracts the entire keyrecord_t structure. However, if only one element of the structure is needed for decision-making, it is more efficient to copy that specific variable alone. For example: `uint8_t next_row = record->event.key.row;`*
+The `next_record` extracts the entire keyrecord_t structure. However, if only one element of the structure is needed for decision-making, it is more efficient to copy that specific variable alone. For example: `uint8_t next_row = record->event.key.row;`.
 
 ## Decision macros
-Use boolean macros to make the mod-tap decision functions more concise and easier to read:
+Boolean macros to make the mod-tap decision functions more concise and easier to read:
 ```c
 // Identify typing activity with short key press interval
 #define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
 
-// Match the home rows on both sides of the keyboard
-#define IS_HOMEROW() (record->event.key.row == 1 || record->event.key.row == 5)
+// Match rows on a 3x5_2 split keyboard
+#define L_HRM() (record->event.key.row == 1)
+#define R_HRM() (record->event.key.row == 5)
+#define L_ALPHA() (0 <= next_record.event.key.row && next_record.event.key.row <= 2)
+#define R_ALPHA() (4 <= next_record.event.key.row && next_record.event.key.row <= 6)
+
+// Home row mod-taps on either side
+#define IS_HOMEROW() (L_HRM() || R_HRM())
+
+// Mod-tap and the key that follows are on the same side of the keyboard
+#define IS_UNILATERAL_TAP() ((L_HRM() && L_ALPHA()) || (R_HRM() && R_ALPHA()))
 
 // Mod-tap and the key that follows are on opposite sides of the keyboard
-#define IS_BILATERAL_TAP()                                        \
-  ( (record->event.key.row == 1 && next_record.event.row > 3) ||  \
-    (record->event.key.row == 5 && next_record.event.row < 4) )
+#define IS_BILATERAL_TAP()  ((L_HRM() && R_ALPHA()) || (R_HRM() && L_ALPHA()))
 ```
-> *Macros are written for a `3x5_2` split keyboard where rows are doubled on the matrix*
 
-## Strict taps
-Modifiers should not be accidentally activated while typing. To prevent this, tapping term is increased for mod-tap keys that are *preceded* by a short typing interval. This is implemented in the following `get_tapping_term` function using the macros listed above.
+## Delay typing modifier
+Modifiers should not be easily triggered while typing. To prevent this, tapping term is increased for mod-tap keys that are *preceded* by a short typing interval. This is implemented in the following `get_tapping_term` function using the macros listed above:
 ```c
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    if (IS_HOMEROW() && IS_TYPING()) {
-        return TAPPING_TERM * 2;
-    }
-    return TAPPING_TERM;
+    // Increase tapping term for the home row mod-tap while typing
+    return IS_HOMEROW() && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 ```
 
+## Stringent unilateral tap
+Modifiers should not be triggered when a mod-tap key is pressed in combination with another key on the same hand. To accomplish this, the mod-tap key is replaced with its base keycode when the *next* tap record is made on the same side side of the keyboard:
+```c
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    uint16_t const next_keycode = get_record_keycode(&next_record, true);
+    // Replace the mod-tap key with its base keycode when
+    // tapped with another non-modifier key on the same hand
+    if (IS_UNILATERAL_TAP() && keycode != next_keycode && !IS_QK_MOD_TAP(next_keycode)) {
+        record->keycode = keycode & 0xff;
+        return true;
+    }
+    return false;
+}
+```
+Mod-tap keys are excluded from the next tap record match to allow chording multiple modifiers on the same hand. This approach uses the `keyrecord->keycode` container that requires the `COMBO_ENABLE` feature to be enabled.
+
 ## Permissive bilateral hold
-Modifiers should be triggered when a mod-tap key is held down and another key is tapped on the opposite hand. This is implemented in the `get_permissive_hold` function for the mod-tap key with a nested key record that *follows* on the opposite side of the keyboard:
+Modifiers should be triggered when a mod-tap key is held down and another key is tapped with the opposite hand. This is implemented in the `get_permissive_hold` function for the mod-tap key with a nested key record on the opposite side of the keyboard:
 ```c
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    // Hold modifier with a nested bilateral tap
     return IS_BILATERAL_TAP();
 }
 ```
+The `return` statement can be modified to include narrow modifier matches for frequent use-cases like Shift or exclude destructive ones like Ctrl. 
+> *When used together, unilateral tap and bilateral will be comparable to ZMK's [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions).*
+
+## Instant tap
+Mod-tap key delays can be annoying and unnecessary when typing quickly. These delays can be eliminated by replacing the mod-tap key with its base keycode before quantum processing if the prior key press interval is less than `INSTANT_TAP_MS` in milliseconds.
+```c
+#define INSTANT_TAP_MS 100
+
+bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (IS_QK_MOD_TAP(keycode) && record->event.pressed && last_input_activity_elapsed() < INSTANT_TAP_MS) {
+        record->keycode = keycode & 0xff;
+        action_tapping_process(*record);
+#if TAP_CODE_DELAY > 0
+        wait_ms(TAP_CODE_DELAY);
+#endif
+        record->event.pressed = false;
+        action_tapping_process(*record);
+        return false;
+    }
+    return true;
+}
+```
+This is an alternate solution to the "Delay typing modifier" configuration above. Using it will disable the [auto-repeat](https://docs.qmk.fm/#/tap_hold?id=quick-tap-term) functionality of mod-tap keys, as the down and up key events are sent in succession.
+> *The output experience will be similar to ZMK's quick tap behaviour with the [global-quick-tap](https://zmk.dev/docs/behaviors/hold-tap#global-quick-tap) setting enabled.*
+
+
+
 
 &nbsp;
 
@@ -179,6 +230,9 @@ The JSON file for 42-key Corne uses the `C_42()` macro in the following format:
 }
 ```
 
+
+
+
 &nbsp;
 
 # Code Snippets
@@ -187,11 +241,11 @@ The JSON file for 42-key Corne uses the `C_42()` macro in the following format:
 ```c
 bool rgb_matrix_indicators_user(void) {
     if (get_highest_layer(layer_state) > 0) {
-        uint8_t layer = get_highest_layer(layer_state);
+        uint8_t const layer = get_highest_layer(layer_state);
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
             for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-                uint_fast8_t  led = g_led_config.matrix_co[row][col];
-                uint_fast16_t key = keymap_key_to_keycode(layer, (keypos_t){col, row});
+                uint_fast8_t  const led = g_led_config.matrix_co[row][col];
+                uint_fast16_t const key = keymap_key_to_keycode(layer, (keypos_t){col, row});
                 if (led != NO_LED && key!= KC_TRNS) {
                     rgb_matrix_set_color(g_led_config.matrix_co[row][col], RGB_BLUE);
                 }
@@ -271,6 +325,9 @@ The icons used to render keyboard state are stored in the `glcdfont.c` file. The
 * [QMK Logo Editor](https://joric.github.io/qle/)
 * [image2cpp](https://javl.github.io/image2cpp/)
 
+
+
+
 &nbsp;
 
 # Hardware Notes
@@ -328,26 +385,8 @@ dfu-flash() {
 }
 ```
 
-## Stemcell controller
-STM32F411 replacement [controller](https://github.com/megamind4089/STeMCell) with Pro Micro footprint, [v1.0.1](https://github.com/megamind4089/STeMCell/releases/tag/v1.0.1). Runs on [tinyuf2 bootloader](https://megamind4089.github.io/STeMCell/software/).
 
-* Reset new STMC to `stm-dfu`:
-  * Connect USB while holding button
-  * Short `RST` and `GND` while holding button
-* Reset STMC with tinyuf2:
-  * Double-short `RST` and `GND`
-  * `QK_BOOT` keycode
-  * Bootmagic lite
 
-### Bootloader
-To install the STeMcell tinyuf2 bootloader
-```
-dfu-util -a 0 -i 0 -s 0x08000000:leave -D tinyuf2-stemcell.bin
-```
-To wipe the entire STeMcell flash (wait up to 30s):
-```
-dfu-util -a 0 -i 0 -s 0x08000000:mass-erase:force
-```
 
 &nbsp;
 

@@ -3,78 +3,39 @@
 
 #include "filterpaper.h"
 
-static keypos_t next_key;
+static keyrecord_t next_record;
 static fast_timer_t tap_timer = 0;
 
 
-// Turn off caps lock after a word break
-static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
-	bool const caps_lock = host_keyboard_led_state().caps_lock;
-	uint8_t mods = get_mods();
-#ifndef NO_ACTION_ONESHOT
-	mods |= get_oneshot_mods();
-#endif
-	// Ignore the following state and caps lock
-	if (!caps_lock || keycode == KC_CAPS || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
-		return true;
-	}
-	// Filter mod-tap and layer-tap keys
-	if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
-		if (record->tap.count == 0) {
-			return true; // Ignore hold key
-		}
-		keycode &= 0xff; // Mask tap keycode
-	}
-	// Identify word break
-	switch(keycode) {
-		case KC_BSPC:
-		case KC_MINS:
-		case KC_UNDS:
-		case KC_A ... KC_0:
-		// Keep caps lock active when no other modifier keys are in use
-			if (mods == false) {
-				break;
-			}
-		// Consider everything as word break
-		default:
-			tap_code(KC_CAPS);
-	}
-	return true;
-}
-
-
-// Process custom hold keycode
-static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
-	if (record->tap.count == 0) {
-		tap_code16(keycode);
-		return false;
-	}
-	return true;
-}
-
-
-// Copy matrix position of event before quantum processing
+// Copy event record before quantum processing
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-	next_key = record->event.key;
+	next_record = *record;
 	return true;
 }
 
 
-// Increase tapping term while typing
+// Increase tapping term for the home row while typing
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	return IS_HOMEROW() && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 
 
-// Select Shift hold immediately with nested bilateral tap
+// Hold Shift with a nested bilateral tap
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return IS_BILATERAL_TAP() && IS_MT_SHIFT(keycode);
+	return IS_BILATERAL_TAP() && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT;
 }
 
 
-// Select layer hold immediately with another key tap
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	return IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode) > 1;
+	uint16_t const next_keycode = get_record_keycode(&next_record, true);
+	// Replace the mod-tap key with its base keycode when
+	// tapped with another non-modifier key on the same hand
+	if (IS_UNILATERAL_TAP() && keycode != next_keycode && !IS_QK_MOD_TAP(next_keycode)) {
+		record->keycode = keycode & 0xff;
+		return true;
+	}
+	// Hold layer with another key tap
+	return IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode);
 }
 
 
@@ -113,4 +74,50 @@ void housekeeping_task_user(void) {
 		}
 #endif
 	}
+}
+
+
+// Process custom hold keycode
+static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
+	if (record->tap.count == 0) {
+		tap_code16(keycode);
+		return false;
+	}
+	return true;
+}
+
+
+// Turn off caps lock after a word break
+static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
+	bool const caps_lock = host_keyboard_led_state().caps_lock;
+	uint8_t mods = get_mods();
+#ifndef NO_ACTION_ONESHOT
+	mods |= get_oneshot_mods();
+#endif
+	// Ignore the following state and caps lock
+	if (!caps_lock || keycode == KC_CAPS || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
+		return true;
+	}
+	// Filter mod-tap and layer-tap keys
+	if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
+		if (record->tap.count == 0) {
+			return true; // Ignore hold key
+		}
+		keycode &= 0xff; // Mask tap keycode
+	}
+	// Identify word break
+	switch(keycode) {
+		case KC_BSPC:
+		case KC_MINS:
+		case KC_UNDS:
+		case KC_A ... KC_0:
+		// Keep caps lock active when no other modifier keys are in use
+			if (mods == false) {
+				break;
+			}
+		// Consider everything as word break
+		default:
+			tap_code(KC_CAPS);
+	}
+	return true;
 }
