@@ -16,13 +16,13 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // Increase tapping term for the home row while typing
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	return IS_HOMEROW() && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
+	return IS_HOMEROW(record) && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 
 
 // Hold Shift with a nested bilateral tap
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-	return IS_BILATERAL_TAP() && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT;
+	return IS_BILATERAL_TAP(record, next_record) && QK_MOD_TAP_GET_MODS(keycode) & MOD_MASK_SHIFT;
 }
 
 
@@ -30,7 +30,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 	uint16_t const next_keycode = get_record_keycode(&next_record, true);
 	// Replace the mod-tap key with its base keycode when
 	// tapped with another non-modifier key on the same hand
-	if (IS_UNILATERAL_TAP() && keycode != next_keycode && !IS_QK_MOD_TAP(next_keycode)) {
+	if (IS_UNILATERAL_TAP(record, next_record) && keycode != next_keycode && !IS_QK_MOD_TAP(next_keycode)) {
 		record->keycode = keycode & 0xff;
 		return true;
 	}
