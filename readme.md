@@ -13,44 +13,31 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 * [RGB](rgb/) matrix indicators and custom effects
 
 
-
-
-&nbsp;
+&nbsp;</br> &nbsp;</br>
 
 # Contextual Mod-Taps
-Mod-taps are very useful on the home row of small split keyboards. They can be triggered more accurately when the decision is based on the preceding and subsequent keys. The following contextual configuration will do just that, using input that comes before and after the mod-tap key.
+Mod-taps are very useful on the home row of small split keyboards. They can be triggered more accurately when their tap or hold decision is based on the preceding and subsequent keys. The following contextual configuration will do just that, using input that comes before and after the mod-tap key.
 
-## Typing interval
-A tap timer is set up within the `process_record_user` function to record the time of each key press. This information will be used to measure the interval between key presses to detect typing activity:
+## Next key record
+Use the `pre_process_record_user` function to capture every key record before it is passed to quantum processing. While action tapping is resolving a mod-tap key, this function will copy the *next* key record of an input that follows. That key record will be used to influence the decision of the mod-tap key that is currently undergoing quantum processing:
 ```c
-static fast_timer_t tap_timer = 0;
+static uint16_t next_keycode;
+static keyrecord_t next_record;
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        tap_timer = timer_read_fast();
+        // Copy the next key record for mod-tap decisions
+        next_keycode = keycode;
+        next_record = *record;
     }
     return true;
 }
 ```
-
-## Next key record
-Use the `pre_process_record_user` function to capture every key record before it is passed to quantum processing. While action tapping is resolving a mod-tap, this function will copy the next key record of an input that follows. That key record will be used to influence the decision of the mod-tap key that is currently undergoing quantum processing:
-```c
-static keyrecord_t next_record;
-
-bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    next_record = *record;
-    return true;
-}
-```
-The `next_record` extracts the entire keyrecord_t structure. However, if only one element of the structure is needed for decision-making, it is more efficient to copy that specific variable alone. For example: `uint8_t next_row = record->event.key.row;`.
+The `next_record` extracts the entire `keyrecord_t` structure. However, if only one element of the structure is needed for decision-making, it is more efficient to copy that specific variable alone. For example: `uint8_t next_row = record->event.key.row;`.
 
 ## Decision macros
 Boolean macros to make the mod-tap decision functions more concise and easier to read:
 ```c
-// Identify typing activity with short key press interval
-#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
-
 // Match rows on a 3x5_2 split keyboard
 #define L_HRM() (record->event.key.row == 1)
 #define R_HRM() (record->event.key.row == 5)
@@ -67,68 +54,100 @@ Boolean macros to make the mod-tap decision functions more concise and easier to
 #define IS_BILATERAL_TAP()  ((L_HRM() && R_ALPHA()) || (R_HRM() && L_ALPHA()))
 ```
 
-## Delay typing modifier
-Modifiers should not be easily triggered while typing. To prevent this, tapping term is increased for mod-tap keys that are *preceded* by a short typing interval. This is implemented in the following `get_tapping_term` function using the macros listed above:
-```c
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Increase tapping term for the home row mod-tap while typing
-    return IS_HOMEROW() && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
-}
-```
-
 ## Stringent unilateral tap
 Modifiers should not be triggered when a mod-tap key is pressed in combination with another key on the same hand. To accomplish this, the mod-tap key is replaced with its base keycode when the *next* tap record is made on the same side side of the keyboard:
 ```c
+#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    uint16_t const next_keycode = get_record_keycode(&next_record, true);
     // Replace the mod-tap key with its base keycode when
     // tapped with another non-modifier key on the same hand
-    if (IS_UNILATERAL_TAP() && keycode != next_keycode && !IS_QK_MOD_TAP(next_keycode)) {
+    if (IS_UNILATERAL_TAP() && !IS_QK_MOD_TAP(next_keycode)) {
         record->keycode = keycode & 0xff;
         return true;
     }
     return false;
 }
+#endif
 ```
 Mod-tap keys are excluded from the next tap record match to allow chording multiple modifiers on the same hand. This approach uses the `keyrecord->keycode` container that requires the `COMBO_ENABLE` feature to be enabled.
 
 ## Permissive bilateral hold
-Modifiers should be triggered when a mod-tap key is held down and another key is tapped with the opposite hand. This is implemented in the `get_permissive_hold` function for the mod-tap key with a nested key record on the opposite side of the keyboard:
+Modifiers should be triggered when a mod-tap key is held down and another key is tapped with the opposite hand. This is applied in the `get_permissive_hold` function for the mod-tap key with a nested key record on the opposite side of the keyboard:
 ```c
+#ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     // Hold modifier with a nested bilateral tap
     return IS_BILATERAL_TAP();
 }
+#endif
 ```
 The `return` statement can be modified to include narrow modifier matches for frequent use-cases like Shift or exclude destructive ones like Ctrl. 
-> *When used together, unilateral tap and bilateral will be comparable to ZMK's [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions).*
+> *When used together, unilateral tap and bilateral hold will be comparable to ZMK's [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions).*
 
 ## Instant tap
-Mod-tap key delays can be annoying and unnecessary when typing quickly. These delays can be eliminated by replacing the mod-tap key with its base keycode before quantum processing if the prior key press interval is less than `INSTANT_TAP_MS` in milliseconds.
+Mod-tap key delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the mod-tap key is replaced with its base keycode before quantum processing if the time interval from the previous key press is less than the `INSTANT_TAP_MS` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
 ```c
 #define INSTANT_TAP_MS 100
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (IS_QK_MOD_TAP(keycode) && record->event.pressed && last_input_activity_elapsed() < INSTANT_TAP_MS) {
-        record->keycode = keycode & 0xff;
-        action_tapping_process(*record);
-#if TAP_CODE_DELAY > 0
-        wait_ms(TAP_CODE_DELAY);
-#endif
-        record->event.pressed = false;
-        action_tapping_process(*record);
-        return false;
+    static uint16_t prev_keycode;
+    if (record->event.pressed) {
+        // Record the previous keycode for instant tap decision
+        prev_keycode = next_keycode;
+        // Copy the next key record for mod-tap decisions
+        next_keycode = keycode;
+        next_record = *record;
+    }
+    // Match home row mod-tap keys when it is not preceded by a Layer key
+    if (IS_HOMEROW() && IS_QK_MOD_TAP(keycode) && !IS_QK_LAYER_TAP(prev_keycode)) {
+        // Tap the mod-tap key instantly when it follows a short interval
+        if (record->event.pressed && last_input_activity_elapsed() < INSTANT_TAP_MS) {
+            record->keycode = keycode & 0xff;
+            action_tapping_process(*record);
+            return false;
+        } else { // Send the base keycode key up event
+            keyrecord_t base_record = *record;
+            base_record.event.pressed = false;
+            base_record.keycode = keycode & 0xff;
+            action_tapping_process(base_record);
+        }
     }
     return true;
 }
 ```
-This is an alternate solution to the "Delay typing modifier" configuration above. Using it will disable the [auto-repeat](https://docs.qmk.fm/#/tap_hold?id=quick-tap-term) functionality of mod-tap keys, as the down and up key events are sent in succession.
+To prevent the override from disabling quick access to layer keys, the previous keycode is stored and evaluated for preceding layer tap. This configuration also uses the `keyrecord->keycode` container, which requires the `COMBO_ENABLE` feature to be enabled.
 > *The output experience will be similar to ZMK's quick tap behaviour with the [global-quick-tap](https://zmk.dev/docs/behaviors/hold-tap#global-quick-tap) setting enabled.*
 
+## Delay modifier hold
+If the "[Instant Tap](#instant-tap)" configuration is too aggressive, a gentler approach is to delay the activation of modifiers while typing quickly. To do this, a tap timer is set up in the `process_record_user` function to record the time of each key press:
+```c
+static fast_timer_t tap_timer = 0;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        tap_timer = timer_read_fast();
+    }
+    return true;
+}
+```
+To prevent modifiers from triggering accidentally, the tapping term is increased for mod-tap keys that are preceded by a short typing interval measured with `tap_timer`. This is implemented in the following `get_tapping_term` function:
+```c
+#ifdef TAPPING_TERM_PER_KEY
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    // Increase tapping term for the home row mod-tap while typing
+    if (IS_HOMEROW(record) && timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2) {
+        return TAPPING_TERM * 2;
+    }
+    return TAPPING_TERM;
+}
+#endif
+```
+
+## Implementation
+Each configuration can be used individually to improve mod-tap trigger accuracy based on personal typing habits. Additionally, the `if` conditions within each configuration can be fine-tuned for specific use cases.
 
 
-
-&nbsp;
+&nbsp;</br> &nbsp;</br>
 
 # Layout Wrapper Macros
 
@@ -231,9 +250,7 @@ The JSON file for 42-key Corne uses the `C_42()` macro in the following format:
 ```
 
 
-
-
-&nbsp;
+&nbsp;</br> &nbsp;</br>
 
 # Code Snippets
 
@@ -326,9 +343,7 @@ The icons used to render keyboard state are stored in the `glcdfont.c` file. The
 * [image2cpp](https://javl.github.io/image2cpp/)
 
 
-
-
-&nbsp;
+&nbsp;</br> &nbsp;</br>
 
 # Hardware Notes
 
@@ -357,7 +372,7 @@ avrdude -c usbasp -P usb -p atmega32u4 \
 -U flash:w:bootloader_atmega32u4_1.0.0.hex:i \
 -U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xF3:m
 ```
-See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide) for more details.
+> *See the [QMK ISP Flashing Guide](https://docs.qmk.fm/#/isp_flashing_guide) for more details.*
 
 ## Command line flashing
 To flash firmware to an AVR controller with Atmel DFU bootloader on macOS, use the following bash or zsh shell alias. It requires `dfu-programmer` from [Homebrew](https://brew.sh/) to be installed:
@@ -387,8 +402,8 @@ dfu-flash() {
 
 
 
-
-&nbsp;
+&nbsp;</br>
+&nbsp;</br>
 
 # Useful Links
 
