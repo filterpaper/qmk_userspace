@@ -15,7 +15,7 @@ jobs:
         conv: [elite_pi, kb2040, stemcell]
         split: [left, right]
         repository: [filterpaper/qmk_firmware]
-        branch: [pre-process]
+        branch: [develop]
         exclude:
         - keyboard: corne
           conv: kb2040
