@@ -135,7 +135,7 @@ To prevent modifiers from triggering accidentally, the tapping term is increased
 #ifdef TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     // Increase tapping term for the home row mod-tap while typing
-    if (IS_HOMEROW(record) && timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2) {
+    if (IS_HOMEROW() && timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2) {
         return TAPPING_TERM * 2;
     }
     return TAPPING_TERM;
