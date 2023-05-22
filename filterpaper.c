@@ -22,7 +22,7 @@ static fast_timer_t tap_timer = 0;
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	// Increase tapping term for the home row mod-tap while typing
-	return IS_HOMEROW(record) && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
+	return IS_HOMEROW(record) && !IS_MOD_TAP_SHIFT(keycode) && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 #endif
 
