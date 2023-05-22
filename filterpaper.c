@@ -8,27 +8,10 @@ static keyrecord_t next_record;
 
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-	static uint16_t prev_keycode;
 	if (record->event.pressed) {
-		// Record the previous keycode for instant tap decision
-		prev_keycode = next_keycode;
 		// Copy the next key record for mod-tap decisions
 		next_keycode = keycode;
 		next_record = *record;
-	}
-	// Match non-Shift home row mod-tap keys when it is not preceded by a Layer key
-	if (IS_HOMEROW(record) && IS_QK_MOD_TAP(keycode) && !IS_QK_MOD_TAP_SHIFT(keycode) && !IS_QK_LAYER_TAP(prev_keycode)) {
-		// Tap the mod-tap key instantly when it follows a short interval
-		if (record->event.pressed && last_input_activity_elapsed() < QUICK_TAP_TERM) {
-			record->keycode = keycode & 0xff;
-			action_tapping_process(*record);
-			return false;
-		} else { // Send the base keycode key up event
-			keyrecord_t base_record = *record;
-			base_record.event.pressed = false;
-			base_record.keycode = keycode & 0xff;
-			action_tapping_process(base_record);
-		}
 	}
 	return true;
 }
@@ -47,7 +30,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 	// Hold Shift with a nested bilateral tap
-	return IS_BILATERAL_TAP(record, next_record) && IS_QK_MOD_TAP_SHIFT(keycode);
+	return IS_BILATERAL_TAP(record, next_record) && IS_MOD_TAP_SHIFT(keycode);
 }
 #endif
 
@@ -125,8 +108,8 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 #ifndef NO_ACTION_ONESHOT
 	mods |= get_oneshot_mods();
 #endif
-	// Ignore the following state and caps lock
-	if (!caps_lock || keycode == KC_CAPS || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
+	// Ignore the non-lock state and caps lock key
+	if (caps_lock == false || keycode == KC_CAPS) {
 		return true;
 	}
 	// Filter mod-tap and layer-tap keys
@@ -142,11 +125,11 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 		case KC_MINS:
 		case KC_UNDS:
 		case KC_A ... KC_0:
-		// Keep caps lock active when no other modifier keys are in use
-			if (mods == false) {
+			// Retain caps lock if there are no active non-Shift modifier
+			if ((mods & ~MOD_MASK_SHIFT) == false) {
 				break;
 			}
-		// Consider everything as word break
+		// Fall-through everything else as word break
 		default:
 			tap_code(KC_CAPS);
 	}
