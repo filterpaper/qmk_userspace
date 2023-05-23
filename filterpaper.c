@@ -3,9 +3,10 @@
 
 #include "filterpaper.h"
 
+
+#if (defined PERMISSIVE_HOLD_PER_KEY || defined HOLD_ON_OTHER_KEY_PRESS_PER_KEY)
 static uint16_t next_keycode;
 static keyrecord_t next_record;
-
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
@@ -15,6 +16,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 	}
 	return true;
 }
+#endif
 
 
 #ifdef TAPPING_TERM_PER_KEY
@@ -22,7 +24,11 @@ static fast_timer_t tap_timer = 0;
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 	// Increase tapping term for the home row mod-tap while typing
-	return IS_HOMEROW(record) && !IS_MOD_TAP_SHIFT(keycode) && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
+	return IS_HOMEROW(record) && IS_TYPING()
+#	ifndef PERMISSIVE_HOLD_PER_KEY
+		&& !IS_MOD_TAP_SHIFT(keycode)
+#	endif
+		? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 #endif
 
@@ -101,15 +107,15 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// Turn off caps lock after a word break
+// Turn off caps lock on a word break
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 	bool const caps_lock = host_keyboard_led_state().caps_lock;
 	uint8_t mods = get_mods();
 #ifndef NO_ACTION_ONESHOT
 	mods |= get_oneshot_mods();
 #endif
-	// Ignore the non-lock state and caps lock key
-	if (caps_lock == false || keycode == KC_CAPS) {
+	// Ignore non-lock state, pass-through caps lock and shifted keys
+	if (caps_lock == false || keycode == KC_CAPS || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
 		return true;
 	}
 	// Filter mod-tap and layer-tap keys
@@ -119,17 +125,16 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
 		}
 		keycode &= 0xff; // Mask tap keycode
 	}
-	// Identify word break
+	// Identify word breaks
 	switch(keycode) {
 		case KC_BSPC:
 		case KC_MINS:
 		case KC_UNDS:
 		case KC_A ... KC_0:
-			// Retain caps lock if there are no active non-Shift modifier
-			if ((mods & ~MOD_MASK_SHIFT) == false) {
+		// Not a word break if there are no active modifiers
+			if (mods == false) {
 				break;
 			}
-		// Fall-through everything else as word break
 		default:
 			tap_code(KC_CAPS);
 	}
