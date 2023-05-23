@@ -5,6 +5,7 @@ UNICODE_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Enable common features
+LTO_ENABLE = yes
 COMBO_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
@@ -16,7 +17,6 @@ INTROSPECTION_KEYMAP_C = filterpaper.c
 SRC += autocorrect.c
 
 ifeq ($(strip $(MCU)), atmega32u4)
-	LTO_ENABLE = yes
 	BOOTLOADER = atmel-dfu
 endif
 
