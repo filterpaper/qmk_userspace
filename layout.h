@@ -21,7 +21,7 @@
 #define TH_SLSH	LT(0,KC_SLSH)
 #define TH(k1,k2,k3,k4) LT(0,k1),LT(0,k2),LT(0,k3),LT(0,k4)
 
-// Mod tap macros
+/* // Mod tap macros
 #define HM_A	LSFT_T(KC_A)
 #define HM_S	LALT_T(KC_S)
 #define HM_D	LCTL_T(KC_D)
@@ -32,6 +32,18 @@
 #define HM_QUOT	RSFT_T(KC_QUOT)
 #define HRML(k1,k2,k3,k4) LSFT_T(k1),LALT_T(k2),LCTL_T(k3),LGUI_T(k4)
 #define HRMR(k1,k2,k3,k4) RGUI_T(k1),RCTL_T(k2),RALT_T(k3),RSFT_T(k4)
+*/
+// CAGS
+#define HM_A	LCTL_T(KC_A)
+#define HM_S	LALT_T(KC_S)
+#define HM_D	LGUI_T(KC_D)
+#define HM_F	LSFT_T(KC_F)
+#define HM_J	RSFT_T(KC_J)
+#define HM_K	RGUI_T(KC_K)
+#define HM_L	RALT_T(KC_L)
+#define HM_QUOT	RCTL_T(KC_QUOT)
+#define HRML(k1,k2,k3,k4) LCTL_T(k1),LALT_T(k2),LGUI_T(k3),LSFT_T(k4)
+#define HRMR(k1,k2,k3,k4) RSFT_T(k1),RGUI_T(k2),RALT_T(k3),RCTL_T(k4)
 
 // Navigation shortcuts
 #define SA_UP S(A(KC_UP))
