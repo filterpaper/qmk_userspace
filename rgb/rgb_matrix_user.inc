@@ -10,7 +10,7 @@
 https://www.pcg-random.org/posts/bob-jenkins-small-prng-passes-practrand.html
 #define rot(x,k) (((x)<<(k))|((x)>>(8-(k))))
 uint8_t jsf8(void) { // Bob Jenkin's fast prng
-	static uint_fast8_t a = 161, b = 62, c = 21, d = 97, t;
+	static uint8_t a = 161, b = 62, c = 21, d = 97, t;
 	t = a - rot(b, 1);
 	a = b ^ rot(c, 4);
 	b = c + d;
@@ -18,10 +18,10 @@ uint8_t jsf8(void) { // Bob Jenkin's fast prng
 	d = t + a;
 	return d;
 }
-uint8_t jsf8_max(uint_fast8_t max) {
+uint8_t jsf8_max(uint8_t max) {
 	return ((uint16_t)jsf8() * (uint16_t)max) >> 8;
 }
-uint8_t jsf8_min_max(uint_fast8_t min, uint_fast8_t max) {
+uint8_t jsf8_min_max(uint8_t min, uint8_t max) {
 	return jsf8_max(max - min) + min;
 }
 */
@@ -87,7 +87,7 @@ RGB_MATRIX_EFFECT(CANDY_RAIN)
 #	define prng_min_max(x,y) (prng_max((y) - (x)) + (x))
 #	define rot(x,k) (((x) << (k)) | ((x) >> (8 - (k))))
 
-static uint_fast8_t a, b, c, d, t;
+static uint8_t a, b, c, d, t;
 static uint8_t jsf8(void) {
 	t = a - rot(b, 1); a = b ^ rot(c, 4);
 	b = c + d; c = d + t; d = t + a;
@@ -95,15 +95,15 @@ static uint8_t jsf8(void) {
 }
 static void jsf8_seed(const uint8_t seed) {
 	a = 161, b = c = d = seed;
-	for (uint_fast8_t i = 0; i < 32; ++i) (void)jsf8();
+	for (uint8_t i = 0; i < 32; ++i) (void)jsf8();
 }
 #endif // __AVR__
 
 static bool CANDY_RAIN(effect_params_t* params) {
 #	define interval() (320 - rgb_matrix_config.speed)
-	static uint_fast32_t wait_timer = 0;
+	static uint32_t wait_timer = 0;
 
-	inline void rain_candy(uint_fast8_t led_index) {
+	inline void rain_candy(uint8_t led_index) {
 		if (!HAS_ANY_FLAGS(g_led_config.flags[led_index], params->flags)) {
 			return;
 		} else if (prng() & 2) {
@@ -136,7 +136,7 @@ static bool CANDY_FRACTAL(effect_params_t* params) {
 #	define interval() (512 - rgb_matrix_config.speed)
 #	define MID_COL MATRIX_COLS / 2
 	static bool led[MATRIX_ROWS][MATRIX_COLS];
-	static uint_fast32_t wait_timer = 0;
+	static uint32_t wait_timer = 0;
 
 	RGB_MATRIX_USE_LIMITS(led_min, led_max);
 	if (g_rgb_timer > wait_timer) {
