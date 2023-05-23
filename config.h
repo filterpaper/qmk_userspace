@@ -4,7 +4,6 @@
 #pragma once
 
 // Common QMK settings
-#define DEBOUNCE 10
 #define TAP_CODE_DELAY 5
 #define TAP_HOLD_CAPS_DELAY 90
 #define GRAVE_ESC_SHIFT_OVERRIDE
@@ -14,10 +13,10 @@
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
-#define TAPPING_TERM 230
+#define TAPPING_TERM 210
 #define TAPPING_TERM_PER_KEY
 #define QUICK_TAP_TERM TAPPING_TERM / 2
-// #define PERMISSIVE_HOLD_PER_KEY
+#define PERMISSIVE_HOLD_PER_KEY
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 #ifdef COMBO_ENABLE
@@ -25,6 +24,10 @@
 #	define EXTRA_SHORT_COMBOS
 #	define COMBO_SHOULD_TRIGGER
 #	define COMBO_ONLY_FROM_LAYER 0
+#endif
+
+#ifdef CONVERT_TO_ELITE_PI
+#	define DEBOUNCE 10
 #endif
 
 #ifdef SPLIT_KEYBOARD
