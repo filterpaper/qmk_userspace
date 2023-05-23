@@ -36,7 +36,7 @@ static inline RGB hsv_to_rgb_glow(HSV hsv) {
 bool rgb_matrix_indicators_user(void) {
 	if (host_keyboard_led_state().caps_lock) {
 		RGB const rgb = hsv_to_rgb_glow((HSV){HSV_CAPS});
-		for (uint_fast8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
+		for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
 			if (g_led_config.flags[i] & CAP_FLAG) {
 				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 			}
@@ -49,11 +49,11 @@ bool rgb_matrix_indicators_user(void) {
 	}
 #endif
 	if (get_mods()) {
-		uint_fast8_t const mods = get_mods();
+		uint8_t const mods = get_mods();
 		// Scale hue to mod bits
 		HSV const hsv = {(mods >> 4 | mods) * 16, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
 		RGB const rgb = hsv_to_rgb(hsv);
-		for (uint_fast8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
+		for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
 			// Mask left and right mods
 			if (g_led_config.flags[i] & mods) {
 				rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
@@ -61,14 +61,14 @@ bool rgb_matrix_indicators_user(void) {
 		}
 	}
 	if (get_highest_layer(layer_state) > CMK) {
-		uint_fast8_t const layer = get_highest_layer(layer_state);
+		uint8_t const layer = get_highest_layer(layer_state);
 		// Scale hue to layer number
 		HSV const hsv = {layer * 48, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
 		RGB const rgb = hsv_to_rgb(hsv);
-		for (uint_fast8_t row = 0; row < MATRIX_ROWS; ++row) {
-			for (uint_fast8_t col = 0; col < MATRIX_COLS; ++col) {
-				uint_fast8_t  const led = g_led_config.matrix_co[row][col];
-				uint_fast16_t const key = keymap_key_to_keycode(layer, (keypos_t){col, row});
+		for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+			for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+				uint8_t  const led = g_led_config.matrix_co[row][col];
+				uint16_t const key = keymap_key_to_keycode(layer, (keypos_t){col, row});
 				// Match only LEDs with configured keycodes
 				if (led != NO_LED && key > KC_TRNS) {
 					rgb_matrix_set_color(led, rgb.r, rgb.g, rgb.b);
