@@ -10,7 +10,7 @@ static keyrecord_t next_record;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 	if (record->event.pressed) {
-		// Copy the next key record for mod-tap decisions
+		// Copy the next key record for tap-hold decisions
 		next_keycode = keycode;
 		next_record = *record;
 	}
@@ -23,12 +23,12 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 static fast_timer_t tap_timer = 0;
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	// Increase tapping term for the home row mod-tap while typing
-	return IS_HOMEROW(record) && IS_TYPING()
+	// Increase tapping term for the home row tap-hold while typing
+	return (IS_HOMEROW(record) && IS_TYPING()
 #	ifndef PERMISSIVE_HOLD_PER_KEY
 		&& !IS_MOD_TAP_SHIFT(keycode)
 #	endif
-		? TAPPING_TERM * 2 : TAPPING_TERM;
+	) ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 #endif
 
@@ -43,11 +43,10 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	// Replace the mod-tap key with its base keycode when
+	// Replace the tap-hold key with its base keycode when
 	// tapped with another non-modifier key on the same hand
 	if (IS_UNILATERAL_TAP(record, next_record) && !IS_QK_MOD_TAP(next_keycode)) {
-		record->keycode = keycode & 0xff;
-		return true;
+		return (record->keycode = keycode & 0xff);
 	// Hold layer with another key tap
 	} else if (IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode)) {
 		return true;

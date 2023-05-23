@@ -12,7 +12,7 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
 // Return mod-tap modifiers in 8bit for MOD_MASK_* logical operations
 #define GET_MT_MOD_BITS(kc) ((kc & 0x1000) ? ((kc >> 8) & 0x0f) << 4 : (kc >> 8) & 0x0f)
 
-// Mod-tap decision helper macros
+// Tap-hold decision helper macros
 #define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
 #define IS_HOMEROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
 #define IS_MOD_TAP_SHIFT(kc) (QK_MOD_TAP_GET_MODS(kc) & MOD_LSFT)
