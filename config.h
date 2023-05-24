@@ -13,9 +13,9 @@
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
-#define TAPPING_TERM 210
+#define TAPPING_TERM 200
 #define TAPPING_TERM_PER_KEY
-#define QUICK_TAP_TERM TAPPING_TERM / 2
+#define QUICK_TAP_TERM 80
 #define PERMISSIVE_HOLD_PER_KEY
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
@@ -37,7 +37,7 @@
 #		define SPLIT_WATCHDOG_ENABLE
 #		define NO_SUSPEND_POWER_DOWN
 #	endif
-#	if (defined OLED_ENABLE || defined RGB_MATRIX_ENABLE)
+#	if defined (OLED_ENABLE) || defined (RGB_MATRIX_ENABLE)
 #		define SPLIT_OLED_ENABLE
 #		define SPLIT_MODS_ENABLE
 #		define SPLIT_LED_STATE_ENABLE
@@ -72,7 +72,7 @@
 #		define ENABLE_RGB_MATRIX_PIXEL_RAIN
 #		define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #	endif
-#	if (defined CONVERT_TO_KB2040 && defined SPLIT_KEYBOARD)
+#	if defined (CONVERT_TO_KB2040) && defined (SPLIT_KEYBOARD)
 #		define RGBW
 #		define WS2812_DI_PIN 17U
 #		define WS2812_PIO_USE_PIO1
