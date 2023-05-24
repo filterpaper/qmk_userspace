@@ -4,7 +4,7 @@
 #include "filterpaper.h"
 
 
-#if (defined PERMISSIVE_HOLD_PER_KEY || defined HOLD_ON_OTHER_KEY_PRESS_PER_KEY)
+#if defined (PERMISSIVE_HOLD_PER_KEY) || defined (HOLD_ON_OTHER_KEY_PRESS_PER_KEY)
 static uint16_t next_keycode;
 static keyrecord_t next_record;
 
@@ -23,10 +23,10 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 static fast_timer_t tap_timer = 0;
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-	// Increase tapping term for the home row tap-hold while typing
+	// Increase tapping term for the home row mod-tap while typing
 	return (IS_HOMEROW(record) && IS_TYPING()
 #	ifndef PERMISSIVE_HOLD_PER_KEY
-		&& !IS_MOD_TAP_SHIFT(keycode)
+			&& !IS_MOD_TAP_SHIFT(keycode)
 #	endif
 	) ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
@@ -43,7 +43,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-	// Replace the tap-hold key with its base keycode when
+	// Replace the mod-tap key with its base keycode when
 	// tapped with another non-modifier key on the same hand
 	if (IS_UNILATERAL_TAP(record, next_record) && !IS_QK_MOD_TAP(next_keycode)) {
 		return (record->keycode = keycode & 0xff);
@@ -108,13 +108,13 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 
 // Turn off caps lock on a word break
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
-	bool const caps_lock = host_keyboard_led_state().caps_lock;
+	bool const caps = host_keyboard_led_state().caps_lock;
 	uint8_t mods = get_mods();
 #ifndef NO_ACTION_ONESHOT
 	mods |= get_oneshot_mods();
 #endif
 	// Ignore non-lock state, pass-through caps lock and shifted keys
-	if (caps_lock == false || keycode == KC_CAPS || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
+	if (caps == false || keycode == KC_CAPS || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
 		return true;
 	}
 	// Filter mod-tap and layer-tap keys
