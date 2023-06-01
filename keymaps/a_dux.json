@@ -1,12 +1,12 @@
 {
-	"keyboard": "a_dux",
-	"keymap": "filterpaper",
-	"layout": "LAYOUT_34key_w",
-	"layers": [
-		[ "HRM(_BASE)" ],
-		[ "HRM(_COLE)" ],
-		[ "_NUMB" ],
-		[ "_SYMB" ],
-		[ "_FUNC" ]
-	]
+    "keyboard": "a_dux",
+    "keymap": "filterpaper",
+    "layout": "LAYOUT_34key_w",
+    "layers": [
+        [ "HRM(_BASE)" ],
+        [ "HRM(_COLE)" ],
+        [ "_NUMB" ],
+        [ "_SYMB" ],
+        [ "_FUNC" ]
+    ]
 }

@@ -32,7 +32,7 @@ Example: ACTN(rgb_tog, rgb_matrix_toggle(), KC_Z, KC_X)
 #define SUBS C_ENUM
 #define ACTN C_ENUM
 enum combos {
-#	include COMBOS_DEF
+#   include COMBOS_DEF
 };
 
 #undef COMB
@@ -50,7 +50,7 @@ enum combos {
 #define SUBS A_TYPE
 #define ACTN A_TYPE
 combo_t key_combos[] = {
-#	include COMBOS_DEF
+#   include COMBOS_DEF
 };
 
 #undef COMB
@@ -60,13 +60,13 @@ combo_t key_combos[] = {
 #define SUBS P_SSTR
 #define ACTN P_ACTN
 void process_combo_event(uint16_t combo_index, bool pressed) {
-	switch (combo_index) {
-#		include COMBOS_DEF
-	}
+    switch (combo_index) {
+#       include COMBOS_DEF
+    }
 }
 
 #ifdef COMBO_SHOULD_TRIGGER
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-	return (tog_num <= combo_index && combo_index <= tog_fnc) || get_highest_layer(layer_state) <= CMK; 
+    return (tog_num <= combo_index && combo_index <= tog_fnc) || get_highest_layer(layer_state) <= CMK;
 }
 #endif

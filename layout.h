@@ -21,19 +21,7 @@
 #define TH_SLSH LT(0,KC_SLSH)
 #define TH(k1,k2,k3,k4) LT(0,k1),LT(0,k2),LT(0,k3),LT(0,k4)
 
-/* // Mod tap macros
-#define HM_A	LSFT_T(KC_A)
-#define HM_S	LALT_T(KC_S)
-#define HM_D	LCTL_T(KC_D)
-#define HM_F	LGUI_T(KC_F)
-#define HM_J	RGUI_T(KC_J)
-#define HM_K	RCTL_T(KC_K)
-#define HM_L	RALT_T(KC_L)
-#define HM_QUOT	RSFT_T(KC_QUOT)
-#define HRML(k1,k2,k3,k4) LSFT_T(k1),LALT_T(k2),LCTL_T(k3),LGUI_T(k4)
-#define HRMR(k1,k2,k3,k4) RGUI_T(k1),RCTL_T(k2),RALT_T(k3),RSFT_T(k4)
-*/
-// CAGS
+// Mod tap macros
 #define HM_A    LCTL_T(KC_A)
 #define HM_S    LALT_T(KC_S)
 #define HM_D    LGUI_T(KC_D)
@@ -62,7 +50,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
  /*╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮
    │  Q     │  W     │  E     │  R     │  T     │   │  Y     │  U     │  I     │  O     │  P     │
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
-   │  A/⇧   │  S/⎇   │  D/⌃   │  F/⌘   │  G     │   │  H     │  J/⌘   │  K/⌃   │  L/⎇   │ ' "/⇧  │
+   │  A/⌃   │  S/⎇   │  D/⌘   │  F/⇧   │  G     │   │  H     │  J/⇧   │  K/⌘   │  L/⎇   │ ' "/⌃  │
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
    │  Z     │  X     │  C     │  V     │  B     │   │  N     │  M     │ , <    │ . >    │ / ?    │
    ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯
@@ -77,7 +65,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
  /*╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮
    │  Q     │  W     │  F     │  P     │  G     │   │  J     │  L     │  U     │  Y     │ ' "    │
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
-   │  A/⇧   │  R/⎇   │  S/⌃   │  T/⌘   │  D     │   │  H     │  N/⌘   │  E/⌃   │  I/⎇   │  O/⇧   │
+   │  A/⌃   │  R/⎇   │  S/⌘   │  T/⇧   │  D     │   │  H     │  N/⇧   │  E/⌘   │  I/⎇   │  O/⌃   │
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
    │  Z     │  X     │  C     │  V     │  B     │   │  K     │  M     │ , <    │ . >    │ / ?    │
    ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯
@@ -165,8 +153,8 @@ KC_LSFT, l11, l12, l13, l14, l15,   r11, r12, r13, r14, r15, KC_ENT,  \
 
 // Ika asymmetry pins
 #ifdef KEYBOARD_a_dux
-#	undef DIRECT_PINS_RIGHT
-#	define DIRECT_PINS_RIGHT { \
+#   undef DIRECT_PINS_RIGHT
+#   define DIRECT_PINS_RIGHT { \
     { D3, B4, C6, F4, F7 }, \
     { D0, E6, D4, F5, B1 }, \
     { B5, D7, D2, F6, B3 }, \
