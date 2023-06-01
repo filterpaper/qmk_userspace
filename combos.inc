@@ -5,8 +5,8 @@
 //          LT(SYM,KC_TAB) LCA_T(KC_ENT)       RSFT_T(KC_SPC)  LT(NUM,KC_BSPC)
 
 #ifdef SWAP_HANDS_ENABLE
-	ACTN(swap_l, swap_hands_toggle(), KC_X, KC_C, KC_V)
-	ACTN(swap_r, swap_hands_toggle(), TH_M, TH_COMM, TH_DOT)
+ACTN(swap_l, swap_hands_toggle(), KC_X, KC_C, KC_V)
+ACTN(swap_r, swap_hands_toggle(), TH_M, TH_COMM, TH_DOT)
 #endif
 
 ACTN(ac_tog, autocorrect_toggle(), KC_U, KC_I, KC_O)
