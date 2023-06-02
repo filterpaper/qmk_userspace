@@ -39,19 +39,19 @@ The `next_record` extracts the entire `keyrecord_t` structure. However, if only 
 Boolean macros to make the mod-tap decision functions more concise and easier to read:
 ```c
 // Match rows on a 3x5_2 split keyboard
-#define L_HRM() (record->event.key.row == 1)
-#define R_HRM() (record->event.key.row == 5)
-#define L_ALPHA() (0 <= next_record.event.key.row && next_record.event.key.row <= 2)
-#define R_ALPHA() (4 <= next_record.event.key.row && next_record.event.key.row <= 6)
+#define L_HRM(r) (r->event.key.row == 1)
+#define R_HRM(r) (r->event.key.row == 5)
+#define L_ALPHA(n) (0 <= n.event.key.row && n.event.key.row <= 2)
+#define R_ALPHA(n) (4 <= n.event.key.row && n.event.key.row <= 6)
 
 // Home row mod-taps on either side
-#define IS_HOMEROW() (L_HRM() || R_HRM())
+#define IS_HOMEROW(r) (L_HRM(r) || R_HRM(r))
 
 // Mod-tap and the key that follows are on the same side of the keyboard
-#define IS_UNILATERAL_TAP() ((L_HRM() && L_ALPHA()) || (R_HRM() && R_ALPHA()))
+#define IS_UNILATERAL_TAP(r,n) ((L_HRM(r) && L_ALPHA(n)) || (R_HRM(r) && R_ALPHA(n)))
 
 // Mod-tap and the key that follows are on opposite sides of the keyboard
-#define IS_BILATERAL_TAP()  ((L_HRM() && R_ALPHA()) || (R_HRM() && L_ALPHA()))
+#define IS_BILATERAL_TAP(r,n)  ((L_HRM(r) && R_ALPHA(n)) || (R_HRM(r) && L_ALPHA(n)))
 ```
 
 ## Stringent unilateral tap
@@ -61,7 +61,7 @@ Modifiers should not be triggered when a mod-tap key is pressed in combination w
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // Replace the mod-tap key with its base keycode when
     // tapped with another non-modifier key on the same hand
-    if (IS_UNILATERAL_TAP() && !IS_QK_MOD_TAP(next_keycode)) {
+    if (IS_UNILATERAL_TAP(record, next_record) && !IS_QK_MOD_TAP(next_keycode)) {
         record->keycode = keycode & 0xff;
         return true;
     }
@@ -77,7 +77,7 @@ Modifiers should be triggered when a mod-tap key is held down and another key is
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     // Hold modifier with a nested bilateral tap
-    return IS_BILATERAL_TAP();
+    return IS_BILATERAL_TAP(record, next_record);
 }
 #endif
 ```
@@ -85,9 +85,9 @@ The `return` statement can be modified to include narrow modifier matches for fr
 > *When used together, unilateral tap and bilateral hold will be comparable to ZMK's [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions).*
 
 ## Instant tap
-Mod-tap key delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the mod-tap key is replaced with its base keycode before quantum processing if the time interval from the previous key press is less than the `INSTANT_TAP_MS` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
+Mod-tap key-up delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the mod-tap key is replaced with its base keycode before quantum processing if the time interval from the previous key press is less than the `TAP_INTERVAL_MS` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
 ```c
-#define INSTANT_TAP_MS 100
+#define TAP_INTERVAL_MS 100
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t prev_keycode;
@@ -99,9 +99,9 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         next_record = *record;
     }
     // Match home row mod-tap keys when it is not preceded by a Layer key
-    if (IS_HOMEROW() && IS_QK_MOD_TAP(keycode) && !IS_QK_LAYER_TAP(prev_keycode)) {
+    if (IS_HOMEROW(record) && IS_QK_MOD_TAP(keycode) && !IS_QK_LAYER_TAP(prev_keycode)) {
         // Tap the mod-tap key instantly when it follows a short interval
-        if (record->event.pressed && last_input_activity_elapsed() < INSTANT_TAP_MS) {
+        if (record->event.pressed && last_input_activity_elapsed() < TAP_INTERVAL_MS) {
             record->keycode = keycode & 0xff;
             action_tapping_process(*record);
             return false;
@@ -115,10 +115,10 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 ```
-To prevent the override from disabling quick access to layer keys, the previous keycode is stored and evaluated for preceding layer tap. This configuration also uses the `keyrecord->keycode` container, which requires the `COMBO_ENABLE` feature to be enabled.
+To prevent the function from disabling quick access to layer keys, the previous keycode is stored and evaluated for preceding layer tap. This configuration also uses the `keyrecord->keycode` container, which requires the `COMBO_ENABLE` feature to be enabled.
 > *The output experience will be similar to ZMK's quick tap behaviour with the [global-quick-tap](https://zmk.dev/docs/behaviors/hold-tap#global-quick-tap) setting enabled.*
 
-## Delay modifier hold
+## Hold delay
 If the "[Instant Tap](#instant-tap)" configuration is too aggressive, a gentler approach is to delay the activation of modifiers while typing quickly. To do this, a tap timer is set up in the `process_record_user` function to record the time of each key press:
 ```c
 static fast_timer_t tap_timer = 0;
@@ -135,7 +135,7 @@ To prevent modifiers from triggering accidentally, the tapping term is increased
 #ifdef TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     // Increase tapping term for the home row mod-tap while typing
-    if (IS_HOMEROW() && timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2) {
+    if (IS_HOMEROW(record) && timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2) {
         return TAPPING_TERM * 2;
     }
     return TAPPING_TERM;
@@ -272,7 +272,7 @@ bool rgb_matrix_indicators_user(void) {
     return false;
 }
 ```
-This code iterates over every row and column on a per-key RGB keyboard, searching for keys that have been configured (not `KC_TRANS`) and lighting the corresponding index location. It is set to activate on layers other than the default layer. This can be further customized by using a layer switch condition inside the last `if` statement.
+This code iterates over every row and column on a per-key RGB keyboard, searching for keys on the layer that have been configured (not `KC_TRANS`) and lighting the corresponding index location. It is set to activate on layers other than the default.
 
 ## KB2040 NeoPixel
 The NeoPixel LED can be enabled for RGB Matrix with the following settings:
@@ -308,7 +308,7 @@ led_config_t g_led_config = { {
 ```
 
 ## Pro Micro RX/TX LEDs
-The Data LEDs on Pro Micro can be used as indicators with code. They are located on pins `B0` (RX) and `D5` (TX) on the Atmega32u4 microcontroller. To use them with QMK's [LED Indicators](https://docs.qmk.fm/#/feature_led_indicators), flag the pin in the config.h file:
+The data LEDs on an Atmega32u4 Pro Micro can be used as indicators. They are located on pins `B0` (RX) and `D5` (TX) of the microcontroller. To use them with QMK's [LED Indicators](https://docs.qmk.fm/#/feature_led_indicators), flag the pin in the config.h file:
 ```c
 #define LED_CAPS_LOCK_PIN B0
 #define LED_PIN_ON_STATE 0
@@ -326,7 +326,7 @@ For advance usage, set up the following macros to call both pins with GPIO funct
 #define RXLED_OFF  writePinHigh(RXLED)
 #define TXLED_OFF  writePinHigh(TXLED)
 ```
-Initialise LEDs with the `*_INIT` macro on startup with `matrix_init_user(void)` function. LEDs can then be used as indicators with the above `*_ON` and `*_OFF` macros.
+Initialise both LEDs with the `*_INIT` macro on startup in the `matrix_init_user(void)` function. They can then be used as indicators with the `*_ON` and `*_OFF` macros.
 
 ## Corne (CRKBD) OLED display
 Corne keyboard can be build with few OLED display options using `-e OLED=` environment variable to select pet animation on primary display.
