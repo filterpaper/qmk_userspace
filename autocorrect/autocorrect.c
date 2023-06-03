@@ -1,7 +1,9 @@
 // Copyright 2021 Google LLC
 // Copyright 2022 @filterpaper
 // SPDX-License-Identifier: Apache-2.0
-// Original source: https://getreuer.info/posts/keyboards/autocorrection
+// Adapted from Pascal Getreuer's Autocorrection
+// https://getreuer.info/posts/keyboards/autocorrection
+
 
 #include QMK_KEYBOARD_H
 #include <string.h>
