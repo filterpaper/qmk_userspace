@@ -5,14 +5,14 @@
 
 
 #if defined (PERMISSIVE_HOLD_PER_KEY) || defined (HOLD_ON_OTHER_KEY_PRESS_PER_KEY)
-static uint16_t next_keycode;
+static uint16_t    next_keycode;
 static keyrecord_t next_record;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        // Copy the next key record for tap-hold decisions
+        // Copy the next keycode and record for current tap-hold decisions
         next_keycode = keycode;
-        next_record = *record;
+        next_record  = *record;
     }
     return true;
 }
@@ -23,19 +23,15 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 static fast_timer_t tap_timer = 0;
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Increase tapping term for the home row mod-tap while typing
-    return (IS_HOMEROW(record) && IS_TYPING()
-#   ifndef PERMISSIVE_HOLD_PER_KEY
-            && !IS_MOD_TAP_SHIFT(keycode)
-#   endif
-    ) ? TAPPING_TERM * 2 : TAPPING_TERM;
+    // Increase tapping term for the non-Shift home row mod-tap while typing
+    return IS_HOMEROW(record) && !IS_MOD_TAP_SHIFT(keycode) && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
 }
 #endif
 
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Hold Shift with a nested bilateral tap
+    // Hold Shift with a nested key tap on the opposite hand
     return IS_BILATERAL_TAP(record, next_record) && IS_MOD_TAP_SHIFT(keycode);
 }
 #endif
@@ -47,8 +43,9 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // tapped with another non-modifier key on the same hand
     if (IS_UNILATERAL_TAP(record, next_record) && !IS_QK_MOD_TAP(next_keycode)) {
         return (record->keycode = keycode & 0xff);
-    // Hold layer with another key tap
-    } else if (IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode)) {
+    }
+    // Hold layer with another key press
+    else if (IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode)) {
         return true;
     }
     return false;
@@ -106,15 +103,15 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// Turn off caps lock on a word break
+// Turn off caps lock at the end of a word
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     bool const caps = host_keyboard_led_state().caps_lock;
-    uint8_t mods = get_mods();
+    uint8_t mods    = get_mods();
 #ifndef NO_ACTION_ONESHOT
     mods |= get_oneshot_mods();
 #endif
-    // Ignore non-lock state, pass-through caps lock and shifted keys
-    if (caps == false || keycode == KC_CAPS || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
+    // Ignore inactive caps lock state, caps lock and shifted keys
+    if (!caps || keycode == KC_CAPS || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) {
         return true;
     }
     // Filter mod-tap and layer-tap keys
@@ -130,10 +127,8 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
         case KC_MINS:
         case KC_UNDS:
         case KC_A ... KC_0:
-        // Not a word break if there are no active modifiers
-            if (mods == false) {
-                break;
-            }
+            if (!mods) break;
+            // Modifiers will end caps lock
         default:
             tap_code(KC_CAPS);
     }
