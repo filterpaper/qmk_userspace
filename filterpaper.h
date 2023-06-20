@@ -13,9 +13,9 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
 #define GET_MT_MOD_BITS(kc) ((kc & 0x1000) ? ((kc >> 8) & 0x0f) << 4 : (kc >> 8) & 0x0f)
 
 // Tap-hold decision helper macros
-#define IS_TYPING() (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
-#define IS_HOMEROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
+#define IS_TYPING()          (timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2)
 #define IS_MOD_TAP_SHIFT(kc) (QK_MOD_TAP_GET_MODS(kc) & MOD_LSFT)
+#define IS_HOMEROW(r)        (r->event.key.row == 1 || r->event.key.row == 5)
 
 #define IS_UNILATERAL_TAP(r, n) ( \
     (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
