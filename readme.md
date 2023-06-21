@@ -28,7 +28,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         // Copy the next key record for mod-tap decisions
         next_keycode = keycode;
-        next_record = *record;
+        next_record  = *record;
     }
     return true;
 }
@@ -39,8 +39,8 @@ The `next_record` extracts the entire `keyrecord_t` structure. However, if only 
 Boolean macros to make the mod-tap decision functions more concise and easier to read:
 ```c
 // Match rows on a 3x5_2 split keyboard
-#define L_HRM(r) (r->event.key.row == 1)
-#define R_HRM(r) (r->event.key.row == 5)
+#define L_HRM(r)   (r->event.key.row == 1)
+#define R_HRM(r)   (r->event.key.row == 5)
 #define L_ALPHA(n) (0 <= n.event.key.row && n.event.key.row <= 2)
 #define R_ALPHA(n) (4 <= n.event.key.row && n.event.key.row <= 6)
 
@@ -96,7 +96,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         prev_keycode = next_keycode;
         // Copy the next key record for mod-tap decisions
         next_keycode = keycode;
-        next_record = *record;
+        next_record  = *record;
     }
     // Match home row mod-tap keys when it is not preceded by a Layer key
     if (IS_HOMEROW(record) && IS_QK_MOD_TAP(keycode) && !IS_QK_LAYER_TAP(prev_keycode)) {
@@ -106,9 +106,9 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
             action_tapping_process(*record);
             return false;
         } else { // Send the base keycode key up event
-            keyrecord_t base_record = *record;
+            keyrecord_t base_record   = *record;
+            base_record.keycode       = keycode & 0xff;
             base_record.event.pressed = false;
-            base_record.keycode = keycode & 0xff;
             action_tapping_process(base_record);
         }
     }
