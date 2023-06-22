@@ -40,8 +40,8 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // Replace the mod-tap key with its base keycode when
-    // tapped with another non-modifier key on the same hand
-    if (IS_UNILATERAL_TAP(record, next_record) && !IS_QK_MOD_TAP(next_keycode)) {
+    // tapped with another non-Shift key on the same hand
+    if (IS_UNILATERAL_TAP(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) {
         return (record->keycode = keycode & 0xff);
     }
     // Hold layer with another key press
