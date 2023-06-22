@@ -40,13 +40,18 @@
 // Layers
 enum layers { BSE, CMK, NUM, SYM, FNC };
 
+// Thumb keys
+#define SYM_TAB LT(SYM,KC_TAB)
+#define LCA_ENT LCA_T(KC_ENT)
+#define SFT_SPC RSFT_T(KC_SPC)
+#define NUM_BSP LT(NUM,KC_BSPC)
 
 // Default 3x5_2 split layout
 #define _BASE \
     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
     KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, \
     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
-                  LT(SYM,KC_TAB), LCA_T(KC_ENT),     RSFT_T(KC_SPC), LT(NUM,KC_BSPC)
+                               SYM_TAB, LCA_ENT,     SFT_SPC, NUM_BSP
  /*╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮
    │  Q     │  W     │  E     │  R     │  T     │   │  Y     │  U     │  I     │  O     │  P     │
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
@@ -54,7 +59,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
    │  Z     │  X     │  C     │  V     │  B     │   │  N     │  M     │ , <    │ . >    │ / ?    │
    ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯
-                              │TAB/SYM │ ENT/CA │   │SPC/SFT │BSPC/NUM│
+                              │SYM/TAB │LCA/ENT │   │SFT/SFT │NUM/BSPC│
                               ╰────────┴────────╯   ╰────────┴────────╯*/
 
 #define _COLE \
