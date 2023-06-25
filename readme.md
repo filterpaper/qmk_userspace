@@ -59,9 +59,9 @@ Modifiers should not be triggered when a mod-tap key is pressed in combination w
 ```c
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    // Replace the mod-tap key with its base keycode when
-    // tapped with another non-modifier key on the same hand
-    if (IS_UNILATERAL_TAP(record, next_record) && !IS_QK_MOD_TAP(next_keycode)) {
+    // Replace the mod-tap key with its base keycode
+    // when tapped with another key on the same hand
+    if (IS_UNILATERAL_TAP(record, next_record)) {
         record->keycode = keycode & 0xff;
         return true;
     }
@@ -69,7 +69,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 #endif
 ```
-Mod-tap keys are excluded from the next tap record match to allow chording multiple modifiers on the same hand. This approach uses the `keyrecord->keycode` container that requires the `COMBO_ENABLE` feature to be enabled.
+This approach uses the `keyrecord->keycode` container that requires the `COMBO_ENABLE` feature to be enabled.
 
 ## Permissive bilateral hold
 Modifiers should be triggered when a mod-tap key is held down and another key is tapped with the opposite hand. This is applied in the `get_permissive_hold` function for the mod-tap key with a nested key record on the opposite side of the keyboard:
