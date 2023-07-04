@@ -18,8 +18,8 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
 #define IS_HOMEROW(r)        (r->event.key.row == 1 || r->event.key.row == 5)
 
 #define IS_UNILATERAL_TAP(r, n) ( \
-    (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
-    (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) )
+    (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2 && r->event.key.col != n.event.key.col) || \
+    (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6 && r->event.key.col != n.event.key.col) )
 
 #define IS_BILATERAL_TAP(r, n) ( \
     (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 6) || \

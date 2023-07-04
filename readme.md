@@ -38,20 +38,18 @@ The `next_record` extracts the entire `keyrecord_t` structure. However, if only 
 ## Decision macros
 Boolean macros to make the mod-tap decision functions more concise and easier to read:
 ```c
-// Match rows on a 3x5_2 split keyboard
-#define L_HRM(r)   (r->event.key.row == 1)
-#define R_HRM(r)   (r->event.key.row == 5)
-#define L_ALPHA(n) (0 <= n.event.key.row && n.event.key.row <= 2)
-#define R_ALPHA(n) (4 <= n.event.key.row && n.event.key.row <= 6)
+// Matches rows on a 3x5_2 split keyboard
+#define IS_HOMEROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
 
-// Home row mod-taps on either side
-#define IS_HOMEROW(r) (L_HRM(r) || R_HRM(r))
-
-// Mod-tap and the key that follows are on the same side of the keyboard
-#define IS_UNILATERAL_TAP(r,n) ((L_HRM(r) && L_ALPHA(n)) || (R_HRM(r) && R_ALPHA(n)))
+// Mod-tap and the key that follows are on the same side of the keyboard and are not the same keys
+#define IS_UNILATERAL_TAP(r, n) ( \
+    (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2 && r->event.key.col != n.event.key.col) || \
+    (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6 && r->event.key.col != n.event.key.col) )
 
 // Mod-tap and the key that follows are on opposite sides of the keyboard
-#define IS_BILATERAL_TAP(r,n)  ((L_HRM(r) && R_ALPHA(n)) || (R_HRM(r) && L_ALPHA(n)))
+#define IS_BILATERAL_TAP(r, n) ( \
+    (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 6) || \
+    (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 2) )
 ```
 
 ## Stringent unilateral tap
@@ -62,14 +60,20 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // Replace the mod-tap key with its base keycode
     // when tapped with another key on the same hand
     if (IS_UNILATERAL_TAP(record, next_record)) {
+        // Mask the base keycode and send the tap event
         record->keycode = keycode & 0xff;
+        process_record(record);
+        // Send the base keycode key up event
+        record->event.pressed = false;
+        process_record(record);
+        // Return true to end action tapping process
         return true;
     }
     return false;
 }
 #endif
 ```
-This approach uses the `keyrecord->keycode` container that requires the `COMBO_ENABLE` feature to be enabled.
+This approach uses the `keycode` container in the `keyrecord_t` struct that requires the `COMBO_ENABLE` feature to be enabled.
 
 ## Permissive bilateral hold
 Modifiers should be triggered when a mod-tap key is held down and another key is tapped with the opposite hand. This is applied in the `get_permissive_hold` function for the mod-tap key with a nested key record on the opposite side of the keyboard:

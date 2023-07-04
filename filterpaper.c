@@ -42,7 +42,11 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // Replace the mod-tap key with its base keycode when
     // tapped with another non-Shift key on the same hand
     if (IS_UNILATERAL_TAP(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) {
-        return (record->keycode = keycode & 0xff);
+        record->keycode = keycode & 0xff;
+        process_record(record);
+        record->event.pressed = false;
+        process_record(record);
+        return true;
     }
     // Hold layer with another key press
     else if (IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode)) {
