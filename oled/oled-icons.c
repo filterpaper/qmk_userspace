@@ -21,7 +21,7 @@
 #include QMK_KEYBOARD_H
 
 
-static void render_logo(void) {
+static inline void render_logo(void) {
     static char const corne_logo[] PROGMEM = {
         0x80, 0x81, 0x82, 0x83, 0x84,
         0xa0, 0xa1, 0xa2, 0xa3, 0xa4,
@@ -34,7 +34,7 @@ static void render_logo(void) {
 }
 
 
-static void render_layer_state(uint8_t const state) {
+static inline void render_layer_state(uint8_t const state) {
     static char const base_layer[] PROGMEM = {
         0x20, 0x9a, 0x9b, 0x9c, 0x20,
         0x20, 0xba, 0xbb, 0xbc, 0x20,
@@ -52,16 +52,14 @@ static void render_layer_state(uint8_t const state) {
         0x20, 0xbd, 0xbe, 0xbf, 0x20,
         0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
 
-    switch(state) {
-        case 1:  oled_write_P(numb_layer, false); break;
-        case 2:  oled_write_P(symb_layer, false); break;
-        case 3:  oled_write_P(func_layer, false); break;
-        default: oled_write_P(base_layer, false);
-    }
+    if (state == 2)      oled_write_P(numb_layer, false);
+    else if (state == 3) oled_write_P(symb_layer, false);
+    else if (state == 4) oled_write_P(func_layer, false);
+    else                 oled_write_P(base_layer, false);
 }
 
 
-static void render_gui_alt(uint8_t const gui, uint8_t const alt) {
+static inline void render_gui_alt(uint8_t const gui, uint8_t const alt) {
     static char const gui_off_1[] PROGMEM = {0x85, 0x86, 0};
     static char const gui_off_2[] PROGMEM = {0xa5, 0xa6, 0};
     static char const gui_on_1[]  PROGMEM = {0x8d, 0x8e, 0};
@@ -84,23 +82,23 @@ static void render_gui_alt(uint8_t const gui, uint8_t const alt) {
 
     // Top half with in between fillers
     oled_write_P(gui ? gui_on_1 : gui_off_1, false);
-    if (gui && alt) { oled_write_P(on_on_1,   false); }
-    else if (gui)   { oled_write_P(on_off_1,  false); }
-    else if (alt)   { oled_write_P(off_on_1,  false); }
-    else            { oled_write_P(off_off_1, false); }
+    if (gui && alt) oled_write_P(on_on_1,   false);
+    else if (gui)   oled_write_P(on_off_1,  false);
+    else if (alt)   oled_write_P(off_on_1,  false);
+    else            oled_write_P(off_off_1, false);
     oled_write_P(alt ? alt_on_1 : alt_off_1, false);
 
     // Bottom half with in between fillers
     oled_write_P(gui ? gui_on_2 : gui_off_2, false);
-    if (gui && alt) { oled_write_P(on_on_2,   false); }
-    else if (gui)   { oled_write_P(on_off_2,  false); }
-    else if (alt)   { oled_write_P(off_on_2,  false); }
-    else            { oled_write_P(off_off_2, false); }
+    if (gui && alt) oled_write_P(on_on_2,   false);
+    else if (gui)   oled_write_P(on_off_2,  false);
+    else if (alt)   oled_write_P(off_on_2,  false);
+    else            oled_write_P(off_off_2, false);
     oled_write_P(alt ? alt_on_2 : alt_off_2, false);
 }
 
 
-static void render_ctrl_shift(uint8_t const ctrl, uint8_t const shift) {
+static inline void render_ctrl_shift(uint8_t const ctrl, uint8_t const shift) {
     static char const ctrl_off_1[] PROGMEM = {0x89, 0x8a, 0};
     static char const ctrl_off_2[] PROGMEM = {0xa9, 0xaa, 0};
     static char const ctrl_on_1[]  PROGMEM = {0x91, 0x92, 0};
@@ -123,18 +121,18 @@ static void render_ctrl_shift(uint8_t const ctrl, uint8_t const shift) {
 
     // Top half with in between fillers
     oled_write_P(ctrl ? ctrl_on_1 : ctrl_off_1, false);
-    if (ctrl && shift) { oled_write_P(on_on_1,   false); }
-    else if (ctrl)     { oled_write_P(on_off_1,  false); }
-    else if (shift)    { oled_write_P(off_on_1,  false); }
-    else               { oled_write_P(off_off_1, false); }
+    if (ctrl && shift) oled_write_P(on_on_1,   false);
+    else if (ctrl)     oled_write_P(on_off_1,  false);
+    else if (shift)    oled_write_P(off_on_1,  false);
+    else               oled_write_P(off_off_1, false);
     oled_write_P(shift ? shift_on_1 : shift_off_1, false);
 
     // Bottom half with in between fillers
     oled_write_P(ctrl ? ctrl_on_2 : ctrl_off_2, false);
-    if (ctrl && shift) { oled_write_P(on_on_2,   false); }
-    else if (ctrl)     { oled_write_P(on_off_2,  false); }
-    else if (shift)    { oled_write_P(off_on_2,  false); }
-    else               { oled_write_P(off_off_2, false); }
+    if (ctrl && shift) oled_write_P(on_on_2,   false);
+    else if (ctrl)     oled_write_P(on_off_2,  false);
+    else if (shift)    oled_write_P(off_on_2,  false);
+    else               oled_write_P(off_off_2, false);
     oled_write_P(shift ? shift_on_2 : shift_off_2, false);
 }
 

@@ -14,13 +14,13 @@
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
 #define TAPPING_TERM 200
-#define TAPPING_TERM_PER_KEY
+//#define TAPPING_TERM_PER_KEY
 #define QUICK_TAP_TERM TAPPING_TERM / 2
 #define PERMISSIVE_HOLD_PER_KEY
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 #ifdef CONVERT_TO_ELITE_PI
-#   define DEBOUNCE 10
+#   define DEBOUNCE 12
 #endif
 
 #ifdef COMBO_ENABLE
@@ -36,6 +36,9 @@
 #       define SPLIT_USB_DETECT
 #       define SPLIT_WATCHDOG_ENABLE
 #       define NO_SUSPEND_POWER_DOWN
+#   endif
+#   ifdef CONVERT_TO_KB2040
+#       define SPLIT_WATCHDOG_ENABLE
 #   endif
 #   if defined (OLED_ENABLE) || defined (RGB_MATRIX_ENABLE)
 #       define SPLIT_OLED_ENABLE
