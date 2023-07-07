@@ -66,10 +66,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (!process_caps_unlock(keycode, record)) return false;
 
         // Clipboard shortcuts
-        if (keycode == TH_M)         return process_tap_hold(Z_PST, record);
+        if      (keycode == TH_M)    return process_tap_hold(Z_PST, record);
         else if (keycode == TH_COMM) return process_tap_hold(Z_CPY, record);
         else if (keycode == TH_DOT)  return process_tap_hold(Z_CUT, record);
         else if (keycode == TH_SLSH) return process_tap_hold(Z_UND, record);
+
+#ifdef MOUSEKEY_ENABLE
+        // Reset overlapping opposite direction mousekey presses
+        report_mouse_t mouse_report = mousekey_get_report();
+        if      (keycode == KC_MS_U && mouse_report.y > 0) mousekey_off(KC_MS_D);
+        else if (keycode == KC_MS_D && mouse_report.y < 0) mousekey_off(KC_MS_U);
+        else if (keycode == KC_MS_L && mouse_report.x > 0) mousekey_off(KC_MS_R);
+        else if (keycode == KC_MS_R && mouse_report.x < 0) mousekey_off(KC_MS_L);
+#endif
     }
 
     return true;
@@ -88,7 +97,7 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     bool const caps = host_keyboard_led_state().caps_lock;
 
-    uint8_t mods    = get_mods();
+    uint8_t mods = get_mods();
 #ifndef NO_ACTION_ONESHOT
     mods |= get_oneshot_mods();
 #endif
