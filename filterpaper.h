@@ -28,3 +28,7 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
 #ifdef COMBO_ENABLE
 #   include "combos.h"
 #endif
+
+#ifdef MOUSEKEY_ENABLE
+#   include "quantum/mousekey.h"
+#endif
