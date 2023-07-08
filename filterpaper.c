@@ -62,8 +62,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef TAPPING_TERM_PER_KEY
         tap_timer = timer_read_fast();
 #endif
-        if (!process_autocorrect(keycode, record)) return false;
-        if (!process_caps_unlock(keycode, record)) return false;
+        if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
 
         // Clipboard shortcuts
         if      (keycode == TH_M)    return process_tap_hold(Z_PST, record);
