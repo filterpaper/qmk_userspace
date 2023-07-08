@@ -96,11 +96,7 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 // Turn off caps lock at the end of a word
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     bool const caps = host_keyboard_led_state().caps_lock;
-
-    uint8_t mods = get_mods();
-#ifndef NO_ACTION_ONESHOT
-    mods |= get_oneshot_mods();
-#endif
+    uint8_t    mods = get_mods();
 
     // Ignore inactive caps lock status and shifted keys
     if (!caps || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) return true;
@@ -137,4 +133,13 @@ void housekeeping_task_user(void) {
         if (is_swap_hands_on()) swap_hands_off();
 #endif
     }
+}
+
+
+// Simplify unused magic config functions
+uint16_t keycode_config(uint16_t keycode) {
+    return keycode;
+}
+uint8_t mod_config(uint8_t mod) {
+    return mod;
 }

@@ -52,7 +52,7 @@ static inline void render_layer_state(uint8_t const state) {
         0x20, 0xbd, 0xbe, 0xbf, 0x20,
         0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
 
-    if (state == 2)      oled_write_P(numb_layer, false);
+    if      (state == 2) oled_write_P(numb_layer, false);
     else if (state == 3) oled_write_P(symb_layer, false);
     else if (state == 4) oled_write_P(func_layer, false);
     else                 oled_write_P(base_layer, false);
@@ -140,9 +140,6 @@ static inline void render_ctrl_shift(uint8_t const ctrl, uint8_t const shift) {
 // Primary modifier status display function
 void render_mod_status(void) {
     uint8_t mods = get_mods();
-#ifndef NO_ACTION_ONESHOT
-    mods |= get_oneshot_mods();
-#endif
 
     render_logo();
     oled_set_cursor(0,6);

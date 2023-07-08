@@ -207,9 +207,6 @@ static inline void luna_action(char const action[][LUNA_SIZE]) {
 
 static inline void animate_luna(uint32_t interval) {
     uint8_t mods = get_mods();
-#ifndef NO_ACTION_ONESHOT
-    mods |= get_oneshot_mods();
-#endif
 
     render_logo();
     oled_set_cursor(0,8);
