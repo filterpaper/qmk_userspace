@@ -23,13 +23,8 @@ bool process_autocorrect(uint16_t keycode, keyrecord_t* record) {
     static uint8_t typo_buffer[DICTIONARY_MAX_LENGTH] = {0};
     static uint8_t buffer_size = 0;
 
-    uint8_t mods = get_mods();
-#ifndef NO_ACTION_ONESHOT
-    mods |= get_oneshot_mods();
-#endif
-
     // Reset with non-Shift modifiers or when feature is off.
-    if (mods & ~MOD_MASK_SHIFT || autocorrect_on == false) {
+    if (get_mods() & ~MOD_MASK_SHIFT || autocorrect_on == false) {
         buffer_size = 0;
         return true;
     }
@@ -39,9 +34,6 @@ bool process_autocorrect(uint16_t keycode, keyrecord_t* record) {
         case KC_LSFT:
         case KC_RSFT:
         case KC_CAPS:
-#ifndef NO_ACTION_ONESHOT
-        case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:
-#endif
             return true;
         case QK_MOD_TAP ... QK_MOD_TAP_MAX:
         case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
