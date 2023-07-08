@@ -16,7 +16,7 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 &nbsp;</br> &nbsp;</br>
 
 # Contextual Mod-Taps
-Mod-taps are very useful on the home row of small split keyboards. They can be triggered more accurately when their tap or hold decision is based on the preceding and subsequent keys. The following contextual configuration will do just that, using input that comes before and after the mod-tap key.
+Mod-taps are very useful on the home row of small split keyboards. They can be triggered more accurately when their tap or hold decision is based on the preceding or subsequent keys. The following contextual configuration will do just that, using input that comes before and after the mod-tap key.
 
 ## Next key record
 Use the `pre_process_record_user` function to capture every key record before it is passed to quantum processing. While action tapping is resolving a mod-tap key, this function will copy the *next* key record of an input that follows. That key record will be used to influence the decision of the mod-tap key that is currently undergoing quantum processing:
@@ -26,7 +26,7 @@ static keyrecord_t next_record;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        // Copy the next key record for mod-tap decisions
+        // Cache the next input for mod-tap decisions
         next_keycode = keycode;
         next_record  = *record;
     }
@@ -96,9 +96,9 @@ Mod-tap key-up delays can be bothersome and unnecessary while typing quickly. To
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t prev_keycode;
     if (record->event.pressed) {
-        // Record the previous keycode for instant tap decision
+        // Store the previous keycode for instant tap decision
         prev_keycode = next_keycode;
-        // Copy the next key record for mod-tap decisions
+        // Cache the next input for mod-tap decisions
         next_keycode = keycode;
         next_record  = *record;
     }

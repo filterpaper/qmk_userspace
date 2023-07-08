@@ -10,7 +10,7 @@ static keyrecord_t next_record;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        // Copy the next keycode and record for current tap-hold decisions
+        // Cache the next input for mod-tap decisions
         next_keycode = keycode;
         next_record  = *record;
     }
