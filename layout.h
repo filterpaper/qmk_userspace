@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 
 #pragma once
-#include "quantum/keycodes.h"
 
 // macOS shortcuts
 #define Z_UND   G(KC_Z)
