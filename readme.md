@@ -80,7 +80,7 @@ Modifiers should be triggered when a mod-tap key is held down and another key is
 ```c
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Hold modifier with a nested bilateral tap
+    // Hold modifier with a nested bilateral tap on the opposite hand
     return IS_BILATERAL_TAP(record, next_record);
 }
 #endif
