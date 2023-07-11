@@ -41,10 +41,11 @@ Boolean macros to make the mod-tap decision functions more concise and easier to
 // Matches rows on a 3x5_2 split keyboard
 #define IS_HOMEROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
 
-// Mod-tap and the key that follows are on the same side of the keyboard and are not the same keys
-#define IS_UNILATERAL_TAP(r, n) ( \
-    (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2 && r->event.key.col != n.event.key.col) || \
-    (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6 && r->event.key.col != n.event.key.col) )
+// Mod-tap and the key that follows are not the same keys
+// and they are on the same side of the keyboard
+#define IS_UNILATERAL_TAP(r, n) ((r->event.key.col != n.event.key.col) && (    \
+    (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
+    (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) ))
 
 // Mod-tap and the key that follows are on opposite sides of the keyboard
 #define IS_BILATERAL_TAP(r, n) ( \
