@@ -31,8 +31,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Hold modifier with a nested key tap on the opposite hand
-    return IS_BILATERAL_TAP(record, next_record);
+    // Hold Control and Shift with a nested key tap on the opposite hand
+    return IS_BILATERAL_TAP(record, next_record) && IS_MOD_TAP_CS(keycode);
 }
 #endif
 
