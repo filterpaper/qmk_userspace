@@ -64,12 +64,12 @@ RGB_MATRIX_EFFECT(CANDY_RAIN)
 #       define prng_min_max(x,y) (prng_max((y) - (x)) + (x))
 #       define rot(x,k) (((x) << (k)) | ((x) >> (8 - (k))))
 static uint8_t a, b, c, d, t;
-static uint8_t jsf8(void) {
+static inline uint8_t jsf8(void) {
     t = a - rot(b, 1); a = b ^ rot(c, 4);
     b = c + d; c = d + t; d = t + a;
     return d;
 }
-static void jsf8_seed(const uint8_t seed) {
+static inline void jsf8_seed(const uint8_t seed) {
     a = 161, b = c = d = seed;
     for (uint8_t i = 0; i < 32; ++i) (void)jsf8();
 }
