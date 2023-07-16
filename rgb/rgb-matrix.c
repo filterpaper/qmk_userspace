@@ -3,7 +3,7 @@
 
 #include QMK_KEYBOARD_H
 #include "rgb-matrix.h"
-#include "lib/lib8tion/lib8tion.h"
+#include <lib/lib8tion/lib8tion.h>
 
 #ifdef CONVERT_TO_KB2040
 // Map keys to KB2040 LEDs on each side
@@ -57,7 +57,7 @@ bool rgb_matrix_indicators_user(void) {
 #endif
     if (get_highest_layer(layer_state) > CMK) {
         uint8_t const layer = get_highest_layer(layer_state);
-        RGB const rgb = hsv_to_rgb((HSV){layer * 48, 255, rgb_matrix_config.hsv.v});
+        RGB const rgb = hsv_to_rgb((HSV){(layer - 1) * 80, 255, rgb_matrix_config.hsv.v});
         rgb_matrix_set_color_all(rgb.r, rgb.g, rgb.b);
     }
     return false;
