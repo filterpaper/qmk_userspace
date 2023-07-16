@@ -58,21 +58,19 @@ static bool CANDY_SPLASH(effect_params_t* params) {
 RGB_MATRIX_EFFECT(CANDY_RAIN)
 #   ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
-#       define prng()            jsf8()
-#       define prng_seed(x)      jsf8_seed(x)
-#       define prng_max(x)       (((uint16_t)jsf8() * (uint16_t)(x)) >> 8)
-#       define prng_min_max(x,y) (prng_max((y) - (x)) + (x))
-#       define rot(x,k) (((x) << (k)) | ((x) >> (8 - (k))))
 static uint8_t a, b, c, d, t;
-static inline uint8_t jsf8(void) {
+static inline uint8_t prng(void) {
+#   define rot(x,k) (((x) << (k)) | ((x) >> (8 - (k))))
     t = a - rot(b, 1); a = b ^ rot(c, 4);
     b = c + d; c = d + t; d = t + a;
     return d;
 }
-static inline void jsf8_seed(const uint8_t seed) {
+static inline void prng_seed(const uint8_t seed) {
     a = 161, b = c = d = seed;
-    for (uint8_t i = 0; i < 32; ++i) (void)jsf8();
+    for (uint8_t i = 0; i < 32; ++i) (void)prng();
 }
+#define prng_max(x)       ((prng() * (x)) >> 8)
+#define prng_min_max(x,y) (prng_max((y) - (x)) + (x))
 
 static bool CANDY_RAIN(effect_params_t* params) {
     static uint32_t wait_timer = 0;
