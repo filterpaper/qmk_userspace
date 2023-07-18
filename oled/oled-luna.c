@@ -185,7 +185,7 @@ static char const sneak[][LUNA_SIZE] PROGMEM = { {
 #endif
 
 
-static inline void render_logo(void) {
+static void render_logo(void) {
     static char const corne_logo[] PROGMEM = {
         0x80, 0x81, 0x82, 0x83, 0x84,
         0xa0, 0xa1, 0xa2, 0xa3, 0xa4,
@@ -198,14 +198,14 @@ static inline void render_logo(void) {
 }
 
 
-static inline void luna_action(char const action[][LUNA_SIZE]) {
+static void luna_action(char const action[][LUNA_SIZE]) {
     static uint8_t current_frame = 0;
     current_frame = (current_frame + 1) & 1;
     oled_write_raw_P(action[current_frame], LUNA_SIZE);
 }
 
 
-static inline void animate_luna(uint32_t interval) {
+static void animate_luna(uint32_t interval) {
     uint8_t mods = get_mods();
 
     render_logo();
@@ -221,7 +221,7 @@ static inline void animate_luna(uint32_t interval) {
 }
 
 
-static inline void render_luna_status(void) {
+static void render_luna_status(void) {
     static uint16_t frame_timer = 0;
     uint32_t input_timer = last_matrix_activity_time();
 

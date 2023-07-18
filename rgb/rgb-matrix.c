@@ -26,7 +26,7 @@ layer_state_t layer_state_set_user(layer_state_t const state) {
 }
 
 
-static inline RGB hsv_to_rgb_glow(HSV hsv) {
+static RGB hsv_to_rgb_glow(HSV hsv) {
     // Return glowing RGB values
     hsv.v = scale8(abs8(sin8(scale16by8(g_rgb_timer, rgb_matrix_config.speed / 8)) - 128) * 2, hsv.v);
     return hsv_to_rgb(hsv);
