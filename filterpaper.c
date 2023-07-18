@@ -57,36 +57,10 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed) {
-#ifdef TAPPING_TERM_PER_KEY
-        tap_timer = timer_read_fast();
-#endif
-        if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
-
-        // Clipboard shortcuts
-        if      (keycode == TH_M)    return process_tap_hold(Z_PST, record);
-        else if (keycode == TH_COMM) return process_tap_hold(Z_CPY, record);
-        else if (keycode == TH_DOT)  return process_tap_hold(Z_CUT, record);
-        else if (keycode == TH_SLSH) return process_tap_hold(Z_UND, record);
-    }
-
-    return true;
-}
-
-
-// Send custom hold keycode
-static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
-    if (record->tap.count) return true;
-    tap_code16(keycode);
-    return false;
-}
-
-
 // Turn off caps lock at the end of a word
-static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
-    bool const caps = host_keyboard_led_state().caps_lock;
-    uint8_t    mods = get_mods();
+static bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
+    bool    const caps = host_keyboard_led_state().caps_lock;
+    uint8_t const mods = get_mods();
 
     // Ignore inactive caps lock status and shifted keys
     if (!caps || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) return true;
@@ -106,7 +80,33 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
             keycode == KC_UNDS ||
             (KC_A <= keycode && keycode <= KC_0)
         )
-     ) tap_code(KC_CAPS);
+    ) tap_code(KC_CAPS);
+
+    return true;
+}
+
+
+// Send custom hold keycode
+static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
+    if (record->tap.count) return true;
+    tap_code16(keycode);
+    return false;
+}
+
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+#ifdef TAPPING_TERM_PER_KEY
+        tap_timer = timer_read_fast();
+#endif
+        if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
+
+        // Clipboard shortcuts
+        if      (keycode == TH_M)    return process_tap_hold(Z_PST, record);
+        else if (keycode == TH_COMM) return process_tap_hold(Z_CPY, record);
+        else if (keycode == TH_DOT)  return process_tap_hold(Z_CUT, record);
+        else if (keycode == TH_SLSH) return process_tap_hold(Z_UND, record);
+    }
 
     return true;
 }
