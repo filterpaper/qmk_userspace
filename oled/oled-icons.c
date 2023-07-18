@@ -21,7 +21,7 @@
 #include QMK_KEYBOARD_H
 
 
-static inline void render_logo(void) {
+static void render_logo(void) {
     static char const corne_logo[] PROGMEM = {
         0x80, 0x81, 0x82, 0x83, 0x84,
         0xa0, 0xa1, 0xa2, 0xa3, 0xa4,
@@ -34,7 +34,7 @@ static inline void render_logo(void) {
 }
 
 
-static inline void render_layer_state(uint8_t const state) {
+static void render_layer_state(uint8_t const state) {
     static char const base_layer[] PROGMEM = {
         0x20, 0x9a, 0x9b, 0x9c, 0x20,
         0x20, 0xba, 0xbb, 0xbc, 0x20,
@@ -59,7 +59,7 @@ static inline void render_layer_state(uint8_t const state) {
 }
 
 
-static inline void render_gui_alt(uint8_t const gui, uint8_t const alt) {
+static void render_gui_alt(uint8_t const gui, uint8_t const alt) {
     static char const gui_off_1[] PROGMEM = {0x85, 0x86, 0};
     static char const gui_off_2[] PROGMEM = {0xa5, 0xa6, 0};
     static char const gui_on_1[]  PROGMEM = {0x8d, 0x8e, 0};
@@ -98,7 +98,7 @@ static inline void render_gui_alt(uint8_t const gui, uint8_t const alt) {
 }
 
 
-static inline void render_ctrl_shift(uint8_t const ctrl, uint8_t const shift) {
+static void render_ctrl_shift(uint8_t const ctrl, uint8_t const shift) {
     static char const ctrl_off_1[] PROGMEM = {0x89, 0x8a, 0};
     static char const ctrl_off_2[] PROGMEM = {0xa9, 0xaa, 0};
     static char const ctrl_on_1[]  PROGMEM = {0x91, 0x92, 0};
