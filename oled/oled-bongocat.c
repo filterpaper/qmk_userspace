@@ -207,7 +207,7 @@ static unsigned char const *left_tap[TAP_FRAMES] = {
 // RLE decoding loop that reads count from frame index
 // If count >= 0x80, next (count - 128) bytes are unique
 // If count < 0x80, next byte is repeated by count
-static inline void decode_frame(unsigned char const *frame) {
+static void decode_frame(unsigned char const *frame) {
     uint16_t cursor = 0;
     uint8_t i = 1, size = pgm_read_byte(frame);
 
@@ -232,7 +232,7 @@ static inline void decode_frame(unsigned char const *frame) {
 }
 
 
-static inline void animate_cat(uint32_t interval) {
+static void animate_cat(uint32_t interval) {
     static uint8_t tap_index = 0, idle_index = 0;
 
     if (interval < TAP_INTERVAL) {
@@ -247,7 +247,7 @@ static inline void animate_cat(uint32_t interval) {
 }
 
 
-static inline void render_bongocat(void) {
+static void render_bongocat(void) {
     static uint16_t frame_timer = 0;
     uint32_t input_timer = last_matrix_activity_time();
 

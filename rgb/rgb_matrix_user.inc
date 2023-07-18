@@ -26,7 +26,7 @@ uint8_t jsf8_min_max(uint8_t min, uint8_t max) {
 RGB_MATRIX_EFFECT(CANDY_TAP)
 #   ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_TAP(effect_params_t* params) {
-    inline HSV CANDY_TAP_math(HSV hsv, uint16_t offset) {
+    HSV CANDY_TAP_math(HSV hsv, uint16_t offset) {
         hsv.h = scale16by8(g_rgb_timer, qadd8(rgb_matrix_config.speed, 8) >> 4);
         hsv.v = scale8(255 - offset, hsv.v);
         return hsv;
@@ -41,7 +41,7 @@ static bool CANDY_TAP(effect_params_t* params) {
 RGB_MATRIX_EFFECT(CANDY_SPLASH)
 #   ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool CANDY_SPLASH(effect_params_t* params) {
-    inline HSV CANDY_WIDE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
+    HSV CANDY_WIDE_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
         uint16_t effect = tick + dist * 5;
         if (effect > 255) effect = 255;
         hsv.h = scale16by8(g_rgb_timer, qadd8(rgb_matrix_config.speed, 8) >> 4);
@@ -59,13 +59,13 @@ RGB_MATRIX_EFFECT(CANDY_RAIN)
 #   ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
 static uint8_t a, b, c, d, t;
-static inline uint8_t prng(void) {
+static uint8_t prng(void) {
 #   define rot(x,k) (((x) << (k)) | ((x) >> (8 - (k))))
     t = a - rot(b, 1); a = b ^ rot(c, 4);
     b = c + d; c = d + t; d = t + a;
     return d;
 }
-static inline void prng_seed(const uint8_t seed) {
+static void prng_seed(const uint8_t seed) {
     a = 161, b = c = d = seed;
     for (uint8_t i = 0; i < 32; ++i) (void)prng();
 }
@@ -75,7 +75,7 @@ static inline void prng_seed(const uint8_t seed) {
 static bool CANDY_RAIN(effect_params_t* params) {
     static uint32_t wait_timer = 0;
 
-    inline void rain_candy(uint8_t led_index) {
+    void rain_candy(uint8_t led_index) {
         if (!HAS_ANY_FLAGS(g_led_config.flags[led_index], params->flags)) return;
         HSV hsv = prng() & 2 ? (HSV){0, 0, 0} : (HSV){prng(), prng_min_max(127, 255), rgb_matrix_config.hsv.v};
         RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
