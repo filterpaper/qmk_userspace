@@ -2,7 +2,7 @@
 
 This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is set up as a self-contained repository that does not require user files to be stored in keyboard sub-folders. To build it, place this repository within QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) folder and compile with the JSON files. Alternatively, you can use GitHub [Actions](https://docs.github.com/en/actions) to build it on a container with the [build.yml](.github/workflows/build.yml) workflow.
 
-![corneplanck](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/corneplanck.png)
+![kb](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/sweep_gateron.png)
 
 ## Features
 * [Contextual](#Contextual-mod-taps) mod-taps
