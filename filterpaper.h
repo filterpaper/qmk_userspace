@@ -6,8 +6,10 @@
 
 extern void autocorrect_toggle(void);
 extern bool process_autocorrect(uint16_t keycode, keyrecord_t *record);
-static bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
-static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) __attribute__((always_inline));
+#if defined (CONVERT_TO_KB2040) && defined (RGB_MATRIX_ENABLE)
+__attribute__((flatten)) static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record);
+#endif
+__attribute__((always_inline)) static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record);
 
 // Return mod-tap modifiers in 8bit for MOD_MASK_* logical operations
 #define GET_MT_MOD_BITS(kc) ((kc & 0x1000) ? ((kc >> 8) & 0x0f) << 4 : (kc >> 8) & 0x0f)
