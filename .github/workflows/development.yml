@@ -12,9 +12,9 @@ jobs:
       fail-fast: false
       matrix:
         keyboard: [a_dux, cradio, corne]
-        conv: [elite_pi, kb2040, stemcell]
+        conv: [elite_pi, kb2040]
         split: [left, right]
-        repository: [filterpaper/qmk_firmware]
+        repository: [qmk/qmk_firmware]
         branch: [develop]
         exclude:
         - keyboard: corne
