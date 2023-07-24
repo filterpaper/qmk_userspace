@@ -58,7 +58,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 
 // Turn off caps lock at the end of a word
-static bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
+static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     bool    const caps = host_keyboard_led_state().caps_lock;
     uint8_t const mods = get_mods();
 
@@ -124,9 +124,5 @@ void housekeeping_task_user(void) {
 
 
 // Simplify unused magic config functions
-uint16_t keycode_config(uint16_t keycode) {
-    return keycode;
-}
-uint8_t mod_config(uint8_t mod) {
-    return mod;
-}
+uint8_t mod_config(uint8_t mod) { return mod; }
+uint16_t keycode_config(uint16_t keycode) { return keycode; }
