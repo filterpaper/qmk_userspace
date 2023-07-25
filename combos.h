@@ -3,18 +3,18 @@
 
 /*
 An adaptation of Jane Bernhardt's Combos on Steroids (http://combos.gboards.ca/)
-These preprocessors will construct combo source with the following macros in COMBOS_DEF:
+These preprocessors will build combo source codes from the following macros:
 COMB(name, keycode_shortcut, combo_sequence...)
 SUBS(name, "string to send", combo_sequence...)
 ACTN(name, function_call(),  combo_sequence...)
 
-Use the COMB macro to create simple keycode shortcuts with two or more keys
+Use the COMB macro for simple keycode shortcuts
 Example: COMB(vol_up, KC_VOLU, KC_Y, KC_U).
 
-Use the SUBS macro for shotcuts to send short strings and phrases
+Use the SUBS macro for sending strings
 Example: SUBS(which, "which ", KC_W, KC_H).
 
-Use the ACTN macro for combos to call internal functions
+Use the ACTN macro for function callbacks
 Example: ACTN(rgb_tog, rgb_matrix_toggle(), KC_Z, KC_X)
 */
 
@@ -67,6 +67,6 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 
 #ifdef COMBO_SHOULD_TRIGGER
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-    return (tog_num <= combo_index && combo_index <= tog_fnc) || get_highest_layer(layer_state) <= CMK;
+    return (thmb_l <= combo_index && combo_index <= tog_fnc) || get_highest_layer(layer_state) <= CMK;
 }
 #endif
