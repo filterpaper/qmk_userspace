@@ -22,6 +22,7 @@ endif
 
 ifneq ($(strip $(CONVERT_TO)),)
     EEPROM_DRIVER = transient
+    DEBOUNCE_TYPE = sym_defer_pr
     ifeq ($(strip $(CONVERT_TO)), kb2040)
         RGB_MATRIX_ENABLE = yes
         RGB_MATRIX_DRIVER = WS2812
@@ -33,7 +34,7 @@ ifneq ($(strip $(CONVERT_TO)),)
     endif
 endif
 
-ifeq ($(strip $(KEYBOARD)), $(filter $(KEYBOARD), crkbd/rev1))
+ifeq ($(strip $(KEYBOARD)), crkbd/rev1)
     RGB_MATRIX_ENABLE = yes
     RGB_MATRIX_CUSTOM_USER = yes
     SRC += rgb-matrix.c

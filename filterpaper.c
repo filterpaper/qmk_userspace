@@ -20,11 +20,9 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 #ifdef TAPPING_TERM_PER_KEY
-static fast_timer_t tap_timer = 0;
-
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Increase tapping term for the non-Shift home row mod-tap while typing
-    return IS_HOMEROW(record) && !IS_MOD_TAP_SHIFT(keycode) && IS_TYPING() ? TAPPING_TERM * 2 : TAPPING_TERM;
+    // Decrease tapping term for home row Shift
+    return IS_HOMEROW(record) && IS_MOD_TAP_SHIFT(keycode) ? TAPPING_TERM - 30 : TAPPING_TERM;
 }
 #endif
 
@@ -96,9 +94,6 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-#ifdef TAPPING_TERM_PER_KEY
-        tap_timer = timer_read_fast();
-#endif
         if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
 
         // Clipboard shortcuts
