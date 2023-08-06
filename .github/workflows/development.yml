@@ -37,6 +37,11 @@ jobs:
     - name: Configure safe directory
       run: git config --global --add safe.directory '*'
 
+    - name: Apply PRs
+      run: |
+        wget -qO - https://github.com/qmk/qmk_firmware/pull/21494.diff | git apply -v
+        wget -qO - https://github.com/qmk/qmk_firmware/pull/21667.diff | git apply -v
+
     - name: Compile
       env:
         conv: ${{ matrix.conv }}
@@ -46,13 +51,14 @@ jobs:
         qmk -v compile -j 3 $path/${{ matrix.keyboard }}.json
         ${conv:+-e CONVERT_TO=$conv} ${split:+-e SPLIT=$split}
         -e TARGET=${{ matrix.keyboard }}${conv:+_$conv}${split:+_$split}
+        && echo "suffix=${conv:+_$conv}" >> $GITHUB_ENV
 
     - name: Archive firmware
       if: github.event_name == 'workflow_dispatch'
       uses: actions/upload-artifact@main
       with:
         retention-days: 3
-        name: ${{ matrix.keyboard }}_${{ matrix.conv }}
+        name: ${{ matrix.keyboard }}${{ env.suffix }}
         path: |
           *.hex
           *.bin
