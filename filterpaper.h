@@ -25,8 +25,8 @@ __attribute__((always_inline)) static inline bool process_tap_hold(uint16_t keyc
     (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) ))
 
 #define IS_BILATERAL_TAP(r, n) ( \
-    (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 6) || \
-    (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 2) )
+    (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 7) || \
+    (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 3) )
 
 #ifdef COMBO_ENABLE
 #   include "combos.h"
