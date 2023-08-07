@@ -3,8 +3,6 @@
 
 #include "filterpaper.h"
 
-
-#if defined (PERMISSIVE_HOLD_PER_KEY) || defined (HOLD_ON_OTHER_KEY_PRESS_PER_KEY)
 static uint16_t    next_keycode;
 static keyrecord_t next_record;
 
@@ -16,35 +14,22 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
-#endif
 
 
-#ifdef TAPPING_TERM_PER_KEY
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Decrease tapping term for home row Shift
-    return IS_HOMEROW(record) && IS_MOD_TAP_SHIFT(keycode) ? TAPPING_TERM - 30 : TAPPING_TERM;
-}
-#endif
-
-
-#ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     // Hold Control and Shift with a nested key tap on the opposite hand
     return IS_BILATERAL_TAP(record, next_record) && IS_MOD_TAP_CS(keycode);
 }
-#endif
 
 
-#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    // Replace the mod-tap key with its base keycode when
-    // tapped with another non-Shift key on the same hand
-    if (IS_UNILATERAL_TAP(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) {
+    // When a mod-tap key is tapped with another non-Shift key on the same
+    // hand without any other modifiers active, its base keycode is sent
+    if (IS_UNILATERAL_TAP(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode) && !get_mods()) {
         record->keycode = keycode & 0xff;
         process_record(record);
         record->event.pressed = false;
         process_record(record);
-        return true;
     }
     // Hold layer with another key press
     else if (IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode)) {
@@ -52,7 +37,6 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     }
     return false;
 }
-#endif
 
 
 // Turn off caps lock at the end of a word

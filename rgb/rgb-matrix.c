@@ -49,9 +49,7 @@ bool rgb_matrix_indicators_user(void) {
         uint8_t const mods = get_mods();
         RGB const rgb = hsv_to_rgb((HSV){(mods >> 4 | mods) * 16, 255, rgb_matrix_config.hsv.v});
         for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
-            if (g_led_config.flags[i] & mods) {
-                rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
-            }
+            if (g_led_config.flags[i] & mods) rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
         }
     }
 #endif
