@@ -5,8 +5,8 @@ This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_fi
 ![kb](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/cradio_pink.png)
 
 ## Features
-* [Contextual](#Contextual-mod-taps) mod-taps
-* [Layout](layout.h) wrapper macros
+* [Contextual](#contextual-mod-taps) mod-taps
+* [Layout](#layout-wrapper-macros) wrapper macros
 * [Combos](combos.h) with preprocessors
 * [Autocorrect](autocorrect/) word processing
 * [OLED](oled/) indicators and animation
@@ -67,8 +67,6 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
         // Send the base keycode key up event
         record->event.pressed = false;
         process_record(record);
-        // Return true to end action tapping process
-        return true;
     }
     return false;
 }
@@ -149,17 +147,16 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 ```
 
 ## Implementation
-Each configuration can be used individually to improve mod-tap trigger accuracy based on personal typing habits. Additionally, the `if` conditions within each configuration can be fine-tuned for specific use cases.
+Each configuration can be used individually to improve mod-tap trigger accuracy based on personal typing habits. Additionally, conditional statements within each configuration should be fine-tuned for specific use cases.
 
 
 &nbsp;</br> &nbsp;</br>
 
 # Layout Wrapper Macros
-
-## Basic setup
 A single keymap layout can be shared with multiple keyboards by using C preprocessor macros. These macros are referenced in the keyboard JSON files, and the build process will expand them into a transient `keymap.c` file during compile time.
 
-The following `split_3x5_2` layout is used as the base and defined in `layout.h`:
+## Basic setup
+The `split_3x5_2` layout is used as the base, with layers defined in `layout.h`. The following is an example of a default layer:
 ```c
 #define _BASE \
     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
@@ -167,11 +164,13 @@ The following `split_3x5_2` layout is used as the base and defined in `layout.h`
     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,      KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
                   LT(SYM,KC_TAB), LCA_T(KC_ENT),   RSFT_T(KC_SPC), LT(NUM,KC_BSPC)
 ```
-Next, a wrapper alias to the layout used by the keyboard is also defined in the `layout.h` file. For example, the following code defines a wrapper alias for the Cradio layout:
+Next, a wrapper alias to the layout used by the keyboard is also defined in the `layout.h` file. For example, the following defines a wrapper alias for the Cradio layout:
 ```c
 #define LAYOUT_34key_w(...) LAYOUT_split_3x5_2(__VA_ARGS__)
 ```
-Both macros are referenced in the keyboard JSON file as follows:
+> Wrapper alias is necessary to allow the compiler to expand an single macro keyword into multiple elements in the build process.
+
+Both layout and layer macros are referenced in the keyboard JSON file (`cradio.json`) as follows:
 ```c
 {
     "keyboard": "cradio",
@@ -185,33 +184,37 @@ Both macros are referenced in the keyboard JSON file as follows:
     ]
 }
 ```
-To include the layout macros defined in the `layout.h` file, add the following line to the `config.h` file:
+To include the layout macros in the `layout.h` file, add the following line into the `config.h` file:
 ```c
-#include layout.h
+#ifndef __ASSEMBLER__
+#    include layout.h
+#endif
 ```
-The build process will then construct a transient `keymap.c` file using the C preprocessor macros referenced by the JSON file. Wrapper aliases are necessary because the `LAYOUT_34key_w(_BASE)` macro contains a single variable, and both macros are replaced (expanded) in the build process concurrently.
+> The assembler definition will prevent that file from being assembled in any build process where C opcodes are not valid.
+
+Running `qmk compile cradio.json` will cause the build process to construct a transient `keymap.c` using the wrapper macros for compilation.
 
 ## Wrapping home row modifiers
-[Home row mods](https://precondition.github.io/home-row-mods) can be added to the layout macros. The order of the home row modifiers is defined by these two macros:
+[Home row mods](https://precondition.github.io/home-row-mods) can be added to the layout macros in the same manner. The order of the home row modifiers is defined by these two macros:
 ```c
-#define HRML(k1,k2,k3,k4) LSFT_T(k1),LALT_T(k2),LCTL_T(k3),LGUI_T(k4)
-#define HRMR(k1,k2,k3,k4) RGUI_T(k1),RCTL_T(k2),RALT_T(k3),RSFT_T(k4)
+#define HRML(k1,k2,k3,k4)  LSFT_T(k1), LALT_T(k2), LCTL_T(k3), LGUI_T(k4)
+#define HRMR(k1,k2,k3,k4)  RGUI_T(k1), RCTL_T(k2), RALT_T(k3), RSFT_T(k4)
 ```
-Both are then placed within the `HRM` macro for the `split_3x5_2` base:
+Both are then used to transform the home row elements in the following `HRM` wrapper macro for the `split_3x5_2` layout:
 ```c
 #define HRM(k) HRM_TAPHOLD(k)
 #define HRM_TAPHOLD( \
-      l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05, \
-      l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10, \
-      l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15, \
-                     l16, l17,    r16, r17                 \
+      l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05,       \
+      l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10,       \
+      l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15,       \
+                     l16, l17,    r16, r17                       \
 ) \
       l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05,       \
 HRML(l06, l07, l08, l09), l10,    r06, HRMR(r07, r08, r09, r10), \
       l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15,       \
                      l16, l17,    r16, r17
 ```
-The `HRM()` macro is used in the JSON file to define home row modifiers for layers that require them. For example:
+The `HRM()` macro can now be used in the JSON file to add home row modifiers for layers that require them. For example:
 ```c
 "layers": [
     [ "HRM(_BASE)" ],
@@ -221,25 +224,26 @@ The `HRM()` macro is used in the JSON file to define home row modifiers for laye
     [ "_FUNC" ]
 ],
 ```
+> When setup this way, the home row modifier order can be easily edited in both `HRML` and `HRMR` macros.
 
-## Adapting layouts
-The base layout can be shared and adapted for other split keyboards by expanding it with macros. The following example expands Cradio's 34-key layout to Corne's 42-key 3x6_3 layout (6 columns, 3 thumb keys) using the following wrapper macro to add additional keys to the outer columns:
+## Adapting for a different layout
+The base layout can be adapted for other split keyboards by expanding it with macros. The following example expands the `split_3x5_2` layout to Corne's 42-key 3x6_3 layout (6 columns, 3 thumb keys) using the following wrapper to add additional keys to the outer columns:
 ```c
 #define LAYOUT_corne_w(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 // 3x5_2 to 42-key conversion
 #define C_42(k) CONV_42(k)
 #define CONV_42( \
-         l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05, \
-         l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10, \
-         l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15, \
-                        l16, l17,    r16, r17                 \
+         l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05,          \
+         l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10,          \
+         l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15,          \
+                        l16, l17,    r16, r17                          \
 ) \
 KC_TAB,  l01, l02, l03, l04, l05,    r01, r02, r03, r04, r05, KC_BSPC, \
 QK_GESC, l06, l07, l08, l09, l10,    r06, r07, r08, r09, r10, KC_SCLN, \
 KC_LSFT, l11, l12, l13, l14, l15,    r11, r12, r13, r14, r15, KC_ENT,  \
          RSA_T(KC_ESC), l16, l17,    r16, r17, RAG_T(KC_DEL)
 ```
-The JSON file for 42-key Corne uses the `C_42()` macro in the following format:
+The JSON file for Corne (`corne.json`) will use the conversion and HRM macro in the following format:
 ```c
 {
     "keyboard": "crkbd/rev1",
@@ -406,9 +410,7 @@ dfu-flash() {
 ```
 
 
-
-&nbsp;</br>
-&nbsp;</br>
+&nbsp;</br> &nbsp;</br>
 
 # Useful Links
 
