@@ -39,6 +39,12 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    // Decrease tapping term for the home row Shift
+    return IS_HOMEROW(record) && IS_MOD_TAP_SHIFT(keycode) ? TAPPING_TERM - 50 : TAPPING_TERM;
+}
+
+
 // Turn off caps lock at the end of a word
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     bool    const caps = host_keyboard_led_state().caps_lock;
