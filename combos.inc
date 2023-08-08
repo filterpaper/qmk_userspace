@@ -11,19 +11,19 @@ ACTN(swap_r, swap_hands_toggle(), TH_M, TH_COMM, TH_DOT)
 ACTN(tog_ac, autocorrect_toggle(), KC_U, KC_I, KC_O)
 
 // Macros
-SUBS(vi_quit, ":q!",   KC_Q,    KC_W)
-SUBS(vi_save, ":x",    KC_Z,    KC_X)
-SUBS(dir_up,  "../",   TH_DOT,  TH_SLSH)
+SSTR(vi_quit,  ":q!",    KC_Q,    KC_W)
+SSTR(vi_save,  ":x",     KC_Z,    KC_X)
+SSTR(dir_up,   "../",    TH_DOT,  TH_SLSH)
 
-COMB(vol_up,  KC_VOLU, KC_P,    HM_QUOT)
-COMB(vol_dn,  KC_VOLD, HM_QUOT, TH_SLSH)
-COMB(cap_lk,  KC_CAPS, HM_F,    HM_J)
-// Noop thumbs
-COMB(thmb_l,  KC_NO,   SYM_TAB, LCA_ENT)
-COMB(thmb_r,  KC_NO,   SFT_SPC, NUM_BSP)
-// Layer toggles
-COMB(tog_num, TG(NUM), NUM_BSP, KC_N, TH_M)
-COMB(tog_fnc, TG(FNC), SYM_TAB, KC_B, KC_V)
+COMB(vol_up,   KC_VOLU,  KC_P,    HM_QUOT)
+COMB(vol_dn,   KC_VOLD,  HM_QUOT, TH_SLSH)
+COMB(cap_lk,   KC_CAPS,  HM_F,    HM_J)
 // Navigation
-COMB(nav_dn,  S(A(KC_DOWN)), TH_M,    TH_COMM)
-COMB(nav_up,  S(A(KC_UP)),   TH_COMM, TH_DOT)
+COMB(nav_dn,   SA_DN,    TH_M,    TH_COMM)
+COMB(nav_up,   SA_UP,    TH_COMM, TH_DOT)
+// Noop thumbs
+COMB(thmb_l,   KC_NO,    SYM_TAB, LCA_ENT)
+COMB(thmb_r,   KC_NO,    SFT_SPC, NUM_BSP)
+// Layer toggles
+COMB(tog_num,  TG(NUM),  NUM_BSP, KC_N, TH_M)
+COMB(tog_fnc,  TG(FNC),  SYM_TAB, KC_B, KC_V)
