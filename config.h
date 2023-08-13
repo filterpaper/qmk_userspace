@@ -21,10 +21,6 @@
 #define HOLD_ON_OTHER_KEY_PRESS
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
-#ifdef CONVERT_TO_ELITE_PI
-#   define DEBOUNCE 12
-#endif
-
 #ifdef COMBO_ENABLE
 #   define COMBO_TERM 30
 #   define EXTRA_SHORT_COMBOS

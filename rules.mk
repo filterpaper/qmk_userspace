@@ -22,7 +22,6 @@ endif
 
 ifneq ($(strip $(CONVERT_TO)),)
     EEPROM_DRIVER = transient
-    DEBOUNCE_TYPE = sym_defer_pr
     ifeq ($(strip $(CONVERT_TO)), kb2040)
         RGB_MATRIX_ENABLE = yes
         RGB_MATRIX_DRIVER = WS2812
