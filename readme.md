@@ -424,6 +424,7 @@ dfu-flash() {
 * [Autocorrections with QMK](https://getreuer.info/posts/keyboards/autocorrection/index.html)
 
 ## Hardware Parts
+* [ProMicro RP2040](https://www.aliexpress.com/item/1005005881019149.html)
 * [Adafruit KB2040](https://www.adafruit.com/product/5302)
 * [Elite-Pi](https://keeb.io/collections/diy-parts/products/elite-pi-usb-c-pro-micro-replacement-rp2040)
 * Mill-Max [315-43-112-41-003000](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) low profile sockets
