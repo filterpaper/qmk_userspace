@@ -2,6 +2,7 @@
 MAGIC_ENABLE = no
 CONSOLE_ENABLE = no
 UNICODE_ENABLE = no
+GRAVE_ESC_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Enable common features
