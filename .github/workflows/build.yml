@@ -15,14 +15,11 @@ jobs:
       fail-fast: false
       matrix:
         keyboard: [a_dux, cradio]
-        conv: [elite_pi, kb2040]
+        conv: [helios, kb2040]
         split: [left, right]
         exclude:
         - keyboard: a_dux
           conv: kb2040
-        include:
-        - keyboard: cradio
-          conv: ''
 
     steps:
     - name: Checkout QMK
