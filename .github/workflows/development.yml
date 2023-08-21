@@ -12,20 +12,21 @@ jobs:
       fail-fast: false
       matrix:
         keyboard: [a_dux, cradio, corne]
-        conv: [elite_pi, kb2040]
+        conv: [helios, kb2040]
         split: [left, right]
-        repository: [qmk/qmk_firmware]
-        branch: [develop]
         exclude:
         - keyboard: corne
           conv: kb2040
+        include:
+        - keyboard: cradio
+          conv: ''
 
     steps:
-    - name: Checkout ${{ matrix.repository }}/${{ matrix.branch }} branch
+    - name: Checkout QMK
       uses: actions/checkout@main
       with:
-        repository: ${{ matrix.repository }}
-        ref: ${{ matrix.branch }}
+        repository: qmk/qmk_firmware
+        ref: develop
         submodules: true
 
     - name: Checkout ${{ github.actor }} userspace

@@ -23,14 +23,12 @@ endif
 
 ifneq ($(strip $(CONVERT_TO)),)
     EEPROM_DRIVER = transient
+    MAKECMDGOALS = uf2-split-$(SPLIT)
     ifeq ($(strip $(CONVERT_TO)), kb2040)
         RGB_MATRIX_ENABLE = yes
-        RGB_MATRIX_DRIVER = WS2812
+        RGB_MATRIX_DRIVER = ws2812
         RGB_MATRIX_CUSTOM_USER = yes
         SRC += rgb-matrix.c
-    endif
-    ifeq ($(strip $(SPLIT)), $(filter $(SPLIT), left right))
-        MAKECMDGOALS = uf2-split-$(SPLIT)
     endif
 endif
 
