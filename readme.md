@@ -1,6 +1,6 @@
 # Summary
 
-This is my personal *userspace* for [QMK Firmware](https://github.com/qmk/qmk_firmware). It is set up as a self-contained repository that does not require user files to be stored in keyboard sub-folders. To build it, place this repository within QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) folder and compile with the JSON files. Alternatively, you can use GitHub [Actions](https://docs.github.com/en/actions) to build it on a container with the [build.yml](.github/workflows/build.yml) workflow.
+My personal [QMK](https://github.com/qmk/qmk_firmware) *userspace* is a self-contained repository that does not require user files to be placed within keyboard sub-folders. To build it, either place the repository within QMK's [userspace](https://docs.qmk.fm/#/feature_userspace) folder and compile with the JSON files, or use GitHub [Actions](https://docs.github.com/en/actions) to build it in a container with its [workflow](.github/workflows/build.yml).
 
 ![kb](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/cradio_pink.png)
 
@@ -52,6 +52,7 @@ Boolean macros to make the mod-tap decision functions more concise and easier to
     (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 6) || \
     (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 2) )
 ```
+> *These macros will be used to compare the current `keyrecord_t *record` values with the ones in `keyrecord_t next_record`*
 
 ## Stringent unilateral tap
 Modifiers should not be triggered when a mod-tap key is pressed in combination with another key on the same hand. To accomplish this, the mod-tap key is replaced with its base keycode when the *next* tap record is made on the same side side of the keyboard:
@@ -122,7 +123,7 @@ To prevent the function from disabling quick access to layer keys, the previous 
 > *The output experience will be similar to ZMK's quick tap behaviour with the [global-quick-tap](https://zmk.dev/docs/behaviors/hold-tap#global-quick-tap) setting enabled.*
 
 ## Hold delay
-If the "[Instant Tap](#instant-tap)" configuration is too aggressive, a gentler approach is to delay the activation of modifiers while typing quickly. To do this, a tap timer is set up in the `process_record_user` function to record the time of each key press:
+If the "[Instant Tap](#instant-tap)" configuration is too aggressive, a gentler approach is to delay the activation interval time of modifiers while typing quickly. To do this, a tap timer is set up in the `process_record_user` function to record the time of each key press:
 ```c
 static fast_timer_t tap_timer = 0;
 
@@ -147,7 +148,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 ```
 
 ## Implementation
-Each configuration can be used individually to improve mod-tap trigger accuracy based on personal typing habits. Additionally, conditional statements within each configuration should be fine-tuned for specific use cases.
+Each configuration can be used independently to improve mod-tap trigger accuracy based on personal typing habits. Conditional statements within each configuration should also be fine-tuned for specific use cases.
 
 
 &nbsp;</br> &nbsp;</br>
