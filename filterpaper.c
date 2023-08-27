@@ -59,16 +59,15 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
         keycode &= 0xff;
     }
 
-    // Identify word breaks
-    if (mods & ~MOD_MASK_SHIFT ||
-        !(
-            keycode == KC_CAPS ||
-            keycode == KC_BSPC ||
-            keycode == KC_MINS ||
-            keycode == KC_UNDS ||
-            (KC_A <= keycode && keycode <= KC_0)
-        )
-    ) tap_code(KC_CAPS);
+    // Identify caps lock retention key codes
+    switch (keycode) {
+        case KC_A ... KC_0:
+        case KC_BSPC:
+        case KC_MINS:
+        case KC_UNDS:
+        case KC_CAPS: if (!mods) return true;
+        default: tap_code(KC_CAPS);
+    }
 
     return true;
 }
