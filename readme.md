@@ -19,7 +19,7 @@ My personal [QMK](https://github.com/qmk/qmk_firmware) *userspace* is a self-con
 Mod-taps are very useful on the home row of small split keyboards. They can be triggered more accurately when their tap or hold decision is based on the preceding or subsequent keys. The following contextual configuration will do just that, using input that comes before and after the mod-tap key.
 
 ## Next key record
-Use the `pre_process_record_user` function to capture every key record before it is passed to quantum processing. While action tapping is resolving a mod-tap key, this function will copy the *next* key record of an input that follows. That key record will be used to influence the decision of the mod-tap key that is currently undergoing quantum processing:
+Use the `pre_process_record_user` function to capture every key record before it is passed to quantum processing. While action tapping is resolving a mod-tap key, this function will cache the *next* key record of an input that follows. That key record will be used to influence the decision of the mod-tap key that is currently undergoing quantum processing:
 ```c
 static uint16_t next_keycode;
 static keyrecord_t next_record;
@@ -33,7 +33,6 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 ```
-The `next_record` extracts the entire `keyrecord_t` structure. However, if only one element of the structure is needed for decision-making, it is more efficient to copy that specific variable alone. For example: `uint8_t next_row = record->event.key.row;`.
 
 ## Decision macros
 Boolean macros to make the mod-tap decision functions more concise and easier to read:
@@ -41,9 +40,8 @@ Boolean macros to make the mod-tap decision functions more concise and easier to
 // Matches rows on a 3x5_2 split keyboard
 #define IS_HOMEROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
 
-// Mod-tap and the key that follows are not the same keys
-// and they are on the same side of the keyboard
-#define IS_UNILATERAL_TAP(r, n) ((r->event.key.col != n.event.key.col) && (    \
+// Mod-tap and the key that follows are on the same side of the keyboard
+#define IS_UNILATERAL_TAP(r, n) ( r->event.key.col != n.event.key.col &&    (  \
     (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
     (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) ))
 
@@ -52,7 +50,7 @@ Boolean macros to make the mod-tap decision functions more concise and easier to
     (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 6) || \
     (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 2) )
 ```
-> *These macros will be used to compare the current `keyrecord_t *record` values with the ones in `keyrecord_t next_record`*
+> *These macros are used to compare the current `keyrecord_t *record` pointer values with the cached ones in `keyrecord_t next_record`*
 
 ## Stringent unilateral tap
 Modifiers should not be triggered when a mod-tap key is pressed in combination with another key on the same hand. To accomplish this, the mod-tap key is replaced with its base keycode when the *next* tap record is made on the same side side of the keyboard:
@@ -85,13 +83,13 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 }
 #endif
 ```
-The `return` statement can be modified to include narrow modifier matches for frequent use-cases like Shift or exclude destructive ones like Ctrl. 
+The conditional statement can be modified to include narrow modifier matches for frequent use-cases like Shift or exclude destructive ones like Ctrl. 
 > *When used together, unilateral tap and bilateral hold will be comparable to ZMK's [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions).*
 
 ## Instant tap
 Mod-tap key-up delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the mod-tap key is replaced with its base keycode before quantum processing if the time interval from the previous key press is less than the `TAP_INTERVAL_MS` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
 ```c
-#define TAP_INTERVAL_MS 100
+#define TAP_INTERVAL_MS TAPPING_TERM / 2
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t prev_keycode;
@@ -123,7 +121,7 @@ To prevent the function from disabling quick access to layer keys, the previous 
 > *The output experience will be similar to ZMK's quick tap behaviour with the [global-quick-tap](https://zmk.dev/docs/behaviors/hold-tap#global-quick-tap) setting enabled.*
 
 ## Hold delay
-If the "[Instant Tap](#instant-tap)" configuration is too aggressive, a gentler approach is to delay the activation interval time of modifiers while typing quickly. To do this, a tap timer is set up in the `process_record_user` function to record the time of each key press:
+If the "[Instant Tap](#instant-tap)" configuration is too aggressive, a gentler approach to avoid unintended modifier activation is to increase the activation interval time while typing rapidly. To do this, a tap timer is set up in the `process_record_user` function to record the time of each key press:
 ```c
 static fast_timer_t tap_timer = 0;
 
@@ -147,8 +145,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #endif
 ```
 
-## Implementation
-Each configuration can be used independently to improve mod-tap trigger accuracy based on personal typing habits. Conditional statements within each configuration should also be fine-tuned for specific use cases.
+## Implementation summary
+These decision functions will only occur within `TAPPING_TERM` interval, *before* tap or hold decisions are resolved by QMK. Each configuration can be used independently to improve mod-tap trigger accuracy based on personal typing habits. Conditional statements within them should also be fine-tuned for specific use cases.
 
 
 &nbsp;</br> &nbsp;</br>
@@ -198,8 +196,8 @@ Running `qmk compile cradio.json` will cause the build process to construct a tr
 ## Wrapping home row modifiers
 [Home row mods](https://precondition.github.io/home-row-mods) can be added to the layout macros in the same manner. The order of the home row modifiers is defined by these two macros:
 ```c
-#define HRML(k1,k2,k3,k4)  LSFT_T(k1), LALT_T(k2), LCTL_T(k3), LGUI_T(k4)
-#define HRMR(k1,k2,k3,k4)  RGUI_T(k1), RCTL_T(k2), RALT_T(k3), RSFT_T(k4)
+#define HRML(k1,k2,k3,k4)  LCTL_T(k1), LALT_T(k2), LGUI_T(k3), LSFT_T(k4)
+#define HRMR(k1,k2,k3,k4)  RSFT_T(k1), RGUI_T(k2), RALT_T(k3), RCTL_T(k4)
 ```
 Both are then used to transform the home row elements in the following `HRM` wrapper macro for the `split_3x5_2` layout:
 ```c
@@ -225,7 +223,7 @@ The `HRM()` macro can now be used in the JSON file to add home row modifiers for
     [ "_FUNC" ]
 ],
 ```
-> When setup this way, the home row modifier order can be easily edited in both `HRML` and `HRMR` macros.
+> When setup this way, the home row modifier order can be easily edited in the `HRML` and `HRMR` macros.
 
 ## Adapting for a different layout
 The base layout can be adapted for other split keyboards by expanding it with macros. The following example expands the `split_3x5_2` layout to Corne's 42-key 3x6_3 layout (6 columns, 3 thumb keys) using the following wrapper to add additional keys to the outer columns:
@@ -425,7 +423,7 @@ dfu-flash() {
 * [Autocorrections with QMK](https://getreuer.info/posts/keyboards/autocorrection/index.html)
 
 ## Hardware Parts
-* [ProMicro RP2040](https://www.aliexpress.com/item/1005005881019149.html)
+* Low cost [ProMicro RP2040](https://www.aliexpress.com/item/1005005881019149.html)
 * [Adafruit KB2040](https://www.adafruit.com/product/5302)
 * [Elite-Pi](https://keeb.io/collections/diy-parts/products/elite-pi-usb-c-pro-micro-replacement-rp2040)
 * Mill-Max [315-43-112-41-003000](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) low profile sockets
