@@ -4,15 +4,14 @@
 #pragma once
 
 // Common QMK settings
-#define TAP_CODE_DELAY 5
-#define TAP_HOLD_CAPS_DELAY 90
+#define DEBOUNCE 10
 #define USB_SUSPEND_WAKEUP_DELAY 2000
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 1500U
 // Space saving options
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
-#define TAPPING_TERM 220
+#define TAPPING_TERM 210
 #define TAPPING_TERM_PER_KEY
 #define QUICK_TAP_TERM TAPPING_TERM / 2
 #define PERMISSIVE_HOLD
