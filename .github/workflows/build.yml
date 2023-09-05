@@ -23,14 +23,14 @@ jobs:
 
     steps:
     - name: Checkout QMK
-      uses: actions/checkout@v3.6.0
+      uses: actions/checkout@main
       with:
         repository: qmk/qmk_firmware
         ref: develop
         submodules: true
 
     - name: Checkout userspace
-      uses: actions/checkout@v3.6.0
+      uses: actions/checkout@main
       with:
         path: users/${{ github.actor }}
         persist-credentials: false
