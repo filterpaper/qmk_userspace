@@ -49,7 +49,7 @@ jobs:
         -e TARGET=${{ matrix.keyboard }}${conv:+_$conv}${split:+_$split}
 
     - name: Archive firmware
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v3.1.3
       with:
         retention-days: 60
         name: ${{ matrix.keyboard }}_${{ matrix.conv }}
