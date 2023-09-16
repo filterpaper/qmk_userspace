@@ -153,15 +153,3 @@ KC_TAB,  l01, l02, l03, l04, l05,   r01, r02, r03, r04, r05, KC_BSPC, \
 QK_GESC, l06, l07, l08, l09, l10,   r06, r07, r08, r09, r10, KC_SCLN, \
 KC_LSFT, l11, l12, l13, l14, l15,   r11, r12, r13, r14, r15, KC_ENT,  \
          RSA_T(KC_ESC), l16, l17,   r16, r17, RAG_T(KC_DEL)
-
-
-// Ika asymmetry pins
-#ifdef KEYBOARD_a_dux
-#   undef DIRECT_PINS_RIGHT
-#   define DIRECT_PINS_RIGHT { \
-    { D3, B4, C6, F4, F7 }, \
-    { D0, E6, D4, F5, B1 }, \
-    { B5, D7, D2, F6, B3 }, \
-    { B6, B2, NO_PIN, NO_PIN, NO_PIN } \
-}
-#endif
