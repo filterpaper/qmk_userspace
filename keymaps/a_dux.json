@@ -1,5 +1,29 @@
 {
     "keyboard": "a_dux",
+    "config": {
+        "matrix_pins": {
+            "direct": [
+                ["C6", "D2", "F7", "B2", "F4"],
+                ["D7", "D0", "F6", "B3", "F5"],
+                ["E6", "D4", "D3", "B1", "B6"],
+                ["B4", "B5", null, null, null]
+            ]
+        },
+        "split": {
+            "enabled": true,
+            "soft_serial_pin": "D1",
+            "matrix_pins": {
+                "right": {
+                    "direct": [
+                        ["D3", "B4", "C6", "F4", "F7"],
+                        ["D0", "E6", "D4", "F5", "B1"],
+                        ["B5", "D7", "D2", "F6", "B3"],
+                        ["B6", "B2", null, null, null]
+                    ]
+                }
+            }
+        }
+    },
     "keymap": "filterpaper",
     "layout": "LAYOUT_34key_w",
     "layers": [
