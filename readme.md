@@ -53,7 +53,7 @@ Boolean macros to make the mod-tap decision functions more concise and easier to
 > *These macros are used to compare the current `keyrecord_t *record` pointer values with the cached ones in `keyrecord_t next_record`*
 
 ## Stringent unilateral tap
-Modifiers should not be triggered when a mod-tap key is pressed in combination with another key on the same hand. To accomplish this, the mod-tap key is replaced with its base keycode when the *next* tap record is made on the same side side of the keyboard:
+Modifiers should not be triggered when a mod-tap key is pressed in combination with another key on the same hand. To accomplish this, the mod-tap key is resolved to a tap when the *next* tap record is made on the same side side of the keyboard:
 ```c
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
@@ -87,7 +87,7 @@ The conditional statement can be modified to include narrow modifier matches for
 > *When used together, unilateral tap and bilateral hold will be comparable to ZMK's [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions).*
 
 ## Instant tap
-Mod-tap key-up delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the mod-tap key is replaced with its base keycode before quantum processing if the time interval from the previous key press is less than the `TAP_INTERVAL_MS` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
+Mod-tap key-up delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the mod-tap key is replaced with its base keycode if the time interval from the previous key press is less than the `TAP_INTERVAL_MS` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
 ```c
 #define TAP_INTERVAL_MS TAPPING_TERM / 2
 
@@ -132,7 +132,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 ```
-To prevent modifiers from triggering accidentally, the tapping term is increased for mod-tap keys that are preceded by a short typing interval measured with `tap_timer`. This is implemented in the following `get_tapping_term` function:
+To prevent modifiers from triggering accidentally, the tapping term is increased for mod-tap keys that are preceded by a short typing interval measured with `tap_timer`. This is implemented in the `get_tapping_term` function:
 ```c
 #ifdef TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
@@ -146,7 +146,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 ```
 
 ## Implementation summary
-These decision functions will only occur within `TAPPING_TERM` interval, *before* tap or hold decisions are resolved by QMK. Each configuration can be used independently to improve mod-tap trigger accuracy based on personal typing habits. Conditional statements within them should also be fine-tuned for specific use cases.
+These decision functions are only used during the `TAPPING_TERM` interval, *before* QMK decides to register a tap or hold event. Each configuration can be used independently to improve the accuracy of mod-tap triggers, based on your personal typing habits. The conditional statements within them should also be fine-tuned for specific use cases.
 
 
 &nbsp;</br> &nbsp;</br>
@@ -167,7 +167,7 @@ Next, a wrapper alias to the layout used by the keyboard is also defined in the 
 ```c
 #define LAYOUT_34key_w(...) LAYOUT_split_3x5_2(__VA_ARGS__)
 ```
-> Wrapper alias is necessary to allow the compiler to expand an single macro keyword into multiple elements in the build process.
+> Macros are not replaced recursively in a single step. Wrapper alias is required for the compiler to expand them on different iterations.
 
 Both layout and layer macros are referenced in the keyboard JSON file (`cradio.json`) as follows:
 ```c
