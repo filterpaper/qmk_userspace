@@ -1,10 +1,10 @@
 name: Userspace Build
 on:
-  workflow_dispatch:
   push:
     paths-ignore:
     - '**.md'
     - '**.py'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,12 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: [a_dux, cradio]
-        conv: [helios, kb2040]
+        keyboard: [cradio, cradio_kb2040, ika]
         split: [left, right]
-        exclude:
-        - keyboard: a_dux
-          conv: kb2040
 
     steps:
     - name: Checkout QMK
@@ -40,19 +36,17 @@ jobs:
 
     - name: Compile
       env:
-        conv: ${{ matrix.conv }}
         split: ${{ matrix.split }}
         path: users/${{ github.actor }}/keymaps
       run: >
         qmk -v compile -j 3 $path/${{ matrix.keyboard }}.json
-        ${conv:+-e CONVERT_TO=$conv} ${split:+-e SPLIT=$split}
-        -e TARGET=${{ matrix.keyboard }}${conv:+_$conv}${split:+_$split}
+        ${split:+-e SPLIT=$split} -e TARGET=${{ matrix.keyboard }}${split:+_$split}
 
     - name: Archive firmware
-      uses: actions/upload-artifact@v3.1.3
+      uses: actions/upload-artifact@main
       with:
         retention-days: 60
-        name: ${{ matrix.keyboard }}_${{ matrix.conv }}
+        name: ${{ matrix.keyboard }}
         path: |
           *.hex
           *.bin

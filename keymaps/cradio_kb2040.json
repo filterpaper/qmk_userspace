@@ -1,0 +1,31 @@
+{
+    "keyboard": "cradio",
+    "converter": "kb2040",
+    "config": {
+        "split": {
+            "transport": {
+                "watchdog": true
+            },
+            "usb_detect": {
+                "enabled": true
+            }
+        },
+        "rgb_matrix": {
+            "driver": "ws2812",
+            "split_count": [1, 1]
+        },
+        "ws2812": {
+            "driver": "vendor",
+            "pin": 17
+        }
+    },
+    "keymap": "filterpaper",
+    "layout": "LAYOUT_34key_w",
+    "layers": [
+        [ "HRM(_BASE)" ],
+        [ "HRM(_COLE)" ],
+        [ "_NUMB" ],
+        [ "_SYMB" ],
+        [ "_FUNC" ]
+    ]
+}

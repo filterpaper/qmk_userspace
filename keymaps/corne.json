@@ -1,5 +1,6 @@
 {
     "keyboard": "crkbd/rev1",
+    "converter": "helios",
     "keymap": "filterpaper",
     "layout": "LAYOUT_crkbd_w",
     "layers": [
