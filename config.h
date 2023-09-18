@@ -28,14 +28,6 @@
 
 #ifdef SPLIT_KEYBOARD
 #   define EE_HANDS
-#   ifdef __AVR__
-#       define SPLIT_USB_DETECT
-#       define SPLIT_WATCHDOG_ENABLE
-#       define NO_SUSPEND_POWER_DOWN
-#   endif
-#   ifdef CONVERT_TO_KB2040
-#       define SPLIT_WATCHDOG_ENABLE
-#   endif
 #   if defined (OLED_ENABLE) || defined (RGB_MATRIX_ENABLE)
 #       define SPLIT_OLED_ENABLE
 #       define SPLIT_MODS_ENABLE

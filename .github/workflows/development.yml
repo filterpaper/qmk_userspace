@@ -11,15 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: [a_dux, cradio, corne]
-        conv: [helios, kb2040]
+        keyboard: [corne, cradio, cradio_kb2040, ika]
         split: [left, right]
-        exclude:
-        - keyboard: corne
-          conv: kb2040
-        include:
-        - keyboard: cradio
-          conv: ''
 
     steps:
     - name: Checkout QMK
@@ -39,27 +32,30 @@ jobs:
       run: git config --global --add safe.directory '*'
 
     - name: Apply PRs
-      run: |
-        wget -qO - https://github.com/qmk/qmk_firmware/pull/21494.diff | git apply -v
-        wget -qO - https://github.com/qmk/qmk_firmware/pull/21667.diff | git apply -v
+      run: wget -qO - https://github.com/qmk/qmk_firmware/pull/21494.diff | git apply -v
 
     - name: Compile
       env:
-        conv: ${{ matrix.conv }}
         split: ${{ matrix.split }}
         path: users/${{ github.actor }}/keymaps
       run: >
         qmk -v compile -j 3 $path/${{ matrix.keyboard }}.json
-        ${conv:+-e CONVERT_TO=$conv} ${split:+-e SPLIT=$split}
-        -e TARGET=${{ matrix.keyboard }}${conv:+_$conv}${split:+_$split}
-        && echo "suffix=${conv:+_$conv}" >> $GITHUB_ENV
+        ${split:+-e SPLIT=$split} -e TARGET=${{ matrix.keyboard }}${split:+_$split}
+
+    - name: AVR build
+      if: matrix.keyboard == 'cradio_kb2040' && matrix.split == 'left'
+      env:
+        path: users/${{ github.actor }}/keymaps
+      run: >
+        qmk compile -j 3 $path/${{ matrix.keyboard }}.json
+        -e TARGET=${{ matrix.keyboard }}_avr -e CONVERT_TO=
 
     - name: Archive firmware
       if: github.event_name == 'workflow_dispatch'
       uses: actions/upload-artifact@main
       with:
         retention-days: 3
-        name: ${{ matrix.keyboard }}${{ env.suffix }}
+        name: ${{ matrix.keyboard }}
         path: |
           *.hex
           *.bin

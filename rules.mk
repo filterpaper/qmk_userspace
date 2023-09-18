@@ -17,16 +17,10 @@ VPATH += $(USER_PATH)/autocorrect $(USER_PATH)/oled $(USER_PATH)/rgb
 INTROSPECTION_KEYMAP_C = filterpaper.c
 SRC += autocorrect.c
 
-ifeq ($(strip $(MCU)), atmega32u4)
-    BOOTLOADER = atmel-dfu
-endif
-
 ifneq ($(strip $(CONVERT_TO)),)
-    EEPROM_DRIVER = transient
     MAKECMDGOALS = uf2-split-$(SPLIT)
     ifeq ($(strip $(CONVERT_TO)), kb2040)
         RGB_MATRIX_ENABLE = yes
-        RGB_MATRIX_DRIVER = ws2812
         RGB_MATRIX_CUSTOM_USER = yes
         SRC += rgb-matrix.c
     endif

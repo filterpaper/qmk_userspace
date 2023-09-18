@@ -1,17 +1,8 @@
 {
     "keyboard": "a_dux",
+    "converter": "helios",
     "config": {
-        "matrix_pins": {
-            "direct": [
-                ["C6", "D2", "F7", "B2", "F4"],
-                ["D7", "D0", "F6", "B3", "F5"],
-                ["E6", "D4", "D3", "B1", "B6"],
-                ["B4", "B5", null, null, null]
-            ]
-        },
         "split": {
-            "enabled": true,
-            "soft_serial_pin": "D1",
             "matrix_pins": {
                 "right": {
                     "direct": [
