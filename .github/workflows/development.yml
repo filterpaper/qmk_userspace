@@ -31,9 +31,6 @@ jobs:
     - name: Configure safe directory
       run: git config --global --add safe.directory '*'
 
-    - name: Apply PRs
-      run: wget -qO - https://github.com/qmk/qmk_firmware/pull/21494.diff | git apply -v
-
     - name: Compile
       env:
         split: ${{ matrix.split }}
