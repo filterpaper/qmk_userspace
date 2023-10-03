@@ -117,8 +117,8 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 ```
-To prevent the function from disabling quick access to layer keys, the previous keycode is stored and evaluated for preceding layer tap. This configuration also uses the `keyrecord->keycode` container, which requires the `COMBO_ENABLE` feature to be enabled.
-> *The output experience will be similar to ZMK's quick tap behaviour with the [global-quick-tap](https://zmk.dev/docs/behaviors/hold-tap#global-quick-tap) setting enabled.*
+To prevent the function from disabling quick access to keys in a layer, the previous keycode is stored and evaluated for preceding layer tap. This configuration also uses the `keyrecord->keycode` container, which requires the `COMBO_ENABLE` feature to be enabled.
+> *The output experience will be similar to ZMK's [require-prior-idle-ms](https://zmk.dev/docs/behaviors/hold-tap#require-prior-idle-ms) feature.*
 
 ## Hold delay
 If the "[Instant Tap](#instant-tap)" configuration is too aggressive, a gentler approach to avoid unintended modifier activation is to increase the activation interval time while typing rapidly. To do this, a tap timer is set up in the `process_record_user` function to record the time of each key press:
@@ -423,7 +423,7 @@ dfu-flash() {
 * [Autocorrections with QMK](https://getreuer.info/posts/keyboards/autocorrection/index.html)
 
 ## Hardware Parts
-* Low cost [ProMicro RP2040](https://www.aliexpress.com/item/1005005881019149.html)
+* Helios [RP2040 clone](https://www.aliexpress.com/item/1005005881019149.html)
 * [Adafruit KB2040](https://www.adafruit.com/product/5302)
 * [Elite-Pi](https://keeb.io/collections/diy-parts/products/elite-pi-usb-c-pro-micro-replacement-rp2040)
 * Mill-Max [315-43-112-41-003000](https://www.digikey.com/en/products/detail/315-43-112-41-003000/ED4764-12-ND/4455232) low profile sockets
