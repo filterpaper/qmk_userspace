@@ -34,18 +34,17 @@ jobs:
     - name: Compile
       env:
         split: ${{ matrix.split }}
-        path: users/${{ github.actor }}/keymaps
       run: >
-        qmk -v compile -j 3 $path/${{ matrix.keyboard }}.json
+        qmk -v compile -j $(($(nproc) + 1))
         ${split:+-e SPLIT=$split} -e TARGET=${{ matrix.keyboard }}${split:+_$split}
+        users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json
 
     - name: AVR build
       if: matrix.keyboard == 'cradio_kb2040' && matrix.split == 'left'
-      env:
-        path: users/${{ github.actor }}/keymaps
       run: >
-        qmk compile -j 3 $path/${{ matrix.keyboard }}.json
+        qmk -v compile -j $(($(nproc) + 1))
         -e TARGET=${{ matrix.keyboard }}_avr -e CONVERT_TO=
+        users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json
 
     - name: Archive firmware
       if: github.event_name == 'workflow_dispatch'
