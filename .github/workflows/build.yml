@@ -35,12 +35,11 @@ jobs:
       run: git config --global --add safe.directory '*'
 
     - name: Compile
-      env:
-        split: ${{ matrix.split }}
-        path: users/${{ github.actor }}/keymaps
       run: >
-        qmk -v compile -j 3 $path/${{ matrix.keyboard }}.json
-        ${split:+-e SPLIT=$split} -e TARGET=${{ matrix.keyboard }}${split:+_$split}
+        qmk compile -j $(($(nproc) + 1))
+        -e SPLIT=${{ matrix.split }}
+        -e TARGET=${{ matrix.keyboard }}_${{ matrix.split }}
+        users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json
 
     - name: Archive firmware
       uses: actions/upload-artifact@main
