@@ -110,3 +110,9 @@ void housekeeping_task_user(void) {
 // Simplify unused magic config functions
 uint8_t mod_config(uint8_t mod) { return mod; }
 uint16_t keycode_config(uint16_t keycode) { return keycode; }
+
+
+// Reduce matrix scanning delay
+#ifndef DIRECT_PINS
+void matrix_io_delay(void) { __asm__ volatile("nop\nnop\nnop\n"); }
+#endif
