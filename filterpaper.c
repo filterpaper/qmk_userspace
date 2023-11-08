@@ -39,9 +39,18 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+static fast_timer_t tap_timer = 0;
+
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Decrease tapping term for the home row Shift
-    return IS_HOMEROW(record) && IS_MOD_TAP_SHIFT(keycode) ? TAPPING_TERM - 50 : TAPPING_TERM;
+    // Decrease tapping term for Shift mod tap
+    if (IS_MOD_TAP_SHIFT(keycode)) {
+        return TAPPING_TERM - 50;
+    }
+    // Increase tapping term for the home row mod-tap while typing
+    else if (IS_HOMEROW(record) && timer_elapsed_fast(tap_timer) < TAPPING_TERM * 2) {
+        return TAPPING_TERM * 2;
+    }
+    return TAPPING_TERM;
 }
 
 
@@ -83,6 +92,7 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
+        tap_timer = timer_read_fast();
         if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
 
         // Clipboard shortcuts
