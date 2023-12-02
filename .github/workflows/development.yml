@@ -6,8 +6,11 @@ on:
 
 jobs:
   build:
+    name: QMK Userspace build
     runs-on: ubuntu-latest
-    container: qmkfm/qmk_cli
+    container: qmkfm/base_container
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -18,33 +21,33 @@ jobs:
     - name: Checkout QMK
       uses: actions/checkout@main
       with:
+        path: qmk_firmware
         repository: qmk/qmk_firmware
         ref: develop
         submodules: true
 
-    - name: Checkout ${{ github.actor }} userspace
+    - name: Checkout userspace
       uses: actions/checkout@main
       with:
         path: users/${{ github.actor }}
         persist-credentials: false
 
-    - name: Configure safe directory
-      run: git config --global --add safe.directory '*'
+    - name: Install QMK CLI
+      run: python3 -m pip install --upgrade qmk
+
+    - name: Configure QMK CLI
+      run: |
+        qmk config userspace_compile.parallel=$(nproc)
+        qmk config user.qmk_home=$GITHUB_WORKSPACE/qmk_firmware
+        qmk config user.overlay_dir=$GITHUB_WORKSPACE
+
+    - name: Setup build target
+      run: |
+        wget https://github.com/qmk/qmk_userspace/raw/main/qmk.json
+        qmk userspace-add $GITHUB_WORKSPACE/users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json
 
     - name: Compile
-      env:
-        split: ${{ matrix.split }}
-      run: >
-        qmk -v compile -j $(($(nproc) + 1))
-        ${split:+-e SPLIT=$split} -e TARGET=${{ matrix.keyboard }}${split:+_$split}
-        users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json
-
-    - name: AVR build
-      if: matrix.keyboard == 'cradio_kb2040' && matrix.split == 'left'
-      run: >
-        qmk -v compile -j $(($(nproc) + 1))
-        -e TARGET=${{ matrix.keyboard }}_avr -e CONVERT_TO=
-        users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json
+      run: qmk userspace-compile -e SPLIT=${{ matrix.split }} -e TARGET=${{ matrix.keyboard }}_${{ matrix.split }}
 
     - name: Archive firmware
       if: github.event_name == 'workflow_dispatch'
