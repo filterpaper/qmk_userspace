@@ -58,16 +58,13 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     bool    const caps = host_keyboard_led_state().caps_lock;
     uint8_t const mods = get_mods();
-
     // Ignore inactive caps lock status and shifted keys
     if (!caps || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) return true;
-
-    // Filter mod-tap and layer-tap keys
+    // Get base keycode from mod-tap and layer-tap keys
     if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
         if (record->tap.count == 0) return true;
         keycode &= 0xff;
     }
-
     // Identify caps lock retention key codes
     switch (keycode) {
         case KC_A ... KC_0:
@@ -77,7 +74,6 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
         case KC_CAPS: if (!mods) return true;
         default: tap_code(KC_CAPS);
     }
-
     return true;
 }
 
@@ -94,14 +90,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         tap_timer = timer_read_fast();
         if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
-
         // Clipboard shortcuts
         if      (keycode == TH_M)    return process_tap_hold(Z_PST, record);
         else if (keycode == TH_COMM) return process_tap_hold(Z_CPY, record);
         else if (keycode == TH_DOT)  return process_tap_hold(Z_CUT, record);
         else if (keycode == TH_SLSH) return process_tap_hold(Z_UND, record);
     }
-
     return true;
 }
 
