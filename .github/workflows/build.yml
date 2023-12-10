@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Userspace build
+    name: build
     runs-on: ubuntu-latest
     container: qmkfm/qmk_cli
     strategy:
@@ -44,12 +44,19 @@ jobs:
     - name: Archive firmware
       uses: actions/upload-artifact@main
       with:
-        retention-days: 60
+        retention-days: 3
         name: ${{ matrix.keyboard }}
         path: |
           *.hex
           *.bin
           *.uf2
+
+  release:
+    needs: build
+    uses: filterpaper/scripts/.github/workflows/publish-artifact.yml@main
+    with:
+      release_name: Firmware
+      release_tag: latest
 
   purge:
     uses: filterpaper/scripts/.github/workflows/purge-workflow.yml@main
