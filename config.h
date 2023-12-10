@@ -10,7 +10,7 @@
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
-#define TAPPING_TERM 210
+#define TAPPING_TERM 250
 #define TAPPING_TERM_PER_KEY
 #define QUICK_TAP_TERM TAPPING_TERM / 2
 #define PERMISSIVE_HOLD
