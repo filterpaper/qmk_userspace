@@ -14,8 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: [cradio, cradio_kb2040, ika]
-        split: [left, right]
+        keyboard: [cradio, kbcradio, ika]
+        split: [left, right, '']
 
     steps:
     - name: Checkout QMK
@@ -35,17 +35,18 @@ jobs:
       run: git config --global --add safe.directory '*'
 
     - name: Compile
+      env:
+        split: ${{ matrix.split }}
+      working-directory: users/${{ github.actor }}/keymaps/
       run: >
-        qmk compile -j $(($(nproc) + 1))
-        -e SPLIT=${{ matrix.split }}
-        -e TARGET=${{ matrix.keyboard }}_${{ matrix.split }}
-        users/${{ github.actor }}/keymaps/${{ matrix.keyboard }}.json
+        qmk compile -j $(nproc) ${{ matrix.keyboard }}.json
+        -e SPLIT=${{ matrix.split }} -e TARGET=${{ matrix.keyboard }}${split:+_$split}
 
     - name: Archive firmware
       uses: actions/upload-artifact@main
       with:
         retention-days: 3
-        name: ${{ matrix.keyboard }}
+        name: ${{ matrix.keyboard }}_${{ matrix.split }}
         path: |
           *.hex
           *.bin
