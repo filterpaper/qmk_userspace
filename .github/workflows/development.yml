@@ -14,8 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: [corne, cradio, cradio_kb2040, ika]
-        split: [left, right]
+        keyboard: [corne, cradio, kbcradio, ika]
+        split: [left, right, '']
 
     steps:
     - name: Checkout QMK
@@ -48,6 +48,10 @@ jobs:
 
     - name: Compile
       run: qmk userspace-compile -e SPLIT=${{ matrix.split }} -e TARGET=${{ matrix.keyboard }}_${{ matrix.split }}
+
+    - name: AVR build
+      if: matrix.keyboard == 'kbcradio' && matrix.split == ''
+      run: qmk userspace-compile -e CONVERT_TO= -e TARGET=${{ matrix.keyboard }}_avr
 
     - name: Archive firmware
       if: github.event_name == 'workflow_dispatch'
