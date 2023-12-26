@@ -2,13 +2,8 @@
     "keyboard": "cradio",
     "converter": "kb2040",
     "config": {
-        "split": {
-            "transport": {
-                "watchdog": true
-            },
-            "usb_detect": {
-                "enabled": true
-            }
+        "features": {
+            "rgb_matrix": true
         },
         "rgb_matrix": {
             "driver": "ws2812",
@@ -17,6 +12,14 @@
         "ws2812": {
             "driver": "vendor",
             "pin": 17
+        },
+        "split": {
+            "transport": {
+                "watchdog": true
+            },
+            "usb_detect": {
+                "enabled": true
+            }
         }
     },
     "keymap": "filterpaper",
