@@ -1,6 +1,13 @@
 {
     "keyboard": "crkbd/rev1",
     "converter": "helios",
+    "config": {
+        "features": {
+            "oled": true,
+            "rgblight": false,
+            "rgb_matrix": true
+        }
+    },
     "keymap": "filterpaper",
     "layout": "LAYOUT_crkbd_w",
     "layers": [

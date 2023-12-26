@@ -15,22 +15,15 @@ SWAP_HANDS_ENABLE = yes
 
 VPATH += $(USER_PATH)/autocorrect $(USER_PATH)/oled $(USER_PATH)/rgb
 INTROSPECTION_KEYMAP_C = filterpaper.c
+MAKECMDGOALS = uf2-split-$(SPLIT)
 SRC += autocorrect.c
 
-ifneq ($(strip $(CONVERT_TO)),)
-    MAKECMDGOALS = uf2-split-$(SPLIT)
-    ifeq ($(strip $(CONVERT_TO)), kb2040)
-        RGB_MATRIX_ENABLE = yes
-        RGB_MATRIX_CUSTOM_USER = yes
-        SRC += rgb-matrix.c
-    endif
-endif
-
-ifeq ($(strip $(KEYBOARD)), crkbd/rev1)
-    RGB_MATRIX_ENABLE = yes
+ifeq ($(strip $(RGB_MATRIX_ENABLE)), yes)
     RGB_MATRIX_CUSTOM_USER = yes
     SRC += rgb-matrix.c
-    OLED_ENABLE = yes
+endif
+
+ifeq ($(strip $(OLED_ENABLE)), yes)
     ifneq ($(strip $(OLED)),)
         OPT_DEFS += -D$(OLED)
         SRC += oled-icons.c oled-luna.c
