@@ -3,34 +3,24 @@
 
 #include "filterpaper.h"
 
-static uint16_t    next_keycode, processed_keycode;
-static keyrecord_t next_record;
-
-// Check for combo generated keycode
-static inline bool is_combo(uint16_t keycode) {
-    for (uint16_t i = 0; i < sizeof(key_combos) / sizeof(combo_t); ++i) {
-        if (keycode == key_combos[i].keycode) return true;
-    }
-    return false;
-}
+static uint16_t        next_keycode;
+static keyrecord_t     next_record;
+static keyevent_type_t prev_event;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t prev_keycode;
     static bool     is_pressed[UINT8_MAX];
-
+    // Store previous and next input for tap-hold decisions
     if (record->event.pressed) {
-        // Copy previous keycode for instant tap decision
         prev_keycode = next_keycode;
-        // Cache current input for on-going mod-tap decisions
         next_keycode = keycode;
         next_record  = *record;
     }
-
-    // Match non-shift home row mod-tap keys if not preceded by layer or combo keys
-    if (IS_HOMEROW(record) && IS_MOD_TAP_CAG(keycode) && !IS_LAYER_TAP(prev_keycode) && !is_combo(processed_keycode)) {
+    // Trigger tap for tap-hold keys based on previous input
+    if (IS_HOMEROW(record) && IS_MOD_TAP_CAG(keycode)) {
         uint8_t const tap_keycode = keycode & 0xff;
-        // Press the tap keycode when it follows a short interval
-        if (record->event.pressed && last_input_activity_elapsed() < QUICK_TAP_TERM) {
+        // Press the tap keycode on short input interval when not preceded by layer or combo keys
+        if (record->event.pressed && IS_TYPING() && !IS_LAYER_TAP(prev_keycode) && prev_event != COMBO_EVENT) {
             record->keycode = tap_keycode;
             is_pressed[tap_keycode] = true;
         }
@@ -44,18 +34,12 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Send Control or Shift with a nested key tap on the opposite hand
-    return IS_BILATERAL_TAP(record, next_record) && IS_MOD_TAP_CS(keycode);
-}
-
-
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // Activate layer with another key press
     if (IS_LAYER_TAP(keycode)) return true;
-    // Sent the tap keycode when the mod-tap key overlaps with
+    // Send the tap keycode when the mod-tap key overlaps with
     // another key on the same hand with no active modifiers
-    if (IS_UNILATERAL_TAP(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode) && !get_mods()) {
+    if (IS_UNILATERAL_TAP(record, next_record) && IS_MOD_TAP_CAG(next_keycode) && !get_mods()) {
         record->keycode = keycode & 0xff;
         process_record(record);
         record->event.pressed = false;
@@ -65,12 +49,15 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    // Send Control or Shift with a nested key press on the opposite hand
+    return IS_BILATERAL_TAP(record, next_record) && IS_MOD_TAP_CS(keycode);
+}
+
+
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     // Decrease tapping term for Shift mod tap and clipboard shortcuts
-    if (IS_MOD_TAP_SHIFT(keycode) || (IS_QK_LAYER_TAP(keycode) && !QK_LAYER_TAP_GET_LAYER(keycode))) {
-        return TAPPING_TERM - 50;
-    }
-    return TAPPING_TERM;
+    return IS_MOD_TAP_SHIFT(keycode) || IS_CLIPBOARD(keycode) ? TAPPING_TERM - 50 : TAPPING_TERM;
 }
 
 
@@ -98,7 +85,6 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-
 // Send custom hold keycode
 static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
     if (record->tap.count) return true;
@@ -106,10 +92,9 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
     return false;
 }
 
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        processed_keycode = keycode; // Store processed keycode for combo detection with instant tap
+        prev_event = record->event.type; // Store processed event for combo detection with instant tap
         if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
         // Clipboard shortcuts
         if      (keycode == TH_M)    return process_tap_hold(Z_PST, record);
