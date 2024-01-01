@@ -85,9 +85,10 @@ The conditional statement can be modified to include narrow modifier matches for
 > *When used together, unilateral tap and bilateral hold will be comparable to ZMK's [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions).*
 
 ## Instant tap
-Mod-tap key-up delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the mod-tap key is replaced with its tap keycode if the time interval from the previous key press is less than the `INPUT_INTERVAL_MS` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
+Mod-tap key-up delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the mod-tap key is replaced with its tap keycode if the time interval from the previous key press is less than the `INPUT_INTERVAL` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
 ```c
-#define INPUT_INTERVAL_MS TAPPING_TERM / 2
+#define INPUT_INTERVAL TAPPING_TERM / 2
+#define IS_TYPING() (last_input_activity_elapsed() < INPUT_INTERVAL)
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t prev_keycode;
@@ -101,11 +102,12 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         next_record  = *record;
     }
 
-    // Match home row mod-tap keys when not preceded by a Layer key
-    if (IS_HOMEROW(record) && IS_QK_MOD_TAP(keycode) && !IS_QK_LAYER_TAP(prev_keycode)) {
+    // Match home row mod-tap keys
+    if (IS_HOMEROW(record) && IS_QK_MOD_TAP(keycode)) {
         uint8_t const tap_keycode = keycode & 0xff;
-        // Press the tap keycode when it follows a short interval
-        if (record->event.pressed && last_input_activity_elapsed() < INPUT_INTERVAL_MS) {
+        // Press the tap keycode on short input interval
+        // when not preceded by layer keys
+        if (record->event.pressed && IS_TYPING() && !IS_QK_LAYER_TAP(prev_keycode)) {
             record->keycode = tap_keycode;
             is_pressed[tap_keycode] = true;
         }
