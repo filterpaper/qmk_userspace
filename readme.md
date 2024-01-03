@@ -105,8 +105,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Match home row mod-tap keys
     if (IS_HOMEROW(record) && IS_QK_MOD_TAP(keycode)) {
         uint8_t const tap_keycode = keycode & 0xff;
-        // Press the tap keycode on short input interval
-        // when not preceded by layer keys
+        // Press the tap keycode on quick input when not preceded by layer or combo keys
         if (record->event.pressed && IS_TYPING() && !IS_QK_LAYER_TAP(prev_keycode)) {
             record->keycode = tap_keycode;
             is_pressed[tap_keycode] = true;
