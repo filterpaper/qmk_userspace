@@ -38,12 +38,14 @@ bool rgb_matrix_indicators_user(void) {
         RGB const rgb = hsv_to_rgb_glow((HSV){HSV_CAPS});
         rgb_matrix_set_color_all(rgb.r, rgb.g, rgb.b);
     }
+
 #ifdef SWAP_HANDS_ENABLE
     if (is_swap_hands_on()) {
         RGB const rgb = hsv_to_rgb_glow((HSV){HSV_SWAP});
         rgb_matrix_set_color_all(rgb.r, rgb.g, rgb.b);
     }
 #endif
+
 #ifdef CONVERT_TO_KB2040
     if (get_mods()) {
         uint8_t const mods = get_mods();
@@ -53,10 +55,12 @@ bool rgb_matrix_indicators_user(void) {
         }
     }
 #endif
+
     if (get_highest_layer(layer_state) > CMK) {
         uint8_t const layer = get_highest_layer(layer_state);
         RGB const rgb = hsv_to_rgb((HSV){(layer - 1) * 80, 255, rgb_matrix_config.hsv.v});
         rgb_matrix_set_color_all(rgb.r, rgb.g, rgb.b);
     }
+
     return false;
 }
