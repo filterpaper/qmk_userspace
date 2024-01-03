@@ -18,6 +18,7 @@ SSTR(dir_up,   "../",    TH_DOT,  TH_SLSH)
 COMB(vol_up,   KC_VOLU,  KC_P,    HM_QUOT)
 COMB(vol_dn,   KC_VOLD,  HM_QUOT, TH_SLSH)
 COMB(cap_lk,   KC_CAPS,  HM_F,    HM_J)
+
 // Navigation
 COMB(arr_up,   KC_UP,    KC_U,    KC_I)
 COMB(arr_dn,   KC_DOWN,  HM_J,    HM_K)
@@ -25,9 +26,11 @@ COMB(arr_lt,   KC_LEFT,  KC_H,    HM_J)
 COMB(arr_rt,   KC_RGHT,  HM_K,    HM_L)
 COMB(nav_up,   SA_UP,    TH_COMM, TH_DOT)
 COMB(nav_dn,   SA_DN,    TH_M,    TH_COMM)
+
 // Noop thumbs
 COMB(thmb_l,   KC_NO,    SYM_TAB, LCA_ENT)
 COMB(thmb_r,   KC_NO,    SFT_SPC, NUM_BSP)
+
 // Layer toggles
 COMB(tog_num,  TG(NUM),  NUM_BSP, KC_N, TH_M)
 COMB(tog_fnc,  TG(FNC),  SYM_TAB, KC_B, KC_V)
