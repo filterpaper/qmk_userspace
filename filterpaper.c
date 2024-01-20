@@ -12,17 +12,17 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t prev_keycode;
     static bool     is_pressed[UINT8_MAX];
 
-    // Store previous and next input for tap-hold decisions
+    // Cache previous and next input for tap-hold decisions
     if (record->event.pressed) {
         prev_keycode = next_keycode;
         next_keycode = keycode;
         next_record  = *record;
     }
 
-    // Trigger tap for tap-hold keys based on previous input
+    // Override tap-hold keys based on previous input
     if (IS_HOMEROW(record) && IS_MOD_TAP_CAG(keycode)) {
-        uint8_t const tap_keycode = keycode & 0xff;
-        // Press the tap keycode on quick input when not preceded by layer or combo keys
+        uint8_t const tap_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+        // Press the tap keycode while typing when not preceded by layer or combo keys
         if (record->event.pressed && IS_TYPING() && !IS_LAYER_TAP(prev_keycode) && prev_event != COMBO_EVENT) {
             record->keycode = tap_keycode;
             is_pressed[tap_keycode] = true;
@@ -42,10 +42,9 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // Activate layer with another key press
     if (IS_LAYER_TAP(keycode)) return true;
 
-    // If a mod-tap key is pressed with a key on the same hand,
-    // and no other modifiers are active, send the tap keycode
-    if (IS_UNILATERAL_TAP(record, next_record) && IS_MOD_TAP_CAG(next_keycode) && !get_mods()) {
-        record->keycode = keycode & 0xff;
+    // Sent its tap keycode when non-Shift overlaps with another key on the same hand
+    if (IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) {
+        record->keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
         process_record(record);
         record->event.pressed = false;
         process_record(record);
@@ -57,13 +56,13 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     // Send Control or Shift with a nested key press on the opposite hand
-    return IS_BILATERAL_TAP(record, next_record) && IS_MOD_TAP_CS(keycode);
+    return IS_BILATERAL(record, next_record) && IS_MOD_TAP_CS(keycode);
 }
 
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Decrease tapping term for Shift mod tap and clipboard shortcuts
-    return IS_MOD_TAP_SHIFT(keycode) || IS_CLIPBOARD(keycode) ? TAPPING_TERM - 50 : TAPPING_TERM;
+    // Decrease tapping term for Shift
+    return IS_MOD_TAP_SHIFT(keycode) ? TAPPING_TERM - 50 : TAPPING_TERM;
 }
 
 
@@ -78,7 +77,7 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     // Get base keycode from mod-tap and layer-tap keys
     if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
         if (record->tap.count == 0) return true;
-        keycode &= 0xff;
+        keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
     }
 
     // Match caps lock retention keycodes
