@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: [corne, cradio, kbcradio, ika]
+        keyboard: [corne, cradio, sweep, ika]
         split: [left, right, '']
 
     steps:
@@ -49,16 +49,12 @@ jobs:
     - name: Compile
       run: qmk userspace-compile -e SPLIT=${{ matrix.split }} -e TARGET=${{ matrix.keyboard }}_${{ matrix.split }}
 
-    - name: AVR build
-      if: matrix.keyboard == 'kbcradio' && matrix.split == ''
-      run: qmk userspace-compile -e CONVERT_TO= -e TARGET=${{ matrix.keyboard }}_avr
-
     - name: Archive firmware
       if: github.event_name == 'workflow_dispatch'
       uses: actions/upload-artifact@main
       with:
         retention-days: 3
-        name: ${{ matrix.keyboard }}
+        name: ${{ matrix.keyboard }}_${{ matrix.split }}
         path: |
           *.hex
           *.bin

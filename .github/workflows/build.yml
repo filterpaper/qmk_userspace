@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: [cradio, kbcradio, ika]
+        keyboard: [cradio, sweep, ika]
         split: [left, right, '']
 
     steps:
