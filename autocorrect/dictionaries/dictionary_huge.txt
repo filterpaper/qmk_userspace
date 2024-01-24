@@ -1269,7 +1269,6 @@ equivelent          -> equivalent
 equivilant          -> equivalent
 equivilent          -> equivalent
 equivlalent         -> equivalent
-errupted            -> erupted
 esential            -> essential
 esitmated           -> estimated
 especialy           -> especially
