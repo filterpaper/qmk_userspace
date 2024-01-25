@@ -4,6 +4,7 @@
 #pragma once
 
 // Common QMK settings
+#define TAP_HOLD_CAPS_DELAY 110
 #define USB_SUSPEND_WAKEUP_DELAY 2000
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 1500U
 // Space saving options
