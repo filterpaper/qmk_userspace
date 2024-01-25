@@ -35,8 +35,7 @@ static RGB hsv_to_rgb_glow(HSV hsv) {
 
 bool rgb_matrix_indicators_user(void) {
     if (host_keyboard_led_state().caps_lock) {
-        RGB const rgb = hsv_to_rgb_glow((HSV){HSV_CAPS});
-        rgb_matrix_set_color_all(rgb.r, rgb.g, rgb.b);
+        rgb_matrix_set_color_all(RGB_RED);
     }
 
 #ifdef SWAP_HANDS_ENABLE

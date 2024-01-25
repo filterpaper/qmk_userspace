@@ -68,13 +68,10 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 // Turn off caps lock at a word boundry
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
-    bool    const caps = host_keyboard_led_state().caps_lock;
-    uint8_t const mods = get_mods();
+    // Skip if caps lock is off
+    if (!host_keyboard_led_state().caps_lock) return true;
 
-    // Ignore inactive caps lock status and shifted keys
-    if (!caps || mods == MOD_BIT_LSHIFT || mods == MOD_BIT_RSHIFT) return true;
-
-    // Get base keycode from mod-tap and layer-tap keys
+    // Get tap keycode from tap hold keys
     if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
         if (record->tap.count == 0) return true;
         keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
@@ -86,7 +83,7 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
         case KC_BSPC:
         case KC_MINS:
         case KC_UNDS:
-        case KC_CAPS: if (!mods) return true;
+        case KC_CAPS: if (!(get_mods() & ~MOD_MASK_SHIFT)) break;
         // Any unmatched keycode is a word boundary
         default: tap_code(KC_CAPS);
     }

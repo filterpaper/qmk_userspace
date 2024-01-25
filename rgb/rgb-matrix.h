@@ -48,5 +48,5 @@
 #define RGB_FLUOR   75, 122, 22
 #define RGB_LAYER   RGB_BSTEEL
 #define RGB_MODS    RGB_GREEN
-#define HSV_CAPS    HSV_PINK
+#define HSV_CAPS    HSV_RED
 #define HSV_SWAP    HSV_TEAL
