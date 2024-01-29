@@ -43,7 +43,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     if (IS_LAYER_TAP(keycode)) return true;
 
     // Sent its tap keycode when non-Shift overlaps with another key on the same hand
-    if (IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) {
+    if (IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode) && !get_mods()) {
         record->keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
         process_record(record);
         record->event.pressed = false;
@@ -101,7 +101,7 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        // Store processed event for combo detection with instant tap
+        // Store processed event for combo detection in preprocess record
         prev_event = record->event.type;
 
         if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
