@@ -21,7 +21,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     // Override tap-hold keys based on previous input
     if (IS_HOMEROW(record) && IS_MOD_TAP_CAG(keycode)) {
-        uint8_t const tap_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+        uint8_t const tap_keycode = GET_TAP_KEYCODE(keycode);
         // Press the tap keycode while typing when not preceded by layer or combo keys
         if (record->event.pressed && IS_TYPING() && !IS_LAYER_TAP(prev_keycode) && prev_event != COMBO_EVENT) {
             record->keycode = tap_keycode;
@@ -44,7 +44,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
     // Sent its tap keycode when non-Shift overlaps with another key on the same hand
     if (IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode) && !get_mods()) {
-        record->keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+        record->keycode = GET_TAP_KEYCODE(keycode);
         process_record(record);
         record->event.pressed = false;
         process_record(record);
@@ -74,7 +74,7 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     // Get tap keycode from tap hold keys
     if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
         if (record->tap.count == 0) return true;
-        keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+        keycode = GET_TAP_KEYCODE(keycode);
     }
 
     // Match caps lock retention keycodes

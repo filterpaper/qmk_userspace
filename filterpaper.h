@@ -12,13 +12,15 @@ __attribute__((flatten)) static inline bool process_caps_unlock(uint16_t keycode
 __attribute__((always_inline)) static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record);
 
 // Return mod-tap modifiers in 8bit for MOD_MASK_* logical operations
-#define GET_MT_MOD_BITS(kc) ((kc & 0x1000) ? ((kc >> 8) & 0x0f) << 4 : (kc >> 8) & 0x0f)
+#define GET_MT_MOD_BITS(kc) (((kc) & 0x1000) ? ((kc >> 8) & 0x0f) << 4 : (kc >> 8) & 0x0f)
+// Basic keycode filter
+#define GET_TAP_KEYCODE(kc) ((kc) & 0xff)
 
 // Tap-hold decision helper macros
 #define IS_HOMEROW(r)        (r->event.key.row == 1 || r->event.key.row == 5)
-#define IS_MOD_TAP_SHIFT(kc) (QK_MOD_TAP_GET_MODS(kc) & (MOD_LSFT))
-#define IS_MOD_TAP_CS(kc)    (QK_MOD_TAP_GET_MODS(kc) & (MOD_LCTL | MOD_LSFT))
-#define IS_MOD_TAP_CAG(kc)   (QK_MOD_TAP_GET_MODS(kc) & (MOD_LCTL | MOD_LALT | MOD_LGUI))
+#define IS_MOD_TAP_SHIFT(kc) (IS_QK_MOD_TAP(kc) && QK_MOD_TAP_GET_MODS(kc) & (MOD_LSFT))
+#define IS_MOD_TAP_CS(kc)    (IS_QK_MOD_TAP(kc) && QK_MOD_TAP_GET_MODS(kc) & (MOD_LCTL | MOD_LSFT))
+#define IS_MOD_TAP_CAG(kc)   (IS_QK_MOD_TAP(kc) && QK_MOD_TAP_GET_MODS(kc) & (MOD_LCTL | MOD_LALT | MOD_LGUI))
 #define IS_LAYER_TAP(kc)     (IS_QK_LAYER_TAP(kc) && QK_LAYER_TAP_GET_LAYER(kc))
 #define IS_TYPING()          (last_input_activity_elapsed() < QUICK_TAP_TERM)
 
