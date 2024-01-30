@@ -23,7 +23,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (IS_HOMEROW(record) && IS_MOD_TAP_CAG(keycode)) {
         uint8_t const tap_keycode = GET_TAP_KEYCODE(keycode);
         // Press the tap keycode while typing when not preceded by layer or combo keys
-        if (record->event.pressed && IS_TYPING() && !IS_LAYER_TAP(prev_keycode) && prev_event != COMBO_EVENT) {
+        if (record->event.pressed && IS_TYPING(prev_keycode) && prev_event != COMBO_EVENT) {
             record->keycode = tap_keycode;
             is_pressed[tap_keycode] = true;
         }
