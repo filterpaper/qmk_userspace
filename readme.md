@@ -86,10 +86,10 @@ The conditional statement can be modified to include narrow modifier matches for
 > *When used together, unilateral tap and bilateral hold will be comparable to ZMK's [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions).*
 
 ## Instant tap
-Mod-tap key-up delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the mod-tap key is replaced with its tap keycode if the time interval from the previous key press is less than the `INPUT_INTERVAL` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
+Tap-hold key-up delays can be bothersome and unnecessary while typing quickly. To eliminate these delays, the tap-hold key is replaced with its tap keycode if prior key press is less than the `INPUT_INTERVAL` duration in milliseconds. This implementation is placed in the `pre_process_record_user` function after the "[Next key record](#next-key-record)" configuration:
 ```c
 #define INPUT_INTERVAL TAPPING_TERM / 2
-#define IS_TYPING() (last_input_activity_elapsed() < INPUT_INTERVAL)
+#define IS_TYPING(kc) (last_input_activity_elapsed() < INPUT_INTERVAL && !IS_QK_LAYER_TAP(kc))
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t prev_keycode;
@@ -106,8 +106,8 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Match home row mod-tap keys
     if (IS_HOMEROW(record) && IS_QK_MOD_TAP(keycode)) {
         uint8_t const tap_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
-        // Press the tap keycode on quick input when not preceded by layer keys
-        if (record->event.pressed && IS_TYPING() && !IS_QK_LAYER_TAP(prev_keycode)) {
+        // Press the tap keycode while typing when not preceded by layer key
+        if (record->event.pressed && IS_TYPING(prev_keycode)) {
             record->keycode = tap_keycode;
             is_pressed[tap_keycode] = true;
         }
@@ -120,7 +120,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 ```
-The previous keycode is evaluated for preceding layer tap to prevent this feature from disabling quick access of keys in a layer. This configuration also uses the `keyrecord->keycode` structure container, which requires either the `REPEAT_KEY_ENABLE` or `COMBO_ENABLE` feature to be enabled.
+The prior keycode macro excludes layer tap to prevent this feature from disabling quick access of keys in a layer. It can be customised to improve trigger accuracy. This configuration also uses the `keyrecord->keycode` structure container, which requires either the `REPEAT_KEY_ENABLE` or `COMBO_ENABLE` feature.
 > *The output experience will be similar to ZMK's [require-prior-idle-ms](https://zmk.dev/docs/behaviors/hold-tap#require-prior-idle-ms) feature.*
 
 ## Hold delay
@@ -150,7 +150,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 > *This solution might be the only one that is needed if unintended modifier activations were simply caused by slow releasing fingers.*
 
 ## Implementation summary
-These decision functions are only called within `TAPPING_TERM` interval, *before* QMK decides to register a tap or hold event. Each configuration should be used independently to improve the accuracy of mod-tap based on your personal typing habits. The conditional statements within them should also be fine-tuned for specific use cases.
+These decision functions are only evaluated *within* `TAPPING_TERM` interval, *before* QMK decides to register a tap or hold event. Each configuration should be used independently to resolve specific accuracy problems with tap-hold keys. The conditional statements within them should also be fine-tuned for personal use cases.
 
 
 &nbsp;</br> &nbsp;</br>
