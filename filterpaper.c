@@ -77,13 +77,14 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
         keycode = GET_TAP_KEYCODE(keycode);
     }
 
-    // Match caps lock retention keycodes
     switch (keycode) {
+        // Caps lock retention keycodes
         case KC_A ... KC_0:
         case KC_BSPC:
         case KC_MINS:
         case KC_UNDS:
-        case KC_CAPS: if (!(get_mods() & ~MOD_MASK_SHIFT)) break;
+        case KC_CAPS:
+            if (!(get_mods() & ~MOD_MASK_SHIFT)) break;
         // Any unmatched keycode is a word boundary
         default: tap_code(KC_CAPS);
     }
