@@ -298,7 +298,6 @@ RGB_MATRIX_DRIVER = WS2812
 ```c
 #define RGBW
 #define WS2812_DI_PIN 17U
-#define WS2812_PIO_USE_PIO1
 // Additional directives for a pair on a split keyboard:
 #define RGB_MATRIX_LED_COUNT 2
 #define RGB_MATRIX_SPLIT {1, 1}
