@@ -6,6 +6,16 @@
             "oled": true,
             "rgblight": false,
             "rgb_matrix": true
+        },
+        "split": {
+            "transport": {
+                "sync": {
+                    "indicators": true,
+                    "layer_state": true,
+                    "modifiers": true,
+                    "oled": true
+                }
+            }
         }
     },
     "keymap": "filterpaper",
