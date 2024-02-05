@@ -78,15 +78,15 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
 
 #define _NUMB \
     KC_INS,  KC_1,    KC_2,    KC_3,    KC_VOLU,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_COLN, \
-    KC_DEL,  KC_4,    KC_5,    KC_6,    KC_VOLD,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_SCLN, \
-    KC_CAPS, KC_7,    KC_8,    KC_9,    KC_0,        _______, SA_DN,   SA_UP,   _______, _______, \
+    KC_CAPS, KC_4,    KC_5,    KC_6,    KC_VOLD,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_SCLN, \
+    KC_DEL,  KC_7,    KC_8,    KC_9,    KC_0,        _______, SA_DN,   SA_UP,   _______, _______, \
                                MO(FNC), KC_ESC,      _______, _______
  /*╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮
    │ INSERT │  1     │  2     │  3     │ VOL UP │   │ HOME   │ PG DN  │ PG UP  │ END    │  :     │
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
-   │ DELETE │  4     │  5     │  6     │ VOL DN │   │ LEFT   │ DOWN   │ UP     │ RIGHT  │  ;     │
+   │ CAPS   │  4     │  5     │  6     │ VOL DN │   │ LEFT   │ DOWN   │ UP     │ RIGHT  │  ;     │
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
-   │ CAPS   │  7     │  8     │  9     │  0     │   │        │ S/A DN │ S/A UP │        │        │
+   │ DELETE │  7     │  8     │  9     │  0     │   │        │ S/A DN │ S/A UP │        │        │
    ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯
                               │ FNC    │ ESC    │   │        │        │
                               ╰────────┴────────╯   ╰────────┴────────╯*/
