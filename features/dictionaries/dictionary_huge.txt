@@ -646,7 +646,6 @@ captued             -> captured
 capturd             -> captured
 carachter           -> character
 caracterized        -> characterized
-carefull            -> careful
 careing             -> caring
 carismatic          -> charismatic
 carreer             -> career
