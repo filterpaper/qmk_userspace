@@ -206,14 +206,14 @@ static void luna_action(char const action[][LUNA_SIZE]) {
 
 
 static void animate_luna(uint32_t interval) {
-    uint8_t mods = get_mods();
+    uint8_t const mods = get_mods();
+    bool    const caps = host_keyboard_led_state().caps_lock;
+
+    if (mods & MOD_MASK_SHIFT || caps) luna_action(bark);
 
     render_logo();
     oled_set_cursor(0,8);
 
-    bool caps = host_keyboard_led_state().caps_lock;
-
-    if (mods & MOD_MASK_SHIFT || caps) luna_action(bark);
     else if (mods & MOD_MASK_CAG)      luna_action(sneak);
     else if (interval < RUN_INTERVAL)  luna_action(run);
     else if (interval < WALK_INTERVAL) luna_action(walk);
@@ -223,7 +223,7 @@ static void animate_luna(uint32_t interval) {
 
 static void render_luna_status(void) {
     static uint16_t frame_timer = 0;
-    uint32_t input_timer = last_matrix_activity_time();
+    uint32_t  const input_timer = last_matrix_activity_time();
 
     if (timer_elapsed32(input_timer) > OLED_TIMEOUT) {
         oled_off();

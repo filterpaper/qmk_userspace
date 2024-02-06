@@ -10,20 +10,20 @@ COMBO_ENABLE = yes
 SWAP_HANDS_ENABLE = yes
 
 MAKECMDGOALS = uf2-split-$(SPLIT)
-VPATH += $(USER_PATH)/autocorrect $(USER_PATH)/oled $(USER_PATH)/rgb
+VPATH += $(USER_PATH)/features
 INTROSPECTION_KEYMAP_C = filterpaper.c
 SRC += autocorrect.c
 
 ifeq ($(strip $(RGB_MATRIX_ENABLE)), yes)
     RGB_MATRIX_CUSTOM_USER = yes
-    SRC += rgb-matrix.c
+    SRC += rgb_matrix.c
 endif
 
 ifeq ($(strip $(OLED_ENABLE)), yes)
     ifneq ($(strip $(OLED)),)
         OPT_DEFS += -D$(OLED)
-        SRC += oled-icons.c oled-luna.c
+        SRC += oled_icons.c oled_luna.c
     else
-        SRC += oled-icons.c oled-bongocat.c
+        SRC += oled_icons.c oled_bongocat.c
     endif
 endif

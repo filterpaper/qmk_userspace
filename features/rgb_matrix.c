@@ -2,8 +2,13 @@
 // SPDX-License-Identifier: GPL-2.0+
 
 #include QMK_KEYBOARD_H
-#include "rgb-matrix.h"
 #include <lib/lib8tion/lib8tion.h>
+
+#define RGB_DPINK   115, 20, 45
+#define RGB_DTEAL   5, 35, 35
+#define RGB_FLUOR   75, 122, 22
+#define RGB_CAPS    RGB_DPINK
+#define HSV_SWAP    HSV_TEAL
 
 #ifdef CONVERT_TO_KB2040
 // Map keys to KB2040 LEDs on each side
@@ -35,7 +40,7 @@ static RGB hsv_to_rgb_glow(HSV hsv) {
 
 bool rgb_matrix_indicators_user(void) {
     if (host_keyboard_led_state().caps_lock) {
-        rgb_matrix_set_color_all(RGB_RED);
+        rgb_matrix_set_color_all(RGB_CAPS);
     }
 
 #ifdef SWAP_HANDS_ENABLE
