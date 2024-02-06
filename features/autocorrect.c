@@ -4,8 +4,9 @@
 // Adapted from Pascal Getreuer's Autocorrection
 // https://getreuer.info/posts/keyboards/autocorrection
 
-
 #include QMK_KEYBOARD_H
+
+#include "autocorrect.h"
 #include <string.h>
 #ifdef __AVR__
 #   include "autocorrect_data_avr.h"
