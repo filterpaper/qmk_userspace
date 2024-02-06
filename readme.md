@@ -7,10 +7,9 @@ My personal [QMK](https://github.com/qmk/qmk_firmware) *userspace* is a self-con
 ## Features
 * [Contextual](#contextual-mod-taps) mod-taps
 * [Layout](#layout-wrapper-macros) wrapper macros
-* [Combos](combos.h) with preprocessors
-* [Autocorrect](autocorrect/) word processing
-* [OLED](oled/) indicators and animation
-* [RGB](rgb/) matrix indicators and custom effects
+* [Combos](features/combos.h) with preprocessors
+* [Autocorrect](features/autocorrect.c) word processing
+* [RGB](features/rgb_matrix.c) matrix indicators and custom effects
 
 
 &nbsp;</br> &nbsp;</br>
