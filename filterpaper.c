@@ -19,10 +19,10 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         next_record  = *record;
     }
 
-    // Override tap-hold keys based on previous input
+    // Override non-Shift tap-hold keys based on previous input
     if (IS_HOMEROW(record) && IS_MOD_TAP_CAG(keycode)) {
         uint8_t const tap_keycode = GET_TAP_KEYCODE(keycode);
-        // Press the tap keycode while typing when not preceded by layer or combo keys
+        // Press the tap keycode while typing and only if preceded by text keycodes
         if (record->event.pressed && IS_TYPING(prev_keycode) && prev_event != COMBO_EVENT) {
             record->keycode = tap_keycode;
             is_pressed[tap_keycode] = true;
@@ -78,14 +78,15 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
-        // Caps lock retention keycodes
+        // Retain caps lock with the following keycodes
+        // if there are no active non-Shift modifiers
         case KC_A ... KC_0:
         case KC_BSPC:
         case KC_MINS:
         case KC_UNDS:
         case KC_CAPS:
             if (!(get_mods() & ~MOD_MASK_SHIFT)) break;
-        // Any unmatched keycode is a word boundary
+        // Everything else is a word boundary
         default: tap_code(KC_CAPS);
     }
     return true;

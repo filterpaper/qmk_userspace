@@ -139,7 +139,7 @@ static void render_ctrl_shift(uint8_t const ctrl, uint8_t const shift) {
 
 // Primary modifier status display function
 void render_mod_status(void) {
-    uint8_t mods = get_mods();
+    uint8_t const mods = get_mods();
 
     render_logo();
     oled_set_cursor(0,6);
