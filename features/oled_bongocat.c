@@ -249,7 +249,7 @@ static void animate_cat(uint32_t interval) {
 
 static void render_bongocat(void) {
     static uint16_t frame_timer = 0;
-    uint32_t input_timer = last_matrix_activity_time();
+    uint32_t  const input_timer = last_matrix_activity_time();
 
     if (timer_elapsed32(input_timer) > OLED_TIMEOUT) {
         oled_off();
