@@ -101,7 +101,7 @@ definitly      -> definitely
 demostration   -> demonstration
 dervied        -> derived
 desparate      -> desperate
-develope       -> develop
+develope:      -> develop
 diffrence      -> difference
 dificult       -> difficult
 dilema         -> dilemma

@@ -17,15 +17,15 @@
 #define PERMISSIVE_HOLD_PER_KEY
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
+#ifdef SPLIT_KEYBOARD
+#   define EE_HANDS
+#endif
+
 #ifdef COMBO_ENABLE
 #   define COMBO_TERM 30
 #   define EXTRA_SHORT_COMBOS
 #   define COMBO_SHOULD_TRIGGER
 #   define COMBO_ONLY_FROM_LAYER 0
-#endif
-
-#ifdef SPLIT_KEYBOARD
-#   define EE_HANDS
 #endif
 
 #ifdef MOUSEKEY_ENABLE
@@ -50,11 +50,16 @@
 #ifdef OLED_ENABLE
 #   define OLED_TIMEOUT 10000
 #   define OLED_BRIGHTNESS 180
-#   define OLED_FONT_H "oled/oledfont.c"
+#   define OLED_FONT_H "oled_font.c"
 #endif
 
 #ifdef RGB_MATRIX_ENABLE
-#   include "rgb/rgb-matrix.h"
+#   define RGB_MATRIX_KEYPRESSES
+#   define ENABLE_RGB_MATRIX_CANDY_TAP
+#   define ENABLE_RGB_MATRIX_CANDY_RAIN
+#   define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CUSTOM_CANDY_TAP
+#   define DEF_MODE RGB_MATRIX_DEFAULT_MODE
+#   define CMK_MODE RGB_MATRIX_CUSTOM_CANDY_RAIN
 #endif
 
 // Layout macros

@@ -4,8 +4,10 @@
 #pragma once
 #include QMK_KEYBOARD_H
 
-extern void autocorrect_toggle(void);
-extern bool process_autocorrect(uint16_t keycode, keyrecord_t *record);
+#include "autocorrect.h"
+#ifdef COMBO_ENABLE
+#   include "combos.h"
+#endif
 
 // Convert 5-bit packed mod-tap modifiers to 8-bit packed MOD_MASK modifiers
 #define GET_MT_MOD_BITS(kc) (((kc) & 0x1000) ? ((kc >> 8) & 0x0f) << 4 : (kc >> 8) & 0x0f)
@@ -28,7 +30,3 @@ extern bool process_autocorrect(uint16_t keycode, keyrecord_t *record);
 #define IS_BILATERAL(r, n) ( \
     (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 7) || \
     (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 3) )
-
-#ifdef COMBO_ENABLE
-#   include "combos.h"
-#endif

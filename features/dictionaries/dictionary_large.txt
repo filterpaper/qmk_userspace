@@ -189,7 +189,7 @@ descripton     -> description
 desgin         -> design
 detailled      -> detailed
 detatched      -> detached
-develope       -> develop
+develope:      -> develop
 diablical      -> diabolical
 diaster        -> disaster
 dichtomy       -> dichotomy
