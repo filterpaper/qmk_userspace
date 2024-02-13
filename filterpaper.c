@@ -3,9 +3,8 @@
 
 #include "filterpaper.h"
 
-static uint16_t        next_keycode;
-static keyrecord_t     next_record;
-static keyevent_type_t prev_event;
+static uint16_t    next_keycode;
+static keyrecord_t next_record;
 
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -22,13 +21,13 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Override non-Shift tap-hold keys based on previous input
     if (IS_HOMEROW(record) && IS_MOD_TAP_CAG(keycode)) {
         uint8_t const tap_keycode = GET_TAP_KEYCODE(keycode);
-        // Press the tap keycode while typing and only if preceded by text keycodes
-        if (record->event.pressed && IS_TYPING(prev_keycode) && prev_event != COMBO_EVENT) {
+        // Press the tap keycode when precedeed by short text input interval
+        if (record->event.pressed && IS_TYPING(prev_keycode)) {
             record->keycode = tap_keycode;
             is_pressed[tap_keycode] = true;
         }
         // Release the tap keycode if pressed
-        else if (is_pressed[tap_keycode]) {
+        else if (!record->event.pressed && is_pressed[tap_keycode]) {
             record->keycode = tap_keycode;
             is_pressed[tap_keycode] = false;
         }
@@ -43,7 +42,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     if (IS_LAYER_TAP(keycode)) return true;
 
     // Sent its tap keycode when non-Shift overlaps with another key on the same hand
-    if (IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode) && !get_mods()) {
+    if (IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) {
         record->keycode = GET_TAP_KEYCODE(keycode);
         process_record(record);
         record->event.pressed = false;
@@ -103,9 +102,6 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        // Store processed event for combo detection in preprocess record
-        prev_event = record->event.type;
-
         if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
 
         // Clipboard shortcuts
