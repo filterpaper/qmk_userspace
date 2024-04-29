@@ -20,8 +20,11 @@
 #define IS_MOD_TAP_CS(kc)    (IS_QK_MOD_TAP(kc) && (kc) & (QK_LCTL | QK_LSFT))
 #define IS_MOD_TAP_CAG(kc)   (IS_QK_MOD_TAP(kc) && (kc) & (QK_LCTL | QK_LALT | QK_LGUI))
 #define IS_LAYER_TAP(kc)     (IS_QK_LAYER_TAP(kc) && QK_LAYER_TAP_GET_LAYER(kc))
-#define IS_TEXT(kc)          (KC_A <= (uint8_t)(kc) && (uint8_t)(kc) <= KC_SLSH)
-#define IS_TYPING(kc)        (last_input_activity_elapsed() < INPUT_INTERVAL && IS_TEXT(kc) && !IS_LAYER_TAP(kc))
+
+#define IS_TYPING(kc) ( \
+    last_input_activity_elapsed() < INPUT_INTERVAL   && \
+    (KC_A <= (uint8_t)(kc) && (uint8_t)(kc) <= KC_0) && \
+    !IS_LAYER_TAP(kc) )
 
 #define IS_UNILATERAL(r, n) ( \
     (0 <= r->event.key.row && r->event.key.row <= 2 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
