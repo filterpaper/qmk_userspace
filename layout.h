@@ -44,6 +44,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
 #define LCA_ENT LCA_T(KC_ENT)
 #define SFT_SPC RSFT_T(KC_SPC)
 #define NUM_BSP LT(NUM,KC_BSPC)
+#define ALT_BSP A(KC_BSPC)
 
 // Default 3x5_2 split layout
 #define _BASE \
@@ -95,7 +96,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
     _______, KC_LBRC, KC_LCBR, KC_RCBR, _______,     KC_CIRC, KC_LPRN, KC_RPRN, KC_RBRC, KC_TILD, \
     KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_ASTR, KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  \
     _______, _______, KC_LT,   KC_GT,   _______,     KC_AMPR, KC_UNDS, KC_PLUS, KC_PIPE, _______, \
-                               _______, _______,     _______, _______
+                               _______, _______,     _______, ALT_BSP
  /*╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮
    │        │  [     │  {     │  }     │        │   │  ^     │  (     │  )     │  ]     │  ~     │
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
@@ -103,7 +104,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
    │        │        │  <     │  >     │        │   │  &     │  _     │  +     │  │     │        │
    ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯
-                              │        │        │   │        │        │
+                              │        │        │   │        │ALT BSPC│
                               ╰────────┴────────╯   ╰────────┴────────╯*/
 
 #define _FUNC \
