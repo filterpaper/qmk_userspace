@@ -1,6 +1,6 @@
 {
     "keyboard": "cradio",
-    "converter": "helios",
+    "converter": "elite_pi",
     "keymap": "filterpaper",
     "layout": "LAYOUT_34key_w",
     "layers": [
