@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         keyboard: [cradio, sweep]
-        split: [left, right, '']
+        split: [left, right]
 
     steps:
     - name: Checkout QMK
