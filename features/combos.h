@@ -65,6 +65,13 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
     }
 }
 
+#ifdef COMBO_TERM_PER_COMBO
+uint16_t get_combo_term(uint16_t index, combo_t *combo) {
+    if (vol_up <= index && index <= nav_dn) return COMBO_TERM - 5;
+    return COMBO_TERM;
+}
+#endif
+
 #ifdef COMBO_SHOULD_TRIGGER
 static fast_timer_t input_timer;
 
