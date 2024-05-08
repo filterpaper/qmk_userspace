@@ -8,29 +8,30 @@
 #endif
 
 // Convert 5-bit packed mod-tap modifiers to 8-bit packed MOD_MASK modifiers
-#define MOD_TAP_GET_MOD_BITS(kc) (((kc) & 0x0f00) >> (((kc) & 0x1000) ? 4 : 8))
+#define MOD_TAP_GET_MOD_BITS(k) (((k) & 0x0f00) >> (((k) & 0x1000) ? 4 : 8))
 // Basic keycode filter for tap-hold keys
-#define GET_TAP_KEYCODE(kc) ((kc) & 0xff)
+#define GET_TAP_KEYCODE(k) ((k) & 0xff)
 
 // Tap-hold decision helper macros
-#define IS_HOMEROW(r)        (r->event.key.row == 1 || r->event.key.row == 5)
-#define IS_MOD_TAP_SHIFT(kc) (IS_QK_MOD_TAP(kc) && (kc) & (QK_LSFT))
-#define IS_MOD_TAP_CS(kc)    (IS_QK_MOD_TAP(kc) && (kc) & (QK_LCTL | QK_LSFT))
-#define IS_MOD_TAP_CAG(kc)   (IS_QK_MOD_TAP(kc) && (kc) & (QK_LCTL | QK_LALT | QK_LGUI))
-#define IS_LAYER_TAP(kc)     (IS_QK_LAYER_TAP(kc) && QK_LAYER_TAP_GET_LAYER(kc))
+#define IS_MOD_TAP_SHIFT(k) (IS_QK_MOD_TAP(k) && (k) & QK_LSFT)
+#define IS_LAYER_TAP(k) (IS_QK_LAYER_TAP(k) && QK_LAYER_TAP_GET_LAYER(k))
+#define IS_SHORTCUT(k) (IS_QK_LAYER_TAP(k) && !QK_LAYER_TAP_GET_LAYER(k))
 
-#define IS_TYPING(kc) ( \
-    last_input_activity_elapsed() < INPUT_INTERVAL   && \
-    (KC_A <= (uint8_t)(kc) && (uint8_t)(kc) <= KC_0) && \
-    !IS_LAYER_TAP(kc) )
+#define IS_TYPING(k) ( \
+    (uint8_t)(k) <= KC_SPC && !IS_LAYER_TAP(k) && \
+    last_input_activity_elapsed() < INPUT_INTERVAL)
+
+#define IS_HOMEROW_CAG(k, r) ( \
+    (r->event.key.row == 1 || r->event.key.row == 5) && \
+    IS_QK_MOD_TAP(k) && (k) & (QK_LCTL|QK_LALT|QK_LGUI) )
 
 #define IS_UNILATERAL(r, n) ( \
-    (0 <= r->event.key.row && r->event.key.row <= 2 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
-    (4 <= r->event.key.row && r->event.key.row <= 6 && 4 <= n.event.key.row && n.event.key.row <= 6) )
+    (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
+    (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) )
 
 #define IS_BILATERAL(r, n) ( \
-    (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 7) || \
-    (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 3) )
+    (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 6) || \
+    (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 2) )
 
 
 static uint16_t    next_keycode;
@@ -40,26 +41,23 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t prev_keycode;
     static bool     is_pressed[UINT8_MAX];
 
-    // Cache previous and next input for tap-hold decisions
     if (record->event.pressed) {
+        // Cache previous and next input for tap-hold decisions
         prev_keycode = next_keycode;
         next_keycode = keycode;
         next_record  = *record;
+
+        // Press the tap keycode if the non-Shift mod-tap follows the previous key rapidly
+        if (IS_HOMEROW_CAG(keycode, record) && IS_TYPING(prev_keycode)) {
+            record->keycode = GET_TAP_KEYCODE(keycode);
+            is_pressed[record->keycode] = true;
+        }
     }
 
-    // Override non-Shift tap-hold keys based on previous input
-    if (IS_HOMEROW(record) && IS_MOD_TAP_CAG(keycode)) {
-        uint8_t const tap_keycode = GET_TAP_KEYCODE(keycode);
-        // Press the tap keycode when precedeed by short text input interval
-        if (record->event.pressed && IS_TYPING(prev_keycode)) {
-            record->keycode = tap_keycode;
-            is_pressed[tap_keycode] = true;
-        }
-        // Release the tap keycode if pressed
-        else if (!record->event.pressed && is_pressed[tap_keycode]) {
-            record->keycode = tap_keycode;
-            is_pressed[tap_keycode] = false;
-        }
+    // Release the tap keycode if pressed
+    if (!record->event.pressed && is_pressed[GET_TAP_KEYCODE(keycode)]) {
+        record->keycode = GET_TAP_KEYCODE(keycode);
+        is_pressed[record->keycode] = false;
     }
 
     return true;
@@ -67,11 +65,12 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    // Activate layer with another key press
+    // Activate layer hold with another key press
     if (IS_LAYER_TAP(keycode)) return true;
 
-    // Send its tap keycode when non-Shift overlaps with another key on the same hand
-    if (IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) {
+    // Tap the mod-tap key with an overlapping non-Shift key on the same hand
+    // or the shortcut key with any overlapping keys
+    if ((IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) || IS_SHORTCUT(keycode)) {
         record->keycode = GET_TAP_KEYCODE(keycode);
         process_record(record);
         record->event.pressed = false;
@@ -83,14 +82,16 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Send Control or Shift with a nested key press on the opposite hand
-    return IS_BILATERAL(record, next_record) && IS_MOD_TAP_CS(keycode);
+    // Enable hold with a nested key press on the opposite hand
+    return IS_BILATERAL(record, next_record);
 }
 
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Decrease tapping term for Shift
-    return IS_MOD_TAP_SHIFT(keycode) ? TAPPING_TERM - 50 : TAPPING_TERM;
+    // Term refinements
+    if (IS_MOD_TAP_SHIFT(keycode)) return TAPPING_TERM - 60;
+    else if (IS_SHORTCUT(keycode)) return TAPPING_TERM + 60;
+    else return TAPPING_TERM;
 }
 
 
@@ -99,7 +100,7 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     // Skip if caps lock is off
     if (!host_keyboard_led_state().caps_lock) return true;
 
-    // Get tap keycode from tap hold keys
+    // Get tap keycode from tap-hold keys
     if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
         if (record->tap.count == 0) return true;
         keycode = GET_TAP_KEYCODE(keycode);
@@ -117,6 +118,7 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
         // Everything else is a word boundary
         default: tap_code(KC_CAPS);
     }
+
     return true;
 }
 
