@@ -69,7 +69,8 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 static fast_timer_t input_timer;
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-    if (timer_elapsed_fast(input_timer) < INPUT_INTERVAL) return false;
-    return combo_index >= thmb_l || get_highest_layer(layer_state) <= CMK;
+    if (combo_index >= thmb_l) return true;
+    else if (timer_elapsed_fast(input_timer) < INPUT_INTERVAL) return false;
+    else return get_highest_layer(layer_state) <= CMK;
 }
 #endif
