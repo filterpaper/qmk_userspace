@@ -10,13 +10,14 @@ ACTN(swap_r, swap_hands_toggle(), TH_M, TH_COMM, TH_DOT)
 #endif
 ACTN(tog_ac, autocorrect_toggle(), KC_U, KC_I, KC_O)
 
-COMB(vol_up,   KC_VOLU,  KC_P,    HM_QUOT)
-COMB(vol_dn,   KC_VOLD,  HM_QUOT, TH_SLSH)
-
 // Macros
 SSTR(vi_quit,  ":q!",    KC_Q,    KC_W)
 SSTR(vi_save,  ":x",     KC_Z,    KC_X)
 SSTR(dir_up,   "../",    TH_DOT,  TH_SLSH)
+
+// Media
+COMB(vol_up,   KC_VOLU,  KC_P,    HM_QUOT)
+COMB(vol_dn,   KC_VOLD,  HM_QUOT, TH_SLSH)
 
 // Navigation
 COMB(arr_up,   KC_UP,    KC_U,    KC_I)
