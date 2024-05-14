@@ -9,7 +9,6 @@ LTO_ENABLE = yes
 COMBO_ENABLE = yes
 SWAP_HANDS_ENABLE = yes
 
-MAKECMDGOALS = uf2-split-$(SPLIT)
 VPATH += $(USER_PATH)/features
 INTROSPECTION_KEYMAP_C = filterpaper.c
 SRC += autocorrect.c
@@ -19,11 +18,12 @@ ifeq ($(strip $(RGB_MATRIX_ENABLE)), yes)
     SRC += rgb_matrix.c
 endif
 
-ifeq ($(strip $(OLED_ENABLE)), yes)
-    ifneq ($(strip $(OLED)),)
-        OPT_DEFS += -D$(OLED)
-        SRC += oled_icons.c oled_luna.c
-    else
-        SRC += oled_icons.c oled_bongocat.c
+ifneq ($(strip $(CONVERT_TO)),)
+    EEPROM_DRIVER = transient
+    DEBOUNCE_TYPE = asym_eager_defer_pk
+    ifneq ($(filter left right, $(strip $(SPLIT))),)
+        _SUFFIX := _$(strip $(SPLIT))
+        MAKECMDGOALS = uf2-split-$(strip $(SPLIT))
     endif
+    override TARGET := $(subst /,_,$(KEYBOARD))_$(strip $(CONVERT_TO))$(_SUFFIX)
 endif
