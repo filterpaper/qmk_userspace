@@ -35,17 +35,20 @@ jobs:
       run: git config --global --add safe.directory '*'
 
     - name: Compile
-      env:
-        split: ${{ matrix.split }}
       working-directory: users/${{ github.actor }}/keymaps/
-      run: >
-        qmk compile -j $(nproc) ${{ matrix.keyboard }}.json
-        -e SPLIT=${{ matrix.split }} -e TARGET=${{ matrix.keyboard }}${split:+_$split}
+      run: qmk compile -j $(nproc) ${{ matrix.keyboard }}.json -e SPLIT=${{ matrix.split }}
+
+    - name: Calculate firmware size
+      run: avr-size $(ls .build/*.tmp) | sed 's/\.build\/\(.*\)\.tmp/\1/'
+
+    - name: Calculate memory usage
+      working-directory: .build/
+      run: arm-none-eabi-size -A *.elf | sed 's/\(.*\)\.elf/\1/'
 
     - name: Archive firmware
       uses: actions/upload-artifact@main
       with:
-        retention-days: 3
+        retention-days: 1
         name: ${{ matrix.keyboard }}_${{ matrix.split }}
         path: |
           *.hex
