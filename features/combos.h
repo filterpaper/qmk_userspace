@@ -65,19 +65,12 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
     }
 }
 
-#ifdef COMBO_TERM_PER_COMBO
-uint16_t get_combo_term(uint16_t index, combo_t *combo) {
-    if (vol_up <= index && index <= nav_dn) return COMBO_TERM - 5;
-    return COMBO_TERM;
-}
-#endif
-
 #ifdef COMBO_SHOULD_TRIGGER
 static fast_timer_t input_timer;
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
     if (combo_index >= thmb_l) return true;
-    else if (timer_elapsed_fast(input_timer) < INPUT_INTERVAL) return false;
+    else if (timer_elapsed_fast(input_timer) < TAPPING_TERM) return false;
     else return get_highest_layer(layer_state) <= CMK;
 }
 #endif
