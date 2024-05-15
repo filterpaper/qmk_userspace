@@ -88,9 +88,9 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Term refinements
+    // Fine tune values
     if (IS_MOD_TAP_SHIFT(keycode)) return TAPPING_TERM - 60;
-    else if (IS_SHORTCUT(keycode)) return TAPPING_TERM + 60;
+    else if (IS_SHORTCUT(keycode)) return TAPPING_TERM + 30;
     else return TAPPING_TERM;
 }
 
