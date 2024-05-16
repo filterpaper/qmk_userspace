@@ -18,7 +18,7 @@
 #define IS_SHORTCUT(k) (IS_QK_LAYER_TAP(k) && !QK_LAYER_TAP_GET_LAYER(k))
 
 #define IS_TYPING(k) ( \
-    (uint8_t)(k) <= KC_SPC && !IS_LAYER_TAP(k) && \
+    (uint8_t)(k) <= KC_Z && !IS_LAYER_TAP(k) && \
     last_input_activity_elapsed() < INPUT_INTERVAL)
 
 #define IS_HOMEROW_CAG(k, r) ( \
@@ -36,10 +36,10 @@
 
 static uint16_t    next_keycode;
 static keyrecord_t next_record;
+static bool        is_pressed[UINT8_MAX];
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t prev_keycode;
-    static bool     is_pressed[UINT8_MAX];
 
     if (record->event.pressed) {
         // Cache previous and next input for tap-hold decisions
@@ -55,7 +55,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     // Release the tap keycode if pressed
-    if (!record->event.pressed && is_pressed[GET_TAP_KEYCODE(keycode)]) {
+    else if (!record->event.pressed && is_pressed[GET_TAP_KEYCODE(keycode)]) {
         record->keycode = GET_TAP_KEYCODE(keycode);
         is_pressed[record->keycode] = false;
     }
@@ -65,17 +65,16 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    // Activate layer hold with another key press
-    if (IS_LAYER_TAP(keycode)) return true;
-
     // Tap the mod-tap key with an overlapping non-Shift key on the same hand
     // or the shortcut key with any overlapping keys
     if ((IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) || IS_SHORTCUT(keycode)) {
         record->keycode = GET_TAP_KEYCODE(keycode);
-        process_record(record);
-        record->event.pressed = false;
-        process_record(record);
+        is_pressed[record->keycode] = true;
+        return true;
     }
+
+    // Activate layer hold with another key press
+    else if (IS_LAYER_TAP(keycode)) return true;
 
     return false;
 }
@@ -91,7 +90,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     // Fine tune values
     if (IS_MOD_TAP_SHIFT(keycode)) return TAPPING_TERM - 60;
     else if (IS_SHORTCUT(keycode)) return TAPPING_TERM + 30;
-    else return TAPPING_TERM;
+    return TAPPING_TERM;
 }
 
 
