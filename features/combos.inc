@@ -10,12 +10,12 @@ ACTN(swap_r, swap_hands_toggle(), TH_M, TH_COMM, TH_DOT)
 #endif
 ACTN(tog_ac, autocorrect_toggle(), KC_U, KC_I, KC_O)
 
-// Macros
+// Macro strings
 SSTR(vi_quit,  ":q!",    KC_Q,    KC_W)
 SSTR(vi_save,  ":x",     KC_Z,    KC_X)
 SSTR(dir_up,   "../",    TH_DOT,  TH_SLSH)
 
-// Media
+// Media keys
 COMB(vol_up,   KC_VOLU,  KC_P,    HM_QUOT)
 COMB(vol_dn,   KC_VOLD,  HM_QUOT, TH_SLSH)
 
@@ -26,10 +26,6 @@ COMB(arr_lt,   KC_LEFT,  KC_H,    HM_J)
 COMB(arr_rt,   KC_RGHT,  HM_K,    HM_L)
 COMB(nav_up,   SA_UP,    TH_COMM, TH_DOT)
 COMB(nav_dn,   SA_DN,    TH_M,    TH_COMM)
-
-// Noop thumbs
-COMB(thmb_l,   KC_NO,    SYM_TAB, LCA_ENT)
-COMB(thmb_r,   KC_NO,    SFT_SPC, NUM_BSP)
 
 // Layer toggles
 COMB(tog_num,  TG(NUM),  NUM_BSP, KC_N, TH_M)
