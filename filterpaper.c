@@ -13,17 +13,16 @@
 #define GET_TAP_KEYCODE(k) ((k) & 0xff)
 
 // Tap-hold decision helper macros
-#define IS_MOD_TAP_SHIFT(k) (IS_QK_MOD_TAP(k) && (k) & QK_LSFT)
 #define IS_LAYER_TAP(k) (IS_QK_LAYER_TAP(k) && QK_LAYER_TAP_GET_LAYER(k))
 #define IS_SHORTCUT(k) (IS_QK_LAYER_TAP(k) && !QK_LAYER_TAP_GET_LAYER(k))
+#define IS_MOD_TAP_SHIFT(k) (IS_QK_MOD_TAP(k) && (k) & QK_LSFT)
+#define IS_MOD_TAP_CAG(k) (IS_QK_MOD_TAP(k) && (k) & (QK_LCTL|QK_LALT|QK_LGUI))
 
-#define IS_TYPING(k) ( \
-    (uint8_t)(k) <= KC_Z && !IS_LAYER_TAP(k) && \
-    last_input_activity_elapsed() < INPUT_INTERVAL)
+#define IS_HOMEROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
+#define IS_HOMEROW_SHIFT(k, r) (IS_HOMEROW(r) && IS_MOD_TAP_SHIFT(k))
+#define IS_HOMEROW_CAG(k, r) (IS_HOMEROW(r) && IS_MOD_TAP_CAG(k))
 
-#define IS_HOMEROW_CAG(k, r) ( \
-    (r->event.key.row == 1 || r->event.key.row == 5) && \
-    IS_QK_MOD_TAP(k) && (k) & (QK_LCTL|QK_LALT|QK_LGUI) )
+#define IS_TYPING(k) (GET_TAP_KEYCODE(k) <= KC_Z && last_input_activity_elapsed() < QUICK_TAP_TERM)
 
 #define IS_UNILATERAL(r, n) ( \
     (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
@@ -88,7 +87,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     // Fine tune values
-    if (IS_MOD_TAP_SHIFT(keycode)) return TAPPING_TERM - 60;
+    if (IS_HOMEROW_SHIFT(keycode, record)) return TAPPING_TERM - 60;
     else if (IS_SHORTCUT(keycode)) return TAPPING_TERM + 30;
     return TAPPING_TERM;
 }
