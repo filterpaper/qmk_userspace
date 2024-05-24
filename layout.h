@@ -13,6 +13,11 @@
 #define Z_SHUT  C(A(G(KC_PWR)))
 #define Z_SSAVE HYPR(KC_S)
 
+// Application shortcuts
+#define SA_UP  S(A(KC_UP))
+#define SA_DN  S(A(KC_DOWN))
+#define SG_SPC LSG(KC_SPC)
+
 // Tap hold macros
 #define TH_M    LT(0,KC_M)
 #define TH_COMM LT(0,KC_COMM)
@@ -32,10 +37,6 @@
 #define HRML(k1,k2,k3,k4) LCTL_T(k1),LALT_T(k2),LGUI_T(k3),LSFT_T(k4)
 #define HRMR(k1,k2,k3,k4) RSFT_T(k1),RGUI_T(k2),RALT_T(k3),RCTL_T(k4)
 
-// Navigation shortcuts
-#define SA_UP S(A(KC_UP))
-#define SA_DN S(A(KC_DOWN))
-
 // Layers
 enum layers { BSE, CMK, NUM, SYM, FNC };
 
@@ -44,8 +45,6 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
 #define LCA_ENT LCA_T(KC_ENT)
 #define SFT_SPC RSFT_T(KC_SPC)
 #define NUM_BSP LT(NUM,KC_BSPC)
-#define LSG_SPC LSG(KC_SPC)
-#define ALT_BSP A(KC_BSPC)
 
 // Default 3x5_2 split layout
 #define _BASE \
@@ -97,7 +96,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
     _______, KC_LBRC, KC_LCBR, KC_RCBR, _______,     KC_CIRC, KC_LPRN, KC_RPRN, KC_RBRC, KC_TILD, \
     KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_ASTR, KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  \
     _______, _______, KC_LT,   KC_GT,   _______,     KC_AMPR, KC_UNDS, KC_PLUS, KC_PIPE, _______, \
-                               _______, _______,     LSG_SPC, ALT_BSP
+                               _______, _______,     _______, KC_NO
  /*╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮
    │        │  [     │  {     │  }     │        │   │  ^     │  (     │  )     │  ]     │  ~     │
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
@@ -105,7 +104,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
    │        │        │  <     │  >     │        │   │  &     │  _     │  +     │  │     │        │
    ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯
-                              │        │        │   │ SG SPC │ALT BSPC│
+                              │        │        │   │        │        │
                               ╰────────┴────────╯   ╰────────┴────────╯*/
 
 #define _FUNC \
