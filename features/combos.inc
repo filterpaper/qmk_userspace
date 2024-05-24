@@ -24,8 +24,11 @@ COMB(arr_up,   KC_UP,    KC_U,    KC_I)
 COMB(arr_dn,   KC_DOWN,  HM_J,    HM_K)
 COMB(arr_lt,   KC_LEFT,  KC_H,    HM_J)
 COMB(arr_rt,   KC_RGHT,  HM_K,    HM_L)
+
+// Shortcuts
 COMB(nav_up,   SA_UP,    TH_COMM, TH_DOT)
 COMB(nav_dn,   SA_DN,    TH_M,    TH_COMM)
+COMB(sg_spc,   SG_SPC,   KC_C,    KC_V)
 
 // Layer toggles
 COMB(tog_num,  TG(NUM),  NUM_BSP, KC_N, TH_M)
