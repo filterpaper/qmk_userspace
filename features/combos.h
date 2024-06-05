@@ -69,7 +69,7 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 static fast_timer_t input_timer;
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-    if (timer_elapsed_fast(input_timer) < TAPPING_TERM) return false;
+    if (timer_elapsed_fast(input_timer) < TAPPING_TERM * 2) return false;
     else if (combo_index >= tog_num) return true;
     return get_highest_layer(layer_state) <= CMK;
 }
