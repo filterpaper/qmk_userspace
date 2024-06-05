@@ -22,7 +22,9 @@
 #define IS_HOMEROW_SHIFT(k, r) (IS_HOMEROW(r) && IS_MOD_TAP_SHIFT(k))
 #define IS_HOMEROW_CAG(k, r) (IS_HOMEROW(r) && IS_MOD_TAP_CAG(k))
 
-#define IS_TYPING(k) (GET_TAP_KEYCODE(k) <= KC_Z && last_input_activity_elapsed() < QUICK_TAP_TERM)
+#define IS_TYPING(k) ( \
+    ((uint8_t)(k) <= KC_Z || (uint8_t)(k) == KC_SPC) && \
+    (last_input_activity_elapsed() < QUICK_TAP_TERM) )
 
 #define IS_UNILATERAL(r, n) ( \
     (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
@@ -46,17 +48,17 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         next_keycode = keycode;
         next_record  = *record;
 
-        // Press the tap keycode if the non-Shift mod-tap follows the previous key rapidly
-        if (IS_HOMEROW_CAG(keycode, record) && IS_TYPING(prev_keycode)) {
+        // Press the tap keycode if the tap-hold key follows the previous key swiftly
+        if ((IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) && IS_TYPING(prev_keycode)) {
+            is_pressed[GET_TAP_KEYCODE(keycode)] = true;
             record->keycode = GET_TAP_KEYCODE(keycode);
-            is_pressed[record->keycode] = true;
         }
     }
 
     // Release the tap keycode if pressed
-    else if (!record->event.pressed && is_pressed[GET_TAP_KEYCODE(keycode)]) {
+    else if (is_pressed[GET_TAP_KEYCODE(keycode)]) {
+        is_pressed[GET_TAP_KEYCODE(keycode)] = false;
         record->keycode = GET_TAP_KEYCODE(keycode);
-        is_pressed[record->keycode] = false;
     }
 
     return true;
@@ -67,15 +69,13 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // Tap the mod-tap key with an overlapping non-Shift key on the same hand
     // or the shortcut key with any overlapping keys
     if ((IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) || IS_SHORTCUT(keycode)) {
-        record->keycode = GET_TAP_KEYCODE(keycode);
-        is_pressed[record->keycode] = true;
+        is_pressed[GET_TAP_KEYCODE(keycode)] = true;
+        record->tap.count++;
         return true;
     }
 
     // Activate layer hold with another key press
-    else if (IS_LAYER_TAP(keycode)) return true;
-
-    return false;
+    else return IS_LAYER_TAP(keycode);
 }
 
 
@@ -86,10 +86,9 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Fine tune values
-    if (IS_HOMEROW_SHIFT(keycode, record)) return TAPPING_TERM - 60;
-    else if (IS_SHORTCUT(keycode)) return TAPPING_TERM + 30;
-    return TAPPING_TERM;
+    // Shortern interval for Shift
+    if (IS_HOMEROW_SHIFT(keycode, record)) return TAPPING_TERM - 90;
+    else return TAPPING_TERM;
 }
 
 
