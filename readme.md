@@ -59,18 +59,17 @@ Modifiers should not be triggered when a mod-tap key is pressed in combination w
 #ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     if (IS_UNILATERAL(record, next_record)) {
-        // Set the tap keycode and send the pressed event
-        record->keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+        // Tap the keycode and send the event
+        record->tap.count++;
         process_record(record);
-        // Release the tap keycode and send the event
+        // Release the tap keycode
         record->event.pressed = false;
-        process_record(record);
+        return true;
     }
     return false;
 }
 #endif
 ```
-This approach uses the `keycode` container in the `keyrecord_t` C structure which requires either the `REPEAT_KEY_ENABLE` or `COMBO_ENABLE` feature to be enabled. The repeat key option will be simpler because it does not require additional code unlike the combo feature.
 
 ## Permissive bilateral hold
 Modifiers should be triggered when a mod-tap key is held down and another key is tapped with the opposite hand. This is applied in the `get_permissive_hold` function for the mod-tap key with a nested key record on the opposite side of the keyboard:
@@ -122,7 +121,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 ```
-The typing keycode macro excludes layer tap to prevent this feature from disabling quick access of keys in a layer. It can be customised to improve trigger accuracy. This configuration also uses the `keyrecord->keycode` structure container, which requires either the `REPEAT_KEY_ENABLE` or `COMBO_ENABLE` feature.
+The typing keycode macro excludes layer tap to prevent this feature from disabling quick access of keys in a layer. It can be customised to improve trigger accuracy. This approach uses the `keycode` container in the `keyrecord_t` C structure which requires either the `REPEAT_KEY_ENABLE` or `COMBO_ENABLE` feature to be enabled.
 > *The output experience will be similar to ZMK's [require-prior-idle-ms](https://zmk.dev/docs/behaviors/hold-tap#require-prior-idle-ms) feature.*
 
 ## Hold delay
