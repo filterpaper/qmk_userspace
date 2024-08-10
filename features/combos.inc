@@ -20,15 +20,17 @@ COMB(vol_up,   KC_VOLU,  KC_P,    HM_QUOT)
 COMB(vol_dn,   KC_VOLD,  HM_QUOT, TH_SLSH)
 
 // Navigation
-COMB(arr_up,   KC_UP,    KC_U,    KC_I)
-COMB(arr_dn,   KC_DOWN,  HM_J,    HM_K)
-COMB(arr_lt,   KC_LEFT,  KC_H,    HM_J)
-COMB(arr_rt,   KC_RGHT,  HM_K,    HM_L)
+COMB(arw_up,   KC_UP,    HM_K,    TH_COMM)
+COMB(arw_dn,   KC_DOWN,  HM_J,    TH_M)
+COMB(arw_lt,   KC_LEFT,  KC_H,    KC_N)
+COMB(arw_rt,   KC_RGHT,  HM_L,    TH_DOT)
+COMB(pageup,   KC_PGUP,  KC_I,    HM_K)
+COMB(pagedn,   KC_PGDN,  KC_U,    HM_J)
 
 // Shortcuts
 COMB(nav_up,   SA_UP,    TH_COMM, TH_DOT)
 COMB(nav_dn,   SA_DN,    TH_M,    TH_COMM)
-COMB(sg_spc,   SG_SPC,   KC_C,    KC_V)
+COMB(sg_spc,   SG_SPC,   HM_D,    HM_F)
 
 // Layer toggles
 COMB(tog_num,  TG(NUM),  NUM_BSP, KC_N, TH_M)
