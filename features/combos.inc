@@ -20,10 +20,12 @@ COMB(vol_up,   KC_VOLU,  KC_P,    HM_QUOT)
 COMB(vol_dn,   KC_VOLD,  HM_QUOT, TH_SLSH)
 
 // Navigation
-COMB(arr_up,   KC_UP,    KC_U,    KC_I)
-COMB(arr_dn,   KC_DOWN,  HM_J,    HM_K)
-COMB(arr_lt,   KC_LEFT,  KC_H,    HM_J)
-COMB(arr_rt,   KC_RGHT,  HM_K,    HM_L)
+COMB(arr_up,   KC_UP,    HM_K,    TH_COMM)
+COMB(arr_dn,   KC_DOWN,  HM_J,    TH_M)
+COMB(arr_lt,   KC_LEFT,  KC_H,    KC_N)
+COMB(arr_rt,   KC_RGHT,  HM_L,    TH_DOT)
+COMB(pageup,   KC_PGUP,  KC_I,    HM_K)
+COMB(pagedn,   KC_PGDN,  KC_U,    HM_J)
 
 // Shortcuts
 COMB(nav_up,   SA_UP,    TH_COMM, TH_DOT)
