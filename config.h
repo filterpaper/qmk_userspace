@@ -31,7 +31,8 @@
 #endif
 
 #ifdef MOUSEKEY_ENABLE
-//#   define MK_KINETIC_SPEED
+#   define MOUSEKEY_OVERLAP_RESET
+#   define MOUSEKEY_OVERLAP_INTERVAL   64
 #   define MOUSEKEY_DELAY               0 // Delay between pressing a key and cursor movement
 #   define MOUSEKEY_INTERVAL           16 // Time between cursor movements in milliseconds
 #   if defined (MK_KINETIC_SPEED)
