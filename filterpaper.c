@@ -35,30 +35,28 @@
     (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 2) )
 
 
-static uint16_t    next_keycode;
-static keyrecord_t next_record;
 static bool        is_pressed[UINT8_MAX];
+static uint16_t    inter_keycode;
+static keyrecord_t inter_record;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static uint16_t prev_keycode;
+    uint16_t const tap_keycode = GET_TAP_KEYCODE(keycode);
 
     if (record->event.pressed) {
-        // Cache previous and next input for tap-hold decisions
-        prev_keycode = next_keycode;
-        next_keycode = keycode;
-        next_record  = *record;
-
         // Press the tap keycode if the tap-hold key follows the previous key swiftly
-        if ((IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) && IS_TYPING(prev_keycode)) {
-            is_pressed[GET_TAP_KEYCODE(keycode)] = true;
-            record->keycode = GET_TAP_KEYCODE(keycode);
+        if ((IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) && IS_TYPING(inter_keycode)) {
+            is_pressed[tap_keycode] = true;
+            record->keycode         = tap_keycode;
         }
+        // Cache incoming input for in-progress and subsequent tap-hold decisions
+        inter_keycode = keycode;
+        inter_record  = *record;
     }
 
-    // Release the tap keycode if pressed
-    else if (is_pressed[GET_TAP_KEYCODE(keycode)]) {
-        is_pressed[GET_TAP_KEYCODE(keycode)] = false;
-        record->keycode = GET_TAP_KEYCODE(keycode);
+    // Release the pressed tap keycode
+    else if (is_pressed[tap_keycode]) {
+        is_pressed[tap_keycode] = false;
+        record->keycode         = tap_keycode;
     }
 
     return true;
@@ -67,11 +65,13 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // Tap the mod-tap key with an overlapping non-Shift key on the same hand
-    // or the shortcut key with any overlapping keys
-    if ((IS_UNILATERAL(record, next_record) && !IS_MOD_TAP_SHIFT(next_keycode)) || IS_SHORTCUT(keycode)) {
+    // or the tap-hold shortcut key with any overlapping key
+    if ((IS_UNILATERAL(record, inter_record) && !IS_MOD_TAP_SHIFT(inter_keycode)) || IS_SHORTCUT(keycode)) {
         is_pressed[GET_TAP_KEYCODE(keycode)] = true;
+        record->tap.interrupted              = false;
         record->tap.count++;
-        return true;
+        process_record(record);
+        return false;
     }
 
     // Activate layer hold with another key press
@@ -80,19 +80,18 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Enable hold with a nested key press on the opposite hand
-    return IS_BILATERAL(record, next_record);
+    // Enable Shift with a nested key press on the opposite hand
+    return IS_BILATERAL(record, inter_record) && IS_MOD_TAP_SHIFT(keycode);
 }
 
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    // Shortern interval for Shift
-    if (IS_HOMEROW_SHIFT(keycode, record)) return TAPPING_TERM - 90;
-    else return TAPPING_TERM;
+    // Shorten interval for Shift
+    return IS_HOMEROW_SHIFT(keycode, record) ? TAPPING_TERM - 80 : TAPPING_TERM;
 }
 
 
-// Turn off caps lock at a word boundry
+// Turn off caps lock at word boundry
 static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     // Skip if caps lock is off
     if (!host_keyboard_led_state().caps_lock) return true;
@@ -111,7 +110,7 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
         case KC_MINS:
         case KC_UNDS:
         case KC_CAPS:
-            if (!(get_mods() & ~MOD_MASK_SHIFT)) break;
+            if ((get_mods() & ~MOD_MASK_SHIFT) == false) break;
         // Everything else is a word boundary
         default: tap_code(KC_CAPS);
     }
