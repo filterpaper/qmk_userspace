@@ -7,7 +7,7 @@ This is my personal self-contained [QMK](https://github.com/qmk/qmk_firmware) ke
 ## Custom Features
 * [Contextual](#contextual-mod-taps) mod-taps
 * [Layout](#layout-wrapper-macros) wrapper macros
-* [Combos](features/combos.h) with preprocessors
+* [Combos](features/combos.c) with preprocessors
 * [Autocorrect](features/autocorrect.c) word processing
 * [RGB](features/rgb_matrix.c) matrix indicators and custom effects
 
