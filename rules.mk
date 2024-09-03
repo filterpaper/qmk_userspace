@@ -10,8 +10,8 @@ COMBO_ENABLE = yes
 SWAP_HANDS_ENABLE = yes
 
 VPATH += $(USER_PATH)/features
-INTROSPECTION_KEYMAP_C = filterpaper.c
-SRC += autocorrect.c
+INTROSPECTION_KEYMAP_C = combos.c
+SRC += autocorrect.c filterpaper.c
 
 ifeq ($(strip $(RGB_MATRIX_ENABLE)), yes)
     RGB_MATRIX_CUSTOM_USER = yes
