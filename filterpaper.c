@@ -85,7 +85,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     // Shorten interval for Shift
-    return IS_HOMEROW_SHIFT(keycode, record) ? TAPPING_TERM - 80 : TAPPING_TERM;
+    return IS_HOMEROW_SHIFT(keycode, record) ? SHIFT_TAP_TERM : TAPPING_TERM;
 }
 
 
@@ -127,9 +127,6 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-#if defined (COMBO_ENABLE) && defined (COMBO_SHOULD_TRIGGER)
-        if (record->event.type != COMBO_EVENT) input_timer = timer_read_fast();
-#endif
         if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
 
         // Clipboard shortcuts
