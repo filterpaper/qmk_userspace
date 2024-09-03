@@ -18,60 +18,80 @@ Use the ACTN macro for function callbacks
 Example: ACTN(rgb_tog, rgb_matrix_toggle(), KC_Z, KC_X)
 */
 
-#define COMBOS_DEF "combos.inc"
+#pragma once
 
-#define C_ENUM(name, val, ...) name,
-#define C_DATA(name, val, ...) uint16_t const name##_combo[] PROGMEM = {__VA_ARGS__, COMBO_END};
-#define C_TYPE(name, val, ...) [name] = COMBO(name##_combo, val),
-#define A_TYPE(name, val, ...) [name] = COMBO_ACTION(name##_combo),
-#define P_SSTR(name, val, ...) case name: if (pressed) { SEND_STRING(val); } break;
-#define P_ACTN(name, val, ...) case name: if (pressed) { val; } break;
-#define UNUSED(...)
+#ifndef COMBOS_DEF
+#   define COMBOS_DEF "combos.inc"
+#endif
 
-#define COMB C_ENUM
-#define SSTR C_ENUM
-#define ACTN C_ENUM
+#ifndef COMBO_IDLE_MS
+#   define COMBO_IDLE_MS (TAPPING_TERM + 100)
+#endif
+
+// Internal helper macros
+#define _C_ENUM(name, val, ...) name,
+#define _C_DATA(name, val, ...) static uint16_t const name##_combo[] PROGMEM = {__VA_ARGS__, COMBO_END};
+#define _C_TYPE(name, val, ...) [name] = COMBO(name##_combo, val),
+#define _A_TYPE(name, val, ...) [name] = COMBO_ACTION(name##_combo),
+#define _P_SSTR(name, val, ...) case name: if (pressed) { SEND_STRING(val); } break;
+#define _P_ACTN(name, val, ...) case name: if (pressed) { val; } break;
+#define _UNUSED(...)
+
+// Generate enum values
+#define COMB _C_ENUM
+#define SSTR _C_ENUM
+#define ACTN _C_ENUM
 enum combos {
-#   include COMBOS_DEF
-};
-
-#undef COMB
-#undef SSTR
-#undef ACTN
-#define COMB C_DATA
-#define SSTR C_DATA
-#define ACTN C_DATA
 #include COMBOS_DEF
-
-#undef COMB
-#undef SSTR
-#undef ACTN
-#define COMB C_TYPE
-#define SSTR A_TYPE
-#define ACTN A_TYPE
-combo_t key_combos[] = {
-#   include COMBOS_DEF
 };
-
 #undef COMB
 #undef SSTR
 #undef ACTN
-#define COMB UNUSED
-#define SSTR P_SSTR
-#define ACTN P_ACTN
+
+// Generate combo key sequences
+#define COMB _C_DATA
+#define SSTR _C_DATA
+#define ACTN _C_DATA
+#include COMBOS_DEF
+#undef COMB
+#undef SSTR
+#undef ACTN
+
+// Generate combo definitions
+#define COMB _C_TYPE
+#define SSTR _A_TYPE
+#define ACTN _A_TYPE
+combo_t key_combos[] = {
+#include COMBOS_DEF
+};
+#undef COMB
+#undef SSTR
+#undef ACTN
+
+// Generate combo event handler
+#define COMB _UNUSED
+#define SSTR _P_SSTR
+#define ACTN _P_ACTN
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch (combo_index) {
-#       include COMBOS_DEF
+#include COMBOS_DEF
+        default: break; // No action for unrecognized combos
     }
 }
+#undef COMB
+#undef SSTR
+#undef ACTN
+
 
 #ifdef COMBO_SHOULD_TRIGGER
 static fast_timer_t input_timer;
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-    if (timer_elapsed_fast(input_timer) > TAPPING_TERM) {
-        return ((combo_index >= tog_num) || (get_highest_layer(layer_state) <= CMK));
-    }
-    return false;
+    if (timer_elapsed_fast(input_timer) < COMBO_IDLE_MS) return false;
+    return (combo_index >= tog_num) || (get_highest_layer(layer_state) <= CMK);
+}
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed && IS_KEYEVENT(record->event)) input_timer = timer_read_fast();
 }
 #endif
