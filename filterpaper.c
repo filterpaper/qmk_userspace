@@ -22,9 +22,7 @@
 #define IS_HOMEROW_SHIFT(k, r) (IS_HOMEROW(r) && IS_MOD_TAP_SHIFT(k))
 #define IS_HOMEROW_CAG(k, r)   (IS_HOMEROW(r) && IS_MOD_TAP_CAG(k))
 
-#define IS_TYPING(k) ( \
-    ((uint8_t)(k) <= KC_Z || (uint8_t)(k) == KC_SPC) && \
-    (last_input_activity_elapsed() < QUICK_TAP_TERM) )
+#define IS_TYPING(k) ((uint8_t)(k) <= KC_Z && last_input_activity_elapsed() < INPUT_IDLE_MS)
 
 #define IS_UNILATERAL(r, n) ( \
     (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
@@ -87,7 +85,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     // Shorten interval for Shift
-    return IS_HOMEROW_SHIFT(keycode, record) ? TAPPING_TERM - 80 : TAPPING_TERM;
+    return IS_HOMEROW_SHIFT(keycode, record) ? SHIFT_TAP_TERM : TAPPING_TERM;
 }
 
 
@@ -129,9 +127,6 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-#if defined (COMBO_ENABLE) && defined (COMBO_SHOULD_TRIGGER)
-        if (record->event.type != COMBO_EVENT) input_timer = timer_read_fast();
-#endif
         if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
 
         // Clipboard shortcuts
