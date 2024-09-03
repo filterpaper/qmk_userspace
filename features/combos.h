@@ -32,7 +32,7 @@ Example: ACTN(rgb_tog, rgb_matrix_toggle(), KC_Z, KC_X)
 #define SSTR C_ENUM
 #define ACTN C_ENUM
 enum combos {
-#   include COMBOS_DEF
+#include COMBOS_DEF
 };
 
 #undef COMB
@@ -50,7 +50,7 @@ enum combos {
 #define SSTR A_TYPE
 #define ACTN A_TYPE
 combo_t key_combos[] = {
-#   include COMBOS_DEF
+#include COMBOS_DEF
 };
 
 #undef COMB
@@ -61,7 +61,7 @@ combo_t key_combos[] = {
 #define ACTN P_ACTN
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch (combo_index) {
-#       include COMBOS_DEF
+#include COMBOS_DEF
     }
 }
 
@@ -69,9 +69,13 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 static fast_timer_t input_timer;
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-    if (timer_elapsed_fast(input_timer) > TAPPING_TERM) {
-        return ((combo_index >= tog_num) || (get_highest_layer(layer_state) <= CMK));
+    if (timer_elapsed_fast(input_timer) < COMBO_IDLE_MS) return false;
+    return (combo_index >= tog_num) || (get_highest_layer(layer_state) <= CMK);
+}
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed && IS_KEYEVENT(record->event)) {
+        input_timer = timer_read_fast();
     }
-    return false;
 }
 #endif
