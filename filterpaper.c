@@ -4,7 +4,7 @@
 #include QMK_KEYBOARD_H
 #include "autocorrect.h"
 
-// Convert 5-bit packed mod-tap modifiers to 8-bit packed MOD_MASK modifiers
+// Convert 5-bit to 8-bit packed modifiers
 #define MOD_TAP_GET_MOD_BITS(k) (((k) & 0x0f00) >> (((k) & 0x1000) ? 4 : 8))
 // Basic keycode filter for tap-hold keys
 #define GET_TAP_KEYCODE(k) ((k) & 0xff)
@@ -19,15 +19,13 @@
 #define IS_HOMEROW_SHIFT(k, r) (IS_HOMEROW(r) && IS_MOD_TAP_SHIFT(k))
 #define IS_HOMEROW_CAG(k, r) (IS_HOMEROW(r) && IS_MOD_TAP_CAG(k))
 
-#define IS_TYPING(k) (!IS_LAYER_TAP(k) && last_input_activity_elapsed() < INPUT_IDLE_MS)
+#define IS_TYPING(k) ( \
+    ((uint8_t)(k) <= KC_Z || IS_SHORTCUT(k)) && \
+    (last_input_activity_elapsed() < INPUT_IDLE_MS))
 
 #define IS_UNILATERAL(r, n) ( \
     (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
     (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) )
-
-#define IS_BILATERAL(r, n) ( \
-    (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 6) || \
-    (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 2) )
 
 
 static uint16_t    inter_keycode;
@@ -47,9 +45,8 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         inter_keycode = keycode;
         inter_record  = *record;
     }
-
-    // Release the pressed tap keycode
     else if (is_pressed[tap_keycode]) {
+        // Release the pressed tap keycode
         is_pressed[tap_keycode] = false;
         record->keycode         = tap_keycode;
     }
@@ -68,15 +65,14 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
         process_record(record);
         return false;
     }
-
     // Activate layer hold with another key press
     else return IS_LAYER_TAP(keycode);
 }
 
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Enable Shift with a nested key press on the opposite hand
-    return IS_BILATERAL(record, inter_record) && IS_MOD_TAP_SHIFT(keycode);
+    // Register Shift with a nested key press
+    return IS_HOMEROW_SHIFT(keycode, record);
 }
 
 
@@ -86,31 +82,26 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// Turn off caps lock at word boundry
-static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
-    // Skip if caps lock is off
-    if (!host_keyboard_led_state().caps_lock) return true;
-
+// Turn off caps lock at word boundary
+static inline void process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     // Get tap keycode from tap-hold keys
     if (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) {
-        if (record->tap.count == 0) return true;
+        if (record->tap.count == 0) return;
         keycode = GET_TAP_KEYCODE(keycode);
     }
 
     switch (keycode) {
-        // Retain caps lock with the following keycodes
-        // if there are no active non-Shift modifiers
         case KC_A ... KC_0:
         case KC_BSPC:
         case KC_MINS:
         case KC_UNDS:
         case KC_CAPS:
-            if ((get_mods() & ~MOD_MASK_SHIFT) == false) break;
-        // Everything else is a word boundary
-        default: tap_code(KC_CAPS);
+            // Retain caps lock if there are no active non-Shift modifiers
+            if ((get_mods() & ~MOD_MASK_SHIFT) == 0) return;
+        default:
+            // Everything else is a word boundary
+            tap_code(KC_CAPS);
     }
-
-    return true;
 }
 
 
@@ -124,7 +115,8 @@ static inline bool process_tap_hold(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        if (!process_autocorrect(keycode, record) || !process_caps_unlock(keycode, record)) return false;
+        if (!process_autocorrect(keycode, record)) return false;
+        if (host_keyboard_led_state().caps_lock) process_caps_unlock(keycode, record);
 
         // Clipboard shortcuts
         if      (keycode == TH_M)    return process_tap_hold(Z_PST, record);
