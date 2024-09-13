@@ -28,10 +28,6 @@
     (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
     (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) )
 
-#define IS_BILATERAL(r, n) ( \
-    (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 6) || \
-    (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 2) )
-
 
 static bool        is_pressed[UINT8_MAX];
 static uint16_t    inter_keycode;
@@ -41,7 +37,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     uint16_t const tap_keycode = GET_TAP_KEYCODE(keycode);
 
     if (record->event.pressed) {
-        // Press the tap keycode if the tap-hold key follows the previous key swiftly
+        // Press the tap keycode if the tap-hold key follows an alphabet key swiftly
         if ((IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) && IS_TYPING(inter_keycode)) {
             is_pressed[tap_keycode] = true;
             record->keycode         = tap_keycode;
@@ -50,7 +46,6 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         inter_keycode = keycode;
         inter_record  = *record;
     }
-
     // Release the pressed tap keycode
     else if (is_pressed[tap_keycode]) {
         is_pressed[tap_keycode] = false;
@@ -71,15 +66,14 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
         process_record(record);
         return false;
     }
-
     // Activate layer hold with another key press
     else return IS_LAYER_TAP(keycode);
 }
 
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Enable Shift with a nested key press on the opposite hand
-    return IS_BILATERAL(record, inter_record) && IS_MOD_TAP_SHIFT(keycode);
+    // Enable Shift with a nested key press
+    return IS_HOMEROW_SHIFT(keycode, record);
 }
 
 
@@ -101,8 +95,8 @@ static inline bool process_caps_unlock(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
-        // Retain caps lock with the following keycodes
-        // if there are no active non-Shift modifiers
+        // Retain caps lock with these keycodes if
+        // there are no active non-Shift modifiers
         case KC_A ... KC_0:
         case KC_BSPC:
         case KC_MINS:
