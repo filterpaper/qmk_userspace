@@ -18,7 +18,7 @@
 #define IS_MOD_TAP_SHIFT(k) (IS_QK_MOD_TAP(k) && (k) & (QK_LSFT))
 #define IS_MOD_TAP_CAG(k)   (IS_QK_MOD_TAP(k) && (k) & (QK_LCTL|QK_LALT|QK_LGUI))
 
-#define IS_HOMEROW(r)          (r->event.key.row == 1 || r->event.key.row == 5)
+#define IS_HOMEROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
 #define IS_HOMEROW_SHIFT(k, r) (IS_HOMEROW(r) && IS_MOD_TAP_SHIFT(k))
 #define IS_HOMEROW_CAG(k, r)   (IS_HOMEROW(r) && IS_MOD_TAP_CAG(k))
 
@@ -27,10 +27,6 @@
 #define IS_UNILATERAL(r, n) ( \
     (r->event.key.row == 1 && 0 <= n.event.key.row && n.event.key.row <= 2) || \
     (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) )
-
-#define IS_BILATERAL(r, n) ( \
-    (r->event.key.row == 1 && 4 <= n.event.key.row && n.event.key.row <= 6) || \
-    (r->event.key.row == 5 && 0 <= n.event.key.row && n.event.key.row <= 2) )
 
 
 static uint_fast16_t inter_keycode;
@@ -41,7 +37,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     const  uint16_t tap_keycode = GET_TAP_KEYCODE(keycode);
 
     if (record->event.pressed) {
-        // Press the tap keycode if the tap-hold key follows the previous key swiftly
+        // Press the tap keycode if the tap-hold key follows an alphabet key swiftly
         if ((IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) && IS_TYPING(inter_keycode)) {
             is_pressed[tap_keycode] = true;
             record->keycode         = tap_keycode;
@@ -76,8 +72,8 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
 
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Enable Shift with a nested key press on the opposite hand
-    return IS_BILATERAL(record, inter_record) && IS_MOD_TAP_SHIFT(keycode);
+    // Enable Shift with a nested key press
+    return IS_HOMEROW_SHIFT(keycode, record);
 }
 
 
