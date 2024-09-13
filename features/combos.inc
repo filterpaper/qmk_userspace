@@ -30,7 +30,7 @@ COMB(pagedn,   KC_PGDN,  KC_U,    HM_J)
 // Shortcuts
 COMB(nav_up,   SA_UP,    TH_COMM, TH_DOT)
 COMB(nav_dn,   SA_DN,    TH_M,    TH_COMM)
-COMB(sg_spc,   SG_SPC,   KC_C,    KC_V)
+COMB(sg_spc,   SG_SPC,   HM_D,    HM_F)
 
 // Layer toggles
 COMB(tog_num,  TG(NUM),  NUM_BSP, KC_N, TH_M)
