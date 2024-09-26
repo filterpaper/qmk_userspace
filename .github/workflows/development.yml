@@ -8,7 +8,7 @@ jobs:
   build:
     name: QMK Userspace build
     runs-on: ubuntu-latest
-    container: qmkfm/base_container
+    container: ghcr.io/qmk/qmk_cli:latest
     permissions:
       contents: write
     strategy:
@@ -32,9 +32,6 @@ jobs:
         path: users/${{ github.actor }}
         persist-credentials: false
 
-    - name: Install QMK CLI
-      run: python3 -m pip install --upgrade qmk
-
     - name: Configure QMK CLI
       run: |
         qmk config userspace_compile.parallel=$(nproc)
@@ -52,6 +49,10 @@ jobs:
     - name: Calculate firmware size
       working-directory: qmk_firmware/.build/
       run: avr-size $(ls *.tmp) | sed 's/\(.*\)\.tmp/\1/'
+
+    - name: Calculate memory usage
+      working-directory: qmk_firmware/.build/
+      run: arm-none-eabi-size -A *.elf | sed 's/\(.*\)\.elf/\1/'
 
     - name: Archive firmware
       if: github.event_name == 'workflow_dispatch'
