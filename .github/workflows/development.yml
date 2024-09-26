@@ -33,7 +33,9 @@ jobs:
         persist-credentials: false
 
     - name: Install QMK CLI
-      run: python3 -m pip install --upgrade qmk
+      run: |
+        python3 -m pip install --upgrade qmk
+        python3 -m pip install -r qmk_firmware/requirements.txt
 
     - name: Configure QMK CLI
       run: |
