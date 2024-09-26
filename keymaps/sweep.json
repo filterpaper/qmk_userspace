@@ -25,9 +25,6 @@
                     "modifiers": true
                 },
                 "watchdog": true
-            },
-            "usb_detect": {
-                "enabled": true
             }
         }
     },
