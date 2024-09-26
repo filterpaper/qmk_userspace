@@ -2,6 +2,9 @@
     "keyboard": "cradio",
     "converter": "kb2040",
     "config": {
+        "build": {
+            "lto": true
+        },
         "features": {
             "rgb_matrix": true
         },
@@ -25,9 +28,6 @@
                     "modifiers": true
                 },
                 "watchdog": true
-            },
-            "usb_detect": {
-                "enabled": true
             }
         }
     },
