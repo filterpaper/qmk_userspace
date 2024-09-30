@@ -38,7 +38,7 @@
 #define HRMR(k1,k2,k3,k4) RSFT_T(k1),RGUI_T(k2),RALT_T(k3),RCTL_T(k4)
 
 // Layers
-enum layers { BSE, CMK, NUM, SYM, FNC };
+enum layers { BSE, CMK, SYM, NUM, FNC };
 
 // Thumb keys
 #define SYM_TAB LT(SYM,KC_TAB)
@@ -47,7 +47,7 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
 #define NUM_BSP LT(NUM,KC_BSPC)
 
 // Default 3x5_2 split layout
-#define _BASE \
+#define BASE \
     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
     KC_A,    KC_S,    KC_D,    KC_F,    KC_G,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, \
     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
@@ -59,10 +59,10 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
    ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
    │  Z     │  X     │  C     │  V     │  B     │   │  N     │  M     │ , <    │ . >    │ / ?    │
    ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯
-                              │SYM/TAB │LCA/ENT │   │SFT/SPC │NUM/BSPC│
+                              │TAB/SYM │ENT/LCA │   │SPC/SFT │BSPC/NUM│
                               ╰────────┴────────╯   ╰────────┴────────╯*/
 
-#define _COLE \
+#define COLE \
     KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,        KC_J,    KC_L,    KC_U,    KC_Y,    KC_QUOT, \
     KC_A,    KC_R,    KC_S,    KC_T,    KC_D,        KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    \
     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
@@ -77,7 +77,22 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
                               │        │        │   │        │        │
                               ╰────────┴────────╯   ╰────────┴────────╯*/
 
-#define _NUMB \
+#define SYMB \
+    _______, KC_LBRC, KC_LCBR, KC_RCBR, _______,     KC_CIRC, KC_LPRN, KC_RPRN, KC_RBRC, KC_TILD, \
+    KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_ASTR, KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  \
+    _______, _______, _______, _______, _______,     KC_AMPR, KC_UNDS, KC_PLUS, KC_PIPE, _______, \
+                               _______, _______,     _______, _______
+ /*╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮
+   │        │  [     │  {     │  }     │        │   │  ^     │  (     │  )     │  ]     │  ~     │
+   ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
+   │  !     │  @     │  #     │  $     │  %     │   │  *     │  -     │  =     │  \     │  `     │
+   ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
+   │        │        │        │        │        │   │  &     │  _     │  +     │  │     │        │
+   ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯
+                              │        │        │   │        │        │
+                              ╰────────┴────────╯   ╰────────┴────────╯*/
+
+#define NUMB \
     KC_INS,  KC_1,    KC_2,    KC_3,    KC_VOLU,     KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_COLN, \
     KC_CAPS, KC_4,    KC_5,    KC_6,    KC_VOLD,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_SCLN, \
     KC_DEL,  KC_7,    KC_8,    KC_9,    KC_0,        _______, SA_DN,   SA_UP,   _______, _______, \
@@ -92,25 +107,10 @@ enum layers { BSE, CMK, NUM, SYM, FNC };
                               │ FNC    │ ESC    │   │        │        │
                               ╰────────┴────────╯   ╰────────┴────────╯*/
 
-#define _SYMB \
-    _______, KC_LBRC, KC_LCBR, KC_RCBR, _______,     KC_CIRC, KC_LPRN, KC_RPRN, KC_RBRC, KC_TILD, \
-    KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_ASTR, KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  \
-    _______, _______, KC_LT,   KC_GT,   _______,     KC_AMPR, KC_UNDS, KC_PLUS, KC_PIPE, _______, \
-                               _______, _______,     _______, KC_NO
- /*╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮
-   │        │  [     │  {     │  }     │        │   │  ^     │  (     │  )     │  ]     │  ~     │
-   ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
-   │  !     │  @     │  #     │  $     │  %     │   │  *     │  -     │  =     │  \     │  `     │
-   ├────────┼────────┼────────┼────────┼────────┤   ├────────┼────────┼────────┼────────┼────────┤
-   │        │        │  <     │  >     │        │   │  &     │  _     │  +     │  │     │        │
-   ╰────────┴────────┴────────┼────────┼────────┤   ├────────┼────────┼────────┴────────┴────────╯
-                              │        │        │   │        │        │
-                              ╰────────┴────────╯   ╰────────┴────────╯*/
-
-#define _FUNC \
-    QK_BOOT, KC_F1,   KC_F2,   KC_F3,   KC_F10,      _______, KC_WH_U, KC_WH_D, _______, TG(CMK), \
-    _______, KC_F4,   KC_F5,   KC_F6,   KC_F11,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, \
-    Z_SLEEP, KC_F7,   KC_F8,   KC_F9,   KC_F12,      _______, KC_BTN2, KC_BTN1, _______, Z_SSAVE, \
+#define FUNC \
+    QK_BOOT, KC_F1,   KC_F2,   KC_F3,   KC_F10,      _______, MS_WHLU, MS_WHLD, _______, TG(CMK), \
+    _______, KC_F4,   KC_F5,   KC_F6,   KC_F11,      MS_LEFT, MS_DOWN, MS_UP,   MS_RGHT, _______, \
+    Z_SLEEP, KC_F7,   KC_F8,   KC_F9,   KC_F12,      _______, MS_BTN2, MS_BTN1, _______, Z_SSAVE, \
                                _______, _______,     _______, _______
  /*╭────────┬────────┬────────┬────────┬────────╮   ╭────────┬────────┬────────┬────────┬────────╮
    │ BOOT   │  F1    │  F2    │  F3    │ F10    │   │        │ WH UP  │ WH DN  │        │COLEMAK │
@@ -153,4 +153,4 @@ HRML(l06, l07, l08, l09), l10,   r06, HRMR(r07, r08, r09, r10), \
 KC_TAB,  l01, l02, l03, l04, l05,   r01, r02, r03, r04, r05, KC_BSPC, \
 QK_GESC, l06, l07, l08, l09, l10,   r06, r07, r08, r09, r10, KC_SCLN, \
 KC_LSFT, l11, l12, l13, l14, l15,   r11, r12, r13, r14, r15, KC_ENT,  \
-         RSA_T(KC_ESC), l16, l17,   r16, r17, RAG_T(KC_DEL)
+                 KC_NO, l16, l17,   r16, r17, KC_NO

@@ -21,10 +21,10 @@
     "keymap": "filterpaper",
     "layout": "LAYOUT_crkbd_w",
     "layers": [
-        [ "C_42(HRM(_BASE))" ],
-        [ "C_42(HRM(_COLE))" ],
-        [ "C_42(_NUMB)" ],
-        [ "C_42(_SYMB)" ],
-        [ "C_42(_FUNC)" ]
+        [ "C_42(HRM(BASE))" ],
+        [ "C_42(HRM(COLE))" ],
+        [ "C_42(SYMB)" ],
+        [ "C_42(NUMB)" ],
+        [ "C_42(FUNC)" ]
     ]
 }

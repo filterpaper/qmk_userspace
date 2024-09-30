@@ -8,7 +8,6 @@
         "rgb_matrix": {
             "driver": "ws2812",
             "led_count": 2,
-            "led_process_limit": 1,
             "split_count": [1, 1],
             "timeout": 180000
         },
@@ -23,17 +22,22 @@
                     "layer_state": true,
                     "modifiers": true
                 },
-                "watchdog": true
+                "watchdog": true,
+                "watchdog_timeout": 3500
+            },
+            "usb_detect" :{
+                "enabled": true,
+                "timeout": 3000
             }
         }
     },
     "keymap": "filterpaper",
     "layout": "LAYOUT_34key_w",
     "layers": [
-        [ "HRM(_BASE)" ],
-        [ "HRM(_COLE)" ],
-        [ "_NUMB" ],
-        [ "_SYMB" ],
-        [ "_FUNC" ]
+        [ "HRM(BASE)" ],
+        [ "HRM(COLE)" ],
+        [ "SYMB" ],
+        [ "NUMB" ],
+        [ "FUNC" ]
     ]
 }
