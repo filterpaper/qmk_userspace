@@ -152,7 +152,7 @@ A single keymap layout can be shared with multiple keyboards by using C preproce
 ## Basic setup
 The `split_3x5_2` layout is used as the base, with layers defined in `layout.h`. The following is an example of a default layer:
 ```c
-#define _BASE \
+#define BASE \
     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
     KC_A,    KC_S,    KC_D,    KC_F,    KC_G,      KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, \
     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,      KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
@@ -171,10 +171,10 @@ Both layout and layer macros are referenced in the keyboard JSON file (`cradio.j
     "keymap": "filterpaper",
     "layout": "LAYOUT_34key_w",
     "layers": [
-        [ "_BASE" ],
-        [ "_NUMB" ],
-        [ "_SYMB" ],
-        [ "_FUNC" ]
+        [ "BASE" ],
+        [ "NUMB" ],
+        [ "SYMB" ],
+        [ "FUNC" ]
     ]
 }
 ```
@@ -211,11 +211,11 @@ HRML(l06, l07, l08, l09), l10,    r06, HRMR(r07, r08, r09, r10), \
 The `HRM()` macro can now be used in the JSON file to add home row modifiers for layers that require them. For example:
 ```c
 "layers": [
-    [ "HRM(_BASE)" ],
-    [ "HRM(_COLE)" ],
-    [ "_NUMB" ],
-    [ "_SYMB" ],
-    [ "_FUNC" ]
+    [ "HRM(BASE)" ],
+    [ "HRM(COLE)" ],
+    [ "NUMB" ],
+    [ "SYMB" ],
+    [ "FUNC" ]
 ],
 ```
 > When setup this way, the home row modifier order can be easily edited in the `HRML` and `HRMR` macros.
@@ -244,10 +244,10 @@ The JSON file for Corne (`corne.json`) will use the conversion and HRM macro in 
     "keymap": "filterpaper",
     "layout": "LAYOUT_corne_w",
     "layers": [
-        [ "C_42(HRM(_BASE))" ],
-        [ "C_42(_NUMB)" ],
-        [ "C_42(_SYMB)" ],
-        [ "C_42(_FUNC)" ]
+        [ "C_42(HRM(BASE))" ],
+        [ "C_42(NUMB)" ],
+        [ "C_42(SYMB)" ],
+        [ "C_42(FUNC)" ]
     ]
 }
 ```
