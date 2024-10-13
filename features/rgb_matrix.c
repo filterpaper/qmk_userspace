@@ -4,67 +4,62 @@
 #include QMK_KEYBOARD_H
 #include <lib/lib8tion/lib8tion.h>
 
-#define RGB_DPINK   115, 20, 45
-#define RGB_DTEAL   5, 35, 35
-#define RGB_FLUOR   75, 122, 22
-#define RGB_CAPS    RGB_DPINK
-#define HSV_SWAP    HSV_TEAL
-
 #ifdef CONVERT_TO_KB2040
-// Map keys to KB2040 LEDs on each side
-led_config_t g_led_config = { {
-    { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
-    { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 },
-    { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }
-}, {
-    {109, 48}, {115, 48}
-}, {
-    0x0f, 0xf0 // Flags for masking mod bits
-} };
+led_config_t g_led_config = {
+    .matrix_co = { // Map keys to LEDs on each side
+        { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
+        { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }
+    },
+    .point = {
+        {0, 48}, {224, 48}
+    },
+    .flags = {
+        0x0F, 0xF0 // Flags for masking modifier bits
+    }
+};
+#   define IS_MODIFIER_FOR_LED(n) (get_mods() & g_led_config.flags[(n)])
+#else
+#   define IS_MODIFIER_FOR_LED(n) (                             \
+        HAS_FLAGS(g_led_config.flags[(n)], LED_FLAG_MODIFIER)   \
+        && get_mods())
 #endif
+
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    hsv_t hsv = {};
+
+    if (get_highest_layer(layer_state) > CMK) {
+        // Scale active layer index to hue value
+        hsv   = rgb_matrix_config.hsv;
+        hsv.h = (get_highest_layer(layer_state) - 1) * 85;
+    } else if (host_keyboard_led_state().caps_lock) {
+        // Apply pulsing brightness to hue value
+        hsv          = (hsv_t){HSV_PINK};
+        uint8_t time = scale16by8(g_rgb_timer, rgb_matrix_config.speed / 4);
+        uint8_t wave = abs8(sin8(time) - 128) * 2;
+        hsv.v        = scale8(wave, hsv.v);
+    }
+
+    for (uint8_t i = led_min; i < led_max; ++i) {
+        uint8_t mods = IS_MODIFIER_FOR_LED(i);
+        if (!mods && !hsv.v) continue;
+
+        if (mods) {
+            // Combine modifier bits and scale to hue range
+            hsv   = rgb_matrix_config.hsv;
+            hsv.h = ((mods >> 4) | (mods & 0x0F)) * 17;
+        }
+        rgb_t rgb = hsv_to_rgb(hsv);
+        rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+    }
+
+    return false;
+}
 
 
 layer_state_t layer_state_set_user(layer_state_t const state) {
     rgb_matrix_mode_noeeprom(layer_state_is(CMK) ? CMK_MODE : DEF_MODE);
     return state;
-}
-
-
-static RGB hsv_to_rgb_glow(HSV hsv) {
-    // Return glowing RGB values
-    hsv.v = scale8(abs8(sin8(scale16by8(g_rgb_timer, rgb_matrix_config.speed / 8)) - 128) * 2, hsv.v);
-    return hsv_to_rgb(hsv);
-}
-
-
-bool rgb_matrix_indicators_user(void) {
-    if (host_keyboard_led_state().caps_lock) {
-        rgb_matrix_set_color_all(RGB_CAPS);
-    }
-
-#ifdef SWAP_HANDS_ENABLE
-    if (is_swap_hands_on()) {
-        RGB const rgb = hsv_to_rgb_glow((HSV){HSV_SWAP});
-        rgb_matrix_set_color_all(rgb.r, rgb.g, rgb.b);
-    }
-#endif
-
-#ifdef CONVERT_TO_KB2040
-    if (get_mods()) {
-        uint8_t const mods = get_mods();
-        RGB const rgb = hsv_to_rgb((HSV){(mods >> 4 | mods) * 16, 255, rgb_matrix_config.hsv.v});
-        for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
-            if (g_led_config.flags[i] & mods) rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
-        }
-    }
-#endif
-
-    if (get_highest_layer(layer_state) > CMK) {
-        uint8_t const layer = get_highest_layer(layer_state);
-        RGB const rgb = hsv_to_rgb((HSV){(layer - 1) * 80, 255, rgb_matrix_config.hsv.v});
-        rgb_matrix_set_color_all(rgb.r, rgb.g, rgb.b);
-    }
-
-    return false;
 }
