@@ -29,12 +29,10 @@
     (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) )
 
 
-static bool        is_pressed[UINT8_MAX];
-static uint16_t    inter_keycode;
-static keyrecord_t inter_record;
-
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    uint16_t const tap_keycode = GET_TAP_KEYCODE(keycode);
+    const  uint16_t tap_keycode = GET_TAP_KEYCODE(keycode);
+    static uint16_t inter_keycode;
+    static bool     is_pressed[UINT8_MAX];
 
     if (record->event.pressed) {
         // Press the tap keycode if the tap-hold key follows an alphabet key swiftly
@@ -44,7 +42,6 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         // Cache incoming input for in-progress and subsequent tap-hold decisions
         inter_keycode = keycode;
-        inter_record  = *record;
     }
     // Release the pressed tap keycode
     else if (is_pressed[tap_keycode]) {
@@ -56,18 +53,28 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    // Tap the mod-tap key with an overlapping non-Shift key on the same hand
-    // or the tap-hold shortcut key with any overlapping key
-    if ((IS_UNILATERAL(record, inter_record) && !IS_MOD_TAP_SHIFT(inter_keycode)) || IS_SHORTCUT(keycode)) {
-        is_pressed[GET_TAP_KEYCODE(keycode)] = true;
-        record->tap.interrupted              = false;
-        record->tap.count++;
-        process_record(record);
+char chordal_hold_handedness(keypos_t key) {
+    if (4 <= key.row && key.row <= 6) return 'R';
+    else if (key.row <= 2) return 'L';
+    else return '*';
+}
+
+
+bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
+                      uint16_t other_keycode, keyrecord_t* other_record) {
+    if (IS_HOMEROW_CAG(tap_hold_keycode, tap_hold_record) && IS_MOD_TAP_SHIFT(other_keycode)) {
+        return true;
+    }
+    else if (IS_SHORTCUT(tap_hold_keycode)) {
         return false;
     }
+    return get_chordal_hold_default(tap_hold_record, other_record);
+}
+
+
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // Activate layer hold with another key press
-    else return IS_LAYER_TAP(keycode);
+    return IS_LAYER_TAP(keycode);
 }
 
 
