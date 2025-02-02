@@ -58,7 +58,27 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+#ifdef CHORDAL_HOLD
+char chordal_hold_handedness(keypos_t key) {
+    // Exempt thumb key rows
+    if (key.row == 3 || key.row == 7) return '*';
+    return key.row < MATRIX_ROWS / 2 ? 'L' : 'R';
+}
+
+bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
+                      uint16_t other_keycode, keyrecord_t* other_record) {
+    // Allow Shift modifier combination
+    if (IS_MOD_TAP_CAG(tap_hold_keycode) && IS_MOD_TAP_SHIFT(other_keycode)) return true;
+    // Prevent shortcut key chords
+    else if (IS_SHORTCUT(tap_hold_keycode)) return false;
+    // Otherwise defer to the opposite hands rule
+    return get_chordal_hold_default(tap_hold_record, other_record);
+}
+#endif
+
+
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+#ifndef CHORDAL_HOLD
     // Press the tap keycode when a mod-tap key overlaps with a non-Shift key
     // on the same hand or when a shortcut key overlaps with any key
     if ((IS_UNILATERAL(record, inter_record) && !IS_MOD_TAP_SHIFT(inter_keycode)) || IS_SHORTCUT(keycode)) {
@@ -67,8 +87,9 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
         process_record(record);
         return false;
     }
+#endif
     // Activate layer hold with another key press
-    else return IS_LAYER_TAP(keycode);
+    return IS_LAYER_TAP(keycode);
 }
 
 

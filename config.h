@@ -22,6 +22,9 @@
 
 #ifdef SPLIT_KEYBOARD
 #   define EE_HANDS
+#   ifdef INIT_EE_HANDS_RIGHT
+#       define CHORDAL_HOLD
+#   endif
 #endif
 
 #ifdef COMBO_ENABLE
