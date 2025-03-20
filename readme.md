@@ -44,35 +44,45 @@ Setup the following boolean macros to make the tap-hold decision functions more 
 ```
 > The home row macros should be adjusted to match the right rows in the keyboard layout.
 
-## Typing pace tap
+## Instant tap
 To prevent accidental modifier activation while typing, the mod-tap key is configured to always register as a tap when pressed within `QUICK_TAP_TERM` delay after a letter key. This logic is handled by the `pre_process_record_user` function:
 ```c
 static uint16_t    inter_keycode;
 static keyrecord_t inter_record;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static bool    is_pressed[UINT8_MAX];
-    const  uint8_t tap_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+    // Packed array for tracking tap keycode state
+    static uint8_t keycode_state[(UINT8_MAX + 7) / 8];
 
-    if (record->event.pressed) {
-        // Press the tap keycode if the homerow mod-tap follows the previous key swiftly
-        if (IS_HOMEROW_CAG(keycode, record) && IS_TYPING(inter_keycode)) {
-            is_pressed[tap_keycode] = true;
-            record->keycode         = tap_keycode;
+    if (IS_HOMEROW_CAG(keycode, record)) {
+        // Indexes to address tap keycode state
+        const uint8_t tap_keycode = GET_TAP_KEYCODE(keycode);
+        const uint8_t byte_index  = tap_keycode / 8;
+        const uint8_t bit_index   = tap_keycode % 8;
+        const uint8_t bit_mask    = 1U << bit_index;
+
+        if (record->event.pressed) {
+            // Press the tap keycode if the tap-hold key follows a previous key swiftly
+            if (IS_TYPING(inter_keycode)) {
+                keycode_state[byte_index] |= bit_mask;
+                record->keycode = tap_keycode;
+            }
         }
-        // Cache incoming input for in-progress and subsequent tap-hold decisions
+        else if (keycode_state[byte_index] & bit_mask) {
+            // Release the pressed tap keycode
+            keycode_state[byte_index] &= ~bit_mask;
+            record->keycode = tap_keycode;
+        }
+    }
+    // Cache incoming input for in-progress and subsequent tap-hold decisions
+    if (record->event.pressed) {
         inter_keycode = keycode;
         inter_record  = *record;
-    }
-    // Release the tap keycode if pressed
-    else if (is_pressed[tap_keycode]) {
-        is_pressed[tap_keycode] = false;
-        record->keycode         = tap_keycode;
     }
     return true;
 }
 ```
-> Shift is excluded from the home row modifier match to favour quicker capitalization.
+> Shift is excluded from the home row modifier match to favour quicker capitalization. The space-saving packed array solution is adapted from [@getreuer](https://github.com/getreuer)'s [Tap-Flow community module](https://github.com/getreuer/qmk-modules/tree/main/tap_flow).
 
 ## Stringent unilateral tap
 To prevent accidental modifier activation when typing two keys on the _same hand_ within `TAPPING_TERM` delay, the mod-tap key will register as a tap if the next key pressed is also on the same side of the keyboard. This is handled in the `get_hold_on_other_key_press` function:

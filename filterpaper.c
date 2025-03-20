@@ -35,23 +35,34 @@ static uint16_t    inter_keycode;
 static keyrecord_t inter_record;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static bool     is_pressed[UINT8_MAX];
-    const  uint16_t tap_keycode = GET_TAP_KEYCODE(keycode);
+    // Packed array for tracking tap keycode state
+    static uint8_t keycode_state[(UINT8_MAX + 7) / 8];
 
-    if (record->event.pressed) {
-        // Press the tap keycode if the tap-hold key follows a previous key swiftly
-        if ((IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) && IS_TYPING(inter_keycode)) {
-            is_pressed[tap_keycode] = true;
-            record->keycode         = tap_keycode;
+    if (IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) {
+        // Indexes to address tap keycode state
+        const uint8_t tap_keycode = GET_TAP_KEYCODE(keycode);
+        const uint8_t byte_index  = tap_keycode / 8;
+        const uint8_t bit_index   = tap_keycode % 8;
+        const uint8_t bit_mask    = 1U << bit_index;
+
+        if (record->event.pressed) {
+            // Press the tap keycode if the tap-hold key follows a previous key swiftly
+            if (IS_TYPING(inter_keycode)) {
+                keycode_state[byte_index] |= bit_mask;
+                record->keycode = tap_keycode;
+            }
         }
-        // Cache incoming input for in-progress and subsequent tap-hold decisions
+        else if (keycode_state[byte_index] & bit_mask) {
+            // Release the pressed tap keycode
+            keycode_state[byte_index] &= ~bit_mask;
+            record->keycode = tap_keycode;
+        }
+    }
+
+    // Cache incoming input for in-progress and subsequent tap-hold decisions
+    if (record->event.pressed) {
         inter_keycode = keycode;
         inter_record  = *record;
-    }
-    else if (is_pressed[tap_keycode]) {
-        // Release the pressed tap keycode
-        is_pressed[tap_keycode] = false;
-        record->keycode         = tap_keycode;
     }
 
     return true;
