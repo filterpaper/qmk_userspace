@@ -34,24 +34,40 @@
 static uint16_t    inter_keycode;
 static keyrecord_t inter_record;
 
-bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static bool     is_pressed[UINT8_MAX];
-    const  uint16_t tap_keycode = GET_TAP_KEYCODE(keycode);
 
-    if (record->event.pressed) {
-        // Press the tap keycode if the tap-hold key follows a previous key swiftly
-        if ((IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) && IS_TYPING(inter_keycode)) {
-            is_pressed[tap_keycode] = true;
-            record->keycode         = tap_keycode;
+bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // Packed array for tracking tap keycode pressed state
+    static uint8_t is_pressed[(UINT8_MAX + 7) / 8];
+
+    if (IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) {
+        // Local struct to manage the pressed state
+        const struct PACKED {
+            uint8_t value, index, bitmask;
+        } tap_keycode = {
+            .value   = GET_TAP_KEYCODE(keycode),
+            .index   = tap_keycode.value / 8,
+            .bitmask = 1U << (tap_keycode.value % 8)
+        };
+
+        if (record->event.pressed) {
+            // Press the tap keycode when it follows the previous key swiftly
+            if (IS_TYPING(inter_keycode)) {
+                is_pressed[tap_keycode.index] |= tap_keycode.bitmask;
+                record->keycode = tap_keycode.value;
+            }
+        } else {
+            // Release the tap keycode if pressed
+            if (is_pressed[tap_keycode.index] & tap_keycode.bitmask) {
+                is_pressed[tap_keycode.index] &= ~tap_keycode.bitmask;
+                record->keycode = tap_keycode.value;
+            }
         }
-        // Cache incoming input for in-progress and subsequent tap-hold decisions
+    }
+
+    // Cache input for contextual tap-hold decisions
+    if (record->event.pressed) {
         inter_keycode = keycode;
         inter_record  = *record;
-    }
-    else if (is_pressed[tap_keycode]) {
-        // Release the pressed tap keycode
-        is_pressed[tap_keycode] = false;
-        record->keycode         = tap_keycode;
     }
 
     return true;
