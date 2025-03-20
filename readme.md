@@ -27,7 +27,7 @@ Setup the following boolean macros to make the tap-hold decision functions more 
 // Matches home rows on a 3x5_2 split keyboard
 #define IS_HOMEROW(r) (r->event.key.row == 1 || r->event.key.row == 5)
 
-// Matches home row Ctrl,Alt or GUI modifiers
+// Matches Ctrl, Alt or GUI modifiers on the home row
 #define IS_HOMEROW_CAG(k, r) ( \
     (IS_HOMEROW(r)) && (IS_QK_MOD_TAP(k) && (k) & (QK_LCTL|QK_LALT|QK_LGUI)))
 
@@ -37,42 +37,62 @@ Setup the following boolean macros to make the tap-hold decision functions more 
     (r->event.key.row == 1 && 0 <= i.event.key.row && i.event.key.row <= 2) || \
     (r->event.key.row == 5 && 4 <= i.event.key.row && i.event.key.row <= 6) )
 
-// The previous alphabetical key was typed within QUICK_TAP_TERM delay
+// Check if the previous alphabetical key was typed within QUICK_TAP_TERM delay
 #define IS_TYPING(k) ( \
     ((uint8_t)(k) <= KC_Z || (uint8_t)(k) == KC_SPC) && \
     (last_input_activity_elapsed() < QUICK_TAP_TERM) )
 ```
 > The home row macros should be adjusted to match the right rows in the keyboard layout.
 
-## Typing pace tap
-To prevent accidental modifier activation while typing, the mod-tap key is configured to always register as a tap when pressed within `QUICK_TAP_TERM` delay after a letter key. This logic is handled by the `pre_process_record_user` function:
+## Instant tap
+To prevent accidental modifier activation while typing, the mod-tap key is configured to always register as a tap when pressed within `QUICK_TAP_TERM` delay after a letter key. This logic is managed with the `pre_process_record_user` function:
 ```c
+// Intermediate contexts used for tap-hold decision making
 static uint16_t    inter_keycode;
 static keyrecord_t inter_record;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static bool    is_pressed[UINT8_MAX];
-    const  uint8_t tap_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+    // Packed array for tracking tap keycode pressed state
+    // Size: (255 + 7) / 8 = 32 bytes, for keycodes 0-255
+    static uint8_t is_pressed[(UINT8_MAX + 7) / 8];
 
-    if (record->event.pressed) {
-        // Press the tap keycode if the homerow mod-tap follows the previous key swiftly
-        if (IS_HOMEROW_CAG(keycode, record) && IS_TYPING(inter_keycode)) {
-            is_pressed[tap_keycode] = true;
-            record->keycode         = tap_keycode;
+    if (IS_HOMEROW_CAG(keycode, record)) {
+        // Variables to manage the state of the tap keycode in its packed array:
+        // - `tap_keycode`: Extracted tap keycode value from the provided `keycode`
+        // - `tap_index`: Byte index in the packed array where the pressed state is stored
+        // - `tap_bitmask`: Bitmask to isolate the specific bit indicating the pressed state
+        const uint8_t tap_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+        const uint8_t tap_index   = tap_keycode / 8;
+        const uint8_t tap_bitmask = 1U << (tap_keycode % 8);
+
+        if (record->event.pressed) {
+            // On key press: if typing fast enough, treat as a tap
+            if (IS_TYPING(inter_keycode)) {
+                // Set the pressed bit marker for the tap keycode
+                is_pressed[tap_index] |= tap_bitmask;
+                record->keycode = tap_keycode;
+            }
+        } else {
+            // On key release: check if tap keycode pressed bit is set
+            if (is_pressed[tap_index] & tap_bitmask) {
+                // Clear the bit marker
+                is_pressed[tap_index] &= ~tap_bitmask;
+                record->keycode = tap_keycode;
+            }
         }
-        // Cache incoming input for in-progress and subsequent tap-hold decisions
+    }
+
+    // Stores the intermediate keycode and its associated
+    // key event record for contextual processing
+    if (record->event.pressed) {
         inter_keycode = keycode;
         inter_record  = *record;
-    }
-    // Release the tap keycode if pressed
-    else if (is_pressed[tap_keycode]) {
-        is_pressed[tap_keycode] = false;
-        record->keycode         = tap_keycode;
     }
     return true;
 }
 ```
-> Shift is excluded from the home row modifier match to favour quicker capitalization.
+> Shift is excluded from the home row modifier match to favour quicker capitalization. The memory-efficient packed array solution is adapted from [@getreuer](https://github.com/getreuer)'s [Tap-Flow](https://github.com/getreuer/qmk-modules/tree/main/tap_flow) community module.
+
 
 ## Stringent unilateral tap
 To prevent accidental modifier activation with overlapping keys on the _same hand_, the mod-tap key will register as a tap if the next key pressed is also on the same side of the keyboard. This is handled in the `get_hold_on_other_key_press` function:
