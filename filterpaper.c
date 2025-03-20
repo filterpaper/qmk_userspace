@@ -31,27 +31,49 @@
     (r->event.key.row == 5 && 4 <= n.event.key.row && n.event.key.row <= 6) )
 
 
-static uint16_t    inter_keycode;
-static keyrecord_t inter_record;
+// Contextual input storage
+static struct {
+    uint16_t    keycode;
+    keyrecord_t record;
+} context;
+
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static bool     is_pressed[UINT8_MAX];
-    const  uint16_t tap_keycode = GET_TAP_KEYCODE(keycode);
+    // Packed array for tracking tap keycode pressed state
+    static uint32_t is_pressed[(UINT8_MAX + 31) / 32];
 
-    if (record->event.pressed) {
-        // Press the tap keycode if the tap-hold key follows a previous key swiftly
-        if ((IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) && IS_TYPING(inter_keycode)) {
-            is_pressed[tap_keycode] = true;
-            record->keycode         = tap_keycode;
+    if (IS_HOMEROW_CAG(keycode, record) || IS_SHORTCUT(keycode)) {
+        // Local struct to manage the pressed state
+        const struct PACKED {
+            uint_fast8_t  keycode;
+            uint_fast8_t  index;
+            uint_fast32_t bitmask;
+        } tap_key = {
+            .keycode = GET_TAP_KEYCODE(keycode),
+            .index   = tap_key.keycode / 32,
+            .bitmask = 1U << (tap_key.keycode % 32)
+        };
+
+        if (record->event.pressed) {
+            // Press the tap keycode when it follows the previous key swiftly
+            if (IS_TYPING(context.keycode)) {
+                is_pressed[tap_key.index] |= tap_key.bitmask;
+                record->keycode = tap_key.keycode;
+            }
+        } else {
+            // Release the tap keycode if pressed
+            if (is_pressed[tap_key.index] & tap_key.bitmask) {
+                is_pressed[tap_key.index] &= ~tap_key.bitmask;
+                record->keycode = tap_key.keycode;
+            }
         }
-        // Cache incoming input for in-progress and subsequent tap-hold decisions
-        inter_keycode = keycode;
-        inter_record  = *record;
     }
-    else if (is_pressed[tap_keycode]) {
-        // Release the pressed tap keycode
-        is_pressed[tap_keycode] = false;
-        record->keycode         = tap_keycode;
+
+    // Stores the intermediate keycode and its associated
+    // key event record for contextual processing
+    if (record->event.pressed) {
+        context.keycode = keycode;
+        context.record  = *record;
     }
 
     return true;
@@ -62,7 +84,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     // If the tap-hold key overlaps with another non-Shift key on the same
     // hand or if the key is a shortcut overlapping with any other key,
     // clear its interrupted state and process the tap-hold key as a tap
-    if ((IS_UNILATERAL(record, inter_record) && !IS_MOD_TAP_SHIFT(inter_keycode)) || IS_SHORTCUT(keycode)) {
+    if ((IS_UNILATERAL(record, context.record) && !IS_MOD_TAP_SHIFT(context.keycode)) || IS_SHORTCUT(keycode)) {
         record->tap.interrupted = false;
         record->tap.count++;
         process_record(record);
