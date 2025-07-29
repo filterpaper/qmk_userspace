@@ -2,7 +2,7 @@
 
 This is my personal self-contained [QMK](https://github.com/qmk/qmk_firmware) keymap repository that can be built in the [userspace](https://docs.qmk.fm/#/feature_userspace) folder or using GitHub [Actions](https://docs.github.com/en/actions) with its [workflow](.github/workflows/build.yml).
 
-![kb](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/cradio_pink.png)
+![kb](https://github.com/filterpaper/filterpaper.github.io/raw/main/images/cradio_ldsa.jpg)
 
 ## Custom Features
 * [Contextual](#contextual-mod-taps) mod-taps
@@ -15,126 +15,140 @@ This is my personal self-contained [QMK](https://github.com/qmk/qmk_firmware) ke
 &nbsp;</br> &nbsp;</br>
 
 # Contextual Mod-Taps
-Home row mods are beneficial on compact split keyboards, and their accuracy can be improved through context-aware settings. By evaluating the keys typed before and after a mod-tap key, we can refine QMK's [Tap-Hold](https://docs.qmk.fm/tap_hold) functionality with these simple rules:
-1. When the mod-tap key is typed _immediately_ after a letter key, it registers as a tap.
-2. When the mod-tap key is followed _immediately_ by another key on the same hand, it registers as a tap.
-3. Otherwise, the mod-tap key registers as a hold in combination with any other key.
+Home row mods are especially useful on compact split keyboards, and their accuracy can be improved through context-aware settings. By evaluating the keys pressed before and after a mod-tap key, we can refine QMK's [Tap-Hold](https://docs.qmk.fm/tap_hold) functionality using these simple rules:
+1. When the mod-tap key is _pressed immediately_ after a letter key, it registers as a tap.
+2. When the mod-tap key is _immediately followed_ by another key on the same hand, it registers as a tap.
+3. In all other cases, the mod-tap key registers as a hold when used in combination with any other key.
 
-## Decision macros
-Setup the following boolean macros to make the tap-hold decision functions more concise and easier to read:
+## Mod-Tap Decision Macros
+Define the following boolean macros, which serve as the primary decision logic for contextual mod-tap behaviour. These macros simplify and centralize the rules that determine tap-hold actions based on keyboard context within QMK’s key event processing functions.
 ```c
-// Matches home rows on a 3x5_2 split keyboard
-#define HOMEROW_MASK ((1 << 1) | (1 << 5)) // Bitmasks for home rows 1 and 5
-#define IS_HOMEROW(r) (HOMEROW_MASK & (1 << (r)->event.key.row))
+// Matches home rows 1 and 5 on a 3x5_2 split keyboard using bitmasks.
+#define HOMEROW_MASK ((1U << 1) | (1U << 5))
+#define IS_HOMEROW(r) (HOMEROW_MASK & (1U << ((r)->event.key.row)))
 
-// Matches Ctrl, Alt or GUI modifiers on the home row
-#define IS_HOMEROW_CAG(k, r) ( \
-    (IS_HOMEROW(r)) && (IS_QK_MOD_TAP(k) && (k) & (QK_LCTL|QK_LALT|QK_LGUI)))
+// Matches Ctrl, Alt or GUI modifiers on the home row.
+#define IS_HOMEROW_CAG(k, r) (          \
+    ((k) & (QK_LCTL|QK_LALT|QK_LGUI))   \
+    && IS_QK_MOD_TAP((k))               \
+    && IS_HOMEROW((r))                  \
+)
 
-// Matches home row mod-tap keys and subsequent keys on the same side of the keyboard
-// Compares `keyrecord_t *record` with the incoming `inter_record` using row bitmasks
-// Row 1 matches rows 0,1,2 (bitmask 0x07) and row 5 matches rows 4,5,6 (bitmask 0x70)
-#define UNILATERAL_MASK(h) ((h) == 1 ? 0x07 : ((h) == 5 ? 0x70 : 0x00))
-#define IS_UNILATERAL(r, i) (UNILATERAL_MASK((r)->event.key.row) & (1U << (i).event.key.row))
+// Detects when a non-Shift home row modifier is pressed in rapid
+// succession after a letter key (A–Z), within QUICK_TAP_TERM.
+#define IS_QUICK_SUCCESSION_INPUT(k1, r, k2) (            \
+    IS_HOMEROW_CAG((k1), (r))                             \
+    && QK_MOD_TAP_GET_TAP_KEYCODE((k2)) <= KC_Z           \
+    && last_matrix_activity_elapsed() <= QUICK_TAP_TERM   \
+)
 
-// Check if the previous alphabetical key input was within QUICK_TAP_TERM delay
-#define IS_TYPING(k) ( \
-    ((uint8_t)(k) <= KC_Z || (uint8_t)(k) == KC_SPC) && \
-    (last_input_activity_elapsed() < QUICK_TAP_TERM) )
+// Checks whether a current and subsequent key are on the same side (hand)
+// of the keyboard by comparing their row values using bitmasks, where
+// row 1 matches rows 0-2 (0x07), and row 5 matches rows 4-6 (0x70).
+#define UNILATERAL_MASK(n) (   \
+    (n) == 1 ? 0x07 :          \
+    (n) == 5 ? 0x70 : 0x00     \
+)
+#define IS_UNILATERAL_INPUT(r, i) (       \
+    UNILATERAL_MASK((r)->event.key.row)   \
+    & (1U << (i).event.key.row)           \
+)
 ```
-> The home row macros should be adjusted to match the right rows in the keyboard layout.
+These macros should be adjusted to match the correct home rows in the keyboard layout.
 
-## Instant tap
-To prevent accidental modifier activation while typing, the mod-tap key is configured to always register as a tap when pressed within `QUICK_TAP_TERM` delay after a letter key. This logic is managed with the `pre_process_record_user` function:
+## Quick Succession Tap
+To prevent accidental modifier activation while typing, the mod-tap key is set to always register as a tap when it is pressed in quick succession after a letter key (within the `QUICK_TAP_TERM` delay). This behaviour is handled by the `pre_process_record_user` function:
 ```c
-// Intermediate contexts used for tap-hold decision making
+// Struct for tap keycode bit array indexing.
+typedef struct {
+    uint8_t index;   // Byte index in the bit array where the pressed state is stored.
+    uint8_t bitmask; // Bitmask to isolate the specific bit indicating the pressed state.
+} tap_bit_t;
+
+// Calculates array index and bitmask from tap keycode.
+#define TAP_BIT_FROM_KEYCODE(k)                                  \
+    ((tap_bit_t){                                                \
+        .index   = QK_MOD_TAP_GET_TAP_KEYCODE((k)) / 8,          \
+        .bitmask = 1U << (QK_MOD_TAP_GET_TAP_KEYCODE((k)) % 8)   \
+    })
+
+// 32-byte bit array for 256 key states.
+static uint8_t pressed_keys[32];
+
+// Intermediate contexts used for tap-hold decision making.
 static uint16_t    inter_keycode;
 static keyrecord_t inter_record;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    // Packed array for tracking tap keycode pressed state
-    // Size: (255 + 7) / 8 = 32 bytes, for keycodes 0-255
-    static uint8_t is_pressed[(UINT8_MAX + 7) / 8];
+    if (record->event.pressed) { // Key press.
+        if (IS_QUICK_SUCCESSION_INPUT(keycode, record, inter_keycode)) {
+            // Mark the tap key as pressed and update the key record.
+            tap_bit_t tap = TAP_BIT_FROM_KEYCODE(keycode);
+            pressed_keys[tap.index] |= tap.bitmask;
+            record->keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+        }
+        
+        // Store the intermediate keycode and its associated
+        // key event record for contextual processing.
+        inter_keycode = keycode;
+        inter_record  = *record;
 
-    if (IS_HOMEROW_CAG(keycode, record)) {
-        // Variables to manage the state of the tap keycode in its packed array:
-        // - `tap_keycode`: Extracted tap keycode value from the provided `keycode`
-        // - `tap_index`: Byte index in the packed array where the pressed state is stored
-        // - `tap_bitmask`: Bitmask to isolate the specific bit indicating the pressed state
-        const uint8_t tap_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
-        const uint8_t tap_index   = tap_keycode / 8;
-        const uint8_t tap_bitmask = 1U << (tap_keycode % 8);
-
-        if (record->event.pressed) {
-            // On key press: if typing fast enough, treat as a tap
-            if (IS_TYPING(inter_keycode)) {
-                // Set the pressed bit marker for the tap keycode
-                is_pressed[tap_index] |= tap_bitmask;
-                record->keycode = tap_keycode;
-            }
-        } else {
-            // On key release: check if tap keycode pressed bit is set
-            if (is_pressed[tap_index] & tap_bitmask) {
-                // Clear the bit marker
-                is_pressed[tap_index] &= ~tap_bitmask;
-                record->keycode = tap_keycode;
-            }
+    } else { // Key release.
+        tap_bit_t tap = TAP_BIT_FROM_KEYCODE(keycode);
+        // Clear the tap key's bit and increment the tap count to release it.
+        if (pressed_keys[tap.index] & tap.bitmask) {
+            pressed_keys[tap.index] &= ~tap.bitmask;
+            record->tap.count++;
         }
     }
 
-    // Store the intermediate keycode and its associated
-    // key event record for contextual processing
-    if (record->event.pressed) {
-        inter_keycode = keycode;
-        inter_record  = *record;
-    }
     return true;
 }
 ```
-> Shift is excluded from the home row modifier match to favour quicker capitalization. The memory-efficient packed array solution is adapted from [@getreuer](https://github.com/getreuer)'s Tap-Flow [community module](https://github.com/getreuer/qmk-modules/tree/main/tap_flow). This can also be done with [flow tap](https://docs.qmk.fm/tap_hold#flow-tap), but it will require significantly more code.
+Shift is excluded from the home row modifier match to allow for quicker capitalization. The memory-efficient bit array solution for tracking pressed state is adapted from [@getreuer](https://github.com/getreuer)'s Tap-Flow [community module](https://github.com/getreuer/qmk-modules/tree/main/tap_flow). This behaviour can also be accomplished with [flow tap](https://docs.qmk.fm/tap_hold#flow-tap), but it requires significantly more code.
 
 
-## Stringent unilateral tap
-To prevent accidental modifier activation with overlapping keys on the _same hand_, the mod-tap key will register as a tap if the next key pressed is also on the same side of the keyboard. This is handled in the `get_hold_on_other_key_press` function:
+## Strict Unilateral Tap
+To prevent accidental modifier activation when overlapping keys are pressed on the _same hand_, the mod-tap key will register as a tap if the next key pressed is also on the same side of the keyboard. This behaviour is handled by the `get_hold_on_other_key_press` function:
 ```c
-#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    // Clear its interrupted state and process the tap-hold key as a tap
-    // if it overlaps with another key press on the same hand
-    if (IS_UNILATERAL(record, inter_record)) {
+    if (IS_UNILATERAL_INPUT(record, inter_record)) {
+        // Flag key as tapped and update the key record tap count.
+        tap_bit_t tap = TAP_BIT_FROM_KEYCODE(keycode);
+        pressed_keys[tap.index] |= tap.bitmask;
         record->tap.interrupted = false;
         record->tap.count++;
-        process_record(record);
+        return true;
     }
+    // Any tap-hold code handling beyond this point
+    // will be considered opposite hand or bilateral.
+
     return false;
 }
-#endif
 ```
-> The unilateral conditional statement can be tweaked to allow activation of two or more same hand modifiers. This behavior can also be accomplished, albeit with a much larger code size, through the use of [chordal hold](https://docs.qmk.fm/tap_hold#chordal-hold).
+The unilateral conditional statement can be adjusted to allow activation of two or more modifiers on the same hand. Alternatively, this can be achieved—though with a much larger code size—by using [chordal hold](https://docs.qmk.fm/tap_hold#chordal-hold).
 
 ## Permissive bilateral hold
-With the previous [unilateral tap](#stringent-unilateral-tap) configured, all other overlapping hold-tap combination will be considered _opposite hand_ or bilateral. Applying permissive hold on them will allow modifiers to be registered with ease:
+With the previous [unilateral tap](#stringent-unilateral-tap) configured, all other overlapping hold-tap combinations will be considered _opposite hand_ or bilateral. Applying permissive hold to these cases allows modifiers to be registered more easily:
 ```c
-#ifdef PERMISSIVE_HOLD_PER_KEY
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    // Register modifier with a nested tap on the opposite hand
+    // Register modifier with a nested tap on the opposite hand.
     return IS_QK_MOD_TAP(keycode);
 }
-#endif
 ```
-> Permissive hold can be tailored to match specific modifiers for frequent use-cases like Shift or exclude destructive ones like Ctrl.
+Permissive hold can be tailored to match specific modifiers for frequent use cases, such as Shift, or to exclude destructive ones like Ctrl.
 
 ## Integration Summary
-The contextual implementation uses the `keycode` container in the `keyrecord_t` structure which requires either `REPEAT_KEY_ENABLE` or `COMBO_ENABLE` feature. These functions will have no effect _after_ the `TAPPING_TERM` delay. The output experience will be similar to ZMK's [require-prior-idle-ms](https://zmk.dev/docs/behaviors/hold-tap#require-prior-idle-ms) option and [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions) feature.
+The contextual implementation uses the `keycode` container in the `keyrecord_t` structure, which requires either the `REPEAT_KEY_ENABLE` or `COMBO_ENABLE` feature. These functions will have no effect after the `TAPPING_TERM` delay. The output experience will be similar to ZMK's [require-prior-idle-ms](https://zmk.dev/docs/behaviors/hold-tap#require-prior-idle-ms) option and [positional hold tap](https://zmk.dev/docs/behaviors/hold-tap#positional-hold-tap-and-hold-trigger-key-positions) feature.
 
 
 &nbsp;</br> &nbsp;</br>
 
 # Layout Wrapper Macros
-A single keymap layout can be shared with multiple keyboards by using C preprocessor macros. These macros are referenced in the keyboard JSON files, and the build process will expand them into a transient `keymap.c` file during compile time.
+A single keymap layout can be shared across multiple keyboards using C preprocessor macros. These macros are referenced in the keyboard JSON files, and the build process expands them into a transient `keymap.c` file at compile time.
 
 ## Basic setup
-The `split_3x5_2` layout is used as the base, with layers defined in `layout.h`. The following is an example of a default layer:
+The `split_3x5_2` layout serves as the base, with layers defined in `layout.h`. Here is an example of a default layer:
 ```c
 #define BASE \
     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    \
@@ -142,11 +156,11 @@ The `split_3x5_2` layout is used as the base, with layers defined in `layout.h`.
     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,      KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
                   LT(SYM,KC_TAB), LCA_T(KC_ENT),   RSFT_T(KC_SPC), LT(NUM,KC_BSPC)
 ```
-Next, a wrapper alias to the layout used by the keyboard is also defined in the `layout.h` file. For example, the following defines a wrapper alias for the Cradio layout:
+Next, define a wrapper alias for the layout used by the keyboard in the `layout.h` file. For example, the following creates a wrapper alias for the Cradio layout:
 ```c
 #define LAYOUT_34key_w(...) LAYOUT_split_3x5_2(__VA_ARGS__)
 ```
-> Macros are not replaced recursively in a single step. Wrapper alias is required for the compiler to expand them on different iterations.
+> Macros are not replaced recursively in a single step. A wrapper alias is required for the compiler to expand them over multiple iterations.
 
 Both layout and layer macros are referenced in the keyboard JSON file (`cradio.json`) as follows:
 ```c
@@ -162,18 +176,18 @@ Both layout and layer macros are referenced in the keyboard JSON file (`cradio.j
     ]
 }
 ```
-To include the layout macros in the `layout.h` file, add the following line into the `config.h` file:
+To include the layout macros from `layout.h`, add the following line to the `config.h` file:
 ```c
 #ifndef __ASSEMBLER__
 #    include layout.h
 #endif
 ```
-> The assembler definition will prevent that file from being assembled in any build process where C opcodes are not valid.
+> The assembler definition prevents this file from being included in builds where C opcodes are not valid.
 
 Running `qmk compile cradio.json` will cause the build process to construct a transient `keymap.c` using the wrapper macros for compilation.
 
 ## Wrapping home row modifiers
-[Home row mods](https://precondition.github.io/home-row-mods) can be added to the layout macros in the same manner. The order of the home row modifiers is defined by these two macros:
+[Home row mods](https://precondition.github.io/home-row-mods) can be added to the layout macros in the same way. The order of the home row modifiers is defined by these two macros:
 ```c
 #define HRML(k1,k2,k3,k4)  LCTL_T(k1), LALT_T(k2), LGUI_T(k3), LSFT_T(k4)
 #define HRMR(k1,k2,k3,k4)  RSFT_T(k1), RGUI_T(k2), RALT_T(k3), RCTL_T(k4)
@@ -202,10 +216,10 @@ The `HRM()` macro can now be used in the JSON file to add home row modifiers for
     [ "FUNC" ]
 ],
 ```
-> When setup this way, the home row modifier order can be easily edited in the `HRML` and `HRMR` macros.
+> With this setup, the home row modifier order can be easily changed in the `HRML` and `HRMR` macros.
 
 ## Adapting for a different layout
-The base layout can be adapted for other split keyboards by expanding it with macros. The following example expands the `split_3x5_2` layout to Corne's 42-key 3x6_3 layout (6 columns, 3 thumb keys) using the following wrapper to add additional keys to the outer columns:
+The base layout can be adapted for other split keyboards by expanding it with macros. The following example expands the `split_3x5_2` layout to Corne's 42-key 3x6_3 layout (6 columns, 3 thumb keys) using a wrapper to add keys to the outer columns:
 ```c
 #define LAYOUT_corne_w(...) LAYOUT_split_3x6_3(__VA_ARGS__)
 // 3x5_2 to 42-key conversion
@@ -259,7 +273,7 @@ bool rgb_matrix_indicators_user(void) {
     return false;
 }
 ```
-This code iterates over every row and column on a per-key RGB keyboard, searching for keys on the layer that have been configured (not `KC_TRANS`) and lighting the corresponding index location. It is set to activate on layers other than the default.
+This code iterates over every row and column of a per-key RGB keyboard, searching for keys on the active layer that are configured (not `KC_TRNS`) and lights the corresponding index location. It activates on layers other than the default.
 
 ## KB2040 NeoPixel
 The controller's NeoPixel LED can be enabled for RGB Matrix with the following settings:
