@@ -20,7 +20,8 @@ endif
 
 ifneq ($(strip $(CONVERT_TO)),)
     EEPROM_DRIVER = transient
-    DEBOUNCE_TYPE = asym_eager_defer_pk
+    DEBOUNCE_TYPE = custom
+    SRC += debounce.c
     ifneq ($(filter left right, $(strip $(SPLIT))),)
         _SUFFIX := _$(strip $(SPLIT))
         MAKECMDGOALS = uf2-split-$(strip $(SPLIT))
