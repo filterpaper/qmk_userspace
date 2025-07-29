@@ -10,14 +10,15 @@
 #define LAYER_STATE_8BIT
 #define NO_ACTION_ONESHOT
 // Tap-hold settings
-#define TAPPING_TERM 230
+#define TAPPING_TERM 220
+#define QUICK_TAP_TERM 105
+#ifdef CONVERT_TO_KB2040
+#   define SHIFT_TAP_TERM 165
+#else
+#   define SHIFT_TAP_TERM 180
+#endif
 #define TAPPING_TERM_PER_KEY
-#define PERMISSIVE_HOLD_PER_KEY
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-// Input intervals
-#define QUICK_TAP_TERM TAPPING_TERM - 100
-#define SHIFT_TAP_TERM TAPPING_TERM - 80
-#define INPUT_IDLE_MS  TAPPING_TERM - 80
 
 #ifdef SPLIT_KEYBOARD
 #   define EE_HANDS
