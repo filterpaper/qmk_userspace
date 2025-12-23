@@ -11,7 +11,7 @@ SWAP_HANDS_ENABLE = yes
 
 VPATH += $(USER_PATH)/features
 INTROSPECTION_KEYMAP_C = combos.c
-SRC += autocorrect.c filterpaper.c
+SRC += autocorrect.c CodyMathis123.c
 
 ifeq ($(strip $(RGB_MATRIX_ENABLE)), yes)
     RGB_MATRIX_CUSTOM_USER = yes
