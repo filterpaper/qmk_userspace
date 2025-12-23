@@ -1,0 +1,14 @@
+{
+    "keyboard": "cantor",
+    "keymap": "CodyMathis123",
+    "layout": "LAYOUT_corne_w",
+    "layers": [
+        ["HRM(_BASE)"],
+        ["_MEDR"],
+        ["_NAVR"],
+        ["_MOUR"],
+        ["_NSSL"],
+        ["_NSL"],
+        ["_FUNL"]
+    ]
+}
