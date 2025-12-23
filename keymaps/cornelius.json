@@ -1,0 +1,14 @@
+{
+    "keyboard": "foostan/cornelius",
+    "keymap": "CodyMathis123",
+    "layout": "LAYOUT_cornelius_w",
+    "layers": [
+        ["C_O(HRM(_BASE))"],
+        ["C_O(_MEDR)"],
+        ["C_O(_NAVR)"],
+        ["C_O(_MOUR)"],
+        ["C_O(_NSSL)"],
+        ["C_O(_NSL)"],
+        ["C_O(_FUNL)"]
+    ]
+}
