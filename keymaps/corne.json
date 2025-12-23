@@ -1,30 +1,14 @@
 {
     "keyboard": "crkbd/rev1",
-    "converter": "helios",
-    "config": {
-        "features": {
-            "oled": true,
-            "rgblight": false,
-            "rgb_matrix": true
-        },
-        "split": {
-            "transport": {
-                "sync": {
-                    "indicators": true,
-                    "layer_state": true,
-                    "modifiers": true,
-                    "oled": true
-                }
-            }
-        }
-    },
-    "keymap": "filterpaper",
-    "layout": "LAYOUT_crkbd_w",
+    "keymap": "CodyMathis123",
+    "layout": "LAYOUT_corne_w",
     "layers": [
-        [ "C_42(HRM(BASE))" ],
-        [ "C_42(HRM(COLE))" ],
-        [ "C_42(SYMB)" ],
-        [ "C_42(NUMB)" ],
-        [ "C_42(FUNC)" ]
+        ["HRM(_BASE)"],
+        ["_MEDR"],
+        ["_NAVR"],
+        ["_MOUR"],
+        ["_NSSL"],
+        ["_NSL"],
+        ["_FUNL"]
     ]
 }
