@@ -1,0 +1,14 @@
+{
+    "keyboard": "boardsource/technik_o",
+    "keymap": "CodyMathis123",
+    "layout": "LAYOUT_ortho_w",
+    "layers": [
+        ["C_O(HRM(_BASE))"],
+        ["C_O(_MEDR)"],
+        ["C_O(_NAVR)"],
+        ["C_O(_MOUR)"],
+        ["C_O(_NSSL)"],
+        ["C_O(_NSL)"],
+        ["C_O(_FUNL)"]
+    ]
+}
