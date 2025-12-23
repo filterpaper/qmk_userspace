@@ -1,0 +1,14 @@
+{
+    "keyboard": "bastardkb/skeletyl/v2/elitec",
+    "keymap": "CodyMathis123",
+    "layout": "LAYOUT_skeletyl_w",
+    "layers": [
+        ["C_36(HRM(_BASE))"],
+        ["C_36(_MEDR)"],
+        ["C_36(_NAVR)"],
+        ["C_36(_MOUR)"],
+        ["C_36(_NSSL)"],
+        ["C_36(_NSL)"],
+        ["C_36(_FUNL)"]
+    ]
+}
