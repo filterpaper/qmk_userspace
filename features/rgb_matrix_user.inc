@@ -76,6 +76,67 @@ static bool CANDY_TAP(effect_params_t* params) {
 #endif // ENABLE_RGB_MATRIX_CUSTOM_CANDY_TAP
 
 
+#ifdef ENABLE_RGB_MATRIX_CUSTOM_CANDY_PRESS
+RGB_MATRIX_EFFECT(CANDY_PRESS)
+#   ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#   include "matrix.h"
+
+// Track the g_rgb_timer value (full 32-bit) when each LED's key was held down.
+static uint32_t candy_press_held[RGB_MATRIX_LED_COUNT];
+
+static bool CANDY_PRESS(effect_params_t* params) {
+    RGB_MATRIX_USE_LIMITS(led_min, led_max);
+
+    // On effect start, initialise all timestamps so every LED begins fully faded out.
+    // Subtracting 0xFFFF ensures the 32-bit elapsed immediately exceeds the fade
+    // window regardless of when in the session the effect is first activated.
+    if (params->iter == 0 && params->init) {
+        for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; ++i) {
+            candy_press_held[i] = g_rgb_timer - 0xFFFFu;
+        }
+    }
+
+    uint8_t time = scale16by8(g_rgb_timer, qadd8(rgb_matrix_config.speed / 32, 1));
+
+    for (uint8_t i = led_min; i < led_max; i++) {
+        RGB_MATRIX_TEST_LED_FLAGS();
+
+        // Scan the physical matrix to find whether this LED's key is currently held
+        bool held = false;
+        for (uint8_t row = 0; row < MATRIX_ROWS && !held; row++) {
+            matrix_row_t row_state = matrix_get_row(row);
+            if (!row_state) continue;
+            for (uint8_t col = 0; col < MATRIX_COLS && !held; col++) {
+                held = (bool)((row_state >> col) & 1 && g_led_config.matrix_co[row][col] == i);
+            }
+        }
+
+        hsv_t hsv = rgb_matrix_config.hsv;
+        hsv.h     = (triwave8(time) / 4) + (g_rgb_timer / 1024);
+
+        if (held) {
+            // Key is down: refresh the held timestamp and keep full brightness
+            candy_press_held[i] = g_rgb_timer;
+        } else {
+            // Key is up: fade from the moment of release. Clamp the 32-bit elapsed
+            // to uint16_t before scaling to avoid truncation wrap-around pulses.
+            uint32_t elapsed_raw = g_rgb_timer - candy_press_held[i];
+            uint16_t elapsed     = (uint16_t)MIN(elapsed_raw, 0xFFFFu);
+            uint16_t offset      = scale16by8(elapsed, qadd8(rgb_matrix_config.speed, 1));
+            hsv.v                = scale8(255 - MIN(offset, 255), hsv.v);
+        }
+
+        rgb_t rgb = rgb_matrix_hsv_to_rgb(hsv);
+        rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+    }
+
+    return rgb_matrix_check_finished_leds(led_max);
+}
+
+#   endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // ENABLE_RGB_MATRIX_CUSTOM_CANDY_PRESS
+
+
 #ifdef ENABLE_RGB_MATRIX_CUSTOM_CANDY_SPLASH
 RGB_MATRIX_EFFECT(CANDY_SPLASH)
 #   ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
