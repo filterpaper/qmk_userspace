@@ -28,28 +28,30 @@ led_config_t g_led_config = {
 
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    hsv_t hsv = {};
+    hsv_t   hsv   = {0};
+    uint8_t time  = scale16by8(g_rgb_timer, qadd8(rgb_matrix_config.speed / 4, 1));
+    uint8_t wave  = triwave8(time) / 8;
+    uint8_t layer = get_highest_layer(layer_state);
 
-    if (get_highest_layer(layer_state) > CMK) {
-        // Scale active layer index to hue value
+    if (layer > CMK) {
+        // Shift triwave hues to active layer index
         hsv   = rgb_matrix_config.hsv;
-        hsv.h = (get_highest_layer(layer_state) - 1) * 85;
+        hsv.h = wave - ((layer - 1) * 85);
     } else if (host_keyboard_led_state().caps_lock) {
         // Apply pulsing brightness to hue value
-        hsv          = (hsv_t){HSV_PINK};
-        uint8_t time = scale16by8(g_rgb_timer, rgb_matrix_config.speed / 4);
-        uint8_t wave = abs8(sin8(time) - 128) * 2;
-        hsv.v        = scale8(wave, hsv.v);
+        hsv   = (hsv_t){HSV_MAGENTA};
+        hsv.v = scale8((abs8(sin8(time) - 128) * 2), hsv.v);
     }
 
     for (uint8_t i = led_min; i < led_max; ++i) {
         uint8_t mods = IS_MODIFIER_FOR_LED(i);
-        if (!mods && !hsv.v) continue;
-
         if (mods) {
-            // Combine modifier bits and scale to hue range
+            // Shift triwave hues to combined modifer bits
             hsv   = rgb_matrix_config.hsv;
-            hsv.h = ((mods >> 4) | (mods & 0x0F)) * 17;
+            hsv.h = wave - (((mods >> 4) | (mods & 0x0F)) * 17);
+        } else if (!hsv.h) {
+            // Skip inactive LEDs
+            continue;
         }
         rgb_t rgb = hsv_to_rgb(hsv);
         rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
