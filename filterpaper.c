@@ -14,12 +14,14 @@
 // Alpha row key detection using bitmask 0x77 for rows 0-2 and 4-6
 #define IS_ALPHA_ROW(r) ((1U << (r)->event.key.row) & 0x77)
 
-// Checks for a non-Shift tap-hold key pressed in rapid succession
-// after a letter key (A–Z) within a short interval
-#define IS_QUICK_SUCCESSION_INPUT(k, r, ctx) (                  \
-    IS_TAP_HOLD((k)) && !IS_SHIFT_TAP((k)) && IS_ALPHA_ROW((r)) \
-    && GET_TAP_KEYCODE((ctx).keycode) <= KC_Z                   \
-    && last_matrix_activity_elapsed() <= QUICK_TAP_TERM         \
+// Checks for a tap-hold key that should be forced to tap in quick succession:
+// a non-Shift tap-hold after a letter key (A–Z), or a Shift-tap after another
+// Shift-tap, both within a short interval
+#define IS_QUICK_SUCCESSION_INPUT(k, r, ctx) (             \
+    IS_TAP_HOLD((k)) && IS_ALPHA_ROW((r))                  \
+    && (!IS_SHIFT_TAP((k)) || IS_SHIFT_TAP((ctx).keycode)) \
+    && GET_TAP_KEYCODE((ctx).keycode) <= KC_Z              \
+    && last_matrix_activity_elapsed() <= QUICK_TAP_TERM    \
 )
 
 // Same-hand key press detection by comparing two rows using bitmasks
@@ -27,7 +29,7 @@
 #define LATERAL_MASK(n) ((n) == 1 ? 0x07 : ((n) == 5 ? 0x70 : 0x00))
 #define IS_UNILATERAL(r1, r2) (LATERAL_MASK(r1) & (1U << (r2)))
 
-// Checks for a home row key overlapping another non-Shift key on the same
+// Checks for an alpha row key overlapping another non-Shift key on the same
 // side of the keyboard, or a shortcut tap-hold key overlapping with any key
 #define IS_CHORDAL_TAP_INPUT(k, r, ctx) (                                          \
     (IS_UNILATERAL((r)->event.key.row, (ctx).row) && !IS_SHIFT_TAP((ctx).keycode)) \
@@ -41,6 +43,29 @@
     && (IS_TAP_HOLD((ctx).keycode) == (bool)(get_mods() & MOD_MASK_SHIFT)) \
 )
 
+// Bitmask of letters excluded from Shift chord detection,
+// encoded at their respective KC_ value bit positions
+#define LETTER_MASK (1U<<KC_A | 1U<<KC_E | 1U<<KC_H | 1U<<KC_I | \
+                     1U<<KC_L | 1U<<KC_O | 1U<<KC_U | 1U<<KC_Y)
+
+// Checks for Shift activation when a Shift-tap key is pressed with
+// a letter key that is not part of a word composition with F and J
+#define IS_SHIFT_CHORD(k, r, ctx) ({              \
+    uint8_t _kc = GET_TAP_KEYCODE((ctx).keycode); \
+    IS_SHIFT_TAP((k)) && IS_ALPHA_ROW((r))        \
+    && (_kc <= KC_Z || _kc == KC_QUOT)            \
+    && !((LETTER_MASK >> _kc) & 1);               \
+})
+
+// Checks for hold activation when: the current key is a layer tap,
+// a Shift chord is formed with a qualifying letter, or a non-zero
+// layer tap follows a pending alpha-row key
+#define IS_CHORDAL_HOLD_INPUT(k, r, ctx) (                          \
+    IS_QK_LAYER_TAP((k))                                            \
+    || IS_SHIFT_CHORD((k), (r), (ctx))                              \
+    || (IS_ALPHA_ROW((r)) && IS_QK_LAYER_TAP((ctx).keycode)         \
+                          && QK_LAYER_TAP_GET_LAYER((ctx).keycode)) \
+)
 
 // Tap keycode pressed state tracker
 static bool tapped[UINT8_MAX + 1];
@@ -55,7 +80,14 @@ static struct {
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     const uint8_t tap_keycode = GET_TAP_KEYCODE(keycode);
     if (record->event.pressed) {
-        // Force tap on rapid input to prevent unintended holds when typing
+        // Force the current key to tap if it arrives in quick succession
+        // within QUICK_TAP_TERM under any of the following conditions:
+        // * The current key is a non-Shift tap-hold on the alpha row and
+        //   the previous key was a letter (A–Z)
+        // * The current key is a Shift-tap on the alpha row and the
+        //   previous key was also a Shift-tap on the alpha row
+        // These conditions prevent accidental hold activation during fast
+        // typing with Shift-taps exempt unless preceded by another Shift-tap
         if (IS_QUICK_SUCCESSION_INPUT(keycode, record, context)) {
             tapped[tap_keycode] = true;
             record->keycode     = tap_keycode;
@@ -73,9 +105,12 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
-    // Force tap on same-hand chord overlap or shortcut tap-hold key press
+    // Force the pending tap-hold to tap under any of the following conditions:
+    // * The pending key and the next key are on the same hand, and the
+    //   next key is not a Shift-tap
+    // * The pending key is a layer-0 shortcut tap-hold
+    // These conditions prevent hold activation on same-hand rolls and shortcuts
     if (IS_CHORDAL_TAP_INPUT(keycode, record, context)) {
         if (!IS_SHIFT_EXEMPT(keycode, context)) {
             tapped[GET_TAP_KEYCODE(keycode)] = true;
@@ -84,8 +119,13 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
         record->tap.count       = 1;
         return true;
     }
-    // Activate layer hold with another key press
-    return IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_LAYER(keycode);
+    // Force the pending tap-hold to hold under any of the following conditions:
+    // * The pending key is a non-zero layer-tap
+    // * The pending key is an alpha row Shift-tap and the next key is a qualifying
+    //   letter (A–Z) that forms a Shift chord
+    // * The pending key is an alpha row tap-hold and the next key is a non-zero layer-tap
+    // These conditions allow layer-hold and Shift-chord to activate immediately
+    return IS_CHORDAL_HOLD_INPUT(keycode, record, context);
 }
 
 
