@@ -43,7 +43,7 @@ enum layers { BSE, CMK, SYM, NUM, FNC };
 // Thumb keys
 #define SYM_TAB LT(SYM,KC_TAB)
 #define LCA_ENT LCA_T(KC_ENT)
-#define SFT_SPC RSFT_T(KC_SPC)
+#define SFT_SPC LSFT_T(KC_SPC)
 #define NUM_BSP LT(NUM,KC_BSPC)
 
 // Default 3x5_2 split layout

@@ -59,21 +59,11 @@ These macros should be adjusted to match the correct home rows in the keyboard l
 ## Quick Succession Tap
 To prevent accidental modifier activation while typing, the mod-tap key is set to always register as a tap when it is pressed in quick succession after a letter key (within the `QUICK_TAP_TERM` delay). This behaviour is handled by the `pre_process_record_user` function:
 ```c
-// Struct for tap keycode bit array indexing.
-typedef struct {
-    uint8_t index;   // Byte index in the bit array where the pressed state is stored.
-    uint8_t bitmask; // Bitmask to isolate the specific bit indicating the pressed state.
-} tap_bit_t;
-
-// Calculates array index and bitmask from tap keycode.
-#define TAP_BIT_FROM_KEYCODE(k)                                  \
-    ((tap_bit_t){                                                \
-        .index   = QK_MOD_TAP_GET_TAP_KEYCODE((k)) / 8,          \
-        .bitmask = 1U << (QK_MOD_TAP_GET_TAP_KEYCODE((k)) % 8)   \
-    })
-
-// 32-byte bit array for 256 key states.
-static uint8_t pressed_keys[32];
+// Tap keycode pressed state tracker
+static matrix_row_t pressed[MATRIX_ROWS] = {0};
+#define IS_PRESSED(r) (pressed[(r)->event.key.row] & ((matrix_row_t)1 << (r)->event.key.col))
+#define SET_PRESSED(r) (pressed[(r)->event.key.row] |= ((matrix_row_t)1 << (r)->event.key.col))
+#define CLEAR_PRESSED(r) (pressed[(r)->event.key.row] &= ~((matrix_row_t)1 << (r)->event.key.col))
 
 // Intermediate contexts used for tap-hold decision making.
 static uint16_t    inter_keycode;
@@ -83,8 +73,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) { // Key press.
         if (IS_QUICK_SUCCESSION_INPUT(keycode, record, inter_keycode)) {
             // Mark the tap key as pressed and update the key record.
-            tap_bit_t tap = TAP_BIT_FROM_KEYCODE(keycode);
-            pressed_keys[tap.index] |= tap.bitmask;
+            SET_PRESSED(record);
             record->keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
         }
         
@@ -94,18 +83,17 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         inter_record  = *record;
 
     } else { // Key release.
-        tap_bit_t tap = TAP_BIT_FROM_KEYCODE(keycode);
         // Clear the tap key's bit and increment the tap count to release it.
-        if (pressed_keys[tap.index] & tap.bitmask) {
-            pressed_keys[tap.index] &= ~tap.bitmask;
-            record->tap.count++;
+        if (IS_PRESSED(record)) {
+            CLEAR_PRESSED(record);
+            record->tap.count = 1;
         }
     }
 
     return true;
 }
 ```
-Shift is excluded from the home row modifier match to allow for quicker capitalization. The memory-efficient bit array solution for tracking pressed state is adapted from [@getreuer](https://github.com/getreuer)'s Tap-Flow [community module](https://github.com/getreuer/qmk-modules/tree/main/tap_flow). This behaviour can also be accomplished with [flow tap](https://docs.qmk.fm/tap_hold#flow-tap), but it requires significantly more code.
+Shift is excluded from the home row modifier match to allow for quicker capitalization. This behaviour can also be accomplished with [flow tap](https://docs.qmk.fm/tap_hold#flow-tap), but it requires significantly more code.
 
 
 ## Strict Unilateral Tap

@@ -5,7 +5,6 @@ GRAVE_ESC_ENABLE = no
 SPACE_CADET_ENABLE = no
 
 # Enable common features
-LTO_ENABLE = yes
 COMBO_ENABLE = yes
 SWAP_HANDS_ENABLE = yes
 
