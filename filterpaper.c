@@ -17,11 +17,11 @@
 // Checks for a tap-hold key that should be forced to tap in quick succession:
 // a non-Shift tap-hold after a letter key (A–Z), or a Shift-tap after another
 // Shift-tap, both within a short interval
-#define IS_QUICK_SUCCESSION_INPUT(k, r, ctx) (             \
-    IS_TAP_HOLD((k)) && IS_ALPHA_ROW((r))                  \
-    && (!IS_SHIFT_TAP((k)) || IS_SHIFT_TAP((ctx).keycode)) \
-    && GET_TAP_KEYCODE((ctx).keycode) <= KC_Z              \
-    && last_matrix_activity_elapsed() <= QUICK_TAP_TERM    \
+#define IS_QUICK_SUCCESSION_INPUT(k, r, ctx) (              \
+    IS_TAP_HOLD((k)) && IS_ALPHA_ROW((r))                   \
+    && (!IS_SHIFT_TAP((k)) || IS_SHIFT_TAP((ctx)->keycode)) \
+    && GET_TAP_KEYCODE((ctx)->keycode) <= KC_Z              \
+    && last_matrix_activity_elapsed() <= QUICK_TAP_TERM     \
 )
 
 // Same-hand key press detection by comparing two rows using bitmasks
@@ -31,10 +31,9 @@
 
 // Checks for an alpha-row key overlapping another non-Shift key on the same
 // side of the keyboard, or a layer-0 shortcut tap-hold key overlapping any key.
-#define IS_CHORDAL_TAP_INPUT(k, r, ctx) (                                          \
-    (IS_UNILATERAL((r)->event.key.row, (ctx).row) && !IS_SHIFT_TAP((k))            \
-                                                  && !IS_SHIFT_TAP((ctx).keycode)) \
-    || (IS_QK_LAYER_TAP((k)) && QK_LAYER_TAP_GET_LAYER((k)) == 0)                  \
+#define IS_CHORDAL_TAP_INPUT(k, r, ctx) (                                                \
+    (IS_UNILATERAL((r)->event.key.row, (ctx)->key.row) && !IS_SHIFT_TAP((ctx)->keycode)) \
+    || (IS_QK_LAYER_TAP((k)) && QK_LAYER_TAP_GET_LAYER((k)) == 0)                        \
 )
 
 // Bitmask of letters excluded from Shift chord detection,
@@ -44,20 +43,20 @@
 
 // Checks for Shift activation when a Shift-tap key is pressed with
 // a letter key that is not part of a word composition with F and J
-#define IS_SHIFT_CHORD(k, r, ctx) ({              \
-    uint8_t _kc = GET_TAP_KEYCODE((ctx).keycode); \
-    IS_SHIFT_TAP((k)) && IS_ALPHA_ROW((r))        \
-    && (_kc <= KC_Z || _kc == KC_QUOT)            \
-    && !((1UL << _kc) & LETTER_MASK);             \
+#define IS_SHIFT_CHORD(k, r, ctx) ({               \
+    uint8_t _kc = GET_TAP_KEYCODE((ctx)->keycode); \
+    IS_SHIFT_TAP((k)) && IS_ALPHA_ROW((r))         \
+    && (_kc <= KC_Z || _kc == KC_QUOT)             \
+    && !((1UL << _kc) & LETTER_MASK);              \
 })
 
 // Checks for hold activation when the next key or the current key
 // is layer tap, or a Shift chord is formed with a qualifying letter
-#define IS_CHORDAL_HOLD_INPUT(k, r, ctx) (                       \
-    (IS_ALPHA_ROW((r)) && IS_QK_LAYER_TAP((ctx).keycode)         \
-                       && QK_LAYER_TAP_GET_LAYER((ctx).keycode)) \
-    || IS_QK_LAYER_TAP((k))                                      \
-    || IS_SHIFT_CHORD((k), (r), (ctx))                           \
+#define IS_CHORDAL_HOLD_INPUT(k, r, ctx) (                        \
+    (IS_ALPHA_ROW((r)) && IS_QK_LAYER_TAP((ctx)->keycode)         \
+                       && QK_LAYER_TAP_GET_LAYER((ctx)->keycode)) \
+    || (IS_QK_LAYER_TAP((k)) && QK_LAYER_TAP_GET_LAYER((k)) > 0)  \
+    || IS_SHIFT_CHORD((k), (r), (ctx))                            \
 )
 
 // Tap keycode pressed state tracker
@@ -65,15 +64,57 @@ static bool tapped[MATRIX_ROWS][MATRIX_COLS] = { false };
 #define IS_TAPPED(r) (tapped[(r)->event.key.row][(r)->event.key.col])
 #define SET_TAPPED(r, v) (tapped[(r)->event.key.row][(r)->event.key.col] = (v))
 
-// Contextual input cache
-static struct {
+
+// Input entry for recent key presses
+typedef struct {
     uint16_t keycode;
-    uint8_t  row;
-} context;
+    uint16_t time;
+    keypos_t key;
+} input_t;
+
+#define INPUT_CACHE_SIZE 4 // Power of two for modulo op
+#define INPUT_CACHE_MASK (INPUT_CACHE_SIZE - 1)
+
+// Contextual input cache for recent key presses
+static struct {
+    input_t cache[INPUT_CACHE_SIZE];
+    uint8_t head;
+} input;
+
+// Append a pressed input key at current input_head position and
+// advance input_head, wrapping around the ring buffer if necessary
+static inline void input_push(uint16_t keycode, keyrecord_t *record) {
+    input.cache[input.head] = (input_t){keycode, record->event.time, record->event.key};
+    input.head              = (input.head + 1) & INPUT_CACHE_MASK;
+}
+
+// Returns the most recent input, taken from the slot just behind input head.
+static inline const input_t *input_last(void) {
+    return &input.cache[(input.head - 1) & INPUT_CACHE_MASK];
+}
+
+// Returns the first input that arrived after the pending record, or NULL if none exists
+static const input_t *input_after(keyrecord_t *pending) {
+    const input_t *next = NULL;
+    // Walk through the ring buffer from newest to oldest input, looking for the
+    // pending key and return the `next` input that arrived immediately after it
+    for (uint8_t i = 1; i <= INPUT_CACHE_SIZE; ++i) {
+        // Examine the current slot in the ring buffer
+        const input_t *p = &input.cache[(input.head - i) & INPUT_CACHE_MASK];
+        // Unwritten slot: the ring has not filled yet, so nothing older exists
+        if (p->keycode == KC_NO) break;
+        // Pending key found: `next` is its interrupter, or NULL if it is the newest press
+        if (p->time == pending->event.time && KEYEQ(p->key, pending->event.key)) return next;
+        // Update `next` to the current entry before moving to the next older one
+        next = p;
+    }
+    return NULL; // Pending key not found in the ring buffer
+}
 
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
+        const input_t *context    = input_last();
         const uint8_t tap_keycode = GET_TAP_KEYCODE(keycode);
         // Force the current key to tap if it arrives in quick succession
         // within QUICK_TAP_TERM under any of the following conditions:
@@ -87,10 +128,8 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
             SET_TAPPED(record, true);
             record->keycode = tap_keycode;
         }
-        // Store the intermediate input for contextual processing,
-        // using the tap keycode if this key was just forced to tap
-        context.keycode = IS_TAPPED(record) ? tap_keycode : keycode;
-        context.row     = record->event.key.row;
+        // Store the tap keycode if this key was just forced to tap
+        input_push(IS_TAPPED(record) ? tap_keycode : keycode, record);
     } else {
         // Clear tapped flag and set tap count for release handling
         if (IS_TAPPED(record)) {
@@ -103,6 +142,8 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    const input_t *context = input_after(record);
+    if (!context) return false; // No interrupting key in the input buffer
     // Force the pending tap-hold to tap under any of the following conditions:
     // * The pending key and the next (context) key are on the same hand, and
     //   the next (context) key is not a Shift-tap
