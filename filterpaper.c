@@ -31,9 +31,13 @@
 
 // Checks for an alpha-row key overlapping another non-Shift key on the same
 // side of the keyboard, or a layer-0 shortcut tap-hold key overlapping any key.
-#define IS_CHORDAL_TAP_INPUT(k, r, ctx) (                                                \
+/*#define IS_CHORDAL_TAP_INPUT(k, r, ctx) (                                                \
     (IS_UNILATERAL((r)->event.key.row, (ctx)->key.row) && !IS_SHIFT_TAP((k))             \
                                                        && !IS_SHIFT_TAP((ctx)->keycode)) \
+    || (IS_QK_LAYER_TAP((k)) && QK_LAYER_TAP_GET_LAYER((k)) == 0)                        \
+)*/
+#define IS_CHORDAL_TAP_INPUT(k, r, ctx) (                                                \
+    (IS_UNILATERAL((r)->event.key.row, (ctx)->key.row) && !IS_SHIFT_TAP((ctx)->keycode)) \
     || (IS_QK_LAYER_TAP((k)) && QK_LAYER_TAP_GET_LAYER((k)) == 0)                        \
 )
 
