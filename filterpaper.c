@@ -91,12 +91,6 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         // using the tap keycode if this key was just forced to tap
         context.keycode = IS_TAPPED(record) ? tap_keycode : keycode;
         context.row     = record->event.key.row;
-    } else {
-        // Clear tapped flag and set tap count for release handling
-        if (IS_TAPPED(record)) {
-            SET_TAPPED(record, false);
-            record->tap.count = 1;
-        }
     }
     return true;
 }
@@ -163,6 +157,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         else if (keycode == TH_COMM) return PROCESS_SHORTCUT(Z_CPY, record);
         else if (keycode == TH_DOT)  return PROCESS_SHORTCUT(Z_CUT, record);
         else if (keycode == TH_SLSH) return PROCESS_SHORTCUT(Z_UND, record);
+    } else {
+        // Clear tapped flag and set tap count for release handling
+        if (IS_TAPPED(record)) {
+            SET_TAPPED(record, false);
+            record->tap.count = 1;
+        }
     }
     return true;
 }
